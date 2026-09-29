@@ -916,7 +916,7 @@
             { id: 84, ch: '84', time: '9:00 AM', name: 'Due South', emoji: '🐺', cat: 'drama', year: '1994', badges: ['PLAYLIST', 'DETECTIVE', '90S'], desc: 'A Mountie and a Chicago detective solve crimes across the border.', tickers: ['Thank you kindly.', 'Fraser and Ray are on the case.'], archiveId: 'due-south-1994-99', playlist: true },
             { id: 85, ch: '85', time: '10:00 AM', name: 'Pie in the Sky', emoji: '🥧', cat: 'british', year: '1994', badges: ['PLAYLIST', 'BBC', 'MYSTERY'], desc: 'A detective balances crime-solving with his dream of running a restaurant.', tickers: ['Crime, cooking and a proper pie.', 'A taste for justice.'], archiveId: 'pie-in-the-sky-94-97', playlist: true },
             { id: 86, ch: '86', time: '11:00 AM', name: 'Ned and Stacey', emoji: '💍', cat: 'classic', year: '1995', badges: ['PLAYLIST', 'SITCOM', '90S'], desc: 'A marriage of convenience becomes an increasingly complicated arrangement.', tickers: ['A marriage made on paper.', 'Ned and Stacey.'], archiveId: 'Ned_and_Stacey', playlist: true },
-            { id: 87, ch: '87', time: '11:30 AM', name: 'Living Single', emoji: '🏙️', cat: 'classic', year: '1993', badges: ['PLAYLIST', 'SITCOM', '90S'], desc: 'Six friends navigate life, love and work in Brooklyn.', tickers: ['Living single in a 90s world.', 'Brooklyn friends, big laughs.'], archiveId: 'living-single-1993', playlist: true },
+            { id: 87, ch: '87', time: '11:30 AM', name: 'Living Single', emoji: '🏙️', cat: 'classic', year: '1993', badges: ['PLAYLIST', 'SITCOM', '90S'], desc: 'Six friends navigate life, love and work in Brooklyn.', tickers: ['Living single in a 90s world.', 'Brooklyn friends, big laughs.'], archiveId: 'living-single-1993', playlist: true, skipFirstEpisode: true },
             { id: 88, ch: '88', time: '12:00 PM', name: 'The Ben Stiller Show', emoji: '🎭', cat: 'classic', year: '1992', badges: ['PLAYLIST', 'COMEDY', 'SKETCH'], desc: 'A sharply surreal sketch show starring Ben Stiller.', tickers: ['Sketch comedy, 90s style.', 'Now for something Stiller.'], archiveId: 'the-ben-stiller-show-complete-series', playlist: true },
             { id: 89, ch: '89', time: '12:30 PM', name: 'The Dilbert Collection', emoji: '💼', cat: 'animation', year: '1999', badges: ['PLAYLIST', 'ADULT', 'COMEDY'], desc: 'Cubicle life, impossible management and corporate absurdity.', tickers: ['Welcome to the corporate maze.', 'Another day in the cubicle.'], archiveId: 'dilbert-season-1-episode-05-testing', playlist: true },
             { id: 90, ch: '90', time: '1:00 PM', name: 'Beyond Reality', emoji: '🔮', cat: 'scifi', year: '1991', badges: ['PLAYLIST', 'PARANORMAL', 'MYSTERY'], desc: 'Two investigators examine cases that defy conventional explanation.', tickers: ['The unexplained is only the beginning.', 'Beyond reality.'], archiveId: 'Beyond-Reality-Series', playlist: true },
@@ -1128,6 +1128,11 @@
                 const j = await r.json();
                 const raw = (j.result || []).map(f => ({ ...f, _archiveId: archiveId }));
                 let videos = filterFiles(raw);
+                // Remove the first Living Single archive entry labelled Artist.
+                if(archiveId === 'living-single-1993'){
+                    const artistIndex = videos.findIndex(f => /artist/i.test(f.name));
+                    if(artistIndex !== -1) videos.splice(artistIndex, 1);
+                }
                 // BAYWATCH FILTER: only files with a number and "REMASTERED VERSION" in filename
                 if (archiveId === 'baywatch_202212') {
                     videos = videos.filter(f => {
