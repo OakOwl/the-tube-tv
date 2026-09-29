@@ -9,7 +9,7 @@
         * { box-sizing: border-box; margin: 0; padding: 0 }
         body {
             background: radial-gradient(ellipse at center,#1a1408 0%,#080602 100%);
-            font-family: 'Special Elite',cursive; color: #d4b483; padding: 10px 12px 28px; min-height: 100vh
+            font-family: 'Special Elite',cursive; color: #d4b483; padding: 14px clamp(14px,2vw,32px) 30px; min-height: 100vh
         }
 
         .site-header { text-align: center; padding: 10px 0 8px }
@@ -178,9 +178,40 @@
         @keyframes livePulse { 0%,100% { opacity: 0.8; } 50% { opacity: 1; } }
 
         .layout {
-            display: grid; grid-template-columns: 190px 1fr 280px; gap: 14px;
-            max-width: 1180px; margin: 0 auto; padding: 10px 0 0; align-items: start
+            display: grid; grid-template-columns: 200px minmax(0,1fr) 300px; gap: 18px;
+            width: min(100%,1320px); max-width: none; margin: 0 auto; padding: 12px 0 0; align-items: start
         }
+        /* Balanced desktop width: prevent the three-column layout feeling cramped below large desktops. */
+        @media(max-width:1040px) {
+            .layout { grid-template-columns: 190px minmax(0,1fr) 280px; gap: 14px; width: 100%; }
+        }
+
+        /* Chunkier VCR front panel. */
+        .vhs-deck {
+            position: relative; overflow: visible; padding: 22px 24px 24px; min-height: 112px; gap: 14px;
+            border-radius: 0 0 7px 7px;
+            box-shadow: inset 0 3px 5px rgba(255,255,255,.12), inset 0 -8px 14px rgba(0,0,0,.32), 0 4px 7px rgba(0,0,0,.35);
+        }
+        .vhs-deck::after {
+            content: ''; position: absolute; left: 12px; right: 12px; bottom: -9px; height: 10px;
+            border-radius: 0 0 5px 5px; background: linear-gradient(180deg,#3f3f39,#252520);
+            box-shadow: inset 0 2px 2px rgba(255,255,255,.08), 0 4px 6px rgba(0,0,0,.35); z-index: -1;
+        }
+        .vhs-cassette-housing {
+            min-height: 64px; padding: 6px 10px 8px; border-width: 3px; border-radius: 5px;
+            box-shadow: inset 0 3px 8px rgba(0,0,0,.95), inset 0 -2px 3px rgba(255,255,255,.05), 0 2px 2px rgba(255,255,255,.08);
+        }
+        .vhs-label-strip { padding: 3px 8px; margin-bottom: 6px; }
+        .vhs-window { min-height: 30px; padding: 6px 8px; gap: 10px; border-radius: 3px; }
+        .vhs-reel { width: 23px; height: 23px; border-width: 3px; }
+        .vhs-reel::after { width: 6px; height: 6px; }
+        .vhs-tape-stretch { height: 8px; }
+        .vhs-time { font-size: .72rem; }
+        .transport { gap: 9px; }
+        .tbtn { width: 46px; height: 44px; border-radius: 4px; }
+        .tbtn-icon { font-size: 1.15rem; }
+        .tbtn-lbl { font-size: .48rem; }
+
         @media(max-width:860px) { .layout { grid-template-columns: 1fr 280px; } .ep-sidebar { display: none; } }
         @media(max-width:640px) {
             .layout { display: flex; flex-direction: column; gap: 20px; }
@@ -916,7 +947,7 @@
             { id: 84, ch: '84', time: '9:00 AM', name: 'Due South', emoji: '🐺', cat: 'drama', year: '1994', badges: ['PLAYLIST', 'DETECTIVE', '90S'], desc: 'A Mountie and a Chicago detective solve crimes across the border.', tickers: ['Thank you kindly.', 'Fraser and Ray are on the case.'], archiveId: 'due-south-1994-99', playlist: true },
             { id: 85, ch: '85', time: '10:00 AM', name: 'Pie in the Sky', emoji: '🥧', cat: 'british', year: '1994', badges: ['PLAYLIST', 'BBC', 'MYSTERY'], desc: 'A detective balances crime-solving with his dream of running a restaurant.', tickers: ['Crime, cooking and a proper pie.', 'A taste for justice.'], archiveId: 'pie-in-the-sky-94-97', playlist: true },
             { id: 86, ch: '86', time: '11:00 AM', name: 'Ned and Stacey', emoji: '💍', cat: 'classic', year: '1995', badges: ['PLAYLIST', 'SITCOM', '90S'], desc: 'A marriage of convenience becomes an increasingly complicated arrangement.', tickers: ['A marriage made on paper.', 'Ned and Stacey.'], archiveId: 'Ned_and_Stacey', playlist: true },
-            { id: 87, ch: '87', time: '11:30 AM', name: 'Living Single', emoji: '🏙️', cat: 'classic', year: '1993', badges: ['PLAYLIST', 'SITCOM', '90S'], desc: 'Six friends navigate life, love and work in Brooklyn.', tickers: ['Living single in a 90s world.', 'Brooklyn friends, big laughs.'], archiveId: 'living-single-1993', playlist: true, skipFirstEpisode: true },
+            { id: 87, ch: '87', time: '11:30 AM', name: 'Living Single', emoji: '🏙️', cat: 'classic', year: '1993', badges: ['PLAYLIST', 'SITCOM', '90S'], desc: 'Six friends navigate life, love and work in Brooklyn.', tickers: ['Living single in a 90s world.', 'Brooklyn friends, big laughs.'], archiveId: 'living-single-1993', playlist: true },
             { id: 88, ch: '88', time: '12:00 PM', name: 'The Ben Stiller Show', emoji: '🎭', cat: 'classic', year: '1992', badges: ['PLAYLIST', 'COMEDY', 'SKETCH'], desc: 'A sharply surreal sketch show starring Ben Stiller.', tickers: ['Sketch comedy, 90s style.', 'Now for something Stiller.'], archiveId: 'the-ben-stiller-show-complete-series', playlist: true },
             { id: 89, ch: '89', time: '12:30 PM', name: 'The Dilbert Collection', emoji: '💼', cat: 'animation', year: '1999', badges: ['PLAYLIST', 'ADULT', 'COMEDY'], desc: 'Cubicle life, impossible management and corporate absurdity.', tickers: ['Welcome to the corporate maze.', 'Another day in the cubicle.'], archiveId: 'dilbert-season-1-episode-05-testing', playlist: true },
             { id: 90, ch: '90', time: '1:00 PM', name: 'Beyond Reality', emoji: '🔮', cat: 'scifi', year: '1991', badges: ['PLAYLIST', 'PARANORMAL', 'MYSTERY'], desc: 'Two investigators examine cases that defy conventional explanation.', tickers: ['The unexplained is only the beginning.', 'Beyond reality.'], archiveId: 'Beyond-Reality-Series', playlist: true },
@@ -1128,11 +1159,6 @@
                 const j = await r.json();
                 const raw = (j.result || []).map(f => ({ ...f, _archiveId: archiveId }));
                 let videos = filterFiles(raw);
-                // Remove the first Living Single archive entry labelled Artist.
-                if(archiveId === 'living-single-1993'){
-                    const artistIndex = videos.findIndex(f => /artist/i.test(f.name));
-                    if(artistIndex !== -1) videos.splice(artistIndex, 1);
-                }
                 // BAYWATCH FILTER: only files with a number and "REMASTERED VERSION" in filename
                 if (archiveId === 'baywatch_202212') {
                     videos = videos.filter(f => {
