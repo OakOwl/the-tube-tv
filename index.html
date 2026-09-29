@@ -183,9 +183,7 @@
         }
         @media(max-width:1040px) { .layout { grid-template-columns:190px minmax(0,1fr) 280px; gap:14px; width:100%; } }
         .idle-welcome { max-width:270px; margin-top:13px; padding:7px 12px; color:#d8b56a; background:rgba(20,16,5,.42); border:1px solid rgba(196,125,14,.34); border-radius:3px; font-family:'Special Elite',cursive; font-size:.62rem; line-height:1.55; letter-spacing:.025em; text-align:center; text-shadow:0 1px 0 rgba(0,0,0,.9),0 0 7px rgba(245,166,35,.16); }
-        .vhs-deck { position:relative; overflow:visible; padding:18px 23px 19px; min-height:88px; gap:12px; border-radius:0 0 6px 6px; box-shadow:inset 0 2px 4px rgba(255,255,255,.10),inset 0 -5px 9px rgba(0,0,0,.25),0 3px 5px rgba(0,0,0,.28); }
-        .vhs-deck::after { content:''; position:absolute; left:14px; right:14px; bottom:-6px; height:7px; border-radius:0 0 4px 4px; background:linear-gradient(180deg,#464640,#30302b); box-shadow:inset 0 1px 1px rgba(255,255,255,.08),0 3px 4px rgba(0,0,0,.28); z-index:-1; }
-        .vhs-cassette-housing { min-height:48px; padding:5px 9px 6px; border-width:2px; border-radius:4px; box-shadow:inset 0 2px 6px rgba(0,0,0,.92),inset 0 -1px 2px rgba(255,255,255,.05),0 1px 1px rgba(255,255,255,.06); }.vhs-label-strip { padding:2px 7px; margin-bottom:4px; }.vhs-window { min-height:24px; padding:4px 7px; gap:8px; border-radius:3px; }.vhs-reel { width:19px; height:19px; border-width:2px; }.vhs-reel::after { width:5px; height:5px; }.vhs-tape-stretch { height:6px; }.vhs-time { font-size:.65rem; }.transport { gap:8px; }.tbtn { width:43px; height:38px; border-radius:4px; }.tbtn-icon { font-size:1.05rem; }.tbtn-lbl { font-size:.44rem; }
+        .vhs-deck { position:relative; overflow:visible; padding:18px 23px 19px; min-height:88px; gap:12px; border-radius:0 0 6px 6px; box-shadow:inset 0 2px 4px rgba(255,255,255,.10),inset 0 -5px 9px rgba(0,0,0,.25),0 3px 5px rgba(0,0,0,.28); }.vhs-deck::after { content:''; position:absolute; left:14px; right:14px; bottom:-6px; height:7px; border-radius:0 0 4px 4px; background:linear-gradient(180deg,#464640,#30302b); box-shadow:inset 0 1px 1px rgba(255,255,255,.08),0 3px 4px rgba(0,0,0,.28); z-index:-1; }.vhs-cassette-housing { min-height:48px; padding:5px 9px 6px; border-width:2px; border-radius:4px; box-shadow:inset 0 2px 6px rgba(0,0,0,.92),inset 0 -1px 2px rgba(255,255,255,.05),0 1px 1px rgba(255,255,255,.06); }.vhs-label-strip { padding:2px 7px; margin-bottom:4px; }.vhs-window { min-height:24px; padding:4px 7px; gap:8px; border-radius:3px; }.vhs-reel { width:19px; height:19px; border-width:2px; }.vhs-reel::after { width:5px; height:5px; }.vhs-tape-stretch { height:6px; }.vhs-time { font-size:.65rem; }.transport { gap:8px; }.tbtn { width:43px; height:38px; border-radius:4px; }.tbtn-icon { font-size:1.05rem; }.tbtn-lbl { font-size:.44rem; }
 
         @media(max-width:860px) { .layout { grid-template-columns: 1fr 280px; } .ep-sidebar { display: none; } }
         @media(max-width:640px) {
@@ -933,10 +931,35 @@
             { id: 95, ch: '95', time: '9:00 PM', name: 'Max Headroom', emoji: '📺', cat: 'scifi', year: '1987', badges: ['PLAYLIST', 'CULT', 'CYBERPUNK'], desc: 'A reporter and an AI TV personality confront a surreal near-future media world.', tickers: ['Twenty minutes into the future.', 'Max Headroom is online.'], archiveId: 'max-headroom-complete', playlist: true },
             { id: 96, ch: '96', time: '10:00 PM', name: 'The Apprentice (US)', emoji: '💼', cat: 'drama', year: '2005', badges: ['PLAYLIST', 'REALITY', '2000S'], desc: 'Contestants compete in business challenges for a high-stakes prize.', tickers: ['The boardroom is open.', 'Business is war.'], archiveId: 'TheApprenticeUSSeason3', playlist: true },
             { id: 97, ch: '97', time: '11:00 PM', name: 'Mission Hill', emoji: '🌆', cat: 'animation', year: '1999', badges: ['PLAYLIST', 'ADULT', 'CULT'], desc: 'Twenty-somethings stumble through work, friendship and adulthood in the city.', tickers: ['Welcome to Mission Hill.', 'Adult animation after dark.'], archiveId: 'underrated-show-69420', playlist: true },
-            { id: 98, ch: '98', time: '12:00 AM', name: 'Dark Shadows', emoji: '🦇', cat: 'horror', year: '1966', badges: ['PLAYLIST', 'GOTHIC', 'CULT'], desc: 'A supernatural gothic serial of vampires, ghosts and family secrets.', tickers: ['Welcome to Collinwood.', 'The shadows are gathering.'], archiveId: 'dark-shadows_202210', playlist: true }            ,{ id: 99, ch: '99', time: '8:00 PM', name: 'Highlander', emoji: '⚔️', cat: 'scifi', year: '1992', badges: ['PLAYLIST', 'ACTION', 'CULT'], desc: 'An immortal warrior battles others across centuries for the ultimate prize.', tickers: ['There can be only one.', 'The Gathering has begun.'], archiveId: 'highlander-the-series-detelecined', playlist: true }
-            ,{ id: 100, ch: '100', time: '9:00 PM', name: "That's My Bush!", emoji: '🇺🇸', cat: 'classic', year: '2001', badges: ['PLAYLIST', 'COMEDY', 'SATIRE'], desc: 'A broad sitcom parody set in a fictional White House.', tickers: ['Welcome to the White House.', 'Political satire after dark.'], archiveId: 's-1-08-05-23-01-thats-my-bush-fare-thee-welfare', playlist: true }
-            ,{ id: 101, ch: '101', time: '10:00 PM', name: 'Hung', emoji: '🏠', cat: 'drama', year: '2009', badges: ['PLAYLIST', 'ADULT', 'COMEDY'], desc: 'A struggling suburban teacher looks for an unconventional way to rebuild his life.', tickers: ['Desperate times in Detroit.', 'A new plan for making ends meet.'], archiveId: 'hung-2008', playlist: true }
-            ,{ id: 102, ch: '102', time: '11:00 PM', name: 'Monkey Dust', emoji: '🖍️', cat: 'animation', year: '2003', badges: ['PLAYLIST', 'BBC', 'ADULT'], desc: 'A dark, surreal animated sketch comedy from the early 2000s.', tickers: ['Late-night animated satire.', 'Welcome to Monkey Dust.'], archiveId: 'monkey-dust-s-01e-06-div-x-640x-352', playlist: true }
+            { id: 98, ch: '98', time: '12:00 AM', name: 'Dark Shadows', emoji: '🦇', cat: 'horror', year: '1966', badges: ['PLAYLIST', 'GOTHIC', 'CULT'], desc: 'A supernatural gothic serial of vampires, ghosts and family secrets.', tickers: ['Welcome to Collinwood.', 'The shadows are gathering.'], archiveId: 'dark-shadows_202210', playlist: true }
+            // SCHEDULE C EXPANDED CATALOGUE
+            ,{ id:81,ch:'81',time:'6:00 AM',name:'The Borrowers',emoji:'🏠',cat:'classic',year:'1992',badges:['PLAYLIST','BBC','FAMILY'],desc:'Tiny people living beneath the floorboards make a big adventure.',tickers:['Something small is stirring beneath the floorboards.','Borrowers beware!'],archiveId:'the-borrowers-1992-93',playlist:true }
+            ,{ id:82,ch:'82',time:'6:30 AM',name:'Classic British TV Pack',emoji:'🇬🇧',cat:'british',year:'Classic',badges:['PLAYLIST','BRITISH','ARCHIVE'],desc:'A varied collection of classic British television.',tickers:['From the classic British television vaults.','Proper telly, preserved.'],archiveId:'classic-british-tv-pack',playlist:true }
+            ,{ id:83,ch:'83',time:'7:30 AM',name:'The Flash',emoji:'⚡',cat:'scifi',year:'1990',badges:['PLAYLIST','DC','ACTION'],desc:'Barry Allen races to protect Central City as The Flash.',tickers:['Fastest man alive.','Central City needs The Flash!'],archiveId:'the-flash-1990-complete-tv-series-thegoodone',playlist:true }
+            ,{ id:84,ch:'84',time:'8:30 AM',name:'Due South',emoji:'🐺',cat:'drama',year:'1994',badges:['PLAYLIST','DETECTIVE','90S'],desc:'A Mountie and a Chicago detective solve crimes across the border.',tickers:['Thank you kindly.','Fraser and Ray are on the case.'],archiveId:'due-south-1994-99',playlist:true }
+            ,{ id:85,ch:'85',time:'9:30 AM',name:'Pie in the Sky',emoji:'🥧',cat:'british',year:'1994',badges:['PLAYLIST','BBC','MYSTERY'],desc:'A detective balances crime-solving with his dream of running a restaurant.',tickers:['Crime, cooking and a proper pie.','A taste for justice.'],archiveId:'pie-in-the-sky-94-97',playlist:true }
+            ,{ id:86,ch:'86',time:'10:30 AM',name:'Ned and Stacey',emoji:'💍',cat:'classic',year:'1995',badges:['PLAYLIST','SITCOM','90S'],desc:'A marriage of convenience becomes an increasingly complicated arrangement.',tickers:['A marriage made on paper.','Ned and Stacey.'],archiveId:'Ned_and_Stacey',playlist:true }
+            ,{ id:87,ch:'87',time:'11:00 AM',name:'Living Single',emoji:'🏙️',cat:'classic',year:'1993',badges:['PLAYLIST','SITCOM','90S'],desc:'Six friends navigate life, love and work in Brooklyn.',tickers:['Living single in a 90s world.','Brooklyn friends, big laughs.'],archiveId:'living-single-1993',playlist:true }
+            ,{ id:88,ch:'88',time:'11:30 AM',name:'The Ben Stiller Show',emoji:'🎭',cat:'classic',year:'1992',badges:['PLAYLIST','COMEDY','SKETCH'],desc:'A sharply surreal sketch show starring Ben Stiller.',tickers:['Sketch comedy, 90s style.','Now for something Stiller.'],archiveId:'the-ben-stiller-show-complete-series',playlist:true }
+            ,{ id:89,ch:'89',time:'12:00 PM',name:'The Dilbert Collection',emoji:'💼',cat:'animation',year:'1999',badges:['PLAYLIST','ADULT','COMEDY'],desc:'Cubicle life, impossible management and corporate absurdity.',tickers:['Welcome to the corporate maze.','Another day in the cubicle.'],archiveId:'dilbert-season-1-episode-05-testing',playlist:true }
+            ,{ id:90,ch:'90',time:'12:30 PM',name:'Beyond Reality',emoji:'🔮',cat:'scifi',year:'1991',badges:['PLAYLIST','PARANORMAL','MYSTERY'],desc:'Two investigators examine cases that defy conventional explanation.',tickers:['The unexplained is only the beginning.','Beyond reality.'],archiveId:'Beyond-Reality-Series',playlist:true }
+            ,{ id:91,ch:'91',time:'1:30 PM',name:'Doctor Who',emoji:'🌀',cat:'scifi',year:'1963',badges:['PLAYLIST','BBC','CULT'],desc:'The Doctor travels through time and space in the TARDIS.',tickers:['Time and relative dimension in space.','The Doctor will see you now.'],archiveId:'doctor-who_202210',playlist:true }
+            ,{ id:92,ch:'92',time:'2:30 PM',name:'Sherlock',emoji:'🔍',cat:'british',year:'2010',badges:['PLAYLIST','BBC','MYSTERY'],desc:'Sherlock Holmes and Dr. Watson solve modern-day London mysteries.',tickers:['The game is on.','Sherlock Holmes is in.'],archiveId:'BBC_Sherlock2010',playlist:true }
+            ,{ id:93,ch:'93',time:'3:30 PM',name:'The Net',emoji:'💻',cat:'scifi',year:'1998',badges:['PLAYLIST','THRILLER','90S'],desc:'A computer analyst is pulled into a dangerous world of digital conspiracy.',tickers:['Trust no network.','Welcome to The Net.'],archiveId:'the-net-complete-tv-series',playlist:true }
+            ,{ id:94,ch:'94',time:'5:00 PM',name:'Blackadder Remastered',emoji:'👑',cat:'british',year:'1983',badges:['PLAYLIST','BBC','COMEDY'],desc:"Rowan Atkinson's cunning antihero battles history with sarcasm and bad luck.",tickers:['I have a cunning plan.','Blackadder is back.'],archiveId:'blackadder-remastered',playlist:true }
+            ,{ id:95,ch:'95',time:'8:30 PM',name:'Max Headroom',emoji:'📺',cat:'scifi',year:'1987',badges:['PLAYLIST','CULT','CYBERPUNK'],desc:'A reporter and an AI TV personality confront a surreal near-future media world.',tickers:['Twenty minutes into the future.','Max Headroom is online.'],archiveId:'max-headroom-complete',playlist:true }
+            ,{ id:96,ch:'96',time:'10:30 PM',name:'The Apprentice (US)',emoji:'💼',cat:'drama',year:'2005',badges:['PLAYLIST','REALITY','2000S'],desc:'Contestants compete in business challenges for a high-stakes prize.',tickers:['The boardroom is open.','Business is war.'],archiveId:'TheApprenticeUSSeason3',playlist:true }
+            ,{ id:97,ch:'97',time:'12:00 AM',name:'Mission Hill',emoji:'🌆',cat:'animation',year:'1999',badges:['PLAYLIST','ADULT','CULT'],desc:'Twenty-somethings stumble through work, friendship and adulthood in the city.',tickers:['Welcome to Mission Hill.','Adult animation after dark.'],archiveId:'underrated-show-69420',playlist:true }
+            ,{ id:98,ch:'98',time:'1:00 AM',name:'Dark Shadows',emoji:'🦇',cat:'horror',year:'1966',badges:['PLAYLIST','GOTHIC','CULT'],desc:'A supernatural gothic serial of vampires, ghosts and family secrets.',tickers:['Welcome to Collinwood.','The shadows are gathering.'],archiveId:'dark-shadows_202210',playlist:true }
+            ,{ id:99,ch:'99',time:'7:30 PM',name:'Highlander',emoji:'⚔️',cat:'scifi',year:'1992',badges:['PLAYLIST','ACTION','CULT'],desc:'An immortal warrior battles others across centuries for the ultimate prize.',tickers:['There can be only one.','The Gathering has begun.'],archiveId:'highlander-the-series-detelecined',playlist:true }
+            ,{ id:100,ch:'100',time:'9:00 PM',name:"That's My Bush!",emoji:'🇺🇸',cat:'classic',year:'2001',badges:['PLAYLIST','COMEDY','SATIRE'],desc:'A broad sitcom parody set in a fictional White House.',tickers:['Welcome to the White House.','Political satire after dark.'],archiveId:'s-1-08-05-23-01-thats-my-bush-fare-thee-welfare',playlist:true }
+            ,{ id:101,ch:'101',time:'11:00 PM',name:'Hung',emoji:'🏠',cat:'drama',year:'2009',badges:['PLAYLIST','ADULT','COMEDY'],desc:'A struggling suburban teacher looks for an unconventional way to rebuild his life.',tickers:['Desperate times in Detroit.','A new plan for making ends meet.'],archiveId:'hung-2008',playlist:true }
+            ,{ id:102,ch:'102',time:'12:30 AM',name:'Monkey Dust',emoji:'🖍️',cat:'animation',year:'2003',badges:['PLAYLIST','BBC','ADULT'],desc:'A dark, surreal animated sketch comedy from the early 2000s.',tickers:['Late-night animated satire.','Welcome to Monkey Dust.'],archiveId:'monkey-dust-s-01e-06-div-x-640x-352',playlist:true }
+            ,{ id:103,ch:'103',time:'6:30 PM',name:"Whose Line Is It Anyway?",emoji:'🎤',cat:'classic',year:'1998',badges:['PLAYLIST','COMEDY','IMPROV'],desc:'Improvisers create comedy scenes, songs and games from audience suggestions.',tickers:['The points do not matter.','Improv comedy is on the air.'],archiveId:'whose-line-is-it-anyway-us-s-07-webdl-1080p',playlist:true }
+            ,{ id:104,ch:'104',time:'10:00 PM',name:'Alan Partridge',emoji:'📻',cat:'british',year:'1994',badges:['PLAYLIST','BBC','COMEDY'],desc:'Awkward broadcaster Alan Partridge navigates radio, television and everyday disaster.',tickers:['A-ha!','This is Alan Partridge.'],archiveId:'alan-partridge-bbc',playlist:true }
+            ,{ id:105,ch:'105',time:'10:00 AM',name:'Mrs. Columbo',emoji:'🕵️',cat:'classic',year:'1979',badges:['PLAYLIST','MYSTERY','CLASSIC'],desc:'Kate Columbo balances family life with solving clever mysteries.',tickers:['One more clue.','Mrs. Columbo is on the case.'],archiveId:'s-01-e-01-word-games-pt.-2',playlist:true }
+            ,{ id:106,ch:'106',time:'7:00 AM',name:'Dan Vs.',emoji:'😠',cat:'animation',year:'2011',badges:['PLAYLIST','ANIMATION','COMEDY'],desc:'Dan takes on whatever has annoyed him this week, with reckless determination.',tickers:['Dan versus everything.','The fight is on.'],archiveId:'dan-vs.-complete-series-hd',playlist:true }
+            ,{ id:107,ch:'107',time:'4:30 PM',name:'Alan Partridge: Mid Morning Matters',emoji:'📻',cat:'british',year:'2010',badges:['PLAYLIST','COMEDY','BBC'],desc:'Alan Partridge broadcasts live from North Norfolk Digital.',tickers:['North Norfolk Digital is on air.','A-ha! Mid Morning Matters.'],archiveId:'mid-morning-matters',playlist:true }
 ];
 
         // ===== SCHEDULES =====
@@ -950,21 +973,33 @@
         ];
 
         const scheduleC = [
-            { startTime: 6 * 60, endTime: 6 * 60 + 30, id: 81 }, { startTime: 6 * 60 + 30, endTime: 7 * 60, id: 82 },
-            { startTime: 7 * 60, endTime: 7 * 60 + 30, id: 81 }, { startTime: 7 * 60 + 30, endTime: 8 * 60, id: 82 },
-            { startTime: 8 * 60, endTime: 9 * 60, id: 83 }, { startTime: 9 * 60, endTime: 10 * 60, id: 84 },
-            { startTime: 10 * 60, endTime: 11 * 60, id: 85 }, { startTime: 11 * 60, endTime: 11 * 60 + 30, id: 86 },
-            { startTime: 11 * 60 + 30, endTime: 12 * 60, id: 87 }, { startTime: 12 * 60, endTime: 12 * 60 + 30, id: 88 },
-            { startTime: 12 * 60 + 30, endTime: 13 * 60, id: 89 }, { startTime: 13 * 60, endTime: 14 * 60, id: 90 },
-            { startTime: 14 * 60, endTime: 15 * 60, id: 91 }, { startTime: 15 * 60, endTime: 16 * 60 + 30, id: 92 },
-            { startTime: 16 * 60 + 30, endTime: 17 * 60 + 30, id: 93 }, { startTime: 17 * 60 + 30, endTime: 18 * 60 + 30, id: 84 },
-            { startTime: 18 * 60 + 30, endTime: 19 * 60 + 30, id: 83 }, { startTime: 19 * 60 + 30, endTime: 20 * 60, id: 94 },
-            { startTime: 20 * 60, endTime: 21 * 60, id: 99 }, { startTime: 21 * 60, endTime: 21 * 60 + 30, id: 100 },
-            { startTime: 21 * 60 + 30, endTime: 22 * 60, id: 87 }, { startTime: 22 * 60, endTime: 23 * 60, id: 101 },
-            { startTime: 23 * 60, endTime: 23 * 60 + 30, id: 102 }, { startTime: 23 * 60 + 30, endTime: 24 * 60, id: 89 },
-            { startTime: 0, endTime: 1 * 60, id: 98 }, { startTime: 1 * 60, endTime: 2 * 60, id: 90 },
-            { startTime: 2 * 60, endTime: 3 * 60, id: 93 }, { startTime: 3 * 60, endTime: 5 * 60, id: 82 },
-            { startTime: 5 * 60, endTime: 6 * 60, id: 81 }
+            { startTime: 6*60, endTime: 6*60+30, id:81 },
+            { startTime: 6*60+30, endTime: 7*60, id:82 },
+            { startTime: 7*60, endTime: 7*60+30, id:106 },
+            { startTime: 7*60+30, endTime: 8*60+30, id:83 },
+            { startTime: 8*60+30, endTime: 9*60+30, id:84 },
+            { startTime: 9*60+30, endTime: 10*60, id:85 },
+            { startTime: 10*60, endTime: 10*60+30, id:105 },
+            { startTime: 10*60+30, endTime: 11*60, id:86 },
+            { startTime: 11*60, endTime: 11*60+30, id:87 },
+            { startTime: 11*60+30, endTime: 12*60, id:88 },
+            { startTime: 12*60, endTime: 12*60+30, id:89 },
+            { startTime: 12*60+30, endTime: 13*60+30, id:90 },
+            { startTime: 13*60+30, endTime: 14*60+30, id:91 },
+            { startTime: 14*60+30, endTime: 15*60+30, id:92 },
+            { startTime: 15*60+30, endTime: 16*60+30, id:93 },
+            { startTime: 16*60+30, endTime: 17*60, id:107 },
+            { startTime: 17*60, endTime: 18*60, id:94 },
+            { startTime: 18*60, endTime: 18*60+30, id:103 },
+            { startTime: 18*60+30, endTime: 19*60+30, id:99 },
+            { startTime: 19*60+30, endTime: 20*60, id:100 },
+            { startTime: 20*60, endTime: 21*60, id:95 },
+            { startTime: 21*60, endTime: 21*60+30, id:104 },
+            { startTime: 21*60+30, endTime: 22*60+30, id:96 },
+            { startTime: 22*60+30, endTime: 23*60+30, id:101 },
+            { startTime: 23*60+30, endTime: 24*60, id:102 },
+            { startTime: 0, endTime: 1*60, id:97 },
+            { startTime: 1*60, endTime: 2*60, id:98 }
         ];
 
 
@@ -1034,7 +1069,7 @@
         function getScheduleShows() {
             const schedule = getCurrentSchedule();
             const uniqueIds = [...new Set(schedule.map(slot => slot.id))];
-            return allShows.filter(s => uniqueIds.includes(s.id));
+            return uniqueIds.map(id => allShows.find(s => s.id === id)).filter(Boolean);
         }
 
         function getShowScheduleTime(showId) {
@@ -1137,7 +1172,10 @@
                 const j = await r.json();
                 const raw = (j.result || []).map(f => ({ ...f, _archiveId: archiveId }));
                 let videos = filterFiles(raw);
-                // Known-bad Highlander episodes: remove them from all playlists and episode lists.
+                if(archiveId === 'living-single-1993'){
+                    const artistIndex = videos.findIndex(f => /artist/i.test(f.name));
+                    if(artistIndex !== -1) videos.splice(artistIndex, 1);
+                }
                 if(archiveId === 'highlander-the-series-detelecined'){
                     const badHighlanderEpisodes = [[1,2],[1,12],[1,13],[2,9],[2,11],[3,21],[4,8],[6,1]];
                     videos = videos.filter(f => !badHighlanderEpisodes.some(([season,episode]) => {
