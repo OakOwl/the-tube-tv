@@ -36,8 +36,6 @@
         .hbtn:active { transform: scale(.96) }
         .btn-donate { background: #0d1a0d; color: #39ff14; border: 1px solid #1a3a1a }
         .btn-donate:hover { background: #122012 }
-        .btn-updates { background: #001a1a; color: #5ce1e6; border: 1px solid #1a3a3a }
-        .btn-updates:hover { background: #002626; box-shadow: 0 0 8px rgba(92,225,230,.2) }
         .btn-surprise { background: #1a001a; color: #ff80ff; border: 1px solid #3a1a3a }
         .btn-surprise:hover { background: #250025 }
         .btn-catalogue { background: #0a0a1a; color: #a0a0ff; border: 1px solid #2a2a5a; }
@@ -571,21 +569,40 @@
         .dl-em:hover { background: #251a00 }
         .modal-close { margin-top: 12px; font-family: 'VT323',monospace; font-size: .74rem; color: #4a3015; background: transparent; border: none; cursor: pointer; letter-spacing: .1em }
         .modal-close:hover { color: #f5a623 }
-        .signup-form { display: flex; flex-direction: column; gap: 8px; text-align: left }
-        .signup-label { font-family: 'VT323',monospace; font-size: .74rem; color: #9a7a45; letter-spacing: .1em }
-        .signup-input {
-            background: #0c0900; border: 1px solid #3a2800; color: #d4b483;
-            font-family: 'VT323',monospace; font-size: 1rem; padding: 9px 12px;
-            border-radius: 3px; outline: none; width: 100%; letter-spacing: .05em
+        .signup-strip {
+            position: relative; background: #000; border-bottom: 1px solid #3a2800;
+            margin: -14px calc(-1 * clamp(14px,2vw,32px)) 6px; padding: 9px 56px; text-align: center
         }
-        .signup-input:focus { border-color: #5ce1e6; box-shadow: 0 0 8px rgba(92,225,230,.2) }
+        .signup-strip.hide { display: none }
+        .strip-form { display: flex; align-items: center; justify-content: center; gap: 8px 12px; flex-wrap: wrap }
+        .strip-text { font-family: 'VT323',monospace; font-size: 1.05rem; font-weight: 700; color: #fff; letter-spacing: .06em }
+        .strip-input {
+            background: #fff; color: #444951; border: 1px solid #fff; border-radius: 4px;
+            font-family: 'VT323',monospace; font-size: 1rem; font-weight: 700; padding: 5px 10px;
+            width: 230px; max-width: 100%; outline: none; letter-spacing: .03em
+        }
+        .strip-input:focus { box-shadow: 0 0 0 2px #ca3aca }
+        .strip-submit {
+            background: #ca3aca; color: #fff; border: none; border-radius: 4px; cursor: pointer;
+            font-family: 'VT323',monospace; font-size: 1rem; font-weight: 700; padding: 6px 16px;
+            letter-spacing: .06em; transition: all .15s
+        }
+        .strip-submit:hover { background: #dd55dd }
+        .strip-submit:active { transform: scale(.96) }
+        .strip-submit:disabled { opacity: .5; cursor: default }
         .signup-trap { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0 }
-        .signup-submit { background: #001a1a; color: #5ce1e6; border: 1px solid #1a3a3a }
-        .signup-submit:hover { background: #002626 }
-        .signup-submit:disabled { opacity: .5; cursor: default }
-        .signup-msg { font-family: 'VT323',monospace; font-size: .85rem; letter-spacing: .08em; color: #39ff14; min-height: 1.2em; margin-top: 8px }
-        .signup-msg.err { color: #ff6b5a }
-        .modal-box p.signup-fine { font-size: .66rem; color: #8a6d3d; margin: 4px 0 0 }
+        .strip-note { font-family: 'Special Elite',cursive; font-size: .62rem; color: #9a9a9a; line-height: 1.4; margin-top: 5px }
+        .strip-note:empty { display: none }
+        .strip-note.ok { font-family: 'VT323',monospace; font-size: .9rem; color: #39ff14; letter-spacing: .08em }
+        .strip-note.err { font-family: 'VT323',monospace; font-size: .9rem; color: #ff6b5a; letter-spacing: .08em }
+        .strip-close {
+            position: absolute; top: 8px; right: 14px; width: 30px; height: 30px; border-radius: 50%;
+            background: transparent; border: 1px solid #333; color: #9a9a9a; cursor: pointer;
+            font-family: 'VT323',monospace; font-size: 1rem; transition: all .15s
+        }
+        .strip-close:hover { color: #fff; border-color: #fff }
+        .help-desc a { color: #f5a623 }
+        @media(max-width:480px) { .signup-strip { margin: -10px -8px 6px; padding: 9px 48px } .strip-input { width: 100% } }
 
         @keyframes flk { 0%,90%,100% { opacity: 1 } 95% { opacity: .2 } }
         @keyframes ticker { 0% { transform: translateX(60%) } 100% { transform: translateX(-100%) } }
@@ -690,6 +707,16 @@
     </style>
 </head>
 <body>
+    <div class="signup-strip" id="signupStrip">
+        <form class="strip-form" id="signupForm" novalidate>
+            <span class="strip-text">Receive New Updates on Shows and Listings</span>
+            <input class="strip-input" type="email" id="signupEmail" placeholder="Email Address" aria-label="Email Address" autocomplete="email" required>
+            <input class="signup-trap" type="text" id="signupTrap" tabindex="-1" autocomplete="off" aria-hidden="true">
+            <button class="strip-submit" type="submit" id="signupSubmit">Sign up</button>
+        </form>
+        <div class="strip-note" id="signupMsg" role="status"></div>
+        <button class="strip-close" id="signupClose" type="button" title="Hide this bar" aria-label="Hide this bar">✕</button>
+    </div>
     <div class="help-btn" id="helpBtn" title="How to use The Tube">?</div>
     <div class="site-header">
         <div class="logo">THE <span>TUBE</span></div>
@@ -697,7 +724,6 @@
         <div class="divider"></div>
         <div class="header-actions">
             <button class="hbtn btn-donate" id="btnDonate">☕ DONATE</button>
-            <button class="hbtn btn-updates" id="btnSignup">📬 GET UPDATES</button>
             <button class="hbtn btn-surprise" id="btnSurprise">🎲 SURPRISE ME</button>
             <button class="hbtn btn-live" id="btnLiveMode">🔴 LIVE MODE</button>
             <button class="hbtn btn-catalogue" id="btnCatalogue">📺 FULL CATALOGUE</button>
@@ -748,7 +774,7 @@
                 <div class="help-section">
                     <div class="help-section-title">🎛 Header Buttons</div>
                     <div class="help-row"><span class="help-key">☕ DONATE</span><span class="help-desc">Support the project via Buy Me a Coffee.</span></div>
-                    <div class="help-row"><span class="help-key">📬 GET UPDATES</span><span class="help-desc">Leave your email to hear when new shows join the archive.</span></div>
+                    <div class="help-row"><span class="help-key">📬 UPDATES</span><span class="help-desc">Use the bar at the top of the page to hear when new shows are added. Hid it? <a href="#" id="signupShow">Bring the bar back</a>.</span></div>
                     <div class="help-row"><span class="help-key">🎲 SURPRISE</span><span class="help-desc">Jumps to a random show and episode — perfect for discovering something new.</span></div>
                     <div class="help-row"><span class="help-key">🔴 LIVE MODE</span><span class="help-desc">Turns The Tube into a real "live channel" — the schedule decides what's on, just like real TV.</span></div>
                     <div class="help-row"><span class="help-key">📺 CATALOGUE</span><span class="help-desc">Browse every show in the archive, filter by category, and tune in directly.</span></div>
@@ -778,19 +804,6 @@
     </div>
 
     <div class="modal-bg" id="modalDonate"><div class="modal-box"><h2>☕ BUY ME A COFFEE</h2><p>Enjoying The Tube? Help keep the archive running!</p><div class="modal-opts"><a class="dl dl-bmc" id="bmcLink" href="https://buymeacoffee.com/oakowltv" target="_blank">☕ BUYMEACOFFEE.COM/OAKOWLTV</a><a class="dl dl-em" href="mailto:tvthetube@gmail.com" target="_blank">✉ tvthetube@gmail.com</a></div><button class="modal-close" id="modalClose">✕ CLOSE</button></div></div>
-    <div class="modal-bg" id="modalSignup"><div class="modal-box">
-        <h2>📬 GET UPDATES</h2>
-        <p>Get an email when new shows join the archive. New-show news only, sent occasionally.</p>
-        <form class="signup-form" id="signupForm" novalidate>
-            <label class="signup-label" for="signupEmail">YOUR EMAIL</label>
-            <input class="signup-input" type="email" id="signupEmail" placeholder="you@example.com" autocomplete="email" required>
-            <input class="signup-trap" type="text" id="signupTrap" tabindex="-1" autocomplete="off" aria-hidden="true">
-            <button class="dl signup-submit" type="submit" id="signupSubmit">▶ SIGN ME UP</button>
-        </form>
-        <div class="signup-msg" id="signupMsg" role="status"></div>
-        <p class="signup-fine">We'll send a confirmation email first. You can unsubscribe at any time using the link in every email. Your address is held by our newsletter provider, Kit, and is used only for these updates.</p>
-        <button class="modal-close" id="signupClose">✕ CLOSE</button>
-    </div></div>
     <div class="toast" id="toast"></div>
     <script>
         // ===== COMMERCIAL ARCHIVES =====
@@ -1891,20 +1904,24 @@
         $('modalClose').addEventListener('click', () => { sndClick(); $('modalDonate').classList.remove('show'); });
 
         // ===== EMAIL SIGNUP =====
-        // Paste the two values from your newsletter provider's HTML embed code.
-        // The GET UPDATES button stays hidden until SIGNUP_ACTION_URL is filled in.
+        // The strip at the top of the page posts to this newsletter form.
+        // It stays hidden if SIGNUP_ACTION_URL is empty.
         const SIGNUP_ACTION_URL = 'https://app.kit.com/forms/10031223/subscriptions';   // the form's action="..." URL
         const SIGNUP_EMAIL_FIELD = 'email_address';   // the email input's name="..."
+        const SIGNUP_HIDE_DAYS = 15;                  // how long the ✕ keeps the strip away
 
-        const signupBg = $('modalSignup');
+        const signupStrip = $('signupStrip');
         const signupSubmit = $('signupSubmit');
-        function setSignupMsg(text, isError) { const m = $('signupMsg'); m.textContent = text; m.classList.toggle('err', !!isError); }
-        function closeSignup() { signupBg.classList.remove('show'); }
-        if (!SIGNUP_ACTION_URL) $('btnSignup').style.display = 'none';
-        $('btnSignup').addEventListener('click', () => { sndClick(); setSignupMsg(''); signupBg.classList.add('show'); setTimeout(() => $('signupEmail').focus(), 50); });
-        $('signupClose').addEventListener('click', () => { sndClick(); closeSignup(); });
-        signupBg.addEventListener('click', e => { if (e.target === signupBg) closeSignup(); });
-        document.addEventListener('keydown', e => { if (e.key === 'Escape' && signupBg.classList.contains('show')) closeSignup(); });
+        function setSignupMsg(text, isError) { const m = $('signupMsg'); m.textContent = text; m.classList.toggle('err', !!isError); m.classList.toggle('ok', !isError); }
+        function signupHiddenUntil() { try { return Number(localStorage.getItem('thetube_signup_hidden_until')) || 0; } catch (e) { return 0; } }
+        function hideSignupFor(days) { try { localStorage.setItem('thetube_signup_hidden_until', String(Date.now() + days * 86400000)); } catch (e) {} }
+        if (!SIGNUP_ACTION_URL || signupHiddenUntil() > Date.now()) signupStrip.classList.add('hide');
+        $('signupClose').addEventListener('click', () => { sndClick(); signupStrip.classList.add('hide'); hideSignupFor(SIGNUP_HIDE_DAYS); });
+        $('signupShow').addEventListener('click', e => {
+            e.preventDefault(); if (!SIGNUP_ACTION_URL) return;
+            hideSignupFor(0); signupStrip.classList.remove('hide'); $('helpModal').classList.remove('show');
+            window.scrollTo({ top: 0, behavior: 'smooth' }); setTimeout(() => $('signupEmail').focus(), 300);
+        });
         $('signupForm').addEventListener('submit', e => {
             e.preventDefault();
             const email = $('signupEmail').value.trim();
@@ -1919,7 +1936,7 @@
             // The provider's reply can't be read from another site, so success here means
             // "sent", and the confirmation email is what proves the signup landed.
             fetch(SIGNUP_ACTION_URL, { method: 'POST', mode: 'no-cors', body })
-                .then(() => { setSignupMsg('◈ ALMOST THERE — CHECK YOUR INBOX TO CONFIRM ◈'); $('signupForm').reset(); })
+                .then(() => { setSignupMsg('◈ ALMOST THERE — CHECK YOUR INBOX TO CONFIRM ◈'); $('signupForm').reset(); hideSignupFor(365); })
                 .catch(() => { setSignupMsg("◈ COULDN'T REACH THE SIGNUP SERVICE — TRY AGAIN ◈", true); })
                 .finally(() => { signupSubmit.disabled = false; });
         });
