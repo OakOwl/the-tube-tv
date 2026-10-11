@@ -38,6 +38,8 @@
         .btn-share:hover { background: #2a1e00 }
         .btn-donate { background: #0d1a0d; color: #39ff14; border: 1px solid #1a3a1a }
         .btn-donate:hover { background: #122012 }
+        .btn-updates { background: #001a1a; color: #5ce1e6; border: 1px solid #1a3a3a }
+        .btn-updates:hover { background: #002626; box-shadow: 0 0 8px rgba(92,225,230,.2) }
         .btn-surprise { background: #1a001a; color: #ff80ff; border: 1px solid #3a1a3a }
         .btn-surprise:hover { background: #250025 }
         .btn-catalogue { background: #0a0a1a; color: #a0a0ff; border: 1px solid #2a2a5a; }
@@ -571,6 +573,21 @@
         .dl-em:hover { background: #251a00 }
         .modal-close { margin-top: 12px; font-family: 'VT323',monospace; font-size: .74rem; color: #4a3015; background: transparent; border: none; cursor: pointer; letter-spacing: .1em }
         .modal-close:hover { color: #f5a623 }
+        .signup-form { display: flex; flex-direction: column; gap: 8px; text-align: left }
+        .signup-label { font-family: 'VT323',monospace; font-size: .74rem; color: #9a7a45; letter-spacing: .1em }
+        .signup-input {
+            background: #0c0900; border: 1px solid #3a2800; color: #d4b483;
+            font-family: 'VT323',monospace; font-size: 1rem; padding: 9px 12px;
+            border-radius: 3px; outline: none; width: 100%; letter-spacing: .05em
+        }
+        .signup-input:focus { border-color: #5ce1e6; box-shadow: 0 0 8px rgba(92,225,230,.2) }
+        .signup-trap { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0 }
+        .signup-submit { background: #001a1a; color: #5ce1e6; border: 1px solid #1a3a3a }
+        .signup-submit:hover { background: #002626 }
+        .signup-submit:disabled { opacity: .5; cursor: default }
+        .signup-msg { font-family: 'VT323',monospace; font-size: .85rem; letter-spacing: .08em; color: #39ff14; min-height: 1.2em; margin-top: 8px }
+        .signup-msg.err { color: #ff6b5a }
+        .modal-box p.signup-fine { font-size: .66rem; color: #8a6d3d; margin: 4px 0 0 }
 
         @keyframes flk { 0%,90%,100% { opacity: 1 } 95% { opacity: .2 } }
         @keyframes ticker { 0% { transform: translateX(60%) } 100% { transform: translateX(-100%) } }
@@ -683,6 +700,7 @@
         <div class="header-actions">
             <button class="hbtn btn-share" id="btnShare">📤 SHARE</button>
             <button class="hbtn btn-donate" id="btnDonate">☕ DONATE</button>
+            <button class="hbtn btn-updates" id="btnSignup">📬 GET UPDATES</button>
             <button class="hbtn btn-surprise" id="btnSurprise">🎲 SURPRISE ME</button>
             <button class="hbtn btn-live" id="btnLiveMode">🔴 LIVE MODE</button>
             <button class="hbtn btn-catalogue" id="btnCatalogue">📺 FULL CATALOGUE</button>
@@ -734,6 +752,7 @@
                     <div class="help-section-title">🎛 Header Buttons</div>
                     <div class="help-row"><span class="help-key">📤 SHARE</span><span class="help-desc">Copy a link to The Tube to share with friends.</span></div>
                     <div class="help-row"><span class="help-key">☕ DONATE</span><span class="help-desc">Support the project via Buy Me a Coffee.</span></div>
+                    <div class="help-row"><span class="help-key">📬 GET UPDATES</span><span class="help-desc">Leave your email to hear when new shows join the archive.</span></div>
                     <div class="help-row"><span class="help-key">🎲 SURPRISE</span><span class="help-desc">Jumps to a random show and episode — perfect for discovering something new.</span></div>
                     <div class="help-row"><span class="help-key">🔴 LIVE MODE</span><span class="help-desc">Turns The Tube into a real "live channel" — the schedule decides what's on, just like real TV.</span></div>
                     <div class="help-row"><span class="help-key">📺 CATALOGUE</span><span class="help-desc">Browse every show in the archive, filter by category, and tune in directly.</span></div>
@@ -762,7 +781,20 @@
         </div>
     </div>
 
-    <div class="modal-bg" id="modalDonate"><div class="modal-box"><h2>☕ BUY ME A COFFEE</h2><p>Enjoying The Tube? Help keep the archive running!</p><div class="modal-opts"><a class="dl dl-bmc" id="bmcLink" href="https://buymeacoffee.com/oakowltv" target="_blank">☕ BUYMEACOFFEE.COM/OAKOWLTV</a><a class="dl dl-em" href="mailto:oakowlrecords@gmail.com" target="_blank">✉ oakowlrecords@gmail.com</a></div><button class="modal-close" id="modalClose">✕ CLOSE</button></div></div>
+    <div class="modal-bg" id="modalDonate"><div class="modal-box"><h2>☕ BUY ME A COFFEE</h2><p>Enjoying The Tube? Help keep the archive running!</p><div class="modal-opts"><a class="dl dl-bmc" id="bmcLink" href="https://buymeacoffee.com/oakowltv" target="_blank">☕ BUYMEACOFFEE.COM/OAKOWLTV</a><a class="dl dl-em" href="mailto:tvthetube@gmail.com" target="_blank">✉ tvthetube@gmail.com</a></div><button class="modal-close" id="modalClose">✕ CLOSE</button></div></div>
+    <div class="modal-bg" id="modalSignup"><div class="modal-box">
+        <h2>📬 GET UPDATES</h2>
+        <p>Get an email when new shows join the archive. New-show news only, sent occasionally.</p>
+        <form class="signup-form" id="signupForm" novalidate>
+            <label class="signup-label" for="signupEmail">YOUR EMAIL</label>
+            <input class="signup-input" type="email" id="signupEmail" placeholder="you@example.com" autocomplete="email" required>
+            <input class="signup-trap" type="text" id="signupTrap" tabindex="-1" autocomplete="off" aria-hidden="true">
+            <button class="dl signup-submit" type="submit" id="signupSubmit">▶ SIGN ME UP</button>
+        </form>
+        <div class="signup-msg" id="signupMsg" role="status"></div>
+        <p class="signup-fine">We'll send a confirmation email first. You can unsubscribe at any time using the link in every email. Your address is held by our newsletter provider, Kit, and is used only for these updates.</p>
+        <button class="modal-close" id="signupClose">✕ CLOSE</button>
+    </div></div>
     <div class="toast" id="toast"></div>
     <script>
         // ===== COMMERCIAL ARCHIVES =====
@@ -1862,6 +1894,40 @@
         $('btnShare').addEventListener('click', () => { sndClick(); if (navigator.share) navigator.share({ title: 'The Tube', text: 'Classic TV', url: location.href }); else showToast('◈ LINK COPIED ◈'); });
         $('btnDonate').addEventListener('click', () => { sndClick(); $('modalDonate').classList.add('show'); });
         $('modalClose').addEventListener('click', () => { sndClick(); $('modalDonate').classList.remove('show'); });
+
+        // ===== EMAIL SIGNUP =====
+        // Paste the two values from your newsletter provider's HTML embed code.
+        // The GET UPDATES button stays hidden until SIGNUP_ACTION_URL is filled in.
+        const SIGNUP_ACTION_URL = 'https://app.kit.com/forms/10031223/subscriptions';   // the form's action="..." URL
+        const SIGNUP_EMAIL_FIELD = 'email_address';   // the email input's name="..."
+
+        const signupBg = $('modalSignup');
+        const signupSubmit = $('signupSubmit');
+        function setSignupMsg(text, isError) { const m = $('signupMsg'); m.textContent = text; m.classList.toggle('err', !!isError); }
+        function closeSignup() { signupBg.classList.remove('show'); }
+        if (!SIGNUP_ACTION_URL) $('btnSignup').style.display = 'none';
+        $('btnSignup').addEventListener('click', () => { sndClick(); setSignupMsg(''); signupBg.classList.add('show'); setTimeout(() => $('signupEmail').focus(), 50); });
+        $('signupClose').addEventListener('click', () => { sndClick(); closeSignup(); });
+        signupBg.addEventListener('click', e => { if (e.target === signupBg) closeSignup(); });
+        document.addEventListener('keydown', e => { if (e.key === 'Escape' && signupBg.classList.contains('show')) closeSignup(); });
+        $('signupForm').addEventListener('submit', e => {
+            e.preventDefault();
+            const email = $('signupEmail').value.trim();
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { setSignupMsg("◈ THAT EMAIL DOESN'T LOOK RIGHT ◈", true); return; }
+            // Bots fill the hidden field; people never see it. Drop those silently.
+            if ($('signupTrap').value) { setSignupMsg('◈ CHECK YOUR INBOX TO CONFIRM ◈'); return; }
+            sndClick();
+            signupSubmit.disabled = true;
+            setSignupMsg('◈ SENDING... ◈');
+            const body = new URLSearchParams();
+            body.append(SIGNUP_EMAIL_FIELD, email);
+            // The provider's reply can't be read from another site, so success here means
+            // "sent", and the confirmation email is what proves the signup landed.
+            fetch(SIGNUP_ACTION_URL, { method: 'POST', mode: 'no-cors', body })
+                .then(() => { setSignupMsg('◈ ALMOST THERE — CHECK YOUR INBOX TO CONFIRM ◈'); $('signupForm').reset(); })
+                .catch(() => { setSignupMsg("◈ COULDN'T REACH THE SIGNUP SERVICE — TRY AGAIN ◈", true); })
+                .finally(() => { signupSubmit.disabled = false; });
+        });
         $('searchBox').addEventListener('input', () => renderList());
         $('tPlay').addEventListener('click', () => {
             sndClick(); if (!active) return;
