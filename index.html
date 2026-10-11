@@ -1,8 +1,33 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>The Tube · Classic Television Archive</title>
+    <meta name="description" content="The Tube is a retro TV set in your browser: a daily schedule of classic television, a programme guide and a full catalogue to browse.">
+    <meta name="theme-color" content="#080602">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="The Tube · Classic Television Archive">
+    <meta property="og:description" content="The Tube is a retro TV set in your browser: a daily schedule of classic television, a programme guide and a full catalogue to browse.">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M10 3l6 5 6-5' stroke='%23f5a623' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3Crect x='3' y='8' width='26' height='20' rx='4' fill='%23f5a623'/%3E%3Crect x='6' y='11' width='15' height='14' rx='2' fill='%23080602'/%3E%3Ccircle cx='25' cy='15' r='1.6' fill='%23080602'/%3E%3Ccircle cx='25' cy='21' r='1.6' fill='%23080602'/%3E%3C/svg%3E">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=VT323&family=Oswald:wght@400;600&family=Special+Elite&display=swap" rel="stylesheet">
     <style>
+        /* ===== DESIGN TOKENS: change a value here and it changes across the site ===== */
+        :root {
+            --bg: #080602; --panel: #0c0900; --line: #2a1e0a; --line-strong: #3a2800;
+            --amber: #f5a623; --amber-deep: #c47d0e; --text: #d4b483; --text-dim: #a8905f;
+            --green: #39ff14; --red: #ff3333; --magenta: #ca3aca;
+            --fs-xs: 12px; --fs-sm: 14px; --fs-md: 16px; --fs-lg: 20px; --fs-xl: 28px;
+            --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px; --sp-5: 24px; --sp-6: 32px;
+            --gutter: clamp(12px,2vw,32px);
+            --ctl-h: 40px;       /* height of buttons and inputs; 44px on touch screens */
+            --page-top: 124px;   /* signup strip + top bar + gap above the TV */
+            --tv-chrome: 252px;  /* TV casing, deck and controls around the picture */
+            --tv-h: 0px;         /* set by script: height of the TV when pinned on phones */
+        }
+
         /* Global base font size increase */
         html { font-size: 18px; }
 
@@ -19,7 +44,7 @@
         }
         .logo span { color: #fff }
         .tagline {
-            font-family: 'VT323',monospace; font-size: .85rem; color: #6a5030;
+            font-family: 'VT323',monospace; font-size: var(--fs-md); color: var(--text-dim);
             letter-spacing: .3em; margin-top: 3px
         }
         .divider {
@@ -29,30 +54,24 @@
         }
         .header-actions { display: flex; justify-content: center; gap: 10px; margin-top: 10px; flex-wrap: wrap }
         .hbtn {
-            font-family: 'VT323',monospace; font-size: .85rem; padding: 6px 14px;
+            font-family: 'VT323',monospace; font-size: var(--fs-md); padding: 6px 14px;
             border-radius: 3px; cursor: pointer; letter-spacing: .1em;
             transition: all .15s; border: none; display: flex; align-items: center; gap: 5px
         }
         .hbtn:active { transform: scale(.96) }
-        .btn-donate { background: #0d1a0d; color: #39ff14; border: 1px solid #1a3a1a }
-        .btn-donate:hover { background: #122012 }
-        .btn-surprise { background: #1a001a; color: #ff80ff; border: 1px solid #3a1a3a }
-        .btn-surprise:hover { background: #250025 }
-        .btn-catalogue { background: #0a0a1a; color: #a0a0ff; border: 1px solid #2a2a5a; }
-        .btn-catalogue:hover { background: #14143a; box-shadow: 0 0 8px rgba(120,120,255,.2); }
         .btn-schedule { background: #0a1a0a; color: #39ff14; border: 1px solid #1a3a1a; }
         .btn-schedule:hover { background: #0f2a0f; box-shadow: 0 0 8px rgba(57,255,20,.2); }
         .schedule-indicator {
-            font-family: 'VT323',monospace; font-size: .65rem; padding: 4px 10px;
+            font-family: 'VT323',monospace; font-size: var(--fs-xs); padding: 4px 10px;
             border-radius: 3px; border: 1px solid #3a2800; background: #0c0900; letter-spacing: .05em;
         }
         .schedule-indicator.a { color: #39ff14; border-color: #39ff14; }
         .schedule-indicator.b { color: #ff6a00; border-color: #ff6a00; }
         .sched-selector { display: flex; gap: 4px; align-items: center; }
         .sched-sel-btn {
-            font-family: 'VT323',monospace; font-size: .72rem; padding: 4px 10px;
+            font-family: 'VT323',monospace; font-size: var(--fs-sm); padding: 4px 10px;
             border-radius: 3px; cursor: pointer; letter-spacing: .08em;
-            border: 1px solid #2a2a2a; background: #0a0a0a; color: #5a5a5a; transition: all .15s;
+            border: 1px solid #2a2a2a; background: #0a0a0a; color: #9a9a9a; transition: all .15s;
         }
         .sched-sel-btn:hover { color: #aaa; border-color: #5a5a5a; }
         .sched-sel-btn.active-a { color: #39ff14; border-color: #39ff14; background: #060d00; }
@@ -60,7 +79,7 @@
         .help-btn {
             position: fixed; top: 14px; left: 14px; width: 34px; height: 34px;
             border-radius: 50%; background: #1a1200; border: 1px solid #3a2800;
-            color: #f5a623; font-family: 'VT323',monospace; font-size: 1.1rem;
+            color: #f5a623; font-family: 'VT323',monospace; font-size: var(--fs-lg);
             display: flex; align-items: center; justify-content: center; cursor: pointer;
             z-index: 9000; transition: all .15s;
         }
@@ -80,9 +99,9 @@
             display: flex; justify-content: space-between; align-items: center;
             padding: 12px 18px; border-bottom: 1px solid #2a1e00; background: #0d0a00;
         }
-        .help-modal-title { font-family: 'VT323',monospace; font-size: 1.3rem; color: #f5a623; letter-spacing: .1em; }
+        .help-modal-title { font-family: 'VT323',monospace; font-size: var(--fs-lg); color: #f5a623; letter-spacing: .1em; }
         .help-modal-close {
-            font-family: 'VT323',monospace; font-size: .85rem; color: #5a4020;
+            font-family: 'VT323',monospace; font-size: var(--fs-md); color: var(--text-dim);
             background: transparent; border: none; cursor: pointer; letter-spacing: .1em; padding: 2px 6px;
         }
         .help-modal-close:hover { color: #f5a623; }
@@ -92,18 +111,17 @@
         .help-modal-body::-webkit-scrollbar-thumb { background: #3a2008; border-radius: 3px; }
         .help-section { margin-bottom: 14px; }
         .help-section-title {
-            font-family: 'VT323',monospace; font-size: .85rem; color: #f5a623;
+            font-family: 'VT323',monospace; font-size: var(--fs-md); color: #f5a623;
             letter-spacing: .08em; margin-bottom: 6px; border-bottom: 1px solid #1e1600; padding-bottom: 4px;
         }
         .help-row { display: flex; align-items: flex-start; gap: 10px; padding: 4px 0; }
         .help-key {
-            font-family: 'VT323',monospace; font-size: .8rem; color: #39ff14;
+            font-family: 'VT323',monospace; font-size: var(--fs-sm); color: #39ff14;
             background: #060d00; border: 1px solid #1a3a1a; border-radius: 3px;
             padding: 2px 8px; min-width: 60px; text-align: center; flex-shrink: 0; letter-spacing: .05em;
         }
-        .help-desc { font-family: 'Special Elite',cursive; font-size: .72rem; color: #b8a070; line-height: 1.5; padding-top: 2px; }
+        .help-desc { font-family: 'Special Elite',cursive; font-size: var(--fs-sm); color: #b8a070; line-height: 1.5; padding-top: 2px; }
         .help-desc b { color: #f5a623; }
-        @media(max-width:580px) { .help-btn { top: 10px; left: 10px; width: 30px; height: 30px; font-size: 1rem; } }
 
         .cat-modal-bg {
             position: fixed; inset: 0; background: rgba(0,0,0,.88); z-index: 10000;
@@ -119,17 +137,17 @@
             display: flex; justify-content: space-between; align-items: center;
             padding: 12px 18px; border-bottom: 1px solid #2a1e00; background: #0d0a00;
         }
-        .cat-modal-title { font-family: 'VT323',monospace; font-size: 1.4rem; color: #f5a623; letter-spacing: .1em; }
-        .cat-modal-count { font-family: 'VT323',monospace; font-size: .75rem; color: #5a4020; letter-spacing: .08em; }
+        .cat-modal-title { font-family: 'VT323',monospace; font-size: var(--fs-xl); color: #f5a623; letter-spacing: .1em; }
+        .cat-modal-count { font-family: 'VT323',monospace; font-size: var(--fs-sm); color: var(--text-dim); letter-spacing: .08em; }
         .cat-modal-close {
-            font-family: 'VT323',monospace; font-size: .85rem; color: #5a4020;
+            font-family: 'VT323',monospace; font-size: var(--fs-md); color: var(--text-dim);
             background: transparent; border: none; cursor: pointer; letter-spacing: .1em; padding: 2px 6px;
         }
         .cat-modal-close:hover { color: #f5a623; }
         .cat-filter-row { display: flex; gap: 6px; flex-wrap: wrap; padding: 8px 18px; border-bottom: 1px solid #1a1200; background: #0a0800; }
         .cat-filter-btn {
-            font-family: 'VT323',monospace; font-size: .65rem; padding: 2px 8px;
-            border: 1px solid #2a1e0a; background: transparent; color: #7a5a2a;
+            font-family: 'VT323',monospace; font-size: var(--fs-xs); padding: 2px 8px;
+            border: 1px solid #2a1e0a; background: transparent; color: var(--text-dim);
             cursor: pointer; border-radius: 2px; transition: all .12s; white-space: nowrap;
         }
         .cat-filter-btn:hover, .cat-filter-btn.active { background: #120c00; color: #f5a623; border-color: #c47d0e; }
@@ -147,25 +165,25 @@
         .cat-card:hover { border-left-color: #f5a623; background: #110d00; }
         .cat-card:active { transform: scale(.97); }
         .cat-card-top { display: flex; align-items: center; gap: 7px; }
-        .cat-card-emoji { font-size: 1.3rem; flex-shrink: 0; }
+        .cat-card-emoji { font-size: var(--fs-lg); flex-shrink: 0; }
         .cat-card-name {
-            font-family: 'Oswald',sans-serif; font-size: .78rem; font-weight: 600;
+            font-family: 'Oswald',sans-serif; font-size: var(--fs-sm); font-weight: 600;
             color: #d4b483; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
         }
         .cat-card-meta {
-            font-family: 'VT323',monospace; font-size: .6rem; color: #4a3015;
+            font-family: 'VT323',monospace; font-size: var(--fs-xs); color: var(--text-dim);
             margin-top: 3px; letter-spacing: .05em; display: flex; gap: 8px;
         }
         .cat-card-ch { color: #f5a623; }
         .cat-card-desc {
-            font-family: 'Special Elite',cursive; font-size: .56rem; color: #4a3015;
+            font-family: 'Special Elite',cursive; font-size: var(--fs-sm); color: var(--text-dim);
             margin-top: 4px; line-height: 1.35; display: -webkit-box;
             -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
         }
         .cat-card-badges { display: flex; gap: 3px; margin-top: 4px; flex-wrap: wrap; }
         .cat-badge {
-            font-family: 'VT323',monospace; font-size: .52rem; padding: 1px 3px;
-            border: 1px solid #1e1600; color: #6a4a20;
+            font-family: 'VT323',monospace; font-size: var(--fs-xs); padding: 1px 3px;
+            border: 1px solid #1e1600; color: var(--text-dim);
         }
         .btn-live {
             background: #1a0000; color: #ff3333; border: 1px solid #ff3333;
@@ -179,26 +197,19 @@
             display: grid; grid-template-columns: 200px minmax(0,1fr) 300px; gap: 18px;
             width: min(100%,1320px); max-width: none; margin: 0 auto; padding: 12px 0 0; align-items: start
         }
-        @media(max-width:1040px) { .layout { grid-template-columns:190px minmax(0,1fr) 280px; gap:14px; width:100%; } }
-        .idle-welcome { max-width:270px; margin-top:13px; padding:7px 12px; color:#d8b56a; background:rgba(20,16,5,.42); border:1px solid rgba(196,125,14,.34); border-radius:3px; font-family:'Special Elite',cursive; font-size:.62rem; line-height:1.55; letter-spacing:.025em; text-align:center; text-shadow:0 1px 0 rgba(0,0,0,.9),0 0 7px rgba(245,166,35,.16); }
-        .vhs-deck { position:relative; overflow:visible; padding:18px 23px 19px; min-height:88px; gap:12px; border-radius:0 0 6px 6px; box-shadow:inset 0 2px 4px rgba(255,255,255,.10),inset 0 -5px 9px rgba(0,0,0,.25),0 3px 5px rgba(0,0,0,.28); }.vhs-deck::after { content:''; position:absolute; left:14px; right:14px; bottom:-6px; height:7px; border-radius:0 0 4px 4px; background:linear-gradient(180deg,#464640,#30302b); box-shadow:inset 0 1px 1px rgba(255,255,255,.08),0 3px 4px rgba(0,0,0,.28); z-index:-1; }.vhs-cassette-housing { min-height:48px; padding:5px 9px 6px; border-width:2px; border-radius:4px; box-shadow:inset 0 2px 6px rgba(0,0,0,.92),inset 0 -1px 2px rgba(255,255,255,.05),0 1px 1px rgba(255,255,255,.06); }.vhs-label-strip { padding:2px 7px; margin-bottom:4px; }.vhs-window { min-height:24px; padding:4px 7px; gap:8px; border-radius:3px; }.vhs-reel { width:19px; height:19px; border-width:2px; }.vhs-reel::after { width:5px; height:5px; }.vhs-tape-stretch { height:6px; }.vhs-time { font-size:.65rem; }.transport { gap:8px; }.tbtn { width:43px; height:38px; border-radius:4px; }.tbtn-icon { font-size:1.05rem; }.tbtn-lbl { font-size:.44rem; }
+        .idle-welcome { max-width:270px; margin-top:13px; padding:7px 12px; color:#d8b56a; background:rgba(20,16,5,.42); border:1px solid rgba(196,125,14,.34); border-radius:3px; font-family:'Special Elite',cursive; font-size: var(--fs-xs); line-height:1.55; letter-spacing:.025em; text-align:center; text-shadow:0 1px 0 rgba(0,0,0,.9),0 0 7px rgba(245,166,35,.16); }
+        .vhs-deck { position:relative; overflow:visible; padding:18px 23px 19px; min-height:88px; gap:12px; border-radius:0 0 6px 6px; box-shadow:inset 0 2px 4px rgba(255,255,255,.10),inset 0 -5px 9px rgba(0,0,0,.25),0 3px 5px rgba(0,0,0,.28); }.vhs-deck::after { content:''; position:absolute; left:14px; right:14px; bottom:-6px; height:7px; border-radius:0 0 4px 4px; background:linear-gradient(180deg,#464640,#30302b); box-shadow:inset 0 1px 1px rgba(255,255,255,.08),0 3px 4px rgba(0,0,0,.28); z-index:-1; }.vhs-cassette-housing { min-height:48px; padding:5px 9px 6px; border-width:2px; border-radius:4px; box-shadow:inset 0 2px 6px rgba(0,0,0,.92),inset 0 -1px 2px rgba(255,255,255,.05),0 1px 1px rgba(255,255,255,.06); }.vhs-label-strip { padding:2px 7px; margin-bottom:4px; }.vhs-window { min-height:24px; padding:4px 7px; gap:8px; border-radius:3px; }.vhs-reel { width:19px; height:19px; border-width:2px; }.vhs-reel::after { width:5px; height:5px; }.vhs-tape-stretch { height:6px; }.vhs-time { font-size: var(--fs-xs); }.transport { gap:8px; }.tbtn { width:43px; height:38px; border-radius:4px; }.tbtn-icon { font-size: var(--fs-lg); }.tbtn-lbl { font-size: var(--fs-xs); }
 
-        @media(max-width:860px) { .layout { grid-template-columns: 1fr 280px; } .ep-sidebar { display: none; } }
         @media(max-width:640px) {
-            .layout { display: flex; flex-direction: column; gap: 20px; }
-            .ep-sidebar { display: none; }
-            .tv-shell { width: 100%; margin: 0; }
-            .layout > div:last-child { width: 100%; }
-            .screen-wrap { aspect-ratio: 16/9; }
             .transport .tbtn { width: 48px; height: 38px; }
-            .tbtn-icon { font-size: 1.2rem; }
+            .tbtn-icon { font-size: var(--fs-lg); }
             .show-card { padding: 10px 8px; }
-            .s-time { font-size: .85rem; min-width: 50px; }
-            .s-emoji { font-size: 1.4rem; width: 36px; }
-            .s-name { font-size: .9rem; white-space: normal; line-height: 1.3; }
-            .s-desc { font-size: .7rem; }
-            .badge { font-size: .6rem; padding: 2px 5px; }
-            .cat-btn { padding: 6px 10px; font-size: .75rem; }
+            .s-time { font-size: var(--fs-md); min-width: 50px; }
+            .s-emoji { font-size: var(--fs-xl); width: 36px; }
+            .s-name { font-size: var(--fs-md); white-space: normal; line-height: 1.3; }
+            .s-desc { font-size: var(--fs-sm); }
+            .badge { font-size: var(--fs-xs); padding: 2px 5px; }
+            .cat-btn { padding: 6px 10px; font-size: var(--fs-sm); }
             .vhs-deck { flex-wrap: wrap; justify-content: center; gap: 8px; }
             .vhs-cassette-housing { width: 100%; }
             .controls-panel { flex-wrap: wrap; justify-content: center; gap: 12px; }
@@ -206,22 +217,18 @@
             .controls-right { order: 2; }
         }
         @media(max-width:480px) {
-            body { padding: 10px 8px 20px; }
-            .guide-title { font-size: 1.2rem; }
-            .logo { font-size: 1.8rem; }
-            .header-actions { gap: 7px; }
-            .hbtn { font-size: .82rem; padding: 6px 12px; }
+            .guide-title { font-size: var(--fs-lg); }
         }
 
         .ep-sidebar {
             background: #080700; border: 1px solid #1e1500; border-radius: 4px; overflow: hidden
         }
         .ep-sidebar-hdr {
-            font-family: 'VT323',monospace; font-size: .88rem; color: #f5a623;
+            font-family: 'VT323',monospace; font-size: var(--fs-md); color: #f5a623;
             letter-spacing: .1em; padding: 6px 10px; background: #0d0a00; border-bottom: 1px solid #1e1500
         }
         .ep-show-name {
-            font-family: 'VT323',monospace; font-size: .68rem; color: #5a4020;
+            font-family: 'VT323',monospace; font-size: var(--fs-xs); color: var(--text-dim);
             padding: 4px 10px 5px; border-bottom: 1px solid #140f00;
             white-space: nowrap; overflow: hidden; text-overflow: ellipsis; letter-spacing: .05em
         }
@@ -230,15 +237,15 @@
         .ep-list::-webkit-scrollbar-track { background: #080700 }
         .ep-list::-webkit-scrollbar-thumb { background: #3a2008; border-radius: 3px }
         .ep-item {
-            font-family: 'VT323',monospace; font-size: .7rem; color: #5a4020;
+            font-family: 'VT323',monospace; font-size: var(--fs-sm); color: var(--text-dim);
             padding: 4px 10px; cursor: pointer; transition: all .1s;
             border-left: 2px solid transparent; line-height: 1.35; display: flex; gap: 5px
         }
         .ep-item:hover { color: #f5a623; background: #120c00; border-left-color: #f5a623 }
         .ep-item.ep-active { color: #39ff14; background: #060d00; border-left-color: #39ff14 }
-        .ep-num { color: #2a1e08; flex-shrink: 0; font-size: .62rem; padding-top: 1px }
+        .ep-num { color: var(--text-dim); flex-shrink: 0; font-size: var(--fs-xs); padding-top: 1px }
         .ep-empty {
-            font-family: 'VT323',monospace; font-size: .68rem; color: #2a1e08;
+            font-family: 'VT323',monospace; font-size: var(--fs-xs); color: var(--text-dim);
             padding: 16px 10px; text-align: center; line-height: 1.7
         }
 
@@ -257,26 +264,26 @@
         .tv-top-strip { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 8px; }
         .tv-brand-block { display: flex; flex-direction: column; align-items: flex-start; gap: 3px; }
         .tv-brand-90s {
-            font-family: 'VT323',monospace; font-size: .85rem; color: #3a3a32;
+            font-family: 'VT323',monospace; font-size: var(--fs-md); color: #3a3a32;
             letter-spacing: .3em; text-shadow: 0 1px 0 rgba(255,255,255,.4)
         }
         .live-widget-inline { display: none; align-items: center; gap: 5px; }
         .live-widget-inline.show { display: flex; }
         .live-indicator {
-            font-family: 'VT323',monospace; font-size: .65rem; color: #ff3333;
+            font-family: 'VT323',monospace; font-size: var(--fs-xs); color: #ff3333;
             background: #1a0000; padding: 2px 6px; border-radius: 3px;
             border: 1px solid #ff3333; letter-spacing: .1em; animation: liveBlink 1s infinite;
         }
         @keyframes liveBlink { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
         .ch-display {
-            font-family: 'VT323',monospace; font-size: 1.5rem; color: #ff4400;
+            font-family: 'VT323',monospace; font-size: var(--fs-xl); color: #ff4400;
             background: #0a0200; padding: 4px 12px; border-radius: 3px;
             border: 2px solid #333; min-width: 70px; text-align: center;
             box-shadow: inset 0 2px 4px rgba(0,0,0,.8)
         }
         .resume-badge {
             position: absolute; bottom: 10px; right: 10px; background: rgba(0,0,0,0.8);
-            color: #39ff14; font-family: 'VT323',monospace; font-size: .65rem;
+            color: #39ff14; font-family: 'VT323',monospace; font-size: var(--fs-xs);
             padding: 3px 8px; border-radius: 3px; border-left: 3px solid #39ff14;
             z-index: 20; pointer-events: none; display: none; letter-spacing: .05em;
         }
@@ -300,7 +307,7 @@
         .l-static { position: absolute; inset: 0; z-index: 4; display: none; align-items: center; justify-content: center; background: #111 }
         .l-static.show { display: flex }
         .static-lbl {
-            font-family: 'VT323',monospace; font-size: .9rem; color: rgba(255,255,255,.8);
+            font-family: 'VT323',monospace; font-size: var(--fs-md); color: rgba(255,255,255,.8);
             z-index: 2; letter-spacing: .2em; animation: flk .12s infinite; pointer-events: none
         }
         canvas.noisecanvas { position: absolute; inset: 0; width: 100%; height: 100% }
@@ -314,9 +321,9 @@
         }
         .l-splash.show { display: flex }
         .sp-emoji { font-size: 3rem }
-        .sp-title { font-family: 'VT323',monospace; font-size: 1.05rem; color: #f5a623; margin-top: 6px; text-align: center; line-height: 1.2 }
-        .sp-year { font-family: 'VT323',monospace; font-size: .68rem; color: #7a5a28; margin-top: 2px }
-        .sp-ep { font-family: 'Special Elite',cursive; font-size: .54rem; color: #bbb; margin-top: 4px; text-align: center; padding: 0 8px; line-height: 1.4 }
+        .sp-title { font-family: 'VT323',monospace; font-size: var(--fs-lg); color: #f5a623; margin-top: 6px; text-align: center; line-height: 1.2 }
+        .sp-year { font-family: 'VT323',monospace; font-size: var(--fs-xs); color: var(--text-dim); margin-top: 2px }
+        .sp-ep { font-family: 'Special Elite',cursive; font-size: var(--fs-xs); color: #bbb; margin-top: 4px; text-align: center; padding: 0 8px; line-height: 1.4 }
         .sp-btn {
             margin-top: 10px; width: 42px; height: 42px; border-radius: 50%;
             background: rgba(245,166,35,.12); border: 2px solid #f5a623;
@@ -327,7 +334,7 @@
             border-top: 8px solid transparent; border-bottom: 8px solid transparent;
             border-left: 15px solid #f5a623; margin-left: 4px
         }
-        .sp-hint { font-family: 'VT323',monospace; font-size: .55rem; color: #4a3015; margin-top: 5px; letter-spacing: .1em }
+        .sp-hint { font-family: 'VT323',monospace; font-size: var(--fs-xs); color: var(--text-dim); margin-top: 5px; letter-spacing: .1em }
         .l-scan {
             position: absolute; inset: 0; z-index: 7;
             background: repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.2) 2px,rgba(0,0,0,.2) 4px);
@@ -351,14 +358,14 @@
         .l-ticker.show { display: block }
         .ticker-inner {
             display: inline-block; font-family: 'VT323',monospace;
-            font-size: .72rem; color: #f5a623; animation: ticker 28s linear infinite
+            font-size: var(--fs-sm); color: #f5a623; animation: ticker 28s linear infinite
         }
         .fs-btn {
             position: absolute; top: 6px; right: 6px; z-index: 11;
             width: 22px; height: 22px; background: rgba(0,0,0,.5);
             border: 1px solid rgba(245,166,35,.3); border-radius: 2px;
             cursor: pointer; display: none; align-items: center; justify-content: center;
-            font-size: .7rem; color: rgba(245,166,35,.7); transition: all .15s
+            font-size: var(--fs-sm); color: rgba(245,166,35,.7); transition: all .15s
         }
         .fs-btn:hover { background: rgba(0,0,0,.8); border-color: #f5a623; color: #f5a623 }
         .l-video.show ~ .fs-btn, .fs-btn.show { display: flex }
@@ -373,12 +380,12 @@
         }
         .vhs-lbl {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
-            font-family: 'VT323',monospace; font-size: 1.3rem; color: #fff;
+            font-family: 'VT323',monospace; font-size: var(--fs-lg); color: #fff;
             letter-spacing: .2em; animation: flk .15s infinite; z-index: 2
         }
         .idle-icon { font-size: 2.4rem }
-        .idle-title { font-family: 'VT323',monospace; font-size: 1.8rem; color: #f5a623; margin-top: 3px }
-        .idle-sub { font-family: 'VT323',monospace; font-size: .68rem; color: #4a3a20; letter-spacing: .2em; margin-top: 3px }
+        .idle-title { font-family: 'VT323',monospace; font-size: var(--fs-xl); color: #f5a623; margin-top: 3px }
+        .idle-sub { font-family: 'VT323',monospace; font-size: var(--fs-xs); color: var(--text-dim); letter-spacing: .2em; margin-top: 3px }
         .test-bars { display: flex; width: 100%; height: 14px; margin-top: 12px }
         .test-bar { flex: 1 }
 
@@ -399,11 +406,11 @@
             border-bottom: 1px solid #0a0800;
         }
         .vhs-show-name {
-            font-family: 'VT323',monospace; font-size: .62rem; color: #f5a623;
+            font-family: 'VT323',monospace; font-size: var(--fs-xs); color: #f5a623;
             letter-spacing: .08em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 70%
         }
         .vhs-ep-name {
-            font-family: 'VT323',monospace; font-size: .52rem; color: #5a3a18;
+            font-family: 'VT323',monospace; font-size: var(--fs-xs); color: var(--text-dim);
             letter-spacing: .05em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
             max-width: 28%; text-align: right
         }
@@ -428,7 +435,7 @@
             border-radius: 1px; box-shadow: 0 0 3px rgba(245,166,35,.15)
         }
         .vhs-time {
-            font-family: 'VT323',monospace; font-size: .58rem; color: #3a2808;
+            font-family: 'VT323',monospace; font-size: var(--fs-xs); color: var(--text-dim);
             letter-spacing: .05em; white-space: nowrap; flex-shrink: 0
         }
 
@@ -445,10 +452,10 @@
             background: linear-gradient(180deg,#8a3300,#4a1500);
             box-shadow: 0 0 6px rgba(255,80,0,.4),inset 0 1px 0 rgba(255,150,50,.2)
         }
-        .tbtn-icon { font-size: 1rem; line-height: 1; color: #bbb }
+        .tbtn-icon { font-size: var(--fs-md); line-height: 1; color: #bbb }
         .tbtn.lit .tbtn-icon, .tbtn:active .tbtn-icon { color: #ffaa44 }
         .tbtn-lbl {
-            font-family: 'VT323',monospace; font-size: .4rem; color: rgba(200,200,180,.4);
+            font-family: 'VT323',monospace; font-size: var(--fs-xs); color: rgba(200,200,180,.4);
             letter-spacing: .04em; line-height: 1; margin-top: 1px
         }
 
@@ -476,7 +483,7 @@
             background: rgba(255,255,255,.7); border-radius: 2px;
             top: 3px; left: 50%; transform: translateX(-50%); transform-origin: 50% 11px
         }
-        .kl90 { font-family: 'VT323',monospace; font-size: .52rem; color: #4a4a40; letter-spacing: .07em }
+        .kl90 { font-family: 'VT323',monospace; font-size: var(--fs-xs); color: #4a4a40; letter-spacing: .07em }
         .sbar { width: 50px; height: 4px; background: #444; border-radius: 2px; overflow: hidden; border: 1px solid #2a2a2a; margin-top: 1px }
         .sbar-fill { height: 100%; background: linear-gradient(90deg,#39ff14,#f5a623); width: 40%; transition: width .1s }
         .vol-ring { width: 50px; height: 4px; background: #444; border-radius: 2px; overflow: hidden; border: 1px solid #2a2a2a; margin-top: 1px }
@@ -487,22 +494,22 @@
             border: 2px solid #551100; cursor: pointer; transition: all .15s;
             box-shadow: 2px 2px 4px rgba(0,0,0,.5); display: flex; align-items: center; justify-content: center
         }
-        .pwr90::after { content: '⏻'; font-size: 1rem; color: rgba(255,255,255,.5) }
+        .pwr90::after { content: '⏻'; font-size: var(--fs-md); color: rgba(255,255,255,.5) }
         .pwr90.on { background: linear-gradient(160deg,#ff4400,#cc2200); box-shadow: 0 0 12px rgba(255,60,0,.6) }
         .pwr90.on::after { color: #fff }
-        .pwr-lbl { font-family: 'VT323',monospace; font-size: .5rem; color: #4a4a40; letter-spacing: .07em }
+        .pwr-lbl { font-family: 'VT323',monospace; font-size: var(--fs-xs); color: #4a4a40; letter-spacing: .07em }
         .spkr90 { display: flex; flex-direction: column; gap: 3px; width: 34px }
         .spkr-slot { height: 3px; background: #555; border-radius: 1px }
         .tv-base { width: 70%; margin: 0 auto; height: 10px; background: linear-gradient(160deg,#b0b0a8,#888880); border-radius: 0 0 8px 8px; box-shadow: 0 4px 8px rgba(0,0,0,.5) }
-        .src-note { font-family: 'VT323',monospace; font-size: .56rem; color: #2a1a08; text-align: center; margin-top: 4px; letter-spacing: .07em }
+        .src-note { font-family: 'VT323',monospace; font-size: var(--fs-xs); color: var(--text-dim); text-align: center; margin-top: 4px; letter-spacing: .07em }
 
         .guide-hdr { display: flex; align-items: baseline; gap: 10px; margin-bottom: 8px; border-bottom: 1px solid #1e1600; padding-bottom: 7px; flex-wrap: wrap; }
-        .guide-title { font-family: 'VT323',monospace; font-size: 1.5rem; color: #f5a623; letter-spacing: .08em }
-        .guide-date { font-family: 'VT323',monospace; font-size: .72rem; color: #4a3015; letter-spacing: .1em }
+        .guide-title { font-family: 'VT323',monospace; font-size: var(--fs-xl); color: #f5a623; letter-spacing: .08em }
+        .guide-date { font-family: 'VT323',monospace; font-size: var(--fs-sm); color: var(--text-dim); letter-spacing: .1em }
         .cat-tabs { display: flex; gap: 3px; flex-wrap: wrap; margin-bottom: 8px }
         .cat-btn {
-            font-family: 'VT323',monospace; font-size: .65rem; padding: 4px 8px;
-            border: 1px solid #2a1e0a; background: transparent; color: #7a5a2a;
+            font-family: 'VT323',monospace; font-size: var(--fs-xs); padding: 4px 8px;
+            border: 1px solid #2a1e0a; background: transparent; color: var(--text-dim);
             cursor: pointer; letter-spacing: .05em; border-radius: 2px; transition: all .12s; white-space: nowrap
         }
         .cat-btn:hover, .cat-btn.active { background: #120c00; color: #f5a623; border-color: #c47d0e; }
@@ -517,16 +524,16 @@
         }
         .show-card:hover { border-left-color: #f5a623; background: #110d00 }
         .show-card.active { border-left-color: #39ff14; background: #060d00 }
-        .s-time { font-family: 'VT323',monospace; font-size: .76rem; color: #fff; min-width: 44px; flex-shrink: 0 }
+        .s-time { font-family: 'VT323',monospace; font-size: var(--fs-sm); color: #fff; min-width: 44px; flex-shrink: 0 }
         .show-card.active .s-time { color: #39ff14 }
-        .s-emoji { font-size: 1.2rem; width: 32px; text-align: center; flex-shrink: 0 }
+        .s-emoji { font-size: var(--fs-lg); width: 32px; text-align: center; flex-shrink: 0 }
         .s-info { flex: 1; min-width: 0 }
-        .s-name { font-family: 'Oswald',sans-serif; font-size: .74rem; font-weight: 600; color: #d4b483; white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
+        .s-name { font-family: 'Oswald',sans-serif; font-size: var(--fs-md); font-weight: 600; color: #d4b483; white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
         .show-card.active .s-name { color: #39ff14 }
-        .s-yr { font-size: .52rem; color: #3a2a10; font-family: 'VT323',monospace }
-        .s-desc { font-family: 'Special Elite',cursive; font-size: .56rem; color: #4a3015; margin-top: 1px; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden }
+        .s-yr { font-size: var(--fs-xs); color: var(--text-dim); font-family: 'VT323',monospace }
+        .s-desc { font-family: 'Special Elite',cursive; font-size: var(--fs-sm); color: var(--text-dim); margin-top: 1px; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden }
         .s-badges { display: flex; gap: 2px; margin-top: 2px; flex-wrap: wrap }
-        .badge { font-family: 'VT323',monospace; font-size: .52rem; padding: 1px 3px; border: 1px solid #1e1600; color: #6a4a20; letter-spacing: .04em }
+        .badge { font-family: 'VT323',monospace; font-size: var(--fs-xs); padding: 1px 3px; border: 1px solid #1e1600; color: var(--text-dim); letter-spacing: .04em }
         .badge.live { border-color: #39ff14; color: #39ff14; animation: flk 2s infinite }
         .badge.playlist { border-color: #4a8cff; color: #6aacff }
         .badge.hot { border-color: #ff6a00; color: #ff8c2a }
@@ -538,13 +545,13 @@
         .show-card.active .play-dot { opacity: 1 }
         .np-bar { display: none; gap: 7px; align-items: center; margin-top: 8px; padding: 5px 8px; background: #060800; border: 1px solid #1a1400 }
         .np-bar.show { display: flex }
-        .np-live { font-family: 'VT323',monospace; font-size: .62rem; color: #39ff14; letter-spacing: .15em; flex-shrink: 0; animation: flk 2s infinite }
-        .np-name { font-family: 'Oswald',sans-serif; font-size: .68rem; color: #d4b483; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
-        .np-ch { font-family: 'VT323',monospace; font-size: .68rem; color: #f5a623; flex-shrink: 0 }
+        .np-live { font-family: 'VT323',monospace; font-size: var(--fs-xs); color: #39ff14; letter-spacing: .15em; flex-shrink: 0; animation: flk 2s infinite }
+        .np-name { font-family: 'Oswald',sans-serif; font-size: var(--fs-xs); color: #d4b483; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
+        .np-ch { font-family: 'VT323',monospace; font-size: var(--fs-xs); color: #f5a623; flex-shrink: 0 }
         .toast {
             position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(60px);
             background: #1a1200; border: 1px solid #f5a623; color: #f5a623;
-            font-family: 'VT323',monospace; font-size: .88rem; padding: 7px 18px;
+            font-family: 'VT323',monospace; font-size: var(--fs-md); padding: 7px 18px;
             border-radius: 3px; z-index: 9999; opacity: 0; transition: all .3s;
             letter-spacing: .1em; pointer-events: none; white-space: nowrap
         }
@@ -555,19 +562,19 @@
             background: linear-gradient(160deg,#0f0c04,#1a1408); border: 1px solid #3a2800;
             border-radius: 6px; padding: 24px 28px; max-width: 310px; width: 90%; text-align: center
         }
-        .modal-box h2 { font-family: 'VT323',monospace; font-size: 1.6rem; color: #f5a623; letter-spacing: .1em; margin-bottom: 5px }
-        .modal-box p { font-family: 'Special Elite',cursive; font-size: .74rem; color: #9a7a45; line-height: 1.5; margin-bottom: 16px }
+        .modal-box h2 { font-family: 'VT323',monospace; font-size: var(--fs-xl); color: #f5a623; letter-spacing: .1em; margin-bottom: 5px }
+        .modal-box p { font-family: 'Special Elite',cursive; font-size: var(--fs-sm); color: #9a7a45; line-height: 1.5; margin-bottom: 16px }
         .modal-opts { display: flex; flex-direction: column; gap: 8px }
         .dl {
-            display: block; font-family: 'VT323',monospace; font-size: .85rem;
+            display: block; font-family: 'VT323',monospace; font-size: var(--fs-md);
             padding: 9px 14px; border-radius: 3px; cursor: pointer; letter-spacing: .1em;
             text-decoration: none; transition: all .14s; border: none; width: 100%; text-align: center
         }
         .dl-bmc { background: #0a1a0a; color: #39ff14; border: 1px solid #1a3a1a }
         .dl-bmc:hover { background: #112211 }
-        .dl-em { background: #1a1200; color: #f5a623; border: 1px solid #3a2800; font-size: .7rem }
+        .dl-em { background: #1a1200; color: #f5a623; border: 1px solid #3a2800; font-size: var(--fs-sm) }
         .dl-em:hover { background: #251a00 }
-        .modal-close { margin-top: 12px; font-family: 'VT323',monospace; font-size: .74rem; color: #4a3015; background: transparent; border: none; cursor: pointer; letter-spacing: .1em }
+        .modal-close { margin-top: 12px; font-family: 'VT323',monospace; font-size: var(--fs-sm); color: var(--text-dim); background: transparent; border: none; cursor: pointer; letter-spacing: .1em }
         .modal-close:hover { color: #f5a623 }
         .signup-strip {
             position: relative; background: #000; border-bottom: 1px solid #3a2800;
@@ -575,34 +582,33 @@
         }
         .signup-strip.hide { display: none }
         .strip-form { display: flex; align-items: center; justify-content: center; gap: 8px 12px; flex-wrap: wrap }
-        .strip-text { font-family: 'VT323',monospace; font-size: 1.05rem; font-weight: 700; color: #fff; letter-spacing: .06em }
+        .strip-text { font-family: 'VT323',monospace; font-size: var(--fs-lg); font-weight: 700; color: #fff; letter-spacing: .06em }
         .strip-input {
             background: #fff; color: #444951; border: 1px solid #fff; border-radius: 4px;
-            font-family: 'VT323',monospace; font-size: 1rem; font-weight: 700; padding: 5px 10px;
+            font-family: 'VT323',monospace; font-size: var(--fs-md); font-weight: 700; padding: 5px 10px;
             width: 230px; max-width: 100%; outline: none; letter-spacing: .03em
         }
         .strip-input:focus { box-shadow: 0 0 0 2px #ca3aca }
         .strip-submit {
             background: #ca3aca; color: #fff; border: none; border-radius: 4px; cursor: pointer;
-            font-family: 'VT323',monospace; font-size: 1rem; font-weight: 700; padding: 6px 16px;
+            font-family: 'VT323',monospace; font-size: var(--fs-md); font-weight: 700; padding: 6px 16px;
             letter-spacing: .06em; transition: all .15s
         }
         .strip-submit:hover { background: #dd55dd }
         .strip-submit:active { transform: scale(.96) }
         .strip-submit:disabled { opacity: .5; cursor: default }
         .signup-trap { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0 }
-        .strip-note { font-family: 'Special Elite',cursive; font-size: .62rem; color: #9a9a9a; line-height: 1.4; margin-top: 5px }
+        .strip-note { font-family: 'Special Elite',cursive; font-size: var(--fs-xs); color: #9a9a9a; line-height: 1.4; margin-top: 5px }
         .strip-note:empty { display: none }
-        .strip-note.ok { font-family: 'VT323',monospace; font-size: .9rem; color: #39ff14; letter-spacing: .08em }
-        .strip-note.err { font-family: 'VT323',monospace; font-size: .9rem; color: #ff6b5a; letter-spacing: .08em }
+        .strip-note.ok { font-family: 'VT323',monospace; font-size: var(--fs-md); color: #39ff14; letter-spacing: .08em }
+        .strip-note.err { font-family: 'VT323',monospace; font-size: var(--fs-md); color: #ff6b5a; letter-spacing: .08em }
         .strip-close {
             position: absolute; top: 8px; right: 14px; width: 30px; height: 30px; border-radius: 50%;
             background: transparent; border: 1px solid #333; color: #9a9a9a; cursor: pointer;
-            font-family: 'VT323',monospace; font-size: 1rem; transition: all .15s
+            font-family: 'VT323',monospace; font-size: var(--fs-md); transition: all .15s
         }
         .strip-close:hover { color: #fff; border-color: #fff }
         .help-desc a { color: #f5a623 }
-        @media(max-width:480px) { .signup-strip { margin: -10px -8px 6px; padding: 9px 48px } .strip-input { width: 100% } }
 
         @keyframes flk { 0%,90%,100% { opacity: 1 } 95% { opacity: .2 } }
         @keyframes ticker { 0% { transform: translateX(60%) } 100% { transform: translateX(-100%) } }
@@ -674,7 +680,7 @@
         }
         .ch-overlay-name {
             font-family: 'VT323', monospace;
-            font-size: .9rem;
+            font-size: var(--fs-md);
             color: #39ff14;
             letter-spacing: .08em;
             text-shadow: 0 0 8px #39ff14;
@@ -691,7 +697,7 @@
         }
         #volOverlay.show { opacity: 1; }
         #volOverlay .vol-overlay-label {
-            font-family: 'VT323', monospace; font-size: 1.2rem; color: #39ff14;
+            font-family: 'VT323', monospace; font-size: var(--fs-lg); color: #39ff14;
             letter-spacing: .25em; text-shadow: 0 0 8px #39ff14, 0 0 20px #39ff14; margin-bottom: 5px;
         }
         #volOverlay .vol-overlay-bars { display: flex; gap: 3px; justify-content: center; align-items: flex-end; height: 20px; }
@@ -704,11 +710,208 @@
             text-align: center;
             margin: 12px 0 6px;
         }
+
+        /* ===== LAYOUT =====
+           Desktop (1040px and up): episodes | TV | guide, all on one screen.
+           Tablet (640 to 1039px): TV | guide and episodes as tabs.
+           Phone (under 640px): TV pinned at the top, tabs and list beneath. */
+        html { -webkit-text-size-adjust: 100%; }
+        body { padding: 0 0 var(--sp-5); }
+        :focus-visible { outline: 2px solid var(--amber); outline-offset: 2px; }
+
+        /* --- signup strip --- */
+        .signup-strip { margin: 0; padding: 6px 56px; }
+        .strip-text { font-size: var(--fs-md); }
+        .strip-input { height: 32px; padding: 0 10px; width: 220px; font-size: var(--fs-md); }
+        .strip-submit { height: 32px; padding: 0 16px; font-size: var(--fs-md); }
+        .strip-close { top: 6px; right: 12px; width: 32px; height: 32px; font-size: var(--fs-md); }
+        .strip-toggle { display: none; }
+
+        /* --- top bar --- */
+        .topbar {
+            position: relative; display: flex; align-items: center; gap: var(--sp-2);
+            min-height: 64px; padding: var(--sp-2) var(--gutter);
+            border-bottom: 1px solid var(--line); background: rgba(8,6,2,.92);
+        }
+        /* the logo sits dead centre of the bar; buttons flow either side of it */
+        .brand { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); text-align: center; pointer-events: none; }
+        .topbar .logo { font-size: 36px; letter-spacing: .12em; white-space: nowrap; padding-left: .12em; }
+        .topbar .tagline {
+            margin: 2px 0 0; font-size: var(--fs-xs); letter-spacing: .22em; padding-left: .22em;
+            color: var(--text-dim); text-transform: uppercase; white-space: nowrap;
+        }
+        .bar-more { display: contents; }
+        #btnCatalogue { margin-left: auto; }
+        .bar-menu-btn { display: none; }
+        .hbtn {
+            height: var(--ctl-h); padding: 0 14px; justify-content: center; gap: var(--sp-2);
+            font-size: var(--fs-md); white-space: nowrap; border-radius: 4px;
+            background: transparent; color: var(--amber); border: 1px solid var(--line-strong);
+        }
+        .hbtn:hover { background: #1a1200; border-color: var(--amber-deep); }
+        .btn-live { background: transparent; color: var(--red); border: 1px solid var(--red); }
+        .btn-live:hover { background: #2a0000; border-color: var(--red); }
+        .btn-live.active { background: #ff0000; color: #fff; border-color: #fff; }
+        .live-dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+        .help-btn { position: static; width: var(--ctl-h); height: var(--ctl-h); padding: 0; border-radius: 4px; font-size: var(--fs-lg); background: transparent; }
+        .help-btn:hover { box-shadow: none; }
+        .help-word { display: none; }
+        @media (max-width: 899px) { .topbar .tagline { display: none; } .topbar { min-height: 56px; } }
+
+        /* --- three columns --- */
+        .layout {
+            display: grid; grid-template-columns: 220px minmax(0,1fr) 340px; grid-template-areas: "ep tv guide";
+            gap: 20px; width: min(100%,1440px); margin: 0 auto; padding: var(--sp-4) var(--gutter) 0; align-items: start;
+        }
+        .ep-sidebar { grid-area: ep; min-width: 0; display: flex; flex-direction: column; max-height: calc(100vh - var(--page-top) - var(--sp-4)); }
+        .ep-list { flex: 1 1 auto; min-height: 0; max-height: none; }
+        .tv-col { grid-area: tv; min-width: 0; }
+        .guide-col { grid-area: guide; min-width: 0; display: flex; flex-direction: column; max-height: calc(100vh - var(--page-top) - var(--sp-4)); }
+        .show-list { flex: 1 1 auto; min-height: 120px; max-height: none; }
+        .side-tabs { grid-area: tabs; display: none; border: 1px solid var(--line-strong); border-radius: 4px; overflow: hidden; }
+        .side-tab {
+            flex: 1; height: 44px; background: transparent; border: none; cursor: pointer;
+            font-family: 'VT323',monospace; font-size: var(--fs-md); letter-spacing: .1em; color: var(--text-dim);
+        }
+        .side-tab + .side-tab { border-left: 1px solid var(--line-strong); }
+        .side-tab.active { background: #1a1200; color: var(--amber); }
+
+        /* the TV is sized from the window height so picture, deck and power all fit */
+        .tv-shell { width: 100%; max-width: max(380px, calc((100vh - var(--page-top) - var(--tv-chrome) - var(--sp-4)) * 1.3333 + 54px)); margin: 0 auto; }
+
+        /* --- guide --- */
+        .guide-hdr { align-items: baseline; }
+        .guide-title { font-size: var(--fs-lg); }
+        .guide-search {
+            width: 100%; height: var(--ctl-h); margin-bottom: var(--sp-2); padding: 0 12px; flex: 0 0 auto;
+            background: var(--panel); border: 1px solid var(--line-strong); border-radius: 4px; outline: none;
+            color: var(--text); font-family: 'VT323',monospace; font-size: var(--fs-md); letter-spacing: .05em;
+        }
+        .guide-search:focus { border-color: var(--amber-deep); }
+        .guide-search::placeholder { color: var(--text-dim); }
+        .cat-tabs { gap: 6px; flex: 0 0 auto; }
+        .cat-btn { min-height: 30px; padding: 0 10px; font-size: var(--fs-sm); border-radius: 3px; }
+        .show-card { padding: 8px 10px; gap: 10px; }
+        .s-desc, .cat-card-desc, .help-desc, .modal-box p { font-family: 'Oswald',sans-serif; font-weight: 400; letter-spacing: .01em; }
+        .s-desc { margin-top: 2px; line-height: 1.35; }
+        .badge { padding: 1px 5px; }
+        .s-badges { gap: 4px; margin-top: 4px; }
+        .sched-selector { justify-content: center; flex-wrap: wrap; gap: 6px; }
+        .pwr90 { position: relative; }
+
+        /* --- tablet: TV beside one tabbed column --- */
+        @media (max-width: 1039px) {
+            .layout { grid-template-columns: minmax(0,1fr) 320px; grid-template-areas: "tv tabs" "tv side"; grid-template-rows: auto 1fr; gap: 12px 16px; }
+            .side-tabs { display: flex; }
+            .ep-sidebar, .guide-col { grid-area: side; max-height: calc(100vh - var(--page-top) - 56px - var(--sp-4)); }
+            .layout[data-tab="guide"] .ep-sidebar { display: none; }
+            .layout[data-tab="episodes"] .guide-col { display: none; }
+            .ep-sidebar-hdr, .guide-title { display: none; }
+            :root { --page-top: 140px; }
+        }
+
+        /* --- touch sizes --- */
+        @media (max-width: 1039px), (pointer: coarse) {
+            :root { --ctl-h: 44px; }
+            .cat-tabs { flex-wrap: nowrap; overflow-x: auto; gap: 8px; padding-bottom: 4px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+            .cat-tabs::-webkit-scrollbar { display: none; }
+            .cat-btn { min-height: 44px; padding: 0 14px; flex: 0 0 auto; }
+            .sched-sel-btn { min-height: 44px; padding: 0 12px; }
+            .tbtn, .transport .tbtn { width: 46px; height: 44px; }
+            .ep-item { padding: 12px; }
+            .knob90::before, .pwr90::before { content: ''; position: absolute; inset: -9px; }
+            .fs-btn { width: 40px; height: 40px; font-size: var(--fs-md); }
+            .help-modal-close, .cat-modal-close, .modal-close { min-height: 44px; padding: 0 12px; }
+            .cat-filter-btn { min-height: 40px; padding: 0 12px; }
+            .strip-input, .strip-submit { height: 44px; }
+            .strip-close { top: 0; right: 4px; width: 44px; height: 44px; border-color: transparent; }
+            .signup-strip { padding: 0 52px; }
+            .strip-form { padding: 6px 0; }
+        }
+
+        /* --- small bar: logo, Live, Surprise, menu --- */
+        @media (max-width: 720px) {
+            .topbar .logo { font-size: 28px; }
+            .lbl-wide { display: none; }
+            .bar-menu-btn { display: flex; margin-left: auto; }
+            #btnCatalogue { margin-left: 0; }
+            .bar-more {
+                display: none; position: absolute; top: calc(100% + 4px); right: var(--gutter); z-index: 9500;
+                flex-direction: column; gap: var(--sp-2); min-width: 200px; padding: var(--sp-3);
+                background: #0f0c04; border: 1px solid var(--line-strong); border-radius: 6px; box-shadow: 0 12px 32px rgba(0,0,0,.7);
+            }
+            .bar-more.open { display: flex; }
+            .bar-more .hbtn { width: 100%; justify-content: flex-start; font-size: var(--fs-md); }
+            .help-q { display: none; }
+            .help-word { display: inline; }
+        }
+
+        @media (max-width: 400px) {
+            .topbar { gap: var(--sp-2); padding-left: var(--sp-2); padding-right: var(--sp-2); }
+            .topbar .logo { font-size: 24px; letter-spacing: .08em; padding-left: .08em; }
+            .hbtn { padding: 0 10px; }
+            .bar-more { right: var(--sp-2); }
+        }
+
+        /* --- phone: one column, TV first --- */
+        @media (max-width: 639px) {
+            .layout { grid-template-columns: minmax(0,1fr); grid-template-areas: "tv" "tabs" "side" "sched"; grid-template-rows: none; gap: 10px; padding: var(--sp-2) var(--sp-2) 0; }
+            .tv-col { display: contents; }
+            .tv-shell { grid-area: tv; max-width: none; padding: 8px; border-radius: 10px; box-shadow: 0 0 0 8px var(--bg), 0 10px 24px rgba(0,0,0,.8); }
+            .tv-shell::before { display: none; }
+            .tv-base, .src-note { display: none; }
+            .schedule-widget-wrapper { grid-area: sched; margin: 0; }
+            .ep-sidebar, .guide-col { max-height: none; }
+            .show-list, .ep-list { max-height: none; overflow: visible; }
+            .tv-top-strip { display: none; }
+            .screen-housing { padding: 5px 5px 7px; }
+            .screen-bezel-90s { padding: 3px; }
+            .vhs-deck { flex-wrap: nowrap; justify-content: space-between; gap: 8px; padding: 6px 10px; min-height: 0; }
+            .vhs-cassette-housing { width: auto; min-width: 0; min-height: 0; }
+            .controls-panel { flex-wrap: nowrap; justify-content: space-between; gap: 8px; padding: 6px 12px; }
+            .knob-group { gap: 14px; align-items: center; }
+            .knob-unit { flex-direction: row; gap: 6px; }
+            .vol-ring, .sbar, .pwr-lbl, .spkr90 { display: none; }
+            .knob90::before, .pwr90::before { inset: -8px -6px; }
+            .toast { max-width: calc(100vw - 24px); white-space: normal; text-align: center; }
+            .cat-modal-title { font-size: var(--fs-lg); }
+            .cat-modal-bg, .help-modal-bg { padding: 10px; }
+
+            /* signup strip folds to one link; tapping it opens the form */
+            .signup-strip { padding: 0 48px 0 12px; min-height: 44px; }
+            .strip-form { padding: 0; }
+            .strip-text, .strip-input, .strip-submit { display: none; }
+            .strip-toggle {
+                display: inline-flex; align-items: center; justify-content: center; width: 100%; height: 44px;
+                background: none; border: none; cursor: pointer; color: #fff;
+                font-family: 'VT323',monospace; font-size: var(--fs-md); letter-spacing: .06em;
+                text-decoration: underline; text-decoration-color: var(--magenta); text-underline-offset: 4px;
+            }
+            .signup-strip.open .strip-toggle { display: none; }
+            .signup-strip.open .strip-form { flex-wrap: nowrap; padding: 6px 0; }
+            .signup-strip.open .strip-input { display: block; flex: 1 1 auto; width: auto; min-width: 0; }
+            .signup-strip.open .strip-submit { display: block; }
+            .strip-note { padding-bottom: 6px; margin-top: 0; }
+        }
+        /* pin the TV while the list scrolls, when the screen is tall enough to leave room for the list */
+        @media (max-width: 639px) and (min-height: 600px) {
+            .tv-shell { position: sticky; top: 0; z-index: 60; }
+            .side-tabs { position: sticky; top: calc(var(--tv-h) + 8px); z-index: 59; background: var(--bg); }
+        }
+        /* phone held sideways: the picture fills the height, controls are a short scroll below */
+        @media (max-height: 500px) and (orientation: landscape) {
+            :root { --page-top: 68px; --tv-chrome: 34px; }
+            .signup-strip, .tv-top-strip { display: none; }
+            .topbar { min-height: 48px; padding-top: 2px; padding-bottom: 2px; }
+            .layout { padding-top: var(--sp-2); }
+            .ep-sidebar, .guide-col { max-height: none; }
+        }
     </style>
 </head>
 <body>
     <div class="signup-strip" id="signupStrip">
         <form class="strip-form" id="signupForm" novalidate>
+            <button class="strip-toggle" id="signupToggle" type="button">Get updates on new shows</button>
             <span class="strip-text">Receive New Updates on Shows and Listings</span>
             <input class="strip-input" type="email" id="signupEmail" placeholder="Email Address" aria-label="Email Address" autocomplete="email" required>
             <input class="signup-trap" type="text" id="signupTrap" tabindex="-1" autocomplete="off" aria-hidden="true">
@@ -717,22 +920,23 @@
         <div class="strip-note" id="signupMsg" role="status"></div>
         <button class="strip-close" id="signupClose" type="button" title="Hide this bar" aria-label="Hide this bar">✕</button>
     </div>
-    <div class="help-btn" id="helpBtn" title="How to use The Tube">?</div>
-    <div class="site-header">
-        <div class="logo">THE <span>TUBE</span></div>
-        <div class="tagline">◈ Classic Television Archive ◈</div>
-        <div class="divider"></div>
-        <div class="header-actions">
-            <button class="hbtn btn-donate" id="btnDonate">☕ DONATE</button>
-            <button class="hbtn btn-surprise" id="btnSurprise">🎲 SURPRISE ME</button>
-            <button class="hbtn btn-live" id="btnLiveMode">🔴 LIVE MODE</button>
-            <button class="hbtn btn-catalogue" id="btnCatalogue">📺 FULL CATALOGUE</button>
-            <div style="display:inline-flex; align-items:center;"><input type="text" id="searchBox" placeholder="🔍 SEARCH SHOWS..." style="background:#0c0900; border:1px solid #3a2800; color:#d4b483; font-family:'VT323',monospace; font-size:.75rem; padding:5px 12px; border-radius:3px; outline:none; width:160px; letter-spacing:.05em;"></div>
+    <header class="topbar">
+        <div class="brand">
+            <div class="logo">THE <span>TUBE</span></div>
+            <div class="tagline">Classic Television Archive</div>
         </div>
-    </div>
-    <div class="layout">
-        <div class="ep-sidebar"><div class="ep-sidebar-hdr">📼 EPISODES</div><div class="ep-show-name" id="epShowName">— SELECT A SHOW —</div><div class="ep-list" id="epList"><div class="ep-empty">Power on &amp; select<br>a show to see<br>episodes here</div></div></div>
-        <div><div class="tv-shell"><div class="tv-top-strip"><div class="tv-brand-block"><span class="tv-brand-90s">NOSTALGIVISION™</span><div class="live-widget-inline" id="liveModeIndicator"><span class="live-indicator">🔴 LIVE</span></div></div><div class="ch-display" id="chDisp">— —</div></div><div class="screen-housing"><div class="screen-bezel-90s"><div class="screen-wrap" id="screenWrap"><div class="l-idle" id="lIdle"><div class="idle-icon">📺</div><div class="idle-title">THE TUBE</div><div class="idle-sub">◈ SELECT A PROGRAMME ◈</div><div class="idle-welcome">Turn on the TV, then choose a programme<br>— or start Live Mode.</div><div class="test-bars"><div class="test-bar" style="background:#fff"></div><div class="test-bar" style="background:#ff0"></div><div class="test-bar" style="background:#0ff"></div><div class="test-bar" style="background:#0f0"></div><div class="test-bar" style="background:#f0f"></div><div class="test-bar" style="background:#f00"></div><div class="test-bar" style="background:#00f"></div><div class="test-bar" style="background:#000"></div></div></div><div class="l-video" id="lVideo"><video id="vid" playsinline preload="auto"></video><div id="resumeBadge" class="resume-badge"></div></div><div class="l-vhsfx" id="lVhs"><canvas class="noisecanvas" id="vhsCanvas"></canvas><div class="vhs-stripe"></div><div class="vhs-band"></div><div class="vhs-lbl" id="vhsLbl">⏩ FF</div></div><div class="l-static" id="lStatic"><canvas class="noisecanvas" id="noiseCanvas"></canvas><div class="static-lbl" id="staticLbl">TUNING...</div></div><div class="l-off" id="lOff"></div><div class="l-splash" id="lSplash"><div class="sp-emoji" id="spEmoji"></div><div class="sp-title" id="spTitle"></div><div class="sp-year" id="spYear"></div><div class="sp-ep" id="spEp"></div><div class="sp-btn"></div><div class="sp-hint">▶ CLICK TO WATCH</div><div class="sp-loading" id="spLoading" style="display:none">LOADING EPISODES...</div></div><div class="l-scan" id="lScan"></div><div class="l-vig"></div><div class="l-phos" id="lPhos"></div><div class="l-ticker" id="lTicker"><span class="ticker-inner" id="tickerTxt"></span></div><div class="fs-btn" id="fsBtn" title="Fullscreen">⛶</div><div id="lPowerOn"><div class="poweron-flash"></div><div class="poweron-line"></div><div class="poweron-bloom"></div></div><div id="chOverlay"><div class="ch-overlay-num" id="chOverlayNum">CH —</div><div class="ch-overlay-name" id="chOverlayName"></div></div><div class="vol-overlay" id="volOverlay"><div class="vol-overlay-label">VOLUME</div><div class="vol-overlay-bars" id="volOverlayBars"></div></div></div></div></div><div class="vhs-deck"><div class="vhs-cassette-housing"><div class="vhs-label-strip"><span class="vhs-show-name" id="vhsShowName">◈ NO TAPE LOADED ◈</span><span class="vhs-ep-name" id="vhsEpName"></span></div><div class="vhs-window"><div class="vhs-reel" id="reelL"></div><div class="vhs-tape-stretch"></div><div class="vhs-reel" id="reelR"></div><div class="vhs-time" id="vhsTime">--:--</div></div></div><div class="transport"><div class="tbtn" id="tRew" title="Rewind 15s"><span class="tbtn-icon">⏪</span><span class="tbtn-lbl">-15s</span></div><div class="tbtn" id="tPlay" title="Play / Pause"><span class="tbtn-icon" id="tPlayIcon">▶</span></div><div class="tbtn" id="tFF" title="Fast forward 15s"><span class="tbtn-icon">⏩</span><span class="tbtn-lbl">+15s</span></div></div></div><div class="controls-panel"><div class="knob-group"><div class="knob-unit"><div class="knob90 k-vol" id="kVol"></div><span class="kl90">VOL</span><div class="vol-ring"><div class="vol-ring-fill" id="volFill"></div></div></div><div class="knob-unit"><div class="knob90 k-static" id="kStatic"></div><span class="kl90">STATIC</span><div class="sbar"><div class="sbar-fill" id="sbarFill"></div></div></div><div class="knob-unit"><div class="knob90 k-bright" id="kBright"></div><span class="kl90">BRIGHT</span></div></div><div class="controls-right"><div class="spkr90"><div class="spkr-slot"></div><div class="spkr-slot"></div><div class="spkr-slot"></div><div class="spkr-slot"></div><div class="spkr-slot"></div><div class="spkr-slot"></div><div class="spkr-slot"></div><div class="spkr-slot"></div></div><div class="pwr-area"><div class="pwr90" id="pwrBtn"></div><span class="pwr-lbl">POWER</span></div></div></div></div><div class="tv-base"></div><div class="src-note">◈ STREAMING VIA INTERNET ARCHIVE ◈</div>
+        <button class="hbtn btn-live" id="btnLiveMode"><span class="live-dot"></span>LIVE<span class="lbl-wide">MODE</span></button>
+        <button class="hbtn bar-menu-btn" id="barMenuBtn" type="button" aria-expanded="false" aria-controls="barMore">MENU</button>
+        <div class="bar-more" id="barMore">
+            <button class="hbtn" id="btnSurprise">SURPRISE ME</button>
+            <button class="hbtn" id="btnCatalogue">CATALOGUE</button>
+            <button class="hbtn" id="btnDonate">DONATE</button>
+            <button class="hbtn help-btn" id="helpBtn" type="button" title="How to use The Tube" aria-label="Help"><span class="help-q">?</span><span class="help-word">HELP</span></button>
+        </div>
+    </header>
+    <div class="layout" data-tab="guide">
+        <div class="ep-sidebar" id="panelEpisodes"><div class="ep-sidebar-hdr">EPISODES</div><div class="ep-show-name" id="epShowName">— SELECT A SHOW —</div><div class="ep-list" id="epList"><div class="ep-empty">Power on &amp; select<br>a show to see<br>episodes here</div></div></div>
+        <div class="tv-col"><div class="tv-shell"><div class="tv-top-strip"><div class="tv-brand-block"><span class="tv-brand-90s">NOSTALGIVISION™</span><div class="live-widget-inline" id="liveModeIndicator"><span class="live-indicator">🔴 LIVE</span></div></div><div class="ch-display" id="chDisp">— —</div></div><div class="screen-housing"><div class="screen-bezel-90s"><div class="screen-wrap" id="screenWrap"><div class="l-idle" id="lIdle"><div class="idle-icon">📺</div><div class="idle-title">THE TUBE</div><div class="idle-sub">◈ SELECT A PROGRAMME ◈</div><div class="idle-welcome">Turn on the TV, then choose a programme<br>— or start Live Mode.</div><div class="test-bars"><div class="test-bar" style="background:#fff"></div><div class="test-bar" style="background:#ff0"></div><div class="test-bar" style="background:#0ff"></div><div class="test-bar" style="background:#0f0"></div><div class="test-bar" style="background:#f0f"></div><div class="test-bar" style="background:#f00"></div><div class="test-bar" style="background:#00f"></div><div class="test-bar" style="background:#000"></div></div></div><div class="l-video" id="lVideo"><video id="vid" playsinline preload="auto"></video><div id="resumeBadge" class="resume-badge"></div></div><div class="l-vhsfx" id="lVhs"><canvas class="noisecanvas" id="vhsCanvas"></canvas><div class="vhs-stripe"></div><div class="vhs-band"></div><div class="vhs-lbl" id="vhsLbl">⏩ FF</div></div><div class="l-static" id="lStatic"><canvas class="noisecanvas" id="noiseCanvas"></canvas><div class="static-lbl" id="staticLbl">TUNING...</div></div><div class="l-off" id="lOff"></div><div class="l-splash" id="lSplash"><div class="sp-emoji" id="spEmoji"></div><div class="sp-title" id="spTitle"></div><div class="sp-year" id="spYear"></div><div class="sp-ep" id="spEp"></div><div class="sp-btn"></div><div class="sp-hint">▶ CLICK TO WATCH</div><div class="sp-loading" id="spLoading" style="display:none">LOADING EPISODES...</div></div><div class="l-scan" id="lScan"></div><div class="l-vig"></div><div class="l-phos" id="lPhos"></div><div class="l-ticker" id="lTicker"><span class="ticker-inner" id="tickerTxt"></span></div><div class="fs-btn" id="fsBtn" title="Fullscreen">⛶</div><div id="lPowerOn"><div class="poweron-flash"></div><div class="poweron-line"></div><div class="poweron-bloom"></div></div><div id="chOverlay"><div class="ch-overlay-num" id="chOverlayNum">CH —</div><div class="ch-overlay-name" id="chOverlayName"></div></div><div class="vol-overlay" id="volOverlay"><div class="vol-overlay-label">VOLUME</div><div class="vol-overlay-bars" id="volOverlayBars"></div></div></div></div></div><div class="vhs-deck"><div class="vhs-cassette-housing"><div class="vhs-label-strip"><span class="vhs-show-name" id="vhsShowName">◈ NO TAPE LOADED ◈</span><span class="vhs-ep-name" id="vhsEpName"></span></div><div class="vhs-window"><div class="vhs-reel" id="reelL"></div><div class="vhs-tape-stretch"></div><div class="vhs-reel" id="reelR"></div><div class="vhs-time" id="vhsTime">--:--</div></div></div><div class="transport"><div class="tbtn" id="tRew" title="Rewind 15s"><span class="tbtn-icon">⏪</span><span class="tbtn-lbl">-15s</span></div><div class="tbtn" id="tPlay" title="Play / Pause"><span class="tbtn-icon" id="tPlayIcon">▶</span></div><div class="tbtn" id="tFF" title="Fast forward 15s"><span class="tbtn-icon">⏩</span><span class="tbtn-lbl">+15s</span></div></div></div><div class="controls-panel"><div class="knob-group"><div class="knob-unit"><div class="knob90 k-vol" id="kVol"></div><span class="kl90">VOL</span><div class="vol-ring"><div class="vol-ring-fill" id="volFill"></div></div></div><div class="knob-unit"><div class="knob90 k-static" id="kStatic"></div><span class="kl90">STATIC</span><div class="sbar"><div class="sbar-fill" id="sbarFill"></div></div></div><div class="knob-unit"><div class="knob90 k-bright" id="kBright"></div><span class="kl90">BRIGHT</span></div></div><div class="controls-right"><div class="spkr90"><div class="spkr-slot"></div><div class="spkr-slot"></div><div class="spkr-slot"></div><div class="spkr-slot"></div><div class="spkr-slot"></div><div class="spkr-slot"></div><div class="spkr-slot"></div><div class="spkr-slot"></div></div><div class="pwr-area"><div class="pwr90" id="pwrBtn"></div><span class="pwr-lbl">POWER</span></div></div></div></div><div class="tv-base"></div><div class="src-note">◈ STREAMING VIA INTERNET ARCHIVE ◈</div>
             <div class="schedule-widget-wrapper">
                 <div class="sched-selector">
                     <button class="sched-sel-btn active-a" id="btnSchedA">📅 SCHED A</button>
@@ -743,7 +947,8 @@
                 </div>
             </div>
         </div>
-        <div><div class="guide-hdr"><span class="guide-title">📋 PROGRAMME GUIDE</span><span class="guide-date" id="gDate"></span></div><div id="whatsOnWidget"></div><div class="cat-tabs" id="catTabs"></div><div class="show-list" id="showList"></div><div class="np-bar" id="npBar"><span class="np-live">▶ ON AIR</span><span class="np-name" id="npName">—</span><span class="np-ch" id="npCh">CH —</span></div></div>
+        <div class="side-tabs" role="tablist" aria-label="Guide or episodes"><button class="side-tab active" type="button" role="tab" aria-selected="true" data-tab="guide">GUIDE</button><button class="side-tab" type="button" role="tab" aria-selected="false" data-tab="episodes">EPISODES</button></div>
+        <div class="guide-col" id="panelGuide"><div class="guide-hdr"><span class="guide-title">PROGRAMME GUIDE</span><span class="guide-date" id="gDate"></span></div><div id="whatsOnWidget"></div><input class="guide-search" type="text" id="searchBox" placeholder="Search shows" aria-label="Search shows" autocomplete="off"><div class="cat-tabs" id="catTabs"></div><div class="show-list" id="showList"></div><div class="np-bar" id="npBar"><span class="np-live">▶ ON AIR</span><span class="np-name" id="npName">—</span><span class="np-ch" id="npCh">CH —</span></div></div>
     </div>
     <!-- HELP MODAL -->
     <div class="help-modal-bg" id="helpModal">
@@ -772,19 +977,19 @@
                     <div class="help-row"><span class="help-key">⏩ +15s</span><span class="help-desc">Fast-forward 15 seconds within the current episode.</span></div>
                 </div>
                 <div class="help-section">
-                    <div class="help-section-title">🎛 Header Buttons</div>
-                    <div class="help-row"><span class="help-key">☕ DONATE</span><span class="help-desc">Support the project via Buy Me a Coffee.</span></div>
+                    <div class="help-section-title">🎛 Top Bar</div>
+                    <div class="help-row"><span class="help-key">DONATE</span><span class="help-desc">Support the project via Buy Me a Coffee.</span></div>
                     <div class="help-row"><span class="help-key">📬 UPDATES</span><span class="help-desc">Use the bar at the top of the page to hear when new shows are added. Hid it? <a href="#" id="signupShow">Bring the bar back</a>.</span></div>
-                    <div class="help-row"><span class="help-key">🎲 SURPRISE</span><span class="help-desc">Jumps to a random show and episode — perfect for discovering something new.</span></div>
-                    <div class="help-row"><span class="help-key">🔴 LIVE MODE</span><span class="help-desc">Turns The Tube into a real "live channel" — the schedule decides what's on, just like real TV.</span></div>
-                    <div class="help-row"><span class="help-key">📺 CATALOGUE</span><span class="help-desc">Browse every show in the archive, filter by category, and tune in directly.</span></div>
+                    <div class="help-row"><span class="help-key">SURPRISE ME</span><span class="help-desc">Jumps to a random show and episode — perfect for discovering something new.</span></div>
+                    <div class="help-row"><span class="help-key">LIVE MODE</span><span class="help-desc">Turns The Tube into a real "live channel" — the schedule decides what's on, just like real TV.</span></div>
+                    <div class="help-row"><span class="help-key">CATALOGUE</span><span class="help-desc">Browse every show in the archive, filter by category, and tune in directly.</span></div>
                     <div class="help-row"><span class="help-key">🔄 TOGGLE SCHEDULE</span><span class="help-desc">Manually switch between Schedule A and B for testing.</span></div>
-                    <div class="help-row"><span class="help-key">🔍 SEARCH</span><span class="help-desc">Type to instantly filter the programme guide by show name.</span></div>
+                    <div class="help-row"><span class="help-key">SEARCH</span><span class="help-desc">Type in the box at the top of the guide to filter it by show name.</span></div>
                 </div>
                 <div class="help-section">
                     <div class="help-section-title">📋 Programme Guide &amp; Episodes</div>
                     <div class="help-row"><span class="help-key">CH LIST</span><span class="help-desc">Click any channel in the guide to tune in — playback starts from that day's scheduled episode.</span></div>
-                    <div class="help-row"><span class="help-key">EP LIST</span><span class="help-desc">Use the episode sidebar to jump to any specific episode of the current show.</span></div>
+                    <div class="help-row"><span class="help-key">EP LIST</span><span class="help-desc">Use the episode list (the Episodes tab on phones and tablets) to jump to any episode of the current show.</span></div>
                 </div>
             </div>
         </div>
@@ -1164,7 +1369,7 @@
 
             el.innerHTML = '';
             if (shows.length === 0) {
-                el.innerHTML = '<div style="font-family:VT323;color:#4a3015;padding:20px;text-align:center;font-size:.8rem;">No shows match</div>';
+                el.innerHTML = '<div style="font-family:VT323;color:#a8905f;padding:20px;text-align:center;font-size:14px;">No shows match</div>';
                 return;
             }
 
@@ -1509,11 +1714,11 @@
             if (!w) return;
             const c = getCurrentShow();
             if (c.message) {
-                w.innerHTML = '<div style="background:#060800;border:1px solid #f5a623;border-radius:6px;padding:10px;margin-bottom:15px;"><div style="font-family:VT323;font-size:.7rem;color:#4a3015;">🔴 NOW PLAYING</div><div style="display:flex;align-items:center;gap:10px;"><div style="font-size:2rem;">📺</div><div><div style="font-family:Oswald;color:#f5a623;">Off Air</div><div style="font-family:VT323;font-size:.7rem;">Select a show from the guide</div></div></div></div>';
+                w.innerHTML = '<div style="background:#060800;border:1px solid #f5a623;border-radius:6px;padding:10px;margin-bottom:15px;"><div style="font-family:VT323;font-size:14px;color:#a8905f;">🔴 NOW PLAYING</div><div style="display:flex;align-items:center;gap:10px;"><div style="font-size:2rem;">📺</div><div><div style="font-family:Oswald;color:#f5a623;">Off Air</div><div style="font-family:VT323;font-size:14px;">Select a show from the guide</div></div></div></div>';
             } else {
                 const showObj = allShows.find(s => s.id === c.id);
                 const chNum = showObj ? showObj.ch : '--';
-                w.innerHTML = '<div style="background:#060800;border:1px solid #39ff14;border-radius:6px;padding:10px;margin-bottom:15px;cursor:pointer;" onclick="window.watchLiveNow(' + c.id + ')"><div style="display:flex;justify-content:space-between;"><div style="font-family:VT323;font-size:.65rem;color:#39ff14;">🔴 LIVE NOW</div><div style="font-family:VT323;font-size:.6rem;color:#4a3015;">CH ' + chNum + '</div></div><div style="display:flex;align-items:center;gap:10px;margin-top:5px;"><div style="font-size:2rem;">' + c.emoji + '</div><div><div style="font-family:Oswald;font-size:1rem;font-weight:600;color:#d4b483;">' + c.name + '</div><div style="font-family:VT323;font-size:.65rem;color:#7a5a28;">▶ Click to watch</div></div></div></div>';
+                w.innerHTML = '<div style="background:#060800;border:1px solid #39ff14;border-radius:6px;padding:10px;margin-bottom:15px;cursor:pointer;" onclick="window.watchLiveNow(' + c.id + ')"><div style="display:flex;justify-content:space-between;"><div style="font-family:VT323;font-size:12px;color:#39ff14;">🔴 LIVE NOW</div><div style="font-family:VT323;font-size:12px;color:#a8905f;">CH ' + chNum + '</div></div><div style="display:flex;align-items:center;gap:10px;margin-top:5px;"><div style="font-size:2rem;">' + c.emoji + '</div><div><div style="font-family:Oswald;font-size:16px;font-weight:600;color:#d4b483;">' + c.name + '</div><div style="font-family:VT323;font-size:12px;color:#a8905f;">▶ Click to watch</div></div></div></div>';
             }
             updateScheduleIndicator();
         }
@@ -1919,7 +2124,7 @@
         $('signupClose').addEventListener('click', () => { sndClick(); signupStrip.classList.add('hide'); hideSignupFor(SIGNUP_HIDE_DAYS); });
         $('signupShow').addEventListener('click', e => {
             e.preventDefault(); if (!SIGNUP_ACTION_URL) return;
-            hideSignupFor(0); signupStrip.classList.remove('hide'); $('helpModal').classList.remove('show');
+            hideSignupFor(0); signupStrip.classList.remove('hide'); signupStrip.classList.add('open'); $('helpModal').classList.remove('show');
             window.scrollTo({ top: 0, behavior: 'smooth' }); setTimeout(() => $('signupEmail').focus(), 300);
         });
         $('signupForm').addEventListener('submit', e => {
@@ -1940,6 +2145,29 @@
                 .catch(() => { setSignupMsg("◈ COULDN'T REACH THE SIGNUP SERVICE — TRY AGAIN ◈", true); })
                 .finally(() => { signupSubmit.disabled = false; });
         });
+
+        // ===== LAYOUT: phone menu, guide/episodes tabs, pinned TV =====
+        (() => {
+            const layoutEl = document.querySelector('.layout');
+            const tabs = document.querySelectorAll('.side-tab');
+            tabs.forEach(t => t.addEventListener('click', () => {
+                sndClick();
+                layoutEl.dataset.tab = t.dataset.tab;
+                tabs.forEach(x => { const on = x === t; x.classList.toggle('active', on); x.setAttribute('aria-selected', on ? 'true' : 'false'); });
+            }));
+            const menuBtn = $('barMenuBtn'), more = $('barMore');
+            const setMenu = open => { more.classList.toggle('open', open); menuBtn.setAttribute('aria-expanded', open ? 'true' : 'false'); };
+            menuBtn.addEventListener('click', e => { e.stopPropagation(); sndClick(); setMenu(!more.classList.contains('open')); });
+            more.addEventListener('click', () => setMenu(false));
+            document.addEventListener('click', e => { if (!more.contains(e.target)) setMenu(false); });
+            document.addEventListener('keydown', e => { if (e.key === 'Escape') setMenu(false); });
+            $('signupToggle').addEventListener('click', () => { sndClick(); signupStrip.classList.add('open'); $('signupEmail').focus(); });
+            // tells the stylesheet how tall the TV is, so the tabs can sit right under it when it is pinned
+            const shell = document.querySelector('.tv-shell');
+            const setTvH = () => document.documentElement.style.setProperty('--tv-h', shell.offsetHeight + 'px');
+            if (window.ResizeObserver) new ResizeObserver(setTvH).observe(shell);
+            window.addEventListener('resize', setTvH); setTvH();
+        })();
         $('searchBox').addEventListener('input', () => renderList());
         $('tPlay').addEventListener('click', () => {
             sndClick(); if (!active) return;
