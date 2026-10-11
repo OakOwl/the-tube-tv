@@ -34,8 +34,6 @@
             transition: all .15s; border: none; display: flex; align-items: center; gap: 5px
         }
         .hbtn:active { transform: scale(.96) }
-        .btn-share { background: #1a1200; color: #f5a623; border: 1px solid #3a2800 }
-        .btn-share:hover { background: #2a1e00 }
         .btn-donate { background: #0d1a0d; color: #39ff14; border: 1px solid #1a3a1a }
         .btn-donate:hover { background: #122012 }
         .btn-updates { background: #001a1a; color: #5ce1e6; border: 1px solid #1a3a3a }
@@ -698,7 +696,6 @@
         <div class="tagline">◈ Classic Television Archive ◈</div>
         <div class="divider"></div>
         <div class="header-actions">
-            <button class="hbtn btn-share" id="btnShare">📤 SHARE</button>
             <button class="hbtn btn-donate" id="btnDonate">☕ DONATE</button>
             <button class="hbtn btn-updates" id="btnSignup">📬 GET UPDATES</button>
             <button class="hbtn btn-surprise" id="btnSurprise">🎲 SURPRISE ME</button>
@@ -750,7 +747,6 @@
                 </div>
                 <div class="help-section">
                     <div class="help-section-title">🎛 Header Buttons</div>
-                    <div class="help-row"><span class="help-key">📤 SHARE</span><span class="help-desc">Copy a link to The Tube to share with friends.</span></div>
                     <div class="help-row"><span class="help-key">☕ DONATE</span><span class="help-desc">Support the project via Buy Me a Coffee.</span></div>
                     <div class="help-row"><span class="help-key">📬 GET UPDATES</span><span class="help-desc">Leave your email to hear when new shows join the archive.</span></div>
                     <div class="help-row"><span class="help-key">🎲 SURPRISE</span><span class="help-desc">Jumps to a random show and episode — perfect for discovering something new.</span></div>
@@ -1891,7 +1887,6 @@
         });
 
         $('btnSurprise').addEventListener('click', () => { sndClick(); if (liveMode) stopLiveMode(); const scheduleShows = getScheduleShows(); if (scheduleShows.length === 0) return; const pick = scheduleShows[Math.floor(Math.random() * scheduleShows.length)]; showToast(`🎲 SURPRISE: ${pick.name}`); setTimeout(() => { if (tvOn) autoLiveNow(pick.id, true, true); else powerOn(() => autoLiveNow(pick.id, true, true)); }, 500); });
-        $('btnShare').addEventListener('click', () => { sndClick(); if (navigator.share) navigator.share({ title: 'The Tube', text: 'Classic TV', url: location.href }); else showToast('◈ LINK COPIED ◈'); });
         $('btnDonate').addEventListener('click', () => { sndClick(); $('modalDonate').classList.add('show'); });
         $('modalClose').addEventListener('click', () => { sndClick(); $('modalDonate').classList.remove('show'); });
 
