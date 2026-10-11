@@ -1186,6 +1186,8 @@
             ,{ id:105,ch:'105',time:'10:00 AM',name:'Mrs. Columbo',emoji:'🕵️',cat:'classic',year:'1979',badges:['PLAYLIST','MYSTERY','CLASSIC'],desc:'Kate Columbo balances family life with solving clever mysteries.',tickers:['One more clue.','Mrs. Columbo is on the case.'],archiveId:'s-01-e-01-word-games-pt.-2',playlist:true }
             ,{ id:106,ch:'106',time:'7:00 AM',name:'Dan Vs.',emoji:'😠',cat:'animation',year:'2011',badges:['PLAYLIST','ANIMATION','COMEDY'],desc:'Dan takes on whatever has annoyed him this week, with reckless determination.',tickers:['Dan versus everything.','The fight is on.'],archiveId:'dan-vs.-complete-series-hd',playlist:true }
             ,{ id:107,ch:'107',time:'4:30 PM',name:'Alan Partridge: Mid Morning Matters',emoji:'📻',cat:'british',year:'2010',badges:['PLAYLIST','COMEDY','BBC'],desc:'Alan Partridge broadcasts live from North Norfolk Digital.',tickers:['North Norfolk Digital is on air.','A-ha! Mid Morning Matters.'],archiveId:'mid-morning-matters',playlist:true }
+            // FILLER: commercials for the hours Schedule C has no programme. Remove this entry and its slot once real shows fill 2-6 AM.
+            ,{ id:108,ch:'108',time:'2:00 AM',name:'Late Night Commercials',emoji:'📼',cat:'classic',year:'1999',badges:['ADS','90S'],desc:'Back-to-back 90s commercial breaks until programmes return at 6 AM.',tickers:['Late night commercial break.','Programmes return at 6:00 AM.'],archiveId:'mtv-commercial-block-1999-vol.-29',playlist:true }
 ];
 
         // ===== SCHEDULES =====
@@ -1225,7 +1227,8 @@
             { startTime: 22*60+30, endTime: 23*60+30, id:101 },
             { startTime: 23*60+30, endTime: 24*60, id:102 },
             { startTime: 0, endTime: 1*60, id:97 },
-            { startTime: 1*60, endTime: 2*60, id:98 }
+            { startTime: 1*60, endTime: 2*60, id:98 },
+            { startTime: 2*60, endTime: 6*60, id:108 }   // filler: commercials until the morning schedule
         ];
 
 
