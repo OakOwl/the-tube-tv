@@ -1846,6 +1846,14 @@
                                 playFile(show, files, nextEpIdx, 0, true, null, true);
                                 return;
                             }
+                            // Pete & Pete episodes are short: keep playing the next episode until the slot ends, instead of cutting to ads
+                            if (show.id === 75 && remainingSeconds > 60 && files.length > 1) {
+                                const nextPete = nextEpIdx % files.length;
+                                showToast(`🌽 PETE & PETE — NEXT EPISODE`);
+                                activeEp = nextPete;
+                                playFile(show, files, nextPete, 0, true, null, true);
+                                return;
+                            }
                             if ((show.id === 2 || show.id === 39) && remainingSeconds > 60 && nextEpIdx < files.length) {
                                 const chainToast = show.id === 2 ? `💪 POPEYE — NEXT EPISODE IN 60s` : `🧸 MR. BEAN — NEXT EPISODE IN 60s`;
                                 showToast(chainToast);
