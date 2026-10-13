@@ -23,7 +23,7 @@
             --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px; --sp-5: 24px; --sp-6: 32px;
             --gutter: clamp(12px,2vw,32px);
             --ctl-h: 40px;       /* height of buttons and inputs; 44px on touch screens */
-            --page-top: 124px;   /* signup strip + top bar + gap above the TV */
+            --page-top: 136px;   /* signup strip + top bar + gap above the TV */
             --tv-chrome: 252px;  /* TV casing, deck and controls around the picture */
             --tv-h: 0px;         /* set by script: height of the TV when pinned on phones */
         }
@@ -735,7 +735,9 @@
         }
         /* the logo sits dead centre of the bar; buttons flow either side of it */
         .brand { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); text-align: center; pointer-events: none; }
-        .topbar .logo { font-size: 36px; letter-spacing: .12em; white-space: nowrap; padding-left: .12em; }
+        .topbar .logo { font-size: 58px; line-height: .9; letter-spacing: .12em; white-space: nowrap; padding-left: .12em; }
+        @media (min-width: 1040px) { .topbar { min-height: 76px; } }   /* room for the full-size logo and tagline */
+        @media (max-width: 1039px) { .topbar .logo { font-size: 48px; } }
         .topbar .tagline {
             margin: 2px 0 0; font-size: var(--fs-xs); letter-spacing: .22em; padding-left: .22em;
             color: var(--text-dim); text-transform: uppercase; white-space: nowrap;
@@ -756,7 +758,7 @@
         .help-btn { position: static; width: var(--ctl-h); height: var(--ctl-h); padding: 0; border-radius: 4px; font-size: var(--fs-lg); background: transparent; }
         .help-btn:hover { box-shadow: none; }
         .help-word { display: none; }
-        @media (max-width: 899px) { .topbar .tagline { display: none; } .topbar { min-height: 56px; } }
+        @media (max-width: 899px) { .topbar .tagline { display: none; } .topbar { min-height: 56px; } .topbar .logo { font-size: 44px; } }
 
         /* --- three columns --- */
         .layout {
@@ -831,7 +833,7 @@
 
         /* --- small bar: logo, Live, Surprise, menu --- */
         @media (max-width: 720px) {
-            .topbar .logo { font-size: 28px; }
+            .topbar .logo { font-size: 36px; }
             .lbl-wide { display: none; }
             .bar-menu-btn { display: flex; margin-left: auto; }
             #btnCatalogue { margin-left: 0; }
@@ -848,7 +850,7 @@
 
         @media (max-width: 400px) {
             .topbar { gap: var(--sp-2); padding-left: var(--sp-2); padding-right: var(--sp-2); }
-            .topbar .logo { font-size: 24px; letter-spacing: .08em; padding-left: .08em; }
+            .topbar .logo { font-size: 30px; letter-spacing: .08em; padding-left: .08em; }
             .hbtn { padding: 0 10px; }
             .bar-more { right: var(--sp-2); }
         }
