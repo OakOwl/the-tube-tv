@@ -1439,21 +1439,37 @@
             }
         }
 
+        // Smart source choice: group files by episode, then pick the lightest version that still looks right
+        // on a ~600px TV screen (>=~400p, or >=350kbps when the height is unknown). Heavier/lighter versions are
+        // kept as alternatives so playback can step down if the connection stalls.
+        function parseLen(v) { if (v == null) return 0; if (typeof v === 'number') return v; v = String(v); if (v.includes(':')) return v.split(':').reduce((t, x) => t * 60 + parseFloat(x || 0), 0); return parseFloat(v) || 0; }
         function filterFiles(rawFiles) {
-            const map = new Map();
+            const groups = new Map();
             rawFiles.forEach(f => {
                 const name = f.name || '', nl = name.toLowerCase();
-                // Exclude thumbnails, samples, and non-video
                 if (!nl.match(/\.(ia\.mp4|mp4|ogv)$/)) return;
                 if (nl.includes('thumb') || nl.includes('sample')) return;
-
-                let base = nl.endsWith('.ia.mp4') ? name.slice(0, -7) : (nl.endsWith('.mp4') ? name.slice(0, -4) : name.slice(0, -4));
+                const stem = nl.endsWith('.ia.mp4') ? name.slice(0, -7) : name.slice(0, -4);
+                // Same episode in several renditions (e.g. "ep1", "ep1.ia", "ep1_512kb") share one group
+                const base = stem.replace(/[._-]?\d{2,4}kb$/i, '').replace(/\.ia$/i, '');
                 const score = nl.endsWith('.ia.mp4') ? 3 : (nl.endsWith('.mp4') ? 2 : 1);
-                const existing = map.get(base);
-                if (!existing || score > existing.score) map.set(base, { name: f.name, score, url: `https://archive.org/download/${f._archiveId}/${encodeURIComponent(f.name)}` });
+                const size = parseFloat(f.size) || 0, len = parseLen(f.length), h = parseInt(f.height) || 0;
+                const kbps = size && len ? Math.round(size * 8 / len / 1000) : 0;
+                const c = { name: f.name, score, kbps, h, url: `https://archive.org/download/${f._archiveId}/${encodeURIComponent(f.name)}` };
+                (groups.get(base) || groups.set(base, []).get(base)).push(c);
             });
-            // Sort by name for deterministic order
-            const result = [...map.values()].map(f => ({ name: f.name.replace(/\.ia\.mp4$|\.mp4$|\.ogv$/i, '').replace(/[_\-]+/g, ' ').trim(), url: f.url }));
+            const okQuality = c => c.h ? c.h >= 400 : (c.kbps ? c.kbps >= 350 : true);
+            const result = [...groups.values()].map(list => {
+                const mp4 = list.filter(c => c.score >= 2); const pool = mp4.length ? mp4 : list;   // .ogv only as a last resort
+                const known = pool.filter(c => c.kbps);
+                let best;
+                if (known.length) {
+                    const good = known.filter(okQuality);
+                    best = (good.length ? good : known).sort((a, b) => a.kbps - b.kbps || b.score - a.score)[0];
+                } else best = pool.sort((a, b) => b.score - a.score)[0];
+                const alts = known.filter(c => c.kbps >= 150).sort((a, b) => b.kbps - a.kbps).map(c => ({ url: c.url, kbps: c.kbps }));
+                return { name: best.name.replace(/\.ia\.mp4$|\.mp4$|\.ogv$/i, '').replace(/[._-]?\d{2,4}kb$/i, '').replace(/[_\-]+/g, ' ').trim(), url: best.url, kbps: best.kbps, alts };
+            });
             result.sort((a, b) => a.name.localeCompare(b.name));
             return result;
         }
@@ -1793,8 +1809,19 @@
                 vid.removeEventListener('pause', window._onPauseListener);
                 window._onPauseListener = null;
             }
-            consumePre(f.url);
-            vid.src = f.url;
+            // Start on the best rendition for this connection (only steps DOWN when the reported downlink is clearly too low)
+            let startUrl = f.url;
+            try {
+                const dl = navigator.connection && navigator.connection.downlink;   // Mbps, coarse
+                if (dl && f.kbps && f.alts && f.alts.length > 1 && f.kbps > dl * 1000 * 0.6) {
+                    const budget = dl * 1000 * 0.6;
+                    const fit = f.alts.find(a => a.kbps <= budget && a.kbps >= 350);
+                    if (fit) startUrl = fit.url;
+                }
+            } catch (e) { }
+            window._curFile = f; window._curUrl = startUrl; window._stalls = 0; window._lastStall = 0; window._lastSwitch = 0;
+            consumePre(startUrl);
+            vid.src = startUrl;
             vid.volume = volumeVal;
             vid.load();
             // Setup resume saving
@@ -2080,7 +2107,25 @@
         // Mid-playback stalls: show BUFFERING after a short grace period, hide when frames flow again
         (function () {
             const v = document.getElementById('vid');
-            const stall = () => { if (tvOn && !isPlayingCommercials && v.getAttribute('src')) showBuf('BUFFERING', 700); };
+            const stall = () => {
+                if (!(tvOn && !isPlayingCommercials && v.getAttribute('src'))) return;
+                showBuf('BUFFERING', 700);
+                const now = Date.now();
+                if (v.readyState >= 3 || now - (window._lastStall || 0) < 5000) return;   // count real stalls, not event bursts
+                window._lastStall = now; window._stalls = (window._stalls || 0) + 1;
+                // Two stalls in a row on a heavy rendition: step down to a lighter version of the same episode, keep position
+                const f = window._curFile;
+                if (window._stalls >= 2 && f && f.alts && now - (window._lastSwitch || 0) > 60000 && v.currentTime > 1) {
+                    const curKbps = (f.alts.find(a => a.url === window._curUrl) || { kbps: f.kbps }).kbps || f.kbps;
+                    const lighter = f.alts.find(a => a.kbps < curKbps * 0.8 && a.kbps >= 150);
+                    if (lighter) {
+                        const t = v.currentTime; window._lastSwitch = now; window._stalls = 0; window._curUrl = lighter.url;
+                        showToast('◈ SLOW CONNECTION — SWITCHING TO LIGHTER FEED ◈'); showBuf('SWITCHING FEED');
+                        v.src = lighter.url; v.onloadedmetadata = () => { v.onloadedmetadata = null; try { v.currentTime = t; } catch (e) { } v.play().catch(() => { }); };
+                        v.load();
+                    }
+                }
+            };
             ['waiting', 'stalled'].forEach(ev => v.addEventListener(ev, stall));
             ['playing', 'canplaythrough'].forEach(ev => v.addEventListener(ev, hideBuf));
             v.addEventListener('seeked', () => { if (v.readyState >= 3) hideBuf(); });
