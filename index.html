@@ -1,40 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    <title>The Tube · Classic Television Archive</title>
-    <meta name="description" content="The Tube is a retro TV set in your browser: a daily schedule of classic television, a programme guide and a full catalogue to browse.">
-    <meta name="theme-color" content="#080602">
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="The Tube · Classic Television Archive">
-    <meta property="og:description" content="The Tube is a retro TV set in your browser: a daily schedule of classic television, a programme guide and a full catalogue to browse.">
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M10 3l6 5 6-5' stroke='%23f5a623' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3Crect x='3' y='8' width='26' height='20' rx='4' fill='%23f5a623'/%3E%3Crect x='6' y='11' width='15' height='14' rx='2' fill='%23080602'/%3E%3Ccircle cx='25' cy='15' r='1.6' fill='%23080602'/%3E%3Ccircle cx='25' cy='21' r='1.6' fill='%23080602'/%3E%3C/svg%3E">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=VT323&family=Oswald:wght@400;600&family=Special+Elite&display=swap" rel="stylesheet">
     <style>
-        /* ===== DESIGN TOKENS: change a value here and it changes across the site ===== */
-        :root {
-            --bg: #080602; --panel: #0c0900; --line: #2a1e0a; --line-strong: #3a2800;
-            --amber: #f5a623; --amber-deep: #c47d0e; --text: #d4b483; --text-dim: #a8905f;
-            --green: #39ff14; --red: #ff3333; --magenta: #ca3aca;
-            --fs-xs: 12px; --fs-sm: 14px; --fs-md: 16px; --fs-lg: 20px; --fs-xl: 28px;
-            --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px; --sp-5: 24px; --sp-6: 32px;
-            --gutter: clamp(12px,2vw,32px);
-            --ctl-h: 40px;       /* height of buttons and inputs; 44px on touch screens */
-            --page-top: 136px;   /* signup strip + top bar + gap above the TV */
-            --tv-chrome: 252px;  /* TV casing, deck and controls around the picture */
-            --tv-h: 0px;         /* set by script: height of the TV when pinned on phones */
-        }
-
         /* Global base font size increase */
         html { font-size: 18px; }
 
         * { box-sizing: border-box; margin: 0; padding: 0 }
         body {
             background: radial-gradient(ellipse at center,#1a1408 0%,#080602 100%);
-            font-family: 'Special Elite',cursive; color: #d4b483; padding: 14px clamp(14px,2vw,32px) 30px; min-height: 100vh
+            font-family: 'Special Elite',cursive; color: #d4b483; padding: 10px 12px 28px; min-height: 100vh
         }
 
         .site-header { text-align: center; padding: 10px 0 8px }
@@ -44,7 +19,7 @@
         }
         .logo span { color: #fff }
         .tagline {
-            font-family: 'VT323',monospace; font-size: var(--fs-md); color: var(--text-dim);
+            font-family: 'VT323',monospace; font-size: .85rem; color: #6a5030;
             letter-spacing: .3em; margin-top: 3px
         }
         .divider {
@@ -54,24 +29,32 @@
         }
         .header-actions { display: flex; justify-content: center; gap: 10px; margin-top: 10px; flex-wrap: wrap }
         .hbtn {
-            font-family: 'VT323',monospace; font-size: var(--fs-md); padding: 6px 14px;
+            font-family: 'VT323',monospace; font-size: .85rem; padding: 6px 14px;
             border-radius: 3px; cursor: pointer; letter-spacing: .1em;
             transition: all .15s; border: none; display: flex; align-items: center; gap: 5px
         }
         .hbtn:active { transform: scale(.96) }
+        .btn-share { background: #1a1200; color: #f5a623; border: 1px solid #3a2800 }
+        .btn-share:hover { background: #2a1e00 }
+        .btn-donate { background: #0d1a0d; color: #39ff14; border: 1px solid #1a3a1a }
+        .btn-donate:hover { background: #122012 }
+        .btn-surprise { background: #1a001a; color: #ff80ff; border: 1px solid #3a1a3a }
+        .btn-surprise:hover { background: #250025 }
+        .btn-catalogue { background: #0a0a1a; color: #a0a0ff; border: 1px solid #2a2a5a; }
+        .btn-catalogue:hover { background: #14143a; box-shadow: 0 0 8px rgba(120,120,255,.2); }
         .btn-schedule { background: #0a1a0a; color: #39ff14; border: 1px solid #1a3a1a; }
         .btn-schedule:hover { background: #0f2a0f; box-shadow: 0 0 8px rgba(57,255,20,.2); }
         .schedule-indicator {
-            font-family: 'VT323',monospace; font-size: var(--fs-xs); padding: 4px 10px;
+            font-family: 'VT323',monospace; font-size: .65rem; padding: 4px 10px;
             border-radius: 3px; border: 1px solid #3a2800; background: #0c0900; letter-spacing: .05em;
         }
         .schedule-indicator.a { color: #39ff14; border-color: #39ff14; }
         .schedule-indicator.b { color: #ff6a00; border-color: #ff6a00; }
         .sched-selector { display: flex; gap: 4px; align-items: center; }
         .sched-sel-btn {
-            font-family: 'VT323',monospace; font-size: var(--fs-sm); padding: 4px 10px;
+            font-family: 'VT323',monospace; font-size: .72rem; padding: 4px 10px;
             border-radius: 3px; cursor: pointer; letter-spacing: .08em;
-            border: 1px solid #2a2a2a; background: #0a0a0a; color: #9a9a9a; transition: all .15s;
+            border: 1px solid #2a2a2a; background: #0a0a0a; color: #5a5a5a; transition: all .15s;
         }
         .sched-sel-btn:hover { color: #aaa; border-color: #5a5a5a; }
         .sched-sel-btn.active-a { color: #39ff14; border-color: #39ff14; background: #060d00; }
@@ -79,7 +62,7 @@
         .help-btn {
             position: fixed; top: 14px; left: 14px; width: 34px; height: 34px;
             border-radius: 50%; background: #1a1200; border: 1px solid #3a2800;
-            color: #f5a623; font-family: 'VT323',monospace; font-size: var(--fs-lg);
+            color: #f5a623; font-family: 'VT323',monospace; font-size: 1.1rem;
             display: flex; align-items: center; justify-content: center; cursor: pointer;
             z-index: 9000; transition: all .15s;
         }
@@ -99,9 +82,9 @@
             display: flex; justify-content: space-between; align-items: center;
             padding: 12px 18px; border-bottom: 1px solid #2a1e00; background: #0d0a00;
         }
-        .help-modal-title { font-family: 'VT323',monospace; font-size: var(--fs-lg); color: #f5a623; letter-spacing: .1em; }
+        .help-modal-title { font-family: 'VT323',monospace; font-size: 1.3rem; color: #f5a623; letter-spacing: .1em; }
         .help-modal-close {
-            font-family: 'VT323',monospace; font-size: var(--fs-md); color: var(--text-dim);
+            font-family: 'VT323',monospace; font-size: .85rem; color: #5a4020;
             background: transparent; border: none; cursor: pointer; letter-spacing: .1em; padding: 2px 6px;
         }
         .help-modal-close:hover { color: #f5a623; }
@@ -111,17 +94,18 @@
         .help-modal-body::-webkit-scrollbar-thumb { background: #3a2008; border-radius: 3px; }
         .help-section { margin-bottom: 14px; }
         .help-section-title {
-            font-family: 'VT323',monospace; font-size: var(--fs-md); color: #f5a623;
+            font-family: 'VT323',monospace; font-size: .85rem; color: #f5a623;
             letter-spacing: .08em; margin-bottom: 6px; border-bottom: 1px solid #1e1600; padding-bottom: 4px;
         }
         .help-row { display: flex; align-items: flex-start; gap: 10px; padding: 4px 0; }
         .help-key {
-            font-family: 'VT323',monospace; font-size: var(--fs-sm); color: #39ff14;
+            font-family: 'VT323',monospace; font-size: .8rem; color: #39ff14;
             background: #060d00; border: 1px solid #1a3a1a; border-radius: 3px;
             padding: 2px 8px; min-width: 60px; text-align: center; flex-shrink: 0; letter-spacing: .05em;
         }
-        .help-desc { font-family: 'Special Elite',cursive; font-size: var(--fs-sm); color: #b8a070; line-height: 1.5; padding-top: 2px; }
+        .help-desc { font-family: 'Special Elite',cursive; font-size: .72rem; color: #b8a070; line-height: 1.5; padding-top: 2px; }
         .help-desc b { color: #f5a623; }
+        @media(max-width:580px) { .help-btn { top: 10px; left: 10px; width: 30px; height: 30px; font-size: 1rem; } }
 
         .cat-modal-bg {
             position: fixed; inset: 0; background: rgba(0,0,0,.88); z-index: 10000;
@@ -137,17 +121,17 @@
             display: flex; justify-content: space-between; align-items: center;
             padding: 12px 18px; border-bottom: 1px solid #2a1e00; background: #0d0a00;
         }
-        .cat-modal-title { font-family: 'VT323',monospace; font-size: var(--fs-xl); color: #f5a623; letter-spacing: .1em; }
-        .cat-modal-count { font-family: 'VT323',monospace; font-size: var(--fs-sm); color: var(--text-dim); letter-spacing: .08em; }
+        .cat-modal-title { font-family: 'VT323',monospace; font-size: 1.4rem; color: #f5a623; letter-spacing: .1em; }
+        .cat-modal-count { font-family: 'VT323',monospace; font-size: .75rem; color: #5a4020; letter-spacing: .08em; }
         .cat-modal-close {
-            font-family: 'VT323',monospace; font-size: var(--fs-md); color: var(--text-dim);
+            font-family: 'VT323',monospace; font-size: .85rem; color: #5a4020;
             background: transparent; border: none; cursor: pointer; letter-spacing: .1em; padding: 2px 6px;
         }
         .cat-modal-close:hover { color: #f5a623; }
         .cat-filter-row { display: flex; gap: 6px; flex-wrap: wrap; padding: 8px 18px; border-bottom: 1px solid #1a1200; background: #0a0800; }
         .cat-filter-btn {
-            font-family: 'VT323',monospace; font-size: var(--fs-xs); padding: 2px 8px;
-            border: 1px solid #2a1e0a; background: transparent; color: var(--text-dim);
+            font-family: 'VT323',monospace; font-size: .65rem; padding: 2px 8px;
+            border: 1px solid #2a1e0a; background: transparent; color: #7a5a2a;
             cursor: pointer; border-radius: 2px; transition: all .12s; white-space: nowrap;
         }
         .cat-filter-btn:hover, .cat-filter-btn.active { background: #120c00; color: #f5a623; border-color: #c47d0e; }
@@ -165,25 +149,25 @@
         .cat-card:hover { border-left-color: #f5a623; background: #110d00; }
         .cat-card:active { transform: scale(.97); }
         .cat-card-top { display: flex; align-items: center; gap: 7px; }
-        .cat-card-emoji { font-size: var(--fs-lg); flex-shrink: 0; }
+        .cat-card-emoji { font-size: 1.3rem; flex-shrink: 0; }
         .cat-card-name {
-            font-family: 'Oswald',sans-serif; font-size: var(--fs-sm); font-weight: 600;
+            font-family: 'Oswald',sans-serif; font-size: .78rem; font-weight: 600;
             color: #d4b483; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
         }
         .cat-card-meta {
-            font-family: 'VT323',monospace; font-size: var(--fs-xs); color: var(--text-dim);
+            font-family: 'VT323',monospace; font-size: .6rem; color: #4a3015;
             margin-top: 3px; letter-spacing: .05em; display: flex; gap: 8px;
         }
         .cat-card-ch { color: #f5a623; }
         .cat-card-desc {
-            font-family: 'Special Elite',cursive; font-size: var(--fs-sm); color: var(--text-dim);
+            font-family: 'Special Elite',cursive; font-size: .56rem; color: #4a3015;
             margin-top: 4px; line-height: 1.35; display: -webkit-box;
             -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
         }
         .cat-card-badges { display: flex; gap: 3px; margin-top: 4px; flex-wrap: wrap; }
         .cat-badge {
-            font-family: 'VT323',monospace; font-size: var(--fs-xs); padding: 1px 3px;
-            border: 1px solid #1e1600; color: var(--text-dim);
+            font-family: 'VT323',monospace; font-size: .52rem; padding: 1px 3px;
+            border: 1px solid #1e1600; color: #6a4a20;
         }
         .btn-live {
             background: #1a0000; color: #ff3333; border: 1px solid #ff3333;
@@ -194,41 +178,180 @@
         @keyframes livePulse { 0%,100% { opacity: 0.8; } 50% { opacity: 1; } }
 
         .layout {
-            display: grid; grid-template-columns: 200px minmax(0,1fr) 300px; gap: 18px;
-            width: min(100%,1320px); max-width: none; margin: 0 auto; padding: 12px 0 0; align-items: start
+            display: grid; grid-template-columns: 190px 1fr 280px; gap: 14px;
+            max-width: 1180px; margin: 0 auto; padding: 10px 0 0; align-items: start
         }
-        .idle-welcome { max-width:270px; margin-top:13px; padding:7px 12px; color:#d8b56a; background:rgba(20,16,5,.42); border:1px solid rgba(196,125,14,.34); border-radius:3px; font-family:'Special Elite',cursive; font-size: var(--fs-xs); line-height:1.55; letter-spacing:.025em; text-align:center; text-shadow:0 1px 0 rgba(0,0,0,.9),0 0 7px rgba(245,166,35,.16); }
-        .vhs-deck { position:relative; overflow:visible; padding:18px 23px 19px; min-height:88px; gap:12px; border-radius:0 0 6px 6px; box-shadow:inset 0 2px 4px rgba(255,255,255,.10),inset 0 -5px 9px rgba(0,0,0,.25),0 3px 5px rgba(0,0,0,.28); }.vhs-deck::after { content:''; position:absolute; left:14px; right:14px; bottom:-6px; height:7px; border-radius:0 0 4px 4px; background:linear-gradient(180deg,#464640,#30302b); box-shadow:inset 0 1px 1px rgba(255,255,255,.08),0 3px 4px rgba(0,0,0,.28); z-index:-1; }.vhs-cassette-housing { min-height:48px; padding:5px 9px 6px; border-width:2px; border-radius:4px; box-shadow:inset 0 2px 6px rgba(0,0,0,.92),inset 0 -1px 2px rgba(255,255,255,.05),0 1px 1px rgba(255,255,255,.06); }.vhs-label-strip { padding:2px 7px; margin-bottom:4px; }.vhs-window { min-height:24px; padding:4px 7px; gap:8px; border-radius:3px; }.vhs-reel { width:19px; height:19px; border-width:2px; }.vhs-reel::after { width:5px; height:5px; }.vhs-tape-stretch { height:6px; }.vhs-time { font-size: var(--fs-xs); }.transport { gap:8px; }.tbtn { width:43px; height:38px; border-radius:4px; }.tbtn-icon { font-size: var(--fs-lg); }.tbtn-lbl { font-size: var(--fs-xs); }
+        @media(max-width:860px) { .layout { grid-template-columns: 1fr 280px; } .ep-sidebar { display: none; } }
+
+        /* ══════════════════════════════════════
+           MOBILE ≤640px — TV-first layout
+        ══════════════════════════════════════ */
+        @media(max-width:640px) {
+            body { padding: 6px 6px 0; }
+            /* Stack layout, hide right guide panel (replaced by drawer) */
+            .layout { display: flex; flex-direction: column; gap: 0; }
+            .ep-sidebar { display: none; }
+            .layout > div:last-child { display: none; }
+
+            /* Header — compact */
+            .site-header { padding: 6px 0 5px; }
+            .logo { font-size: clamp(1.8rem, 9vw, 2.8rem); }
+            .tagline { font-size: .65rem; letter-spacing: .12em; }
+            .divider { margin: 4px auto 0; }
+            .header-actions { gap: 5px; margin-top: 6px; flex-wrap: nowrap; overflow-x: auto; justify-content: center; padding: 0 4px; }
+            /* Icon-only buttons on mobile */
+            .hbtn { font-size: 0; padding: 7px 9px; min-width: 36px; justify-content: center; border-radius: 4px; }
+            .hbtn::before { font-size: .95rem; }
+            .btn-share::before    { content: '📤'; }
+            .btn-donate::before   { content: '☕'; }
+            .btn-surprise::before { content: '🎲'; }
+            .btn-live::before     { content: '🔴'; }
+            .btn-catalogue::before{ content: '📺'; }
+            /* Hide search input on mobile — search is in drawer */
+            .header-actions > div:last-child { display: none; }
+            /* Help button */
+            .help-btn { width: 26px; height: 26px; font-size: .8rem; top: 7px; left: 7px; }
+
+            /* TV shell — full width hero */
+            .layout > div:nth-child(2) { width: 100%; }
+            .tv-shell { border-radius: 8px 8px 10px 10px; padding: 9px 9px 7px; }
+            .tv-base { width: 50%; height: 6px; border-radius: 0 0 6px 6px; }
+            .src-note { font-size: .48rem; margin-top: 2px; }
+            /* Screen stays 4:3 */
+            .screen-wrap { aspect-ratio: 4/3; }
+
+            /* Controls panel — compact single row */
+            .controls-panel { padding: 5px 7px 4px; gap: 6px; flex-wrap: nowrap; }
+            .knob-group { gap: 6px; }
+            .knob90 { width: 22px; height: 22px; }
+            .knob90::after { height: 7px; width: 2px; }
+            .kl90 { font-size: .44rem; }
+            .vol-ring, .sbar { width: 34px; height: 3px; margin-top: 1px; }
+            .spkr90 { width: 24px; gap: 2px; }
+            .spkr-slot { height: 2px; }
+            .pwr90 { width: 20px; height: 20px; }
+            .pwr90::after { font-size: .72rem; }
+            .pwr-lbl { font-size: .44rem; }
+            .controls-right { gap: 7px; }
+
+            /* VHS deck — single tight row */
+            .vhs-deck { padding: 4px 8px 4px; gap: 6px; flex-wrap: nowrap; }
+            .vhs-cassette-housing { padding: 3px 6px 3px; min-width: 0; flex: 1; }
+            .vhs-label-strip { padding: 1px 4px; margin-bottom: 2px; }
+            .vhs-show-name { font-size: .56rem; }
+            .vhs-ep-name { font-size: .46rem; }
+            .vhs-window { padding: 2px 5px; gap: 4px; }
+            .vhs-reel { width: 12px; height: 12px; }
+            .vhs-reel::after { width: 4px; height: 4px; }
+            .vhs-tape-stretch { height: 4px; }
+            .vhs-time { font-size: .48rem; }
+            .transport { gap: 3px; flex-shrink: 0; }
+            .tbtn { width: 28px; height: 20px; }
+            .tbtn-icon { font-size: .68rem; }
+            .tbtn-lbl { font-size: .32rem; }
+
+            /* Schedule selector */
+            .schedule-widget-wrapper { margin-top: 5px; }
+            .sched-selector { gap: 4px; flex-wrap: wrap; justify-content: center; }
+            .sched-sel-btn { font-size: .6rem; padding: 3px 7px; }
+            .schedule-indicator { font-size: .56rem; padding: 3px 6px; }
+        }
+
+        @media(max-width:380px) {
+            .logo { font-size: 1.6rem; }
+            .knob90 { width: 19px; height: 19px; }
+            .tbtn { width: 24px; height: 18px; }
+        }
+
+        /* ══════════════════════════════════════
+           MOBILE BOTTOM DRAWER
+           Three tabs: 📺 NOW ON | 📋 GUIDE | 📼 EPISODES
+        ══════════════════════════════════════ */
+        .mobile-drawer { display: none; }
 
         @media(max-width:640px) {
-            .transport .tbtn { width: 48px; height: 38px; }
-            .tbtn-icon { font-size: var(--fs-lg); }
-            .show-card { padding: 10px 8px; }
-            .s-time { font-size: var(--fs-md); min-width: 50px; }
-            .s-emoji { font-size: var(--fs-xl); width: 36px; }
-            .s-name { font-size: var(--fs-md); white-space: normal; line-height: 1.3; }
-            .s-desc { font-size: var(--fs-sm); }
-            .badge { font-size: var(--fs-xs); padding: 2px 5px; }
-            .cat-btn { padding: 6px 10px; font-size: var(--fs-sm); }
-            .vhs-deck { flex-wrap: wrap; justify-content: center; gap: 8px; }
-            .vhs-cassette-housing { width: 100%; }
-            .controls-panel { flex-wrap: wrap; justify-content: center; gap: 12px; }
-            .knob-group { order: 1; }
-            .controls-right { order: 2; }
-        }
-        @media(max-width:480px) {
-            .guide-title { font-size: var(--fs-lg); }
+            body { padding-bottom: 48px; } /* space for collapsed tab bar */
+
+            .mobile-drawer {
+                display: block;
+                position: fixed;
+                bottom: 0; left: 0; right: 0;
+                z-index: 800;
+                background: #080700;
+                border-top: 2px solid #2a1e00;
+                box-shadow: 0 -6px 24px rgba(0,0,0,.75);
+                border-radius: 12px 12px 0 0;
+                transition: transform .25s ease;
+            }
+            .mob-handle {
+                display: flex; justify-content: center; align-items: center;
+                padding: 6px 0 0; cursor: pointer;
+            }
+            .mob-handle-bar {
+                width: 38px; height: 3px; background: #2a1e00; border-radius: 2px;
+                transition: background .15s;
+            }
+            .mobile-drawer:not(.collapsed) .mob-handle-bar { background: #c47d0e; }
+            .mob-tab-bar {
+                display: flex;
+                background: #0a0900;
+                border-bottom: 1px solid #1a1200;
+            }
+            .mob-tab {
+                flex: 1; text-align: center; padding: 6px 4px 5px;
+                cursor: pointer; user-select: none;
+                font-family: 'VT323',monospace; font-size: .68rem;
+                color: #5a4020; letter-spacing: .05em;
+                border-bottom: 2px solid transparent; transition: all .13s;
+            }
+            .mob-tab.active { color: #f5a623; border-bottom-color: #f5a623; background: #0d0a00; }
+            .mob-tab-icon { display: block; font-size: .85rem; line-height: 1.1; }
+            .mob-panel { display: none; overflow-y: auto; }
+            .mob-panel::-webkit-scrollbar { width: 4px; }
+            .mob-panel::-webkit-scrollbar-thumb { background: #3a2008; border-radius: 2px; }
+            .mob-panel.active { display: block; max-height: 44vh; }
+            .mobile-drawer.collapsed .mob-panel { display: none !important; max-height: 0 !important; }
+
+            /* Now On panel */
+            .mob-now-panel { padding: 8px 10px 10px; }
+            .mob-now-label { font-family:'VT323',monospace; font-size:.68rem; color:#5a4020; letter-spacing:.1em; margin-bottom:3px; }
+            .mob-now-show { font-family:'Oswald',sans-serif; font-size:1rem; font-weight:600; color:#f5a623; }
+            .mob-now-ch { font-family:'VT323',monospace; font-size:.72rem; color:#5a4020; margin-top:2px; letter-spacing:.06em; }
+            .mob-now-desc { font-family:'Special Elite',cursive; font-size:.64rem; color:#6a5030; margin-top:4px; line-height:1.4; }
+
+            /* Guide panel inside drawer */
+            .mob-guide-wrap { padding: 6px 8px 10px; }
+            .mob-search { margin-bottom: 6px; }
+            .mob-search input {
+                width: 100%; background: #0c0900; border: 1px solid #3a2800;
+                color: #d4b483; font-family: 'VT323',monospace; font-size: .8rem;
+                padding: 5px 10px; border-radius: 3px; outline: none; letter-spacing: .05em;
+            }
+            .mob-guide-wrap .cat-tabs { gap: 3px; margin-bottom: 6px; }
+            .mob-guide-wrap .cat-btn { font-size: .6rem; padding: 2px 5px; }
+            .mob-guide-wrap .show-list { max-height: none; overflow: visible; padding-right: 0; }
+            .mob-guide-wrap .show-card { padding: 5px 6px; gap: 5px; }
+            .mob-guide-wrap .s-name { font-size: .7rem; }
+            .mob-guide-wrap .s-desc { font-size: .52rem; -webkit-line-clamp: 1; }
+            .mob-guide-wrap .s-time { font-size: .7rem; min-width: 36px; }
+            .mob-guide-wrap .badge { font-size: .5rem; padding: 1px 2px; }
+
+            /* Episodes panel inside drawer */
+            .mob-ep-wrap { padding: 4px 0 8px; }
+            .mob-ep-wrap .ep-show-name { font-family:'VT323',monospace; font-size:.68rem; color:#5a4020; padding:4px 10px 5px; border-bottom:1px solid #140f00; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+            .mob-ep-wrap .ep-list { max-height: none; overflow: visible; }
+            .mob-ep-wrap .ep-item { font-size:.68rem; padding:4px 10px; }
         }
 
         .ep-sidebar {
             background: #080700; border: 1px solid #1e1500; border-radius: 4px; overflow: hidden
         }
         .ep-sidebar-hdr {
-            font-family: 'VT323',monospace; font-size: var(--fs-md); color: #f5a623;
+            font-family: 'VT323',monospace; font-size: .88rem; color: #f5a623;
             letter-spacing: .1em; padding: 6px 10px; background: #0d0a00; border-bottom: 1px solid #1e1500
         }
         .ep-show-name {
-            font-family: 'VT323',monospace; font-size: var(--fs-xs); color: var(--text-dim);
+            font-family: 'VT323',monospace; font-size: .68rem; color: #5a4020;
             padding: 4px 10px 5px; border-bottom: 1px solid #140f00;
             white-space: nowrap; overflow: hidden; text-overflow: ellipsis; letter-spacing: .05em
         }
@@ -237,15 +360,15 @@
         .ep-list::-webkit-scrollbar-track { background: #080700 }
         .ep-list::-webkit-scrollbar-thumb { background: #3a2008; border-radius: 3px }
         .ep-item {
-            font-family: 'VT323',monospace; font-size: var(--fs-sm); color: var(--text-dim);
+            font-family: 'VT323',monospace; font-size: .7rem; color: #5a4020;
             padding: 4px 10px; cursor: pointer; transition: all .1s;
             border-left: 2px solid transparent; line-height: 1.35; display: flex; gap: 5px
         }
         .ep-item:hover { color: #f5a623; background: #120c00; border-left-color: #f5a623 }
         .ep-item.ep-active { color: #39ff14; background: #060d00; border-left-color: #39ff14 }
-        .ep-num { color: var(--text-dim); flex-shrink: 0; font-size: var(--fs-xs); padding-top: 1px }
+        .ep-num { color: #2a1e08; flex-shrink: 0; font-size: .62rem; padding-top: 1px }
         .ep-empty {
-            font-family: 'VT323',monospace; font-size: var(--fs-xs); color: var(--text-dim);
+            font-family: 'VT323',monospace; font-size: .68rem; color: #2a1e08;
             padding: 16px 10px; text-align: center; line-height: 1.7
         }
 
@@ -264,26 +387,26 @@
         .tv-top-strip { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 8px; }
         .tv-brand-block { display: flex; flex-direction: column; align-items: flex-start; gap: 3px; }
         .tv-brand-90s {
-            font-family: 'VT323',monospace; font-size: var(--fs-md); color: #3a3a32;
+            font-family: 'VT323',monospace; font-size: .85rem; color: #3a3a32;
             letter-spacing: .3em; text-shadow: 0 1px 0 rgba(255,255,255,.4)
         }
         .live-widget-inline { display: none; align-items: center; gap: 5px; }
         .live-widget-inline.show { display: flex; }
         .live-indicator {
-            font-family: 'VT323',monospace; font-size: var(--fs-xs); color: #ff3333;
+            font-family: 'VT323',monospace; font-size: .65rem; color: #ff3333;
             background: #1a0000; padding: 2px 6px; border-radius: 3px;
             border: 1px solid #ff3333; letter-spacing: .1em; animation: liveBlink 1s infinite;
         }
         @keyframes liveBlink { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
         .ch-display {
-            font-family: 'VT323',monospace; font-size: var(--fs-xl); color: #ff4400;
+            font-family: 'VT323',monospace; font-size: 1.5rem; color: #ff4400;
             background: #0a0200; padding: 4px 12px; border-radius: 3px;
             border: 2px solid #333; min-width: 70px; text-align: center;
             box-shadow: inset 0 2px 4px rgba(0,0,0,.8)
         }
         .resume-badge {
             position: absolute; bottom: 10px; right: 10px; background: rgba(0,0,0,0.8);
-            color: #39ff14; font-family: 'VT323',monospace; font-size: var(--fs-xs);
+            color: #39ff14; font-family: 'VT323',monospace; font-size: .65rem;
             padding: 3px 8px; border-radius: 3px; border-left: 3px solid #39ff14;
             z-index: 20; pointer-events: none; display: none; letter-spacing: .05em;
         }
@@ -307,7 +430,7 @@
         .l-static { position: absolute; inset: 0; z-index: 4; display: none; align-items: center; justify-content: center; background: #111 }
         .l-static.show { display: flex }
         .static-lbl {
-            font-family: 'VT323',monospace; font-size: var(--fs-md); color: rgba(255,255,255,.8);
+            font-family: 'VT323',monospace; font-size: .9rem; color: rgba(255,255,255,.8);
             z-index: 2; letter-spacing: .2em; animation: flk .12s infinite; pointer-events: none
         }
         canvas.noisecanvas { position: absolute; inset: 0; width: 100%; height: 100% }
@@ -321,9 +444,9 @@
         }
         .l-splash.show { display: flex }
         .sp-emoji { font-size: 3rem }
-        .sp-title { font-family: 'VT323',monospace; font-size: var(--fs-lg); color: #f5a623; margin-top: 6px; text-align: center; line-height: 1.2 }
-        .sp-year { font-family: 'VT323',monospace; font-size: var(--fs-xs); color: var(--text-dim); margin-top: 2px }
-        .sp-ep { font-family: 'Special Elite',cursive; font-size: var(--fs-xs); color: #bbb; margin-top: 4px; text-align: center; padding: 0 8px; line-height: 1.4 }
+        .sp-title { font-family: 'VT323',monospace; font-size: 1.05rem; color: #f5a623; margin-top: 6px; text-align: center; line-height: 1.2 }
+        .sp-year { font-family: 'VT323',monospace; font-size: .68rem; color: #7a5a28; margin-top: 2px }
+        .sp-ep { font-family: 'Special Elite',cursive; font-size: .54rem; color: #bbb; margin-top: 4px; text-align: center; padding: 0 8px; line-height: 1.4 }
         .sp-btn {
             margin-top: 10px; width: 42px; height: 42px; border-radius: 50%;
             background: rgba(245,166,35,.12); border: 2px solid #f5a623;
@@ -334,7 +457,7 @@
             border-top: 8px solid transparent; border-bottom: 8px solid transparent;
             border-left: 15px solid #f5a623; margin-left: 4px
         }
-        .sp-hint { font-family: 'VT323',monospace; font-size: var(--fs-xs); color: var(--text-dim); margin-top: 5px; letter-spacing: .1em }
+        .sp-hint { font-family: 'VT323',monospace; font-size: .55rem; color: #4a3015; margin-top: 5px; letter-spacing: .1em }
         .l-scan {
             position: absolute; inset: 0; z-index: 7;
             background: repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.2) 2px,rgba(0,0,0,.2) 4px);
@@ -358,14 +481,14 @@
         .l-ticker.show { display: block }
         .ticker-inner {
             display: inline-block; font-family: 'VT323',monospace;
-            font-size: var(--fs-sm); color: #f5a623; animation: ticker 28s linear infinite
+            font-size: .72rem; color: #f5a623; animation: ticker 28s linear infinite
         }
         .fs-btn {
             position: absolute; top: 6px; right: 6px; z-index: 11;
             width: 22px; height: 22px; background: rgba(0,0,0,.5);
             border: 1px solid rgba(245,166,35,.3); border-radius: 2px;
             cursor: pointer; display: none; align-items: center; justify-content: center;
-            font-size: var(--fs-sm); color: rgba(245,166,35,.7); transition: all .15s
+            font-size: .7rem; color: rgba(245,166,35,.7); transition: all .15s
         }
         .fs-btn:hover { background: rgba(0,0,0,.8); border-color: #f5a623; color: #f5a623 }
         .l-video.show ~ .fs-btn, .fs-btn.show { display: flex }
@@ -380,12 +503,12 @@
         }
         .vhs-lbl {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
-            font-family: 'VT323',monospace; font-size: var(--fs-lg); color: #fff;
+            font-family: 'VT323',monospace; font-size: 1.3rem; color: #fff;
             letter-spacing: .2em; animation: flk .15s infinite; z-index: 2
         }
         .idle-icon { font-size: 2.4rem }
-        .idle-title { font-family: 'VT323',monospace; font-size: var(--fs-xl); color: #f5a623; margin-top: 3px }
-        .idle-sub { font-family: 'VT323',monospace; font-size: var(--fs-xs); color: var(--text-dim); letter-spacing: .2em; margin-top: 3px }
+        .idle-title { font-family: 'VT323',monospace; font-size: 1.8rem; color: #f5a623; margin-top: 3px }
+        .idle-sub { font-family: 'VT323',monospace; font-size: .68rem; color: #4a3a20; letter-spacing: .2em; margin-top: 3px }
         .test-bars { display: flex; width: 100%; height: 14px; margin-top: 12px }
         .test-bar { flex: 1 }
 
@@ -406,11 +529,11 @@
             border-bottom: 1px solid #0a0800;
         }
         .vhs-show-name {
-            font-family: 'VT323',monospace; font-size: var(--fs-xs); color: #f5a623;
+            font-family: 'VT323',monospace; font-size: .62rem; color: #f5a623;
             letter-spacing: .08em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 70%
         }
         .vhs-ep-name {
-            font-family: 'VT323',monospace; font-size: var(--fs-xs); color: var(--text-dim);
+            font-family: 'VT323',monospace; font-size: .52rem; color: #5a3a18;
             letter-spacing: .05em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
             max-width: 28%; text-align: right
         }
@@ -435,7 +558,7 @@
             border-radius: 1px; box-shadow: 0 0 3px rgba(245,166,35,.15)
         }
         .vhs-time {
-            font-family: 'VT323',monospace; font-size: var(--fs-xs); color: var(--text-dim);
+            font-family: 'VT323',monospace; font-size: .58rem; color: #3a2808;
             letter-spacing: .05em; white-space: nowrap; flex-shrink: 0
         }
 
@@ -452,10 +575,10 @@
             background: linear-gradient(180deg,#8a3300,#4a1500);
             box-shadow: 0 0 6px rgba(255,80,0,.4),inset 0 1px 0 rgba(255,150,50,.2)
         }
-        .tbtn-icon { font-size: var(--fs-md); line-height: 1; color: #bbb }
+        .tbtn-icon { font-size: 1rem; line-height: 1; color: #bbb }
         .tbtn.lit .tbtn-icon, .tbtn:active .tbtn-icon { color: #ffaa44 }
         .tbtn-lbl {
-            font-family: 'VT323',monospace; font-size: var(--fs-xs); color: rgba(200,200,180,.4);
+            font-family: 'VT323',monospace; font-size: .4rem; color: rgba(200,200,180,.4);
             letter-spacing: .04em; line-height: 1; margin-top: 1px
         }
 
@@ -483,7 +606,7 @@
             background: rgba(255,255,255,.7); border-radius: 2px;
             top: 3px; left: 50%; transform: translateX(-50%); transform-origin: 50% 11px
         }
-        .kl90 { font-family: 'VT323',monospace; font-size: var(--fs-xs); color: #4a4a40; letter-spacing: .07em }
+        .kl90 { font-family: 'VT323',monospace; font-size: .52rem; color: #4a4a40; letter-spacing: .07em }
         .sbar { width: 50px; height: 4px; background: #444; border-radius: 2px; overflow: hidden; border: 1px solid #2a2a2a; margin-top: 1px }
         .sbar-fill { height: 100%; background: linear-gradient(90deg,#39ff14,#f5a623); width: 40%; transition: width .1s }
         .vol-ring { width: 50px; height: 4px; background: #444; border-radius: 2px; overflow: hidden; border: 1px solid #2a2a2a; margin-top: 1px }
@@ -494,22 +617,22 @@
             border: 2px solid #551100; cursor: pointer; transition: all .15s;
             box-shadow: 2px 2px 4px rgba(0,0,0,.5); display: flex; align-items: center; justify-content: center
         }
-        .pwr90::after { content: '⏻'; font-size: var(--fs-md); color: rgba(255,255,255,.5) }
+        .pwr90::after { content: '⏻'; font-size: 1rem; color: rgba(255,255,255,.5) }
         .pwr90.on { background: linear-gradient(160deg,#ff4400,#cc2200); box-shadow: 0 0 12px rgba(255,60,0,.6) }
         .pwr90.on::after { color: #fff }
-        .pwr-lbl { font-family: 'VT323',monospace; font-size: var(--fs-xs); color: #4a4a40; letter-spacing: .07em }
+        .pwr-lbl { font-family: 'VT323',monospace; font-size: .5rem; color: #4a4a40; letter-spacing: .07em }
         .spkr90 { display: flex; flex-direction: column; gap: 3px; width: 34px }
         .spkr-slot { height: 3px; background: #555; border-radius: 1px }
         .tv-base { width: 70%; margin: 0 auto; height: 10px; background: linear-gradient(160deg,#b0b0a8,#888880); border-radius: 0 0 8px 8px; box-shadow: 0 4px 8px rgba(0,0,0,.5) }
-        .src-note { font-family: 'VT323',monospace; font-size: var(--fs-xs); color: var(--text-dim); text-align: center; margin-top: 4px; letter-spacing: .07em }
+        .src-note { font-family: 'VT323',monospace; font-size: .56rem; color: #2a1a08; text-align: center; margin-top: 4px; letter-spacing: .07em }
 
         .guide-hdr { display: flex; align-items: baseline; gap: 10px; margin-bottom: 8px; border-bottom: 1px solid #1e1600; padding-bottom: 7px; flex-wrap: wrap; }
-        .guide-title { font-family: 'VT323',monospace; font-size: var(--fs-xl); color: #f5a623; letter-spacing: .08em }
-        .guide-date { font-family: 'VT323',monospace; font-size: var(--fs-sm); color: var(--text-dim); letter-spacing: .1em }
+        .guide-title { font-family: 'VT323',monospace; font-size: 1.5rem; color: #f5a623; letter-spacing: .08em }
+        .guide-date { font-family: 'VT323',monospace; font-size: .72rem; color: #4a3015; letter-spacing: .1em }
         .cat-tabs { display: flex; gap: 3px; flex-wrap: wrap; margin-bottom: 8px }
         .cat-btn {
-            font-family: 'VT323',monospace; font-size: var(--fs-xs); padding: 4px 8px;
-            border: 1px solid #2a1e0a; background: transparent; color: var(--text-dim);
+            font-family: 'VT323',monospace; font-size: .65rem; padding: 4px 8px;
+            border: 1px solid #2a1e0a; background: transparent; color: #7a5a2a;
             cursor: pointer; letter-spacing: .05em; border-radius: 2px; transition: all .12s; white-space: nowrap
         }
         .cat-btn:hover, .cat-btn.active { background: #120c00; color: #f5a623; border-color: #c47d0e; }
@@ -524,16 +647,16 @@
         }
         .show-card:hover { border-left-color: #f5a623; background: #110d00 }
         .show-card.active { border-left-color: #39ff14; background: #060d00 }
-        .s-time { font-family: 'VT323',monospace; font-size: var(--fs-sm); color: #fff; min-width: 44px; flex-shrink: 0 }
+        .s-time { font-family: 'VT323',monospace; font-size: .76rem; color: #fff; min-width: 44px; flex-shrink: 0 }
         .show-card.active .s-time { color: #39ff14 }
-        .s-emoji { font-size: var(--fs-lg); width: 32px; text-align: center; flex-shrink: 0 }
+        .s-emoji { font-size: 1.2rem; width: 32px; text-align: center; flex-shrink: 0 }
         .s-info { flex: 1; min-width: 0 }
-        .s-name { font-family: 'Oswald',sans-serif; font-size: var(--fs-md); font-weight: 600; color: #d4b483; white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
+        .s-name { font-family: 'Oswald',sans-serif; font-size: .74rem; font-weight: 600; color: #d4b483; white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
         .show-card.active .s-name { color: #39ff14 }
-        .s-yr { font-size: var(--fs-xs); color: var(--text-dim); font-family: 'VT323',monospace }
-        .s-desc { font-family: 'Special Elite',cursive; font-size: var(--fs-sm); color: var(--text-dim); margin-top: 1px; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden }
+        .s-yr { font-size: .52rem; color: #3a2a10; font-family: 'VT323',monospace }
+        .s-desc { font-family: 'Special Elite',cursive; font-size: .56rem; color: #4a3015; margin-top: 1px; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden }
         .s-badges { display: flex; gap: 2px; margin-top: 2px; flex-wrap: wrap }
-        .badge { font-family: 'VT323',monospace; font-size: var(--fs-xs); padding: 1px 3px; border: 1px solid #1e1600; color: var(--text-dim); letter-spacing: .04em }
+        .badge { font-family: 'VT323',monospace; font-size: .52rem; padding: 1px 3px; border: 1px solid #1e1600; color: #6a4a20; letter-spacing: .04em }
         .badge.live { border-color: #39ff14; color: #39ff14; animation: flk 2s infinite }
         .badge.playlist { border-color: #4a8cff; color: #6aacff }
         .badge.hot { border-color: #ff6a00; color: #ff8c2a }
@@ -545,13 +668,13 @@
         .show-card.active .play-dot { opacity: 1 }
         .np-bar { display: none; gap: 7px; align-items: center; margin-top: 8px; padding: 5px 8px; background: #060800; border: 1px solid #1a1400 }
         .np-bar.show { display: flex }
-        .np-live { font-family: 'VT323',monospace; font-size: var(--fs-xs); color: #39ff14; letter-spacing: .15em; flex-shrink: 0; animation: flk 2s infinite }
-        .np-name { font-family: 'Oswald',sans-serif; font-size: var(--fs-xs); color: #d4b483; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
-        .np-ch { font-family: 'VT323',monospace; font-size: var(--fs-xs); color: #f5a623; flex-shrink: 0 }
+        .np-live { font-family: 'VT323',monospace; font-size: .62rem; color: #39ff14; letter-spacing: .15em; flex-shrink: 0; animation: flk 2s infinite }
+        .np-name { font-family: 'Oswald',sans-serif; font-size: .68rem; color: #d4b483; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
+        .np-ch { font-family: 'VT323',monospace; font-size: .68rem; color: #f5a623; flex-shrink: 0 }
         .toast {
             position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(60px);
             background: #1a1200; border: 1px solid #f5a623; color: #f5a623;
-            font-family: 'VT323',monospace; font-size: var(--fs-md); padding: 7px 18px;
+            font-family: 'VT323',monospace; font-size: .88rem; padding: 7px 18px;
             border-radius: 3px; z-index: 9999; opacity: 0; transition: all .3s;
             letter-spacing: .1em; pointer-events: none; white-space: nowrap
         }
@@ -562,53 +685,20 @@
             background: linear-gradient(160deg,#0f0c04,#1a1408); border: 1px solid #3a2800;
             border-radius: 6px; padding: 24px 28px; max-width: 310px; width: 90%; text-align: center
         }
-        .modal-box h2 { font-family: 'VT323',monospace; font-size: var(--fs-xl); color: #f5a623; letter-spacing: .1em; margin-bottom: 5px }
-        .modal-box p { font-family: 'Special Elite',cursive; font-size: var(--fs-sm); color: #9a7a45; line-height: 1.5; margin-bottom: 16px }
+        .modal-box h2 { font-family: 'VT323',monospace; font-size: 1.6rem; color: #f5a623; letter-spacing: .1em; margin-bottom: 5px }
+        .modal-box p { font-family: 'Special Elite',cursive; font-size: .74rem; color: #9a7a45; line-height: 1.5; margin-bottom: 16px }
         .modal-opts { display: flex; flex-direction: column; gap: 8px }
         .dl {
-            display: block; font-family: 'VT323',monospace; font-size: var(--fs-md);
+            display: block; font-family: 'VT323',monospace; font-size: .85rem;
             padding: 9px 14px; border-radius: 3px; cursor: pointer; letter-spacing: .1em;
             text-decoration: none; transition: all .14s; border: none; width: 100%; text-align: center
         }
         .dl-bmc { background: #0a1a0a; color: #39ff14; border: 1px solid #1a3a1a }
         .dl-bmc:hover { background: #112211 }
-        .dl-em { background: #1a1200; color: #f5a623; border: 1px solid #3a2800; font-size: var(--fs-sm) }
+        .dl-em { background: #1a1200; color: #f5a623; border: 1px solid #3a2800; font-size: .7rem }
         .dl-em:hover { background: #251a00 }
-        .modal-close { margin-top: 12px; font-family: 'VT323',monospace; font-size: var(--fs-sm); color: var(--text-dim); background: transparent; border: none; cursor: pointer; letter-spacing: .1em }
+        .modal-close { margin-top: 12px; font-family: 'VT323',monospace; font-size: .74rem; color: #4a3015; background: transparent; border: none; cursor: pointer; letter-spacing: .1em }
         .modal-close:hover { color: #f5a623 }
-        .signup-strip {
-            position: relative; background: #000; border-bottom: 1px solid #3a2800;
-            margin: -14px calc(-1 * clamp(14px,2vw,32px)) 6px; padding: 9px 56px; text-align: center
-        }
-        .signup-strip.hide { display: none }
-        .strip-form { display: flex; align-items: center; justify-content: center; gap: 8px 12px; flex-wrap: wrap }
-        .strip-text { font-family: 'VT323',monospace; font-size: var(--fs-lg); font-weight: 700; color: #fff; letter-spacing: .06em }
-        .strip-input {
-            background: #fff; color: #444951; border: 1px solid #fff; border-radius: 4px;
-            font-family: 'VT323',monospace; font-size: var(--fs-md); font-weight: 700; padding: 5px 10px;
-            width: 230px; max-width: 100%; outline: none; letter-spacing: .03em
-        }
-        .strip-input:focus { box-shadow: 0 0 0 2px #ca3aca }
-        .strip-submit {
-            background: #ca3aca; color: #fff; border: none; border-radius: 4px; cursor: pointer;
-            font-family: 'VT323',monospace; font-size: var(--fs-md); font-weight: 700; padding: 6px 16px;
-            letter-spacing: .06em; transition: all .15s
-        }
-        .strip-submit:hover { background: #dd55dd }
-        .strip-submit:active { transform: scale(.96) }
-        .strip-submit:disabled { opacity: .5; cursor: default }
-        .signup-trap { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0 }
-        .strip-note { font-family: 'Special Elite',cursive; font-size: var(--fs-xs); color: #9a9a9a; line-height: 1.4; margin-top: 5px }
-        .strip-note:empty { display: none }
-        .strip-note.ok { font-family: 'VT323',monospace; font-size: var(--fs-md); color: #39ff14; letter-spacing: .08em }
-        .strip-note.err { font-family: 'VT323',monospace; font-size: var(--fs-md); color: #ff6b5a; letter-spacing: .08em }
-        .strip-close {
-            position: absolute; top: 8px; right: 14px; width: 30px; height: 30px; border-radius: 50%;
-            background: transparent; border: 1px solid #333; color: #9a9a9a; cursor: pointer;
-            font-family: 'VT323',monospace; font-size: var(--fs-md); transition: all .15s
-        }
-        .strip-close:hover { color: #fff; border-color: #fff }
-        .help-desc a { color: #f5a623 }
 
         @keyframes flk { 0%,90%,100% { opacity: 1 } 95% { opacity: .2 } }
         @keyframes ticker { 0% { transform: translateX(60%) } 100% { transform: translateX(-100%) } }
@@ -680,7 +770,7 @@
         }
         .ch-overlay-name {
             font-family: 'VT323', monospace;
-            font-size: var(--fs-md);
+            font-size: .9rem;
             color: #39ff14;
             letter-spacing: .08em;
             text-shadow: 0 0 8px #39ff14;
@@ -697,7 +787,7 @@
         }
         #volOverlay.show { opacity: 1; }
         #volOverlay .vol-overlay-label {
-            font-family: 'VT323', monospace; font-size: var(--fs-lg); color: #39ff14;
+            font-family: 'VT323', monospace; font-size: 1.2rem; color: #39ff14;
             letter-spacing: .25em; text-shadow: 0 0 8px #39ff14, 0 0 20px #39ff14; margin-bottom: 5px;
         }
         #volOverlay .vol-overlay-bars { display: flex; gap: 3px; justify-content: center; align-items: flex-end; height: 20px; }
@@ -710,247 +800,37 @@
             text-align: center;
             margin: 12px 0 6px;
         }
-
-        /* ===== LAYOUT =====
-           Desktop (1040px and up): episodes | TV | guide, all on one screen.
-           Tablet (640 to 1039px): TV | guide and episodes as tabs.
-           Phone (under 640px): TV pinned at the top, tabs and list beneath. */
-        html { -webkit-text-size-adjust: 100%; }
-        body { padding: 0 0 var(--sp-5); }
-        :focus-visible { outline: 2px solid var(--amber); outline-offset: 2px; }
-
-        /* --- signup strip --- */
-        .signup-strip { margin: 0; padding: 6px 56px; }
-        .strip-text { font-size: var(--fs-md); }
-        .strip-input { height: 32px; padding: 0 10px; width: 220px; font-size: var(--fs-md); }
-        .strip-submit { height: 32px; padding: 0 16px; font-size: var(--fs-md); }
-        .strip-close { top: 6px; right: 12px; width: 32px; height: 32px; font-size: var(--fs-md); }
-        .strip-toggle { display: none; }
-
-        /* --- top bar --- */
-        .topbar {
-            position: relative; display: flex; align-items: center; gap: var(--sp-2);
-            min-height: 64px; padding: var(--sp-2) var(--gutter);
-            border-bottom: 1px solid var(--line); background: rgba(8,6,2,.92);
-        }
-        /* the logo sits dead centre of the bar; buttons flow either side of it */
-        .brand { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); text-align: center; pointer-events: none; }
-        .topbar .logo { font-size: 58px; line-height: .9; letter-spacing: .12em; white-space: nowrap; padding-left: .12em; }
-        @media (min-width: 1040px) { .topbar { min-height: 76px; } }   /* room for the full-size logo and tagline */
-        @media (max-width: 1039px) { .topbar .logo { font-size: 48px; } }
-        .topbar .tagline {
-            margin: 2px 0 0; font-size: var(--fs-xs); letter-spacing: .22em; padding-left: .22em;
-            color: var(--text-dim); text-transform: uppercase; white-space: nowrap;
-        }
-        .bar-more { display: contents; }
-        #btnCatalogue { margin-left: auto; }
-        .bar-menu-btn { display: none; }
-        .hbtn {
-            height: var(--ctl-h); padding: 0 14px; justify-content: center; gap: var(--sp-2);
-            font-size: var(--fs-md); white-space: nowrap; border-radius: 4px;
-            background: transparent; color: var(--amber); border: 1px solid var(--line-strong);
-        }
-        .hbtn:hover { background: #1a1200; border-color: var(--amber-deep); }
-        .btn-live { background: transparent; color: var(--red); border: 1px solid var(--red); }
-        .btn-live:hover { background: #2a0000; border-color: var(--red); }
-        .btn-live.active { background: #ff0000; color: #fff; border-color: #fff; }
-        .live-dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
-        .help-btn { position: static; width: var(--ctl-h); height: var(--ctl-h); padding: 0; border-radius: 4px; font-size: var(--fs-lg); background: transparent; }
-        .help-btn:hover { box-shadow: none; }
-        .help-word { display: none; }
-        @media (max-width: 899px) { .topbar .tagline { display: none; } .topbar { min-height: 56px; } .topbar .logo { font-size: 44px; } }
-
-        /* --- three columns --- */
-        .layout {
-            display: grid; grid-template-columns: 220px minmax(0,1fr) 340px; grid-template-areas: "ep tv guide";
-            gap: 20px; width: min(100%,1440px); margin: 0 auto; padding: var(--sp-4) var(--gutter) 0; align-items: start;
-        }
-        .ep-sidebar { grid-area: ep; min-width: 0; display: flex; flex-direction: column; max-height: calc(100vh - var(--page-top) - var(--sp-4)); }
-        .ep-list { flex: 1 1 auto; min-height: 0; max-height: none; }
-        .tv-col { grid-area: tv; min-width: 0; }
-        .guide-col { grid-area: guide; min-width: 0; display: flex; flex-direction: column; max-height: calc(100vh - var(--page-top) - var(--sp-4)); }
-        .show-list { flex: 1 1 auto; min-height: 120px; max-height: none; }
-        .side-tabs { grid-area: tabs; display: none; border: 1px solid var(--line-strong); border-radius: 4px; overflow: hidden; }
-        .side-tab {
-            flex: 1; height: 44px; background: transparent; border: none; cursor: pointer;
-            font-family: 'VT323',monospace; font-size: var(--fs-md); letter-spacing: .1em; color: var(--text-dim);
-        }
-        .side-tab + .side-tab { border-left: 1px solid var(--line-strong); }
-        .side-tab.active { background: #1a1200; color: var(--amber); }
-
-        /* the TV is sized from the window height so picture, deck and power all fit */
-        .tv-shell { width: 100%; max-width: max(380px, calc((100vh - var(--page-top) - var(--tv-chrome) - var(--sp-4)) * 1.3333 + 54px)); margin: 0 auto; }
-
-        /* --- guide --- */
-        .guide-hdr { align-items: baseline; }
-        .guide-title { font-size: var(--fs-lg); }
-        .guide-search {
-            width: 100%; height: var(--ctl-h); margin-bottom: var(--sp-2); padding: 0 12px; flex: 0 0 auto;
-            background: var(--panel); border: 1px solid var(--line-strong); border-radius: 4px; outline: none;
-            color: var(--text); font-family: 'VT323',monospace; font-size: var(--fs-md); letter-spacing: .05em;
-        }
-        .guide-search:focus { border-color: var(--amber-deep); }
-        .guide-search::placeholder { color: var(--text-dim); }
-        .cat-tabs { gap: 6px; flex: 0 0 auto; }
-        .cat-btn { min-height: 30px; padding: 0 10px; font-size: var(--fs-sm); border-radius: 3px; }
-        .show-card { padding: 8px 10px; gap: 10px; }
-        .s-desc, .cat-card-desc, .help-desc, .modal-box p { font-family: 'Oswald',sans-serif; font-weight: 400; letter-spacing: .01em; }
-        .s-desc { margin-top: 2px; line-height: 1.35; }
-        .badge { padding: 1px 5px; }
-        .s-badges { gap: 4px; margin-top: 4px; }
-        .sched-selector { justify-content: center; flex-wrap: wrap; gap: 6px; }
-        .pwr90 { position: relative; }
-
-        /* --- tablet: TV beside one tabbed column --- */
-        @media (max-width: 1039px) {
-            .layout { grid-template-columns: minmax(0,1fr) 320px; grid-template-areas: "tv tabs" "tv side"; grid-template-rows: auto 1fr; gap: 12px 16px; }
-            .side-tabs { display: flex; }
-            .ep-sidebar, .guide-col { grid-area: side; max-height: calc(100vh - var(--page-top) - 56px - var(--sp-4)); }
-            .layout[data-tab="guide"] .ep-sidebar { display: none; }
-            .layout[data-tab="episodes"] .guide-col { display: none; }
-            .ep-sidebar-hdr, .guide-title { display: none; }
-            :root { --page-top: 140px; }
-        }
-
-        /* --- touch sizes --- */
-        @media (max-width: 1039px), (pointer: coarse) {
-            :root { --ctl-h: 44px; }
-            .cat-tabs { flex-wrap: nowrap; overflow-x: auto; gap: 8px; padding-bottom: 4px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
-            .cat-tabs::-webkit-scrollbar { display: none; }
-            .cat-btn { min-height: 44px; padding: 0 14px; flex: 0 0 auto; }
-            .sched-sel-btn { min-height: 44px; padding: 0 12px; }
-            .tbtn, .transport .tbtn { width: 46px; height: 44px; }
-            .ep-item { padding: 12px; }
-            .knob90::before, .pwr90::before { content: ''; position: absolute; inset: -9px; }
-            .fs-btn { width: 40px; height: 40px; font-size: var(--fs-md); }
-            .help-modal-close, .cat-modal-close, .modal-close { min-height: 44px; padding: 0 12px; }
-            .cat-filter-btn { min-height: 40px; padding: 0 12px; }
-            .strip-input, .strip-submit { height: 44px; }
-            .strip-close { top: 0; right: 4px; width: 44px; height: 44px; border-color: transparent; }
-            .signup-strip { padding: 0 52px; }
-            .strip-form { padding: 6px 0; }
-        }
-
-        /* --- small bar: logo, Live, Surprise, menu --- */
-        @media (max-width: 720px) {
-            .topbar .logo { font-size: 36px; }
-            .lbl-wide { display: none; }
-            .bar-menu-btn { display: flex; margin-left: auto; }
-            #btnCatalogue { margin-left: 0; }
-            .bar-more {
-                display: none; position: absolute; top: calc(100% + 4px); right: var(--gutter); z-index: 9500;
-                flex-direction: column; gap: var(--sp-2); min-width: 200px; padding: var(--sp-3);
-                background: #0f0c04; border: 1px solid var(--line-strong); border-radius: 6px; box-shadow: 0 12px 32px rgba(0,0,0,.7);
-            }
-            .bar-more.open { display: flex; }
-            .bar-more .hbtn { width: 100%; justify-content: flex-start; font-size: var(--fs-md); }
-            .help-q { display: none; }
-            .help-word { display: inline; }
-        }
-
-        @media (max-width: 400px) {
-            .topbar { gap: var(--sp-2); padding-left: var(--sp-2); padding-right: var(--sp-2); }
-            .topbar .logo { font-size: 30px; letter-spacing: .08em; padding-left: .08em; }
-            .hbtn { padding: 0 10px; }
-            .bar-more { right: var(--sp-2); }
-        }
-
-        /* --- phone: one column, TV first --- */
-        @media (max-width: 639px) {
-            .layout { grid-template-columns: minmax(0,1fr); grid-template-areas: "tv" "tabs" "side" "sched"; grid-template-rows: none; gap: 10px; padding: var(--sp-2) var(--sp-2) 0; }
-            .tv-col { display: contents; }
-            .tv-shell { grid-area: tv; max-width: none; padding: 8px; border-radius: 10px; box-shadow: 0 0 0 8px var(--bg), 0 10px 24px rgba(0,0,0,.8); }
-            .tv-shell::before { display: none; }
-            .tv-base, .src-note { display: none; }
-            .schedule-widget-wrapper { grid-area: sched; margin: 0; }
-            .ep-sidebar, .guide-col { max-height: none; }
-            .show-list, .ep-list { max-height: none; overflow: visible; }
-            .tv-top-strip { display: none; }
-            .screen-housing { padding: 5px 5px 7px; }
-            .screen-bezel-90s { padding: 3px; }
-            .vhs-deck { flex-wrap: nowrap; justify-content: space-between; gap: 8px; padding: 6px 10px; min-height: 0; }
-            .vhs-cassette-housing { width: auto; min-width: 0; min-height: 0; }
-            .controls-panel { flex-wrap: nowrap; justify-content: space-between; gap: 8px; padding: 6px 12px; }
-            .knob-group { gap: 14px; align-items: center; }
-            .knob-unit { flex-direction: row; gap: 6px; }
-            .vol-ring, .sbar, .pwr-lbl, .spkr90 { display: none; }
-            .knob90::before, .pwr90::before { inset: -8px -6px; }
-            .toast { max-width: calc(100vw - 24px); white-space: normal; text-align: center; }
-            .cat-modal-title { font-size: var(--fs-lg); }
-            .cat-modal-bg, .help-modal-bg { padding: 10px; }
-
-            /* signup strip folds to one link; tapping it opens the form */
-            .signup-strip { padding: 0 48px 0 12px; min-height: 44px; }
-            .strip-form { padding: 0; }
-            .strip-text, .strip-input, .strip-submit { display: none; }
-            .strip-toggle {
-                display: inline-flex; align-items: center; justify-content: center; width: 100%; height: 44px;
-                background: none; border: none; cursor: pointer; color: #fff;
-                font-family: 'VT323',monospace; font-size: var(--fs-md); letter-spacing: .06em;
-                text-decoration: underline; text-decoration-color: var(--magenta); text-underline-offset: 4px;
-            }
-            .signup-strip.open .strip-toggle { display: none; }
-            .signup-strip.open .strip-form { flex-wrap: nowrap; padding: 6px 0; }
-            .signup-strip.open .strip-input { display: block; flex: 1 1 auto; width: auto; min-width: 0; }
-            .signup-strip.open .strip-submit { display: block; }
-            .strip-note { padding-bottom: 6px; margin-top: 0; }
-        }
-        /* pin the TV while the list scrolls, when the screen is tall enough to leave room for the list */
-        @media (max-width: 639px) and (min-height: 600px) {
-            .tv-shell { position: sticky; top: 0; z-index: 60; }
-            .side-tabs { position: sticky; top: calc(var(--tv-h) + 8px); z-index: 59; background: var(--bg); }
-        }
-        /* phone held sideways: the picture fills the height, controls are a short scroll below */
-        @media (max-height: 500px) and (orientation: landscape) {
-            :root { --page-top: 68px; --tv-chrome: 34px; }
-            .signup-strip, .tv-top-strip { display: none; }
-            .topbar { min-height: 48px; padding-top: 2px; padding-bottom: 2px; }
-            .layout { padding-top: var(--sp-2); }
-            .ep-sidebar, .guide-col { max-height: none; }
-        }
     </style>
 </head>
 <body>
-    <div class="signup-strip" id="signupStrip">
-        <form class="strip-form" id="signupForm" novalidate>
-            <button class="strip-toggle" id="signupToggle" type="button">Get updates on new shows</button>
-            <span class="strip-text">Receive New Updates on Shows and Listings</span>
-            <input class="strip-input" type="email" id="signupEmail" placeholder="Email Address" aria-label="Email Address" autocomplete="email" required>
-            <input class="signup-trap" type="text" id="signupTrap" tabindex="-1" autocomplete="off" aria-hidden="true">
-            <button class="strip-submit" type="submit" id="signupSubmit">Sign up</button>
-        </form>
-        <div class="strip-note" id="signupMsg" role="status"></div>
-        <button class="strip-close" id="signupClose" type="button" title="Hide this bar" aria-label="Hide this bar">✕</button>
+    <div class="help-btn" id="helpBtn" title="How to use The Tube">?</div>
+    <div class="site-header">
+        <div class="logo">THE <span>TUBE</span></div>
+        <div class="tagline">◈ Classic Television Archive ◈</div>
+        <div class="divider"></div>
+        <div class="header-actions">
+            <button class="hbtn btn-share" id="btnShare">📤 SHARE</button>
+            <button class="hbtn btn-donate" id="btnDonate">☕ DONATE</button>
+            <button class="hbtn btn-surprise" id="btnSurprise">🎲 SURPRISE ME</button>
+            <button class="hbtn btn-live" id="btnLiveMode">🔴 LIVE MODE</button>
+            <button class="hbtn btn-catalogue" id="btnCatalogue">📺 FULL CATALOGUE</button>
+            <div style="display:inline-flex; align-items:center;"><input type="text" id="searchBox" placeholder="🔍 SEARCH SHOWS..." style="background:#0c0900; border:1px solid #3a2800; color:#d4b483; font-family:'VT323',monospace; font-size:.75rem; padding:5px 12px; border-radius:3px; outline:none; width:160px; letter-spacing:.05em;"></div>
+        </div>
     </div>
-    <header class="topbar">
-        <div class="brand">
-            <div class="logo">THE <span>TUBE</span></div>
-            <div class="tagline">Classic Television Archive</div>
-        </div>
-        <button class="hbtn btn-live" id="btnLiveMode"><span class="live-dot"></span>LIVE<span class="lbl-wide">MODE</span></button>
-        <button class="hbtn bar-menu-btn" id="barMenuBtn" type="button" aria-expanded="false" aria-controls="barMore">MENU</button>
-        <div class="bar-more" id="barMore">
-            <button class="hbtn" id="btnSurprise">SURPRISE ME</button>
-            <button class="hbtn" id="btnCatalogue">CATALOGUE</button>
-            <button class="hbtn" id="btnDonate">DONATE</button>
-            <button class="hbtn help-btn" id="helpBtn" type="button" title="How to use The Tube" aria-label="Help"><span class="help-q">?</span><span class="help-word">HELP</span></button>
-        </div>
-    </header>
-    <div class="layout" data-tab="guide">
-        <div class="ep-sidebar" id="panelEpisodes"><div class="ep-sidebar-hdr">EPISODES</div><div class="ep-show-name" id="epShowName">— SELECT A SHOW —</div><div class="ep-list" id="epList"><div class="ep-empty">Power on &amp; select<br>a show to see<br>episodes here</div></div></div>
-        <div class="tv-col"><div class="tv-shell"><div class="tv-top-strip"><div class="tv-brand-block"><span class="tv-brand-90s">NOSTALGIVISION™</span><div class="live-widget-inline" id="liveModeIndicator"><span class="live-indicator">🔴 LIVE</span></div></div><div class="ch-display" id="chDisp">— —</div></div><div class="screen-housing"><div class="screen-bezel-90s"><div class="screen-wrap" id="screenWrap"><div class="l-idle" id="lIdle"><div class="idle-icon">📺</div><div class="idle-title">THE TUBE</div><div class="idle-sub">◈ SELECT A PROGRAMME ◈</div><div class="idle-welcome">Turn on the TV, then choose a programme<br>— or start Live Mode.</div><div class="test-bars"><div class="test-bar" style="background:#fff"></div><div class="test-bar" style="background:#ff0"></div><div class="test-bar" style="background:#0ff"></div><div class="test-bar" style="background:#0f0"></div><div class="test-bar" style="background:#f0f"></div><div class="test-bar" style="background:#f00"></div><div class="test-bar" style="background:#00f"></div><div class="test-bar" style="background:#000"></div></div></div><div class="l-video" id="lVideo"><video id="vid" playsinline preload="auto"></video><div id="resumeBadge" class="resume-badge"></div></div><div class="l-vhsfx" id="lVhs"><canvas class="noisecanvas" id="vhsCanvas"></canvas><div class="vhs-stripe"></div><div class="vhs-band"></div><div class="vhs-lbl" id="vhsLbl">⏩ FF</div></div><div class="l-static" id="lStatic"><canvas class="noisecanvas" id="noiseCanvas"></canvas><div class="static-lbl" id="staticLbl">TUNING...</div></div><div class="l-off" id="lOff"></div><div class="l-splash" id="lSplash"><div class="sp-emoji" id="spEmoji"></div><div class="sp-title" id="spTitle"></div><div class="sp-year" id="spYear"></div><div class="sp-ep" id="spEp"></div><div class="sp-btn"></div><div class="sp-hint">▶ CLICK TO WATCH</div><div class="sp-loading" id="spLoading" style="display:none">LOADING EPISODES...</div></div><div class="l-scan" id="lScan"></div><div class="l-vig"></div><div class="l-phos" id="lPhos"></div><div class="l-ticker" id="lTicker"><span class="ticker-inner" id="tickerTxt"></span></div><div class="fs-btn" id="fsBtn" title="Fullscreen">⛶</div><div id="lPowerOn"><div class="poweron-flash"></div><div class="poweron-line"></div><div class="poweron-bloom"></div></div><div id="chOverlay"><div class="ch-overlay-num" id="chOverlayNum">CH —</div><div class="ch-overlay-name" id="chOverlayName"></div></div><div class="vol-overlay" id="volOverlay"><div class="vol-overlay-label">VOLUME</div><div class="vol-overlay-bars" id="volOverlayBars"></div></div></div></div></div><div class="vhs-deck"><div class="vhs-cassette-housing"><div class="vhs-label-strip"><span class="vhs-show-name" id="vhsShowName">◈ NO TAPE LOADED ◈</span><span class="vhs-ep-name" id="vhsEpName"></span></div><div class="vhs-window"><div class="vhs-reel" id="reelL"></div><div class="vhs-tape-stretch"></div><div class="vhs-reel" id="reelR"></div><div class="vhs-time" id="vhsTime">--:--</div></div></div><div class="transport"><div class="tbtn" id="tRew" title="Rewind 15s"><span class="tbtn-icon">⏪</span><span class="tbtn-lbl">-15s</span></div><div class="tbtn" id="tPlay" title="Play / Pause"><span class="tbtn-icon" id="tPlayIcon">▶</span></div><div class="tbtn" id="tFF" title="Fast forward 15s"><span class="tbtn-icon">⏩</span><span class="tbtn-lbl">+15s</span></div></div></div><div class="controls-panel"><div class="knob-group"><div class="knob-unit"><div class="knob90 k-vol" id="kVol"></div><span class="kl90">VOL</span><div class="vol-ring"><div class="vol-ring-fill" id="volFill"></div></div></div><div class="knob-unit"><div class="knob90 k-static" id="kStatic"></div><span class="kl90">STATIC</span><div class="sbar"><div class="sbar-fill" id="sbarFill"></div></div></div><div class="knob-unit"><div class="knob90 k-bright" id="kBright"></div><span class="kl90">BRIGHT</span></div></div><div class="controls-right"><div class="spkr90"><div class="spkr-slot"></div><div class="spkr-slot"></div><div class="spkr-slot"></div><div class="spkr-slot"></div><div class="spkr-slot"></div><div class="spkr-slot"></div><div class="spkr-slot"></div><div class="spkr-slot"></div></div><div class="pwr-area"><div class="pwr90" id="pwrBtn"></div><span class="pwr-lbl">POWER</span></div></div></div></div><div class="tv-base"></div><div class="src-note">◈ STREAMING VIA INTERNET ARCHIVE ◈</div>
+    <div class="layout">
+        <div class="ep-sidebar"><div class="ep-sidebar-hdr">📼 EPISODES</div><div class="ep-show-name" id="epShowName">— SELECT A SHOW —</div><div class="ep-list" id="epList"><div class="ep-empty">Power on &amp; select<br>a show to see<br>episodes here</div></div></div>
+        <div><div class="tv-shell"><div class="tv-top-strip"><div class="tv-brand-block"><span class="tv-brand-90s">NOSTALGIVISION™</span><div class="live-widget-inline" id="liveModeIndicator"><span class="live-indicator">🔴 LIVE</span></div></div><div class="ch-display" id="chDisp">— —</div></div><div class="screen-housing"><div class="screen-bezel-90s"><div class="screen-wrap" id="screenWrap"><div class="l-idle" id="lIdle"><div class="idle-icon">📺</div><div class="idle-title">THE TUBE</div><div class="idle-sub">◈ SELECT A PROGRAMME ◈</div><div class="test-bars"><div class="test-bar" style="background:#fff"></div><div class="test-bar" style="background:#ff0"></div><div class="test-bar" style="background:#0ff"></div><div class="test-bar" style="background:#0f0"></div><div class="test-bar" style="background:#f0f"></div><div class="test-bar" style="background:#f00"></div><div class="test-bar" style="background:#00f"></div><div class="test-bar" style="background:#000"></div></div></div><div class="l-video" id="lVideo"><video id="vid" playsinline preload="metadata"></video><div id="resumeBadge" class="resume-badge"></div></div><div class="l-vhsfx" id="lVhs"><canvas class="noisecanvas" id="vhsCanvas"></canvas><div class="vhs-stripe"></div><div class="vhs-band"></div><div class="vhs-lbl" id="vhsLbl">⏩ FF</div></div><div class="l-static" id="lStatic"><canvas class="noisecanvas" id="noiseCanvas"></canvas><div class="static-lbl" id="staticLbl">TUNING...</div></div><div class="l-off" id="lOff"></div><div class="l-splash" id="lSplash"><div class="sp-emoji" id="spEmoji"></div><div class="sp-title" id="spTitle"></div><div class="sp-year" id="spYear"></div><div class="sp-ep" id="spEp"></div><div class="sp-btn"></div><div class="sp-hint">▶ CLICK TO WATCH</div><div class="sp-loading" id="spLoading" style="display:none">LOADING EPISODES...</div></div><div class="l-scan" id="lScan"></div><div class="l-vig"></div><div class="l-phos" id="lPhos"></div><div class="l-ticker" id="lTicker"><span class="ticker-inner" id="tickerTxt"></span></div><div class="fs-btn" id="fsBtn" title="Fullscreen">⛶</div><div id="lPowerOn"><div class="poweron-flash"></div><div class="poweron-line"></div><div class="poweron-bloom"></div></div><div id="chOverlay"><div class="ch-overlay-num" id="chOverlayNum">CH —</div><div class="ch-overlay-name" id="chOverlayName"></div></div><div class="vol-overlay" id="volOverlay"><div class="vol-overlay-label">VOLUME</div><div class="vol-overlay-bars" id="volOverlayBars"></div></div></div></div></div><div class="vhs-deck"><div class="vhs-cassette-housing"><div class="vhs-label-strip"><span class="vhs-show-name" id="vhsShowName">◈ NO TAPE LOADED ◈</span><span class="vhs-ep-name" id="vhsEpName"></span></div><div class="vhs-window"><div class="vhs-reel" id="reelL"></div><div class="vhs-tape-stretch"></div><div class="vhs-reel" id="reelR"></div><div class="vhs-time" id="vhsTime">--:--</div></div></div><div class="transport"><div class="tbtn" id="tRew" title="Rewind 15s"><span class="tbtn-icon">⏪</span><span class="tbtn-lbl">-15s</span></div><div class="tbtn" id="tPlay" title="Play / Pause"><span class="tbtn-icon" id="tPlayIcon">▶</span></div><div class="tbtn" id="tFF" title="Fast forward 15s"><span class="tbtn-icon">⏩</span><span class="tbtn-lbl">+15s</span></div></div></div><div class="controls-panel"><div class="knob-group"><div class="knob-unit"><div class="knob90 k-vol" id="kVol"></div><span class="kl90">VOL</span><div class="vol-ring"><div class="vol-ring-fill" id="volFill"></div></div></div><div class="knob-unit"><div class="knob90 k-static" id="kStatic"></div><span class="kl90">STATIC</span><div class="sbar"><div class="sbar-fill" id="sbarFill"></div></div></div><div class="knob-unit"><div class="knob90 k-bright" id="kBright"></div><span class="kl90">BRIGHT</span></div></div><div class="controls-right"><div class="spkr90"><div class="spkr-slot"></div><div class="spkr-slot"></div><div class="spkr-slot"></div><div class="spkr-slot"></div><div class="spkr-slot"></div><div class="spkr-slot"></div><div class="spkr-slot"></div><div class="spkr-slot"></div></div><div class="pwr-area"><div class="pwr90" id="pwrBtn"></div><span class="pwr-lbl">POWER</span></div></div></div></div><div class="tv-base"></div><div class="src-note">◈ STREAMING VIA INTERNET ARCHIVE ◈</div>
             <div class="schedule-widget-wrapper">
                 <div class="sched-selector">
                     <button class="sched-sel-btn active-a" id="btnSchedA">📅 SCHED A</button>
                     <button class="sched-sel-btn" id="btnSchedB">📅 SCHED B</button>
-                    <button class="sched-sel-btn" id="btnSchedC">📅 SCHED C</button>
+                    <button class="sched-sel-btn" id="btnSchedC" style="display:none">📅 SCHED C</button>
                     <button class="sched-sel-btn" id="btnSchedD" style="display:none">📅 SCHED D</button>
                     <span class="schedule-indicator a" id="scheduleIndicator">📅 SCHEDULE A</span>
                 </div>
             </div>
         </div>
-        <div class="side-tabs" role="tablist" aria-label="Guide or episodes"><button class="side-tab active" type="button" role="tab" aria-selected="true" data-tab="guide">GUIDE</button><button class="side-tab" type="button" role="tab" aria-selected="false" data-tab="episodes">EPISODES</button></div>
-        <div class="guide-col" id="panelGuide"><div class="guide-hdr"><span class="guide-title">PROGRAMME GUIDE</span><span class="guide-date" id="gDate"></span></div><div id="whatsOnWidget"></div><input class="guide-search" type="text" id="searchBox" placeholder="Search shows" aria-label="Search shows" autocomplete="off"><div class="cat-tabs" id="catTabs"></div><div class="show-list" id="showList"></div><div class="np-bar" id="npBar"><span class="np-live">▶ ON AIR</span><span class="np-name" id="npName">—</span><span class="np-ch" id="npCh">CH —</span></div></div>
+        <div><div class="guide-hdr"><span class="guide-title">📋 PROGRAMME GUIDE</span><span class="guide-date" id="gDate"></span></div><div id="whatsOnWidget"></div><div class="cat-tabs" id="catTabs"></div><div class="show-list" id="showList"></div><div class="np-bar" id="npBar"><span class="np-live">▶ ON AIR</span><span class="np-name" id="npName">—</span><span class="np-ch" id="npCh">CH —</span></div></div>
     </div>
     <!-- HELP MODAL -->
     <div class="help-modal-bg" id="helpModal">
@@ -979,19 +859,19 @@
                     <div class="help-row"><span class="help-key">⏩ +15s</span><span class="help-desc">Fast-forward 15 seconds within the current episode.</span></div>
                 </div>
                 <div class="help-section">
-                    <div class="help-section-title">🎛 Top Bar</div>
-                    <div class="help-row"><span class="help-key">DONATE</span><span class="help-desc">Support the project via Buy Me a Coffee.</span></div>
-                    <div class="help-row"><span class="help-key">📬 UPDATES</span><span class="help-desc">Use the bar at the top of the page to hear when new shows are added. Hid it? <a href="#" id="signupShow">Bring the bar back</a>.</span></div>
-                    <div class="help-row"><span class="help-key">SURPRISE ME</span><span class="help-desc">Jumps to a random show and episode — perfect for discovering something new.</span></div>
-                    <div class="help-row"><span class="help-key">LIVE MODE</span><span class="help-desc">Turns The Tube into a real "live channel" — the schedule decides what's on, just like real TV.</span></div>
-                    <div class="help-row"><span class="help-key">CATALOGUE</span><span class="help-desc">Browse every show in the archive, filter by category, and tune in directly.</span></div>
+                    <div class="help-section-title">🎛 Header Buttons</div>
+                    <div class="help-row"><span class="help-key">📤 SHARE</span><span class="help-desc">Copy a link to The Tube to share with friends.</span></div>
+                    <div class="help-row"><span class="help-key">☕ DONATE</span><span class="help-desc">Support the project via Buy Me a Coffee.</span></div>
+                    <div class="help-row"><span class="help-key">🎲 SURPRISE</span><span class="help-desc">Jumps to a random show and episode — perfect for discovering something new.</span></div>
+                    <div class="help-row"><span class="help-key">🔴 LIVE MODE</span><span class="help-desc">Turns The Tube into a real "live channel" — the schedule decides what's on, just like real TV.</span></div>
+                    <div class="help-row"><span class="help-key">📺 CATALOGUE</span><span class="help-desc">Browse every show in the archive, filter by category, and tune in directly.</span></div>
                     <div class="help-row"><span class="help-key">🔄 TOGGLE SCHEDULE</span><span class="help-desc">Manually switch between Schedule A and B for testing.</span></div>
-                    <div class="help-row"><span class="help-key">SEARCH</span><span class="help-desc">Type in the box at the top of the guide to filter it by show name.</span></div>
+                    <div class="help-row"><span class="help-key">🔍 SEARCH</span><span class="help-desc">Type to instantly filter the programme guide by show name.</span></div>
                 </div>
                 <div class="help-section">
                     <div class="help-section-title">📋 Programme Guide &amp; Episodes</div>
                     <div class="help-row"><span class="help-key">CH LIST</span><span class="help-desc">Click any channel in the guide to tune in — playback starts from that day's scheduled episode.</span></div>
-                    <div class="help-row"><span class="help-key">EP LIST</span><span class="help-desc">Use the episode list (the Episodes tab on phones and tablets) to jump to any episode of the current show.</span></div>
+                    <div class="help-row"><span class="help-key">EP LIST</span><span class="help-desc">Use the episode sidebar to jump to any specific episode of the current show.</span></div>
                 </div>
             </div>
         </div>
@@ -1010,7 +890,7 @@
         </div>
     </div>
 
-    <div class="modal-bg" id="modalDonate"><div class="modal-box"><h2>☕ BUY ME A COFFEE</h2><p>Enjoying The Tube? Help keep the archive running!</p><div class="modal-opts"><a class="dl dl-bmc" id="bmcLink" href="https://buymeacoffee.com/oakowltv" target="_blank">☕ BUYMEACOFFEE.COM/OAKOWLTV</a><a class="dl dl-em" href="mailto:tvthetube@gmail.com" target="_blank">✉ tvthetube@gmail.com</a></div><button class="modal-close" id="modalClose">✕ CLOSE</button></div></div>
+    <div class="modal-bg" id="modalDonate"><div class="modal-box"><h2>☕ BUY ME A COFFEE</h2><p>Enjoying The Tube? Help keep the archive running!</p><div class="modal-opts"><a class="dl dl-bmc" id="bmcLink" href="https://buymeacoffee.com/oakowltv" target="_blank">☕ BUYMEACOFFEE.COM/OAKOWLTV</a><a class="dl dl-em" href="mailto:oakowlrecords@gmail.com" target="_blank">✉ oakowlrecords@gmail.com</a></div><button class="modal-close" id="modalClose">✕ CLOSE</button></div></div>
     <div class="toast" id="toast"></div>
     <script>
         // ===== COMMERCIAL ARCHIVES =====
@@ -1129,7 +1009,8 @@
 
             // ===== NEW SHOWS FOR SCHEDULE B =====
             { id: 50, ch: '50', time: '6:00 AM', name: 'Horrible Histories', emoji: '📜', cat: 'classic', year: '2009', badges: ['PLAYLIST', 'CBBC'], desc: 'Historical facts with the nasty bits left in!', tickers: ['Terrible Tudors', 'Gorgeous Georgians'], archiveId: 'horriblehistoriesseason1', playlist: true },
-            { id: 51, ch: '51', time: '6:30 AM', name: 'Come Outside', emoji: '🛫', cat: 'classic', year: '1993', badges: ['PLAYLIST', 'BBC'], desc: 'Auntie Mabel and Pippin the dog fly in a spotty plane.', tickers: ['Auntie Mabel', 'Pippin'], archiveId: 'come-outside-complete-series', playlist: true },
+            // GARFIELD AND FRIENDS — Replaces Come Outside
+            { id: 51, ch: '51', time: '6:30 AM', name: 'Garfield and Friends', emoji: '🐱', cat: 'animation', year: '1988', badges: ['PLAYLIST', 'CLASSIC', 'COMEDY'], desc: 'The lasagna-loving cat and his friends on the farm.', tickers: ['I hate Mondays', 'Garfield!', 'Odie!'], archiveId: '088ghostofachanceroygetssackedrevengeofthelivinglunchdvdripxvidphz', playlist: true },
             { id: 52, ch: '52', time: '8:00 AM', name: 'Clifford The Big Red Dog', emoji: '🐕', cat: 'animation', year: '2000', badges: ['PLAYLIST', 'PBS'], desc: 'Emily Elizabeth and her giant red dog Clifford.', tickers: ['Clifford!'], archiveId: 'clifford-the-big-red-dog-s-01e-20-clifford-on-parade-follow-the-leader', playlist: true },
             { id: 53, ch: '53', time: '7:30 AM', name: 'Little Bear', emoji: '🐻', cat: 'animation', year: '1995', badges: ['PLAYLIST', 'NICK'], desc: 'Gentle adventures of Little Bear and his friends.', tickers: ['Little Bear', 'Mother Bear'], archiveId: 'little-bear-4x-11-the-little-bear-movie', playlist: true },
             { id: 54, ch: '54', time: '8:30 AM', name: 'Recess', emoji: '🪁', cat: 'animation', year: '1997', badges: ['PLAYLIST', 'DISNEY'], desc: 'The playground politics of Third Street School.', tickers: ['Spinelli', 'T.J. Detweiler'], archiveId: 'recessfullseries', playlist: true },
@@ -1160,37 +1041,7 @@
             { id: 79, ch: '79', time: '3:30 AM', name: 'Hey Arnold Marathon', emoji: '🏈', cat: 'animation', year: '1996', badges: ['MARATHON', 'NICK'], desc: 'Classic Hey Arnold! episodes back to back.', tickers: ['Arnold', 'Football Head'], archiveId: 'hey-arnold-marathon-jan-29-2000', playlist: true },
             // NEW: Bill Nye for Schedule A
             { id: 80, ch: '80', time: '5:30 PM', name: 'Bill Nye, The Science Guy', emoji: '🔬', cat: 'classic', year: '1993', badges: ['PLAYLIST', 'PBS'], desc: 'Bill Nye makes science fun.', tickers: ['Science rules!'], archiveId: 'billnyethescienceguythecompleteseries-07-28-2021', playlist: true }
-            // SCHEDULE C EXPANDED CATALOGUE
-            ,{ id:81,ch:'81',time:'6:00 AM',name:'The Borrowers',emoji:'🏠',cat:'classic',year:'1992',badges:['PLAYLIST','BBC','FAMILY'],desc:'Tiny people living beneath the floorboards make a big adventure.',tickers:['Something small is stirring beneath the floorboards.','Borrowers beware!'],archiveId:'the-borrowers-1992-93',playlist:true }
-            ,{ id:82,ch:'82',time:'6:30 AM',name:'Classic British TV Pack',emoji:'🇬🇧',cat:'british',year:'Classic',badges:['PLAYLIST','BRITISH','ARCHIVE'],desc:'A varied collection of classic British television.',tickers:['From the classic British television vaults.','Proper telly, preserved.'],archiveId:'classic-british-tv-pack',playlist:true }
-            ,{ id:83,ch:'83',time:'7:30 AM',name:'The Flash',emoji:'⚡',cat:'scifi',year:'1990',badges:['PLAYLIST','DC','ACTION'],desc:'Barry Allen races to protect Central City as The Flash.',tickers:['Fastest man alive.','Central City needs The Flash!'],archiveId:'the-flash-1990-complete-tv-series-thegoodone',playlist:true }
-            ,{ id:84,ch:'84',time:'8:30 AM',name:'Due South',emoji:'🐺',cat:'drama',year:'1994',badges:['PLAYLIST','DETECTIVE','90S'],desc:'A Mountie and a Chicago detective solve crimes across the border.',tickers:['Thank you kindly.','Fraser and Ray are on the case.'],archiveId:'due-south-1994-99',playlist:true }
-            ,{ id:85,ch:'85',time:'9:30 AM',name:'Pie in the Sky',emoji:'🥧',cat:'british',year:'1994',badges:['PLAYLIST','BBC','MYSTERY'],desc:'A detective balances crime-solving with his dream of running a restaurant.',tickers:['Crime, cooking and a proper pie.','A taste for justice.'],archiveId:'pie-in-the-sky-94-97',playlist:true }
-            ,{ id:86,ch:'86',time:'10:30 AM',name:'Ned and Stacey',emoji:'💍',cat:'classic',year:'1995',badges:['PLAYLIST','SITCOM','90S'],desc:'A marriage of convenience becomes an increasingly complicated arrangement.',tickers:['A marriage made on paper.','Ned and Stacey.'],archiveId:'Ned_and_Stacey',playlist:true }
-            ,{ id:87,ch:'87',time:'11:00 AM',name:'Living Single',emoji:'🏙️',cat:'classic',year:'1993',badges:['PLAYLIST','SITCOM','90S'],desc:'Six friends navigate life, love and work in Brooklyn.',tickers:['Living single in a 90s world.','Brooklyn friends, big laughs.'],archiveId:'living-single-1993',playlist:true }
-            ,{ id:88,ch:'88',time:'11:30 AM',name:'The Ben Stiller Show',emoji:'🎭',cat:'classic',year:'1992',badges:['PLAYLIST','COMEDY','SKETCH'],desc:'A sharply surreal sketch show starring Ben Stiller.',tickers:['Sketch comedy, 90s style.','Now for something Stiller.'],archiveId:'the-ben-stiller-show-complete-series',playlist:true }
-            ,{ id:89,ch:'89',time:'12:00 PM',name:'The Dilbert Collection',emoji:'💼',cat:'animation',year:'1999',badges:['PLAYLIST','ADULT','COMEDY'],desc:'Cubicle life, impossible management and corporate absurdity.',tickers:['Welcome to the corporate maze.','Another day in the cubicle.'],archiveId:'dilbert-season-1-episode-05-testing',playlist:true }
-            ,{ id:90,ch:'90',time:'12:30 PM',name:'Beyond Reality',emoji:'🔮',cat:'scifi',year:'1991',badges:['PLAYLIST','PARANORMAL','MYSTERY'],desc:'Two investigators examine cases that defy conventional explanation.',tickers:['The unexplained is only the beginning.','Beyond reality.'],archiveId:'Beyond-Reality-Series',playlist:true }
-            ,{ id:91,ch:'91',time:'1:30 PM',name:'Doctor Who',emoji:'🌀',cat:'scifi',year:'1963',badges:['PLAYLIST','BBC','CULT'],desc:'The Doctor travels through time and space in the TARDIS.',tickers:['Time and relative dimension in space.','The Doctor will see you now.'],archiveId:'doctor-who_202210',playlist:true }
-            ,{ id:92,ch:'92',time:'2:30 PM',name:'Sherlock',emoji:'🔍',cat:'british',year:'2010',badges:['PLAYLIST','BBC','MYSTERY'],desc:'Sherlock Holmes and Dr. Watson solve modern-day London mysteries.',tickers:['The game is on.','Sherlock Holmes is in.'],archiveId:'BBC_Sherlock2010',playlist:true }
-            ,{ id:93,ch:'93',time:'3:30 PM',name:'The Net',emoji:'💻',cat:'scifi',year:'1998',badges:['PLAYLIST','THRILLER','90S'],desc:'A computer analyst is pulled into a dangerous world of digital conspiracy.',tickers:['Trust no network.','Welcome to The Net.'],archiveId:'the-net-complete-tv-series',playlist:true }
-            ,{ id:94,ch:'94',time:'5:00 PM',name:'Blackadder Remastered',emoji:'👑',cat:'british',year:'1983',badges:['PLAYLIST','BBC','COMEDY'],desc:"Rowan Atkinson's cunning antihero battles history with sarcasm and bad luck.",tickers:['I have a cunning plan.','Blackadder is back.'],archiveId:'blackadder-remastered',playlist:true }
-            ,{ id:95,ch:'95',time:'8:00 PM',name:'Max Headroom',emoji:'📺',cat:'scifi',year:'1987',badges:['PLAYLIST','CULT','CYBERPUNK'],desc:'A reporter and an AI TV personality confront a surreal near-future media world.',tickers:['Twenty minutes into the future.','Max Headroom is online.'],archiveId:'max-headroom-complete',playlist:true }
-            ,{ id:96,ch:'96',time:'9:30 PM',name:'The Apprentice (US)',emoji:'💼',cat:'drama',year:'2005',badges:['PLAYLIST','REALITY','2000S'],desc:'Contestants compete in business challenges for a high-stakes prize.',tickers:['The boardroom is open.','Business is war.'],archiveId:'TheApprenticeUSSeason3',playlist:true }
-            ,{ id:97,ch:'97',time:'12:00 AM',name:'Mission Hill',emoji:'🌆',cat:'animation',year:'1999',badges:['PLAYLIST','ADULT','CULT'],desc:'Twenty-somethings stumble through work, friendship and adulthood in the city.',tickers:['Welcome to Mission Hill.','Adult animation after dark.'],archiveId:'underrated-show-69420',playlist:true }
-            ,{ id:98,ch:'98',time:'1:00 AM',name:'Dark Shadows',emoji:'🦇',cat:'horror',year:'1966',badges:['PLAYLIST','GOTHIC','CULT'],desc:'A supernatural gothic serial of vampires, ghosts and family secrets.',tickers:['Welcome to Collinwood.','The shadows are gathering.'],archiveId:'dark-shadows_202210',playlist:true }
-            ,{ id:99,ch:'99',time:'7:30 PM',name:'Highlander',emoji:'⚔️',cat:'scifi',year:'1992',badges:['PLAYLIST','ACTION','CULT'],desc:'An immortal warrior battles others across centuries for the ultimate prize.',tickers:['There can be only one.','The Gathering has begun.'],archiveId:'highlander-the-series-detelecined',playlist:true }
-            ,{ id:100,ch:'100',time:'9:00 PM',name:"That's My Bush!",emoji:'🇺🇸',cat:'classic',year:'2001',badges:['PLAYLIST','COMEDY','SATIRE'],desc:'A broad sitcom parody set in a fictional White House.',tickers:['Welcome to the White House.','Political satire after dark.'],archiveId:'s-1-08-05-23-01-thats-my-bush-fare-thee-welfare',playlist:true }
-            ,{ id:101,ch:'101',time:'11:00 PM',name:'Hung',emoji:'🏠',cat:'drama',year:'2009',badges:['PLAYLIST','ADULT','COMEDY'],desc:'A struggling suburban teacher looks for an unconventional way to rebuild his life.',tickers:['Desperate times in Detroit.','A new plan for making ends meet.'],archiveId:'hung-2008',playlist:true }
-            ,{ id:102,ch:'102',time:'12:30 AM',name:'Monkey Dust',emoji:'🖍️',cat:'animation',year:'2003',badges:['PLAYLIST','BBC','ADULT'],desc:'A dark, surreal animated sketch comedy from the early 2000s.',tickers:['Late-night animated satire.','Welcome to Monkey Dust.'],archiveId:'monkey-dust-s-01e-06-div-x-640x-352',playlist:true }
-            ,{ id:103,ch:'103',time:'6:30 PM',name:"Whose Line Is It Anyway?",emoji:'🎤',cat:'classic',year:'1998',badges:['PLAYLIST','COMEDY','IMPROV'],desc:'Improvisers create comedy scenes, songs and games from audience suggestions.',tickers:['The points do not matter.','Improv comedy is on the air.'],archiveId:'whose-line-is-it-anyway-us-s-07-webdl-1080p',playlist:true }
-            ,{ id:104,ch:'104',time:'10:00 PM',name:'Alan Partridge',emoji:'📻',cat:'british',year:'1994',badges:['PLAYLIST','BBC','COMEDY'],desc:'Awkward broadcaster Alan Partridge navigates radio, television and everyday disaster.',tickers:['A-ha!','This is Alan Partridge.'],archiveId:'alan-partridge-bbc',playlist:true }
-            ,{ id:105,ch:'105',time:'10:00 AM',name:'Mrs. Columbo',emoji:'🕵️',cat:'classic',year:'1979',badges:['PLAYLIST','MYSTERY','CLASSIC'],desc:'Kate Columbo balances family life with solving clever mysteries.',tickers:['One more clue.','Mrs. Columbo is on the case.'],archiveId:'s-01-e-01-word-games-pt.-2',playlist:true }
-            ,{ id:106,ch:'106',time:'7:00 AM',name:'Dan Vs.',emoji:'😠',cat:'animation',year:'2011',badges:['PLAYLIST','ANIMATION','COMEDY'],desc:'Dan takes on whatever has annoyed him this week, with reckless determination.',tickers:['Dan versus everything.','The fight is on.'],archiveId:'dan-vs.-complete-series-hd',playlist:true }
-            ,{ id:107,ch:'107',time:'4:30 PM',name:'Alan Partridge: Mid Morning Matters',emoji:'📻',cat:'british',year:'2010',badges:['PLAYLIST','COMEDY','BBC'],desc:'Alan Partridge broadcasts live from North Norfolk Digital.',tickers:['North Norfolk Digital is on air.','A-ha! Mid Morning Matters.'],archiveId:'mid-morning-matters',playlist:true }
-            // FILLER: commercials for the hours Schedule C has no programme. Remove this entry and its slot once real shows fill 2-6 AM.
-            ,{ id:108,ch:'108',time:'2:00 AM',name:'Late Night Commercials',emoji:'📼',cat:'classic',year:'1999',badges:['ADS','90S'],desc:'Back-to-back 90s commercial breaks until programmes return at 6 AM.',tickers:['Late night commercial break.','Programmes return at 6:00 AM.'],archiveId:'mtv-commercial-block-1999-vol.-29',playlist:true }
-];
+        ];
 
         // ===== SCHEDULES =====
         const scheduleA = [
@@ -1199,40 +1050,8 @@
         ];
 
         const scheduleB = [
-            { startTime: 6 * 60, endTime: 6 * 60 + 30, id: 50 },{ startTime: 6 * 60 + 30, endTime: 7 * 60, id: 51 },{ startTime: 7 * 60, endTime: 7 * 60 + 30, id: 45 },{ startTime: 7 * 60 + 30, endTime: 8 * 60, id: 53 },{ startTime: 8 * 60, endTime: 8 * 60 + 30, id: 52 },{ startTime: 8 * 60 + 30, endTime: 9 * 60, id: 54 },{ startTime: 9 * 60, endTime: 9 * 60 + 30, id: 55 },{ startTime: 9 * 60 + 30, endTime: 10 * 60, id: 56 },{ startTime: 10 * 60, endTime: 10 * 60 + 30, id: 57 },{ startTime: 10 * 60 + 30, endTime: 11 * 60, id: 58 },{ startTime: 11 * 60, endTime: 11 * 60 + 30, id: 59 },{ startTime: 11 * 60 + 30, endTime: 12 * 60, id: 18 },{ startTime: 12 * 60, endTime: 12 * 60 + 30, id: 13 },{ startTime: 12 * 60 + 30, endTime: 13 * 60, id: 61 },{ startTime: 13 * 60, endTime: 13 * 60 + 30, id: 62 },{ startTime: 13 * 60 + 30, endTime: 14 * 60, id: 63 },{ startTime: 14 * 60, endTime: 14 * 60 + 30, id: 64 },{ startTime: 14 * 60 + 30, endTime: 15 * 60, id: 65 },{ startTime: 15 * 60, endTime: 15 * 60 + 30, id: 66 },{ startTime: 15 * 60 + 30, endTime: 16 * 60, id: 67 },{ startTime: 16 * 60, endTime: 16 * 60 + 30, id: 68 },{ startTime: 16 * 60 + 30, endTime: 17 * 60, id: 69 },{ startTime: 17 * 60, endTime: 17 * 60 + 30, id: 48 },{ startTime: 17 * 60 + 30, endTime: 18 * 60, id: 27 },{ startTime: 18 * 60, endTime: 18 * 60 + 30, id: 49 },{ startTime: 18 * 60 + 30, endTime: 19 * 60, id: 70 },{ startTime: 19 * 60, endTime: 19 * 60 + 30, id: 71 },{ startTime: 19 * 60 + 30, endTime: 20 * 60, id: 72 },{ startTime: 20 * 60, endTime: 20 * 60 + 30, id: 73 },{ startTime: 20 * 60 + 30, endTime: 21 * 60, id: 74 },{ startTime: 21 * 60, endTime: 21 * 60 + 30, id: 75 },{ startTime: 21 * 60 + 30, endTime: 22 * 60, id: 76 },{ startTime: 22 * 60, endTime: 22 * 60 + 30, id: 46 },{ startTime: 22 * 60 + 30, endTime: 23 * 60, id: 35 },{ startTime: 23 * 60, endTime: 23 * 60 + 30, id: 77 },{ startTime: 23 * 60 + 30, endTime: 24 * 60, id: 78 },{ startTime: 0, endTime: 0 * 60 + 30, id: 36 },{ startTime: 0 * 60 + 30, endTime: 2 * 60, id: 47 },{ startTime: 2 * 60, endTime: 2 * 60 + 30, id: 2 },{ startTime: 2 * 60 + 30, endTime: 3 * 60, id: 5 },{ startTime: 3 * 60, endTime: 3 * 60 + 30, id: 43 },{ startTime: 3 * 60 + 30, endTime: 5 * 60 + 30, id: 79 },{ startTime: 5 * 60 + 30, endTime: 6 * 60, id: 7 }
+            { startTime: 6 * 60, endTime: 6 * 60 + 30, id: 50 },{ startTime: 6 * 60 + 30, endTime: 7 * 60, id: 51 },{ startTime: 7 * 60, endTime: 7 * 60 + 30, id: 45 },{ startTime: 7 * 60 + 30, endTime: 8 * 60, id: 53 },{ startTime: 8 * 60, endTime: 8 * 60 + 30, id: 52 },{ startTime: 8 * 60 + 30, endTime: 9 * 60, id: 54 },{ startTime: 9 * 60, endTime: 9 * 60 + 30, id: 55 },{ startTime: 9 * 60 + 30, endTime: 10 * 60, id: 56 },{ startTime: 10 * 60, endTime: 10 * 60 + 30, id: 57 },{ startTime: 10 * 60 + 30, endTime: 11 * 60, id: 58 },{ startTime: 11 * 60, endTime: 11 * 60 + 30, id: 59 },{ startTime: 11 * 60 + 30, endTime: 12 * 60, id: 60 },{ startTime: 12 * 60, endTime: 12 * 60 + 30, id: 13 },{ startTime: 12 * 60 + 30, endTime: 13 * 60, id: 61 },{ startTime: 13 * 60, endTime: 13 * 60 + 30, id: 62 },{ startTime: 13 * 60 + 30, endTime: 14 * 60, id: 63 },{ startTime: 14 * 60, endTime: 14 * 60 + 30, id: 64 },{ startTime: 14 * 60 + 30, endTime: 15 * 60, id: 65 },{ startTime: 15 * 60, endTime: 15 * 60 + 30, id: 66 },{ startTime: 15 * 60 + 30, endTime: 16 * 60, id: 67 },{ startTime: 16 * 60, endTime: 16 * 60 + 30, id: 68 },{ startTime: 16 * 60 + 30, endTime: 17 * 60, id: 69 },{ startTime: 17 * 60, endTime: 17 * 60 + 30, id: 48 },{ startTime: 17 * 60 + 30, endTime: 18 * 60, id: 27 },{ startTime: 18 * 60, endTime: 18 * 60 + 30, id: 49 },{ startTime: 18 * 60 + 30, endTime: 19 * 60, id: 70 },{ startTime: 19 * 60, endTime: 19 * 60 + 30, id: 71 },{ startTime: 19 * 60 + 30, endTime: 20 * 60, id: 72 },{ startTime: 20 * 60, endTime: 20 * 60 + 30, id: 73 },{ startTime: 20 * 60 + 30, endTime: 21 * 60, id: 74 },{ startTime: 21 * 60, endTime: 21 * 60 + 30, id: 75 },{ startTime: 21 * 60 + 30, endTime: 22 * 60, id: 76 },{ startTime: 22 * 60, endTime: 22 * 60 + 30, id: 46 },{ startTime: 22 * 60 + 30, endTime: 23 * 60, id: 35 },{ startTime: 23 * 60, endTime: 23 * 60 + 30, id: 77 },{ startTime: 23 * 60 + 30, endTime: 24 * 60, id: 78 },{ startTime: 0, endTime: 0 * 60 + 30, id: 36 },{ startTime: 0 * 60 + 30, endTime: 2 * 60, id: 47 },{ startTime: 2 * 60, endTime: 2 * 60 + 30, id: 2 },{ startTime: 2 * 60 + 30, endTime: 3 * 60, id: 5 },{ startTime: 3 * 60, endTime: 3 * 60 + 30, id: 43 },{ startTime: 3 * 60 + 30, endTime: 5 * 60 + 30, id: 79 },{ startTime: 5 * 60 + 30, endTime: 6 * 60, id: 7 }
         ];
-
-        const scheduleC = [
-            { startTime: 6*60, endTime: 6*60+30, id:81 },
-            { startTime: 6*60+30, endTime: 7*60, id:82 },
-            { startTime: 7*60, endTime: 7*60+30, id:106 },
-            { startTime: 7*60+30, endTime: 8*60+30, id:83 },
-            { startTime: 8*60+30, endTime: 9*60+30, id:84 },
-            { startTime: 9*60+30, endTime: 10*60, id:85 },
-            { startTime: 10*60, endTime: 10*60+30, id:105 },
-            { startTime: 10*60+30, endTime: 11*60, id:86 },
-            { startTime: 11*60, endTime: 11*60+30, id:87 },
-            { startTime: 11*60+30, endTime: 12*60, id:88 },
-            { startTime: 12*60, endTime: 12*60+30, id:89 },
-            { startTime: 12*60+30, endTime: 13*60+30, id:90 },
-            { startTime: 13*60+30, endTime: 14*60+30, id:91 },
-            { startTime: 14*60+30, endTime: 15*60+30, id:92 },
-            { startTime: 15*60+30, endTime: 16*60+30, id:93 },
-            { startTime: 16*60+30, endTime: 17*60, id:107 },
-            { startTime: 17*60, endTime: 18*60, id:94 },
-            { startTime: 18*60, endTime: 18*60+30, id:103 },
-            { startTime: 18*60+30, endTime: 19*60+30, id:99 },
-            { startTime: 19*60+30, endTime: 20*60, id:100 },
-            { startTime: 20*60, endTime: 21*60, id:95 },
-            { startTime: 21*60, endTime: 21*60+30, id:104 },
-            { startTime: 21*60+30, endTime: 22*60+30, id:96 },
-            { startTime: 22*60+30, endTime: 23*60+30, id:101 },
-            { startTime: 23*60+30, endTime: 24*60, id:102 },
-            { startTime: 0, endTime: 1*60, id:97 },
-            { startTime: 1*60, endTime: 2*60, id:98 },
-            { startTime: 2*60, endTime: 6*60, id:108 }   // filler: commercials until the morning schedule
-        ];
-
 
         const cats = [{ key: 'all', label: 'All Channels' }, { key: 'mtv', label: '📺 MTV' }, { key: 'british', label: '🇬🇧 British' }, { key: 'horror', label: '👁 Horror' }, { key: 'scifi', label: '🚀 Sci-Fi' }, { key: 'classic', label: '🎞 Classic' }, { key: 'animation', label: '🎨 Animation' }, { key: 'drama', label: '🎭 Drama' }];
 
@@ -1253,25 +1072,26 @@
 
         let manualScheduleOverride = null;
 
-        function getCurrentSchedule(){
-            if(manualScheduleOverride === 'A') return scheduleA;
-            if(manualScheduleOverride === 'B') return scheduleB;
-            if(manualScheduleOverride === 'C') return scheduleC;
-            const now = new Date(); let day = now.getDay();
-            if(now.getHours() < 6) day = (day + 6) % 7;
-            if(day === 1 || day === 3) return scheduleA;
-            if(day === 2 || day === 4) return scheduleB;
-            return scheduleC;
+        function getCurrentSchedule() {
+            if (manualScheduleOverride === 'A') return scheduleA;
+            if (manualScheduleOverride === 'B') return scheduleB;
+            const now = new Date();
+            let day = now.getDay();
+            if (now.getHours() < 6) day = (day + 6) % 7;
+            return (day % 2 === 1) ? scheduleA : scheduleB;
         }
-        function updateScheduleIndicator(){
-            const indicator = document.getElementById('scheduleIndicator'); const schedule = getCurrentSchedule();
-            const key = schedule === scheduleA ? 'A' : schedule === scheduleB ? 'B' : 'C';
-            const labels = { A:'SCHEDULE A', B:'SCHEDULE B', C:'SCHEDULE C' };
-            indicator.textContent = labels[key]; indicator.className = 'schedule-indicator ' + key.toLowerCase();
+
+        function updateScheduleIndicator() {
+            const indicator = document.getElementById('scheduleIndicator');
+            const schedule = getCurrentSchedule();
+            const key = schedule === scheduleA ? 'A' : 'B';
+            const labels = { A: '📅 SCHEDULE A', B: '📅 SCHEDULE B' };
+            indicator.textContent = labels[key];
+            indicator.className = 'schedule-indicator ' + key.toLowerCase();
             document.getElementById('btnSchedA').classList.toggle('active-a', key === 'A');
             document.getElementById('btnSchedB').classList.toggle('active-b', key === 'B');
-            document.getElementById('btnSchedC').classList.toggle('active-c', key === 'C');
         }
+
         function getCurrentScheduleTimes() {
             const now = new Date();
             const currentMinutes = (now.getHours() * 60) + now.getMinutes();
@@ -1300,7 +1120,7 @@
         function getScheduleShows() {
             const schedule = getCurrentSchedule();
             const uniqueIds = [...new Set(schedule.map(slot => slot.id))];
-            return uniqueIds.map(id => allShows.find(s => s.id === id)).filter(Boolean);
+            return allShows.filter(s => uniqueIds.includes(s.id));
         }
 
         function getShowScheduleTime(showId) {
@@ -1354,7 +1174,7 @@
 
             el.innerHTML = '';
             if (shows.length === 0) {
-                el.innerHTML = '<div style="font-family:VT323;color:#a8905f;padding:20px;text-align:center;font-size:14px;">No shows match</div>';
+                el.innerHTML = '<div style="font-family:VT323;color:#4a3015;padding:20px;text-align:center;font-size:.8rem;">No shows match</div>';
                 return;
             }
 
@@ -1403,19 +1223,6 @@
                 const j = await r.json();
                 const raw = (j.result || []).map(f => ({ ...f, _archiveId: archiveId }));
                 let videos = filterFiles(raw);
-                if(archiveId === 'living-single-1993'){
-                    const artistIndex = videos.findIndex(f => /artist/i.test(f.name));
-                    if(artistIndex !== -1) videos.splice(artistIndex, 1);
-                }
-                if(archiveId === 'highlander-the-series-detelecined'){
-                    const badHighlanderEpisodes = [[1,2],[1,12],[1,13],[2,9],[2,11],[3,21],[4,8],[6,1]];
-                    videos = videos.filter(f => !badHighlanderEpisodes.some(([season,episode]) => {
-                        const name = f.name.toLowerCase();
-                        const x = new RegExp(`(?:^|[^0-9])${season}x0?${episode}(?:[^0-9]|$)`, 'i');
-                        const se = new RegExp(`s(?:eason)?[ ._-]*0?${season}[^\n]*?(?:e(?:pisode)?)[ ._-]*0?${episode}(?:[^0-9]|$)`, 'i');
-                        return x.test(name) || se.test(name);
-                    }));
-                }
                 // BAYWATCH FILTER: only files with a number and "REMASTERED VERSION" in filename
                 if (archiveId === 'baywatch_202212') {
                     videos = videos.filter(f => {
@@ -1450,6 +1257,8 @@
             return result;
         }
 
+        // Fully release a media element so the browser frees its decoder + buffered data
+        function releaseMedia(v) { try { v.pause(); v.removeAttribute('src'); v.load(); } catch (e) { } }
         function stopCommercial() {
             if (commercialTimeout) { clearTimeout(commercialTimeout); commercialTimeout = null; }
             if (activeCommercialVideo) {
@@ -1457,8 +1266,7 @@
                     activeCommercialVideo.ontimeupdate = null;
                     activeCommercialVideo.onended = null;
                     activeCommercialVideo.onerror = null;
-                    activeCommercialVideo.pause();
-                    activeCommercialVideo.src = '';
+                    releaseMedia(activeCommercialVideo);
                 } catch (e) { }
                 activeCommercialVideo = null;
             }
@@ -1499,7 +1307,7 @@
             const earlySlot = remainingSeconds > (slotLengthSeconds - 600) || (active && active.id === 2);
             if (earlySlot) {
                 showToast(`📺 SHORT BREAK — NEXT EPISODE IN 60s`);
-                vid.pause(); vid.src = ''; vid.style.display = 'none';
+                releaseMedia(vid); vid.style.display = 'none';
                 isPlayingCommercials = true;
                 const commVid = document.createElement('video');
                 commVid.volume = volumeVal;
@@ -1530,7 +1338,7 @@
                 }, 60000);
                 return;
             }
-            vid.pause(); vid.src = ''; vid.style.display = 'none';
+            releaseMedia(vid); vid.style.display = 'none';
             isPlayingCommercials = true;
             showToast(`📺 COMMERCIAL BREAK — ${Math.floor(remainingSeconds / 60)}m OF ADS`);
             const commVid = document.createElement('video');
@@ -1622,9 +1430,11 @@
             return idx;
         }
 
+        let _noiseBuf = null;
+        function getNoiseBuf(c) { if (!_noiseBuf || _noiseBuf.sampleRate !== c.sampleRate) { _noiseBuf = c.createBuffer(1, Math.floor(c.sampleRate * 2), c.sampleRate); const d = _noiseBuf.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1; } return _noiseBuf; }
         function getAC() { if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); return audioCtx; }
         function makeTone(f0, f1, dur, type, vol) { try { const c = getAC(), o = c.createOscillator(), g = c.createGain(); o.connect(g); g.connect(c.destination); o.type = type || 'sine'; o.frequency.setValueAtTime(f0, c.currentTime); if (f1) o.frequency.exponentialRampToValueAtTime(f1, c.currentTime + dur); g.gain.setValueAtTime(vol || 0.15, c.currentTime); g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + dur); o.start(); o.stop(c.currentTime + dur); } catch (e) { } }
-        function makeNoise(dur, f0, f1, q, vol) { try { const c = getAC(), bl = Math.floor(c.sampleRate * dur), b = c.createBuffer(1, bl, c.sampleRate), d = b.getChannelData(0); for (let i = 0; i < bl; i++) d[i] = Math.random() * 2 - 1; const s = c.createBufferSource(); s.buffer = b; const flt = c.createBiquadFilter(); flt.type = 'bandpass'; flt.frequency.setValueAtTime(f0, c.currentTime); if (f1) flt.frequency.exponentialRampToValueAtTime(f1, c.currentTime + dur * 0.85); flt.Q.value = q || 1; const g = c.createGain(); g.gain.setValueAtTime(vol || 0.25, c.currentTime); g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + dur); s.connect(flt); flt.connect(g); g.connect(c.destination); s.start(); s.stop(c.currentTime + dur); } catch (e) { } }
+        function makeNoise(dur, f0, f1, q, vol) { try { const c = getAC(), bl = Math.floor(c.sampleRate * dur), b = getNoiseBuf(c); const s = c.createBufferSource(); s.buffer = b; const flt = c.createBiquadFilter(); flt.type = 'bandpass'; flt.frequency.setValueAtTime(f0, c.currentTime); if (f1) flt.frequency.exponentialRampToValueAtTime(f1, c.currentTime + dur * 0.85); flt.Q.value = q || 1; const g = c.createGain(); g.gain.setValueAtTime(vol || 0.25, c.currentTime); g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + dur); s.connect(flt); flt.connect(g); g.connect(c.destination); s.start(); s.stop(c.currentTime + dur); } catch (e) { } }
         const sndClick = () => { makeTone(160, 55, 0.09, 'sine', 0.18); makeNoise(0.015, 3000, null, 0.5, 0.09); };
         const sndKnob = () => { makeTone(220, 90, 0.05, 'sine', 0.1); };
         const sndPwrOn = () => {
@@ -1638,9 +1448,7 @@
                 pop.connect(popG); popG.connect(c.destination); pop.start();
 
                 const bl = Math.floor(c.sampleRate * 1.6);
-                const b = c.createBuffer(1, bl, c.sampleRate);
-                const d = b.getChannelData(0);
-                for (let i = 0; i < bl; i++) d[i] = Math.random() * 2 - 1;
+                const b = getNoiseBuf(c);
                 const s = c.createBufferSource(); s.buffer = b;
                 const f = c.createBiquadFilter(); f.type = 'bandpass';
                 f.frequency.setValueAtTime(3500, c.currentTime + 0.04);
@@ -1677,9 +1485,7 @@
                 o.start(); o.stop(c.currentTime + 0.85);
 
                 const bl = Math.floor(c.sampleRate * 0.7);
-                const b = c.createBuffer(1, bl, c.sampleRate);
-                const d = b.getChannelData(0);
-                for (let i = 0; i < bl; i++) d[i] = Math.random() * 2 - 1;
+                const b = getNoiseBuf(c);
                 const s = c.createBufferSource(); s.buffer = b;
                 const f = c.createBiquadFilter(); f.type = 'bandpass';
                 f.frequency.value = 500; f.Q.value = 1.2;
@@ -1692,18 +1498,19 @@
         };
         const sndTune = () => { makeNoise(0.9, 4000, 400, 1.2, 0.28 * (staticIntensity + 0.35)); };
         const sndSeek = (ff) => { makeTone(ff ? 700 : 350, ff ? 180 : 90, 0.1, 'sine', 0.07); makeNoise(0.1, ff ? 2500 : 800, null, 1.5, 0.05); };
-        const sndVHS = (ff) => { try { const c = getAC(), bl = Math.floor(c.sampleRate * 1.0), b = c.createBuffer(1, bl, c.sampleRate), d = b.getChannelData(0); for (let i = 0; i < bl; i++) d[i] = (Math.random() * 2 - 1) * 0.9; const s = c.createBufferSource(); s.buffer = b; s.playbackRate.value = ff ? 2.1 : 0.45; const flt = c.createBiquadFilter(); flt.type = 'bandpass'; flt.frequency.value = ff ? 2800 : 700; flt.Q.value = 1.4; const g = c.createGain(); g.gain.setValueAtTime(0.22, c.currentTime); g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 1.0); s.connect(flt); flt.connect(g); g.connect(c.destination); s.start(); s.stop(c.currentTime + 1.0); makeTone(ff ? 140 : 50, ff ? 50 : 18, 0.9, 'sawtooth', 0.035); } catch (e) { } };
+        const sndVHS = (ff) => { try { const c = getAC(), bl = Math.floor(c.sampleRate * 1.0), b = getNoiseBuf(c); const s = c.createBufferSource(); s.buffer = b; s.playbackRate.value = ff ? 2.1 : 0.45; const flt = c.createBiquadFilter(); flt.type = 'bandpass'; flt.frequency.value = ff ? 2800 : 700; flt.Q.value = 1.4; const g = c.createGain(); g.gain.setValueAtTime(0.22, c.currentTime); g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 1.0); s.connect(flt); flt.connect(g); g.connect(c.destination); s.start(); s.stop(c.currentTime + 1.0); makeTone(ff ? 140 : 50, ff ? 50 : 18, 0.9, 'sawtooth', 0.035); } catch (e) { } };
 
+        function setH(el, h) { if (el._h !== h) { el._h = h; el.innerHTML = h; } }
         function updateWidget() {
             const w = document.getElementById('whatsOnWidget');
             if (!w) return;
             const c = getCurrentShow();
             if (c.message) {
-                w.innerHTML = '<div style="background:#060800;border:1px solid #f5a623;border-radius:6px;padding:10px;margin-bottom:15px;"><div style="font-family:VT323;font-size:14px;color:#a8905f;">🔴 NOW PLAYING</div><div style="display:flex;align-items:center;gap:10px;"><div style="font-size:2rem;">📺</div><div><div style="font-family:Oswald;color:#f5a623;">Off Air</div><div style="font-family:VT323;font-size:14px;">Select a show from the guide</div></div></div></div>';
+                setH(w, '<div style="background:#060800;border:1px solid #f5a623;border-radius:6px;padding:10px;margin-bottom:15px;"><div style="font-family:VT323;font-size:.7rem;color:#4a3015;">🔴 NOW PLAYING</div><div style="display:flex;align-items:center;gap:10px;"><div style="font-size:2rem;">📺</div><div><div style="font-family:Oswald;color:#f5a623;">Off Air</div><div style="font-family:VT323;font-size:.7rem;">Select a show from the guide</div></div></div></div>');
             } else {
                 const showObj = allShows.find(s => s.id === c.id);
                 const chNum = showObj ? showObj.ch : '--';
-                w.innerHTML = '<div style="background:#060800;border:1px solid #39ff14;border-radius:6px;padding:10px;margin-bottom:15px;cursor:pointer;" onclick="window.watchLiveNow(' + c.id + ')"><div style="display:flex;justify-content:space-between;"><div style="font-family:VT323;font-size:12px;color:#39ff14;">🔴 LIVE NOW</div><div style="font-family:VT323;font-size:12px;color:#a8905f;">CH ' + chNum + '</div></div><div style="display:flex;align-items:center;gap:10px;margin-top:5px;"><div style="font-size:2rem;">' + c.emoji + '</div><div><div style="font-family:Oswald;font-size:16px;font-weight:600;color:#d4b483;">' + c.name + '</div><div style="font-family:VT323;font-size:12px;color:#a8905f;">▶ Click to watch</div></div></div></div>';
+                setH(w, '<div style="background:#060800;border:1px solid #39ff14;border-radius:6px;padding:10px;margin-bottom:15px;cursor:pointer;" onclick="window.watchLiveNow(' + c.id + ')"><div style="display:flex;justify-content:space-between;"><div style="font-family:VT323;font-size:.65rem;color:#39ff14;">🔴 LIVE NOW</div><div style="font-family:VT323;font-size:.6rem;color:#4a3015;">CH ' + chNum + '</div></div><div style="display:flex;align-items:center;gap:10px;margin-top:5px;"><div style="font-size:2rem;">' + c.emoji + '</div><div><div style="font-family:Oswald;font-size:1rem;font-weight:600;color:#d4b483;">' + c.name + '</div><div style="font-family:VT323;font-size:.65rem;color:#7a5a28;">▶ Click to watch</div></div></div></div>');
             }
             updateScheduleIndicator();
         }
@@ -1711,7 +1518,8 @@
         function screen(state) { $('lIdle').style.display = state === 'idle' ? 'flex' : 'none'; $('lVideo').classList[state === 'video' ? 'add' : 'remove']('show'); $('lVhs').classList[state === 'vhs' ? 'add' : 'remove']('show'); $('lStatic').classList[state === 'static' ? 'add' : 'remove']('show'); $('lSplash').classList[state === 'splash' ? 'add' : 'remove']('show'); $('lOff').classList[state === 'off' ? 'add' : 'remove']('show'); $('fsBtn').classList.toggle('show', state === 'video'); }
         function showOff(cb) { $('lOff').innerHTML = '<div class="off-line"></div>'; screen('off'); setTimeout(() => { $('lOff').innerHTML = ''; screen('idle'); if (cb) cb(); }, 550); }
         function showStaticAnim(label, cb) { $('staticLbl').textContent = label || 'TUNING...'; screen('static'); sndTune(); let f = 0, frames = 12; noiseTimer = setInterval(() => { drawNoise('noiseCanvas', 0.5); if (++f >= frames) { clearInterval(noiseTimer); if (cb) cb(); } }, 52); }
-        function drawNoise(cid, intensity) { const c = $(cid); if (!c) return; c.width = c.offsetWidth || 300; c.height = c.offsetHeight || 225; const ctx = c.getContext('2d'), img = ctx.createImageData(c.width, c.height); const iv = (intensity || 0.5) * 255; for (let i = 0; i < img.data.length; i += 4) { let v = Math.random() * iv; img.data[i] = v; img.data[i + 1] = v; img.data[i + 2] = v; img.data[i + 3] = 255; } ctx.putImageData(img, 0, 0); }
+        const _nz = {};
+        function drawNoise(cid, intensity) { const c = $(cid); if (!c) return; let st = _nz[cid]; if (!st) { c.width = 192; c.height = 144; const ctx = c.getContext('2d'); st = _nz[cid] = { ctx, img: ctx.createImageData(192, 144) }; } const d = st.img.data, iv = (intensity || 0.5) * 255; for (let i = 0; i < d.length; i += 4) { const v = Math.random() * iv; d[i] = v; d[i + 1] = v; d[i + 2] = v; d[i + 3] = 255; } st.ctx.putImageData(st.img, 0, 0); }
         function showVHSAnim(isFF, cb) { $('vhsLbl').textContent = isFF ? '⏩ FF' : '⏮ REW'; screen('vhs'); sndVHS(isFF); let f = 0; vhsTimer = setInterval(() => { drawNoise('vhsCanvas', 0.6); if (++f >= 20) { clearInterval(vhsTimer); if (cb) cb(); } }, 52); }
         function startReels() { $('reelL').classList.add('spinning'); $('reelR').classList.add('spinning'); clearInterval(timeTimer); timeTimer = setInterval(() => { if (vid.duration && isFinite(vid.duration)) { const t = vid.currentTime; $('vhsTime').textContent = `${String(Math.floor(t / 60)).padStart(2, '0')}:${String(Math.floor(t % 60)).padStart(2, '0')}`; } }, 1000); }
         function stopReels() { $('reelL').classList.remove('spinning'); $('reelR').classList.remove('spinning'); clearInterval(timeTimer); }
@@ -1846,14 +1654,6 @@
                                 playFile(show, files, nextEpIdx, 0, true, null, true);
                                 return;
                             }
-                            // Pete & Pete episodes are short: keep playing the next episode until the slot ends, instead of cutting to ads
-                            if (show.id === 75 && remainingSeconds > 60 && files.length > 1) {
-                                const nextPete = nextEpIdx % files.length;
-                                showToast(`🌽 PETE & PETE — NEXT EPISODE`);
-                                activeEp = nextPete;
-                                playFile(show, files, nextPete, 0, true, null, true);
-                                return;
-                            }
                             if ((show.id === 2 || show.id === 39) && remainingSeconds > 60 && nextEpIdx < files.length) {
                                 const chainToast = show.id === 2 ? `💪 POPEYE — NEXT EPISODE IN 60s` : `🧸 MR. BEAN — NEXT EPISODE IN 60s`;
                                 showToast(chainToast);
@@ -1943,7 +1743,7 @@
             clearInterval(noiseTimer); clearInterval(vhsTimer);
             if (commercialTimeout) clearTimeout(commercialTimeout);
             stopCommercial();
-            vid.pause(); vid.src = ''; stopReels(); $('tPlayIcon').textContent = '▶'; $('lTicker').classList.remove('show'); $('lVideo').classList.remove('show');
+            releaseMedia(vid); stopReels(); $('tPlayIcon').textContent = '▶'; $('lTicker').classList.remove('show'); $('lVideo').classList.remove('show');
             active = s; activeEp = episodeIndex;
             $('vhsShowName').textContent = s.name.toUpperCase();
             $('chDisp').textContent = `CH ${s.ch}`;
@@ -2028,9 +1828,7 @@
             clearInterval(noiseTimer); clearInterval(vhsTimer);
             if (commercialTimeout) clearTimeout(commercialTimeout);
             stopCommercial();
-            vid.pause();
-            vid.src = '';
-            vid.load(); // Reset decoder
+            releaseMedia(vid);
             stopReels(); $('tPlayIcon').textContent = '▶';
             // Remove any lingering onPause listener
             if (window._onPauseListener) {
@@ -2098,69 +1896,9 @@
         });
 
         $('btnSurprise').addEventListener('click', () => { sndClick(); if (liveMode) stopLiveMode(); const scheduleShows = getScheduleShows(); if (scheduleShows.length === 0) return; const pick = scheduleShows[Math.floor(Math.random() * scheduleShows.length)]; showToast(`🎲 SURPRISE: ${pick.name}`); setTimeout(() => { if (tvOn) autoLiveNow(pick.id, true, true); else powerOn(() => autoLiveNow(pick.id, true, true)); }, 500); });
+        $('btnShare').addEventListener('click', () => { sndClick(); if (navigator.share) navigator.share({ title: 'The Tube', text: 'Classic TV', url: location.href }); else showToast('◈ LINK COPIED ◈'); });
         $('btnDonate').addEventListener('click', () => { sndClick(); $('modalDonate').classList.add('show'); });
         $('modalClose').addEventListener('click', () => { sndClick(); $('modalDonate').classList.remove('show'); });
-
-        // ===== EMAIL SIGNUP =====
-        // The strip at the top of the page posts to this newsletter form.
-        // It stays hidden if SIGNUP_ACTION_URL is empty.
-        const SIGNUP_ACTION_URL = 'https://app.kit.com/forms/10031223/subscriptions';   // the form's action="..." URL
-        const SIGNUP_EMAIL_FIELD = 'email_address';   // the email input's name="..."
-        const SIGNUP_HIDE_DAYS = 15;                  // how long the ✕ keeps the strip away
-
-        const signupStrip = $('signupStrip');
-        const signupSubmit = $('signupSubmit');
-        function setSignupMsg(text, isError) { const m = $('signupMsg'); m.textContent = text; m.classList.toggle('err', !!isError); m.classList.toggle('ok', !isError); }
-        function signupHiddenUntil() { try { return Number(localStorage.getItem('thetube_signup_hidden_until')) || 0; } catch (e) { return 0; } }
-        function hideSignupFor(days) { try { localStorage.setItem('thetube_signup_hidden_until', String(Date.now() + days * 86400000)); } catch (e) {} }
-        if (!SIGNUP_ACTION_URL || signupHiddenUntil() > Date.now()) signupStrip.classList.add('hide');
-        $('signupClose').addEventListener('click', () => { sndClick(); signupStrip.classList.add('hide'); hideSignupFor(SIGNUP_HIDE_DAYS); });
-        $('signupShow').addEventListener('click', e => {
-            e.preventDefault(); if (!SIGNUP_ACTION_URL) return;
-            hideSignupFor(0); signupStrip.classList.remove('hide'); signupStrip.classList.add('open'); $('helpModal').classList.remove('show');
-            window.scrollTo({ top: 0, behavior: 'smooth' }); setTimeout(() => $('signupEmail').focus(), 300);
-        });
-        $('signupForm').addEventListener('submit', e => {
-            e.preventDefault();
-            const email = $('signupEmail').value.trim();
-            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { setSignupMsg("◈ THAT EMAIL DOESN'T LOOK RIGHT ◈", true); return; }
-            // Bots fill the hidden field; people never see it. Drop those silently.
-            if ($('signupTrap').value) { setSignupMsg('◈ CHECK YOUR INBOX TO CONFIRM ◈'); return; }
-            sndClick();
-            signupSubmit.disabled = true;
-            setSignupMsg('◈ SENDING... ◈');
-            const body = new URLSearchParams();
-            body.append(SIGNUP_EMAIL_FIELD, email);
-            // The provider's reply can't be read from another site, so success here means
-            // "sent", and the confirmation email is what proves the signup landed.
-            fetch(SIGNUP_ACTION_URL, { method: 'POST', mode: 'no-cors', body })
-                .then(() => { setSignupMsg('◈ ALMOST THERE — CHECK YOUR INBOX TO CONFIRM ◈'); $('signupForm').reset(); hideSignupFor(365); })
-                .catch(() => { setSignupMsg("◈ COULDN'T REACH THE SIGNUP SERVICE — TRY AGAIN ◈", true); })
-                .finally(() => { signupSubmit.disabled = false; });
-        });
-
-        // ===== LAYOUT: phone menu, guide/episodes tabs, pinned TV =====
-        (() => {
-            const layoutEl = document.querySelector('.layout');
-            const tabs = document.querySelectorAll('.side-tab');
-            tabs.forEach(t => t.addEventListener('click', () => {
-                sndClick();
-                layoutEl.dataset.tab = t.dataset.tab;
-                tabs.forEach(x => { const on = x === t; x.classList.toggle('active', on); x.setAttribute('aria-selected', on ? 'true' : 'false'); });
-            }));
-            const menuBtn = $('barMenuBtn'), more = $('barMore');
-            const setMenu = open => { more.classList.toggle('open', open); menuBtn.setAttribute('aria-expanded', open ? 'true' : 'false'); };
-            menuBtn.addEventListener('click', e => { e.stopPropagation(); sndClick(); setMenu(!more.classList.contains('open')); });
-            more.addEventListener('click', () => setMenu(false));
-            document.addEventListener('click', e => { if (!more.contains(e.target)) setMenu(false); });
-            document.addEventListener('keydown', e => { if (e.key === 'Escape') setMenu(false); });
-            $('signupToggle').addEventListener('click', () => { sndClick(); signupStrip.classList.add('open'); $('signupEmail').focus(); });
-            // tells the stylesheet how tall the TV is, so the tabs can sit right under it when it is pinned
-            const shell = document.querySelector('.tv-shell');
-            const setTvH = () => document.documentElement.style.setProperty('--tv-h', shell.offsetHeight + 'px');
-            if (window.ResizeObserver) new ResizeObserver(setTvH).observe(shell);
-            window.addEventListener('resize', setTvH); setTvH();
-        })();
         $('searchBox').addEventListener('input', () => renderList());
         $('tPlay').addEventListener('click', () => {
             sndClick(); if (!active) return;
@@ -2294,13 +2032,6 @@
             }
             autoLiveNow(showId, true, false);
         };
-    
-        const btnSchedC = document.getElementById('btnSchedC');
-        if(btnSchedC) btnSchedC.addEventListener('click', () => {
-            sndClick(); manualScheduleOverride = 'C'; updateScheduleIndicator(); updateWidget(); renderList();
-            if(liveMode && tvOn){ const currentShow = getCurrentShow(); if(currentShow && currentShow.id) autoLiveNow(currentShow.id, true, false); }
-            showToast('SCHEDULE C SELECTED');
-        });
-</script>
+    </script>
 </body>
 </html>
