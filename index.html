@@ -916,7 +916,10 @@
             .layout { padding-top: var(--sp-2); }
             .ep-sidebar, .guide-col { max-height: none; }
         }
-    </style>
+            /* Catalogue header button: orange */
+        #btnCatalogue, .bar-more #btnCatalogue { background: #f5a623; color: #120c00; border-color: #f5a623; font-weight: 600; }
+        #btnCatalogue:hover { background: #ffb938; border-color: #ffb938; color: #120c00; }
+</style>
 </head>
 <body>
     <div class="signup-strip" id="signupStrip">
@@ -2411,5 +2414,6 @@
             showToast('SCHEDULE C SELECTED');
         });
 </script>
+
 </body>
 </html>
