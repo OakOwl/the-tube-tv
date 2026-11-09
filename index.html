@@ -1466,6 +1466,16 @@
             if (delay) _bufTimer = setTimeout(go, delay); else go();
         }
         function hideBuf() { clearTimeout(_bufTimer); const o = document.getElementById('bufOverlay'); if (o) o.classList.remove('show'); }
+        // ---- Preloading: warm the next episode / ad in one hidden, muted element (connection, redirect + first MBs) ----
+        let _preVid = null, _preUrl = '';
+        function preloadMedia(url) {
+            if (!url || url === _preUrl || !tvOn) return;
+            if (!_preVid) { _preVid = document.createElement('video'); _preVid.muted = true; _preVid.preload = 'auto'; _preVid.setAttribute('playsinline', ''); }
+            _preUrl = url; _preVid.src = url; try { _preVid.load(); } catch (e) { }
+        }
+        function releasePre() { if (_preVid) { try { _preVid.pause(); _preVid.removeAttribute('src'); _preVid.load(); } catch (e) { } } _preUrl = ''; }
+        function consumePre(url) { if (_preUrl && url === _preUrl) setTimeout(() => { if (_preUrl === url) releasePre(); }, 15000); }
+        function peekPreloadAd() { if (typeof commercialPlaylist !== 'undefined' && commercialPlaylist.length) { const ad = commercialPlaylist[currentCommercialIndex % commercialPlaylist.length]; if (ad) preloadMedia(ad.url); } }
         function releaseMedia(v) { try { v.pause(); v.removeAttribute('src'); v.load(); } catch (e) { } }
         function stopCommercial() {
             if (commercialTimeout) { clearTimeout(commercialTimeout); commercialTimeout = null; }
@@ -1531,7 +1541,7 @@
                     const ad = getNextCommercial();
                     showToast(`📢 ${ad.name}`);
                     commVid.ontimeupdate = null; commVid.onended = null; commVid.onerror = null;
-                    commVid.src = ad.url;
+                    consumePre(ad.url); commVid.src = ad.url; setTimeout(peekPreloadAd, 3000);
                     if (ad.start !== undefined) commVid.currentTime = ad.start;
                     let watchdog = setTimeout(() => { if (commVid.paused || commVid.readyState < 2) loadNextAd(); }, 5000);
                     commVid.play().catch(() => { clearTimeout(watchdog); if (isPlayingCommercials) loadNextAd(); });
@@ -1563,7 +1573,7 @@
                 const ad = getNextCommercial();
                 showToast(`📢 ${ad.name}`);
                 commVid.ontimeupdate = null; commVid.onended = null; commVid.onerror = null;
-                commVid.src = ad.url;
+                consumePre(ad.url); commVid.src = ad.url; setTimeout(peekPreloadAd, 3000);
                 if (ad.start !== undefined) commVid.currentTime = ad.start;
                 let watchdog = setTimeout(() => {
                     if (commVid.paused || commVid.readyState < 2) { console.warn('⚠️ Ad stalled, skipping:', ad.name); loadNextAd(); }
@@ -1783,6 +1793,7 @@
                 vid.removeEventListener('pause', window._onPauseListener);
                 window._onPauseListener = null;
             }
+            consumePre(f.url);
             vid.src = f.url;
             vid.volume = volumeVal;
             vid.load();
@@ -1790,6 +1801,13 @@
             window._saveInterval = setInterval(() => {
                 if (vid.currentTime && vid.duration && !vid.paused && vid.currentTime < vid.duration - 5) {
                     localStorage.setItem(`thetube_resume_${show.id}`, JSON.stringify({ episode: idx, timestamp: Math.floor(vid.currentTime) }));
+                }
+                // Preload what comes next once the episode is nearly over (~2.5 min out)
+                const rem = vid.duration - vid.currentTime;
+                if (isFinite(rem) && rem > 0 && rem < 150 && !vid.paused) {
+                    const chain = !liveMode || show.id === 31 || show.id === 75;
+                    if (chain) { const nf = files[idx + 1] || (show.id === 75 ? files[0] : null); if (nf) preloadMedia(nf.url); }
+                    else peekPreloadAd();
                 }
             }, 10000);
             // Create a named listener so we can remove it later
@@ -2068,6 +2086,7 @@
             v.addEventListener('seeked', () => { if (v.readyState >= 3) hideBuf(); });
         })();
         function powerOff() {
+            releasePre();
             sndPwrOff();
             tvOn = false; active = null; activeEp = 0;
             $('pwrBtn').classList.remove('on');
