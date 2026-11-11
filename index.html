@@ -4188,7 +4188,6 @@
             } catch (err) { showErr(f, friendly(err)); } finally { if (document.body.contains(btn)) lock(false); }
         });
         cta.addEventListener('click', () => { click(); openAuth(session && !st ? 'username' : 'signin'); });
-
         // ================= start-up: restore a session, or handle a link from a confirmation / reset email =================
         (async function boot() {
             let recovery = false;
