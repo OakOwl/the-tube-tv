@@ -1595,6 +1595,8 @@
         #dh .ledl { box-shadow: 0 0 8px 1px rgba(90,255,210,.9); } #dh .ledw { opacity: .85; animation: ledBreathe 6s ease-in-out infinite; } #dh .ledf { animation: ledBreathe 6s ease-in-out infinite; }
         @keyframes ledBreathe { 0%,100% { opacity: .8 } 50% { opacity: 1 } }
         @media (prefers-reduced-motion: reduce) { #dh .ledw, #dh .ledf { animation: none; } }
+        #dh .chest { cursor: pointer; }
+        .tc-modal-bg { z-index: 100001 !important; }
         #dh .stand { background: repeating-linear-gradient(92deg, rgba(0,0,0,.16) 0 2px, transparent 2px 9px), linear-gradient(#9a6630, #6e4620); }
         #dh .sp { position: absolute; left: 0; top: 0; filter: drop-shadow(0 8px 8px rgba(0,0,0,.45)); }
         #dh .sp svg { display: block; width: 100%; height: 100%; overflow: visible; }
@@ -3592,7 +3594,7 @@
         const cam = dh.querySelector('.dh-cam'), roomEl = dh.querySelector('.dh-room'), listEl = dh.querySelector('.dh-list');
         const V = { y: 22, p: -26, z: 0, ty: 40 }, V0 = { y: 22, p: -26, z: 0, ty: 40 };
         const clampV = () => { V.p = Math.max(-82, Math.min(-2, V.p)); V.z = Math.max(-420, Math.min(900, V.z)); };
-        const baseSc = () => Math.max(.5, Math.min(1.35, Math.min(window.innerWidth, window.innerHeight * 1.5) / (window.innerWidth < 640 ? 1130 : 1340)));
+        const baseSc = () => Math.max(.5, Math.min(1.35, Math.min(window.innerWidth, window.innerHeight * 1.5) / (window.innerWidth < 640 ? 1230 : 1470)));
         const applyV = () => {
             clampV(); cam.style.setProperty('--sc', (baseSc() * Math.exp(V.z / 500)).toFixed(4));
             cam.style.setProperty('--y', V.y.toFixed(2) + 'deg'); cam.style.setProperty('--p', V.p.toFixed(2) + 'deg'); cam.style.setProperty('--ty', V.ty.toFixed(0) + 'px');
@@ -3736,10 +3738,10 @@
         const ledLampHtml = () => {
             const X = -396, Z = -292, PH = 330, LED = 'linear-gradient(180deg,#8ff6ff,#38f0c8 45%,#22e07a)', WASH = 'linear-gradient(180deg,rgba(127,240,255,.8),rgba(58,240,192,.95) 55%,rgba(34,224,122,1))';
             const mk = m => 'mask-image:' + m + ';-webkit-mask-image:' + m + ';';
-            const maskB = mk('radial-gradient(ellipse 175px 330px at 54px 80%,#000 0%,rgba(0,0,0,.85) 30%,rgba(0,0,0,.42) 62%,rgba(0,0,0,.12) 84%,transparent 100%)');
-            const maskL = mk('radial-gradient(ellipse 175px 330px at 54px 80%,#000 0%,rgba(0,0,0,.85) 30%,rgba(0,0,0,.42) 62%,rgba(0,0,0,.12) 84%,transparent 100%)');
-            let h = plane(230, PH + 60, -335, FY - (PH + 60) / 2, -302.6, 0, 0, 'ledw', '', 'pointer-events:none;background:' + WASH + ';' + maskB)
-                + plane(230, PH + 60, -449.2, FY - (PH + 60) / 2, -195, 0, 90, 'ledw hid', '', 'pointer-events:none;background:' + WASH + ';' + maskL)
+            const maskB = mk('radial-gradient(ellipse 215px 335px at 54px 80%,#000 0,rgba(0,0,0,.92) 15%,rgba(0,0,0,.74) 30%,rgba(0,0,0,.5) 45%,rgba(0,0,0,.3) 60%,rgba(0,0,0,.15) 75%,rgba(0,0,0,.05) 90%,transparent 100%)');
+            const maskL = mk('radial-gradient(ellipse 215px 335px at 246px 80%,#000 0,rgba(0,0,0,.92) 15%,rgba(0,0,0,.74) 30%,rgba(0,0,0,.5) 45%,rgba(0,0,0,.3) 60%,rgba(0,0,0,.15) 75%,rgba(0,0,0,.05) 90%,transparent 100%)');
+            let h = plane(300, WH, -300, FY - WH / 2, -302.6, 0, 0, 'ledw', '', 'pointer-events:none;background:' + WASH + ';' + maskB)
+                + plane(300, WH, -449.2, FY - WH / 2, -160, 0, 90, 'ledw hid', '', 'pointer-events:none;background:' + WASH + ';' + maskL)
                 + plane(240, 240, X + 50, FY - 1, Z + 50, 90, 0, 'ledf', '', 'pointer-events:none;background:radial-gradient(closest-side,rgba(60,240,170,.5),rgba(60,220,200,.16) 60%,transparent);');
             h += '<div class="bx" style="transform:translate3d(' + X + 'px,0,' + Z + 'px)">' + box(5, PH, 5, 0, FY - PH / 2, 0, 'cb', '', 'background:#0c0c0e;')
                 + plane(3, PH - 6, 0, FY - PH / 2, 2.7, 0, 0, 'ledl', '', 'background:' + LED + ';') + plane(3, PH - 6, 2.7, FY - PH / 2, 0, 0, 90, 'ledl', '', 'background:' + LED + ';')
@@ -3760,7 +3762,7 @@
             const riv = lk.rivets ? [[8, 8], [342, 8], [8, 252], [342, 252]].map(p => '<i class="dh-riv" style="left:' + p[0] + 'px;top:' + p[1] + 'px"></i>').join('') : '';
             const scr = (lk.fx && srcFx ? srcFx.outerHTML : '') + (lk.ring && srcRing ? srcRing.outerHTML : '') + '<div class="tv-scr" style="' + (lk.trim ? 'box-shadow:' + lk.trim + ',0 0 34px rgba(255,170,70,.28);' : '') + '"></div><span class="tv-knob" style="left:316px;top:40px"></span><span class="tv-knob" style="left:316px;top:84px"></span><span class="tv-grille"></span><span class="tv-led"></span><span class="tv-brand" style="' + (lk.brand ? 'color:' + lk.brand + ';' : '') + '">NOSTALGIVISION</span>' + stk + riv;
             const front = 'background:' + sk.pv + ';' + (sk.pr ? 'box-shadow:' + sk.pr.split(/,(?![^(]*\))/)[0] + ';' : ''), side = 'background:linear-gradient(160deg,rgba(255,255,255,.12),rgba(0,0,0,.18)),' + (sk.pd || '#707068') + ';';
-            let h = plane(900, 620, 0, FY, 0, 90, 0, 'w-floor') + plane(900, WH, 0, FY - WH / 2, -310, 0, 0, 'w-wall back hid') + plane(620, WH, -450, FY - WH / 2, 0, 0, 90, 'w-wall hid') + plane(620, WH, 450, FY - WH / 2, 0, 0, -90, 'w-wall hid');
+            let h = plane(900, 800, 0, FY, 90, 90, 0, 'w-floor') + plane(900, WH, 0, FY - WH / 2, -310, 0, 0, 'w-wall back hid') + plane(800, WH, -450, FY - WH / 2, 90, 0, 90, 'w-wall hid') + plane(800, WH, 450, FY - WH / 2, 90, 0, -90, 'w-wall hid');
             h += windowHtml() + curtainsHtml() + ledLampHtml() + cordHtml();
             h += '<div class="bx tvg" style="transform:scale3d(' + TVS + ',' + TVS + ',' + TVS + ');transform-origin:0 ' + FY + 'px -210px">' + box(400, 62, 180, 0, FY - 31, -210, 'stand', '') + box(360, 270, 170, 0, FY - 62 - 135, -215, 'tvbody', scr, front, side);
             if (lk.halo) h += plane(620, 480, 0, FY - 62 - 135, -132, 0, 0, '', '', 'pointer-events:none;background:radial-gradient(closest-side,rgba(' + lk.halo + ',.42),rgba(' + lk.halo + ',.14) 55%,transparent);');
@@ -3807,12 +3809,19 @@
             const W = window.innerWidth, H = window.innerHeight, pw0 = 232, ph0 = 330; pick.style.left = Math.max(8, Math.min(x + 14, W - pw0 - 8)) + 'px'; pick.style.top = Math.max(8, Math.min(y + 14, H - ph0 - 8)) + 'px';
             setFromHex(cols[which]);
         };
+        let shopWatch = false;
+        const openChestShop = () => {
+            const sh = document.getElementById('tcModal'), h = document.getElementById('tcHud'); if (!sh || !h) return;
+            if (!shopWatch) { shopWatch = true; new MutationObserver(() => { if (!sh.classList.contains('show') && dh.classList.contains('show')) { returnScreen(); buildRoom(); takeScreen(); } }).observe(sh, { attributes: true, attributeFilter: ['class'] }); }
+            h.click();
+        };
         const tapAt = (x, y) => {
             if (!dh.classList.contains('show') || dh.classList.contains('guide')) return;
             const list = document.elementsFromPoint(x, y);
             for (const el of list) {
                 if (el.closest('.dh-cord')) { closePick(); toggleCurtains(); return; }
                 if (el.closest('.dh-pick, .dh-ui, .dh-remote, .dh-drawer')) return;
+                if (el.closest('.chest')) { closePick(); openChestShop(); return; }
                 if (el.closest('.cpan')) { openPick('curt', x, y); return; }
                 if (el.closest('.w-wall')) { openPick('wall', x, y); return; }
                 if (el.closest('.dh-room') && !el.closest('.dwin')) { closePick(); return; }
@@ -3849,6 +3858,7 @@
         });
         window.addEventListener('keydown', e => {
             if (!dh.classList.contains('show')) return;
+            if (document.querySelector('.tc-modal-bg.show')) return;
             if (e.key === 'Escape') { e.stopPropagation(); if (!pick.hidden) { closePick(); return; } if (dh.classList.contains('guide')) toggleGuide(false); else closeRoom(); return; }
             if (e.target && /INPUT|TEXTAREA/.test(e.target.tagName)) return;
             if (e.key === 'c' || e.key === 'C') { toggleCurtains(); return; }
