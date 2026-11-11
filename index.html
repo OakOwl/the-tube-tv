@@ -1667,6 +1667,10 @@
         @media (pointer: coarse) { #dh .rb, #dh .tvr-w { animation: none !important; } }
 
         #dh .dh-lb { }
+        #dh .tvk { box-sizing: border-box; border: 2px solid rgba(0,0,0,.6); } #dh .tvk-v, #dh .tvk-l, #dh .tvk-w, #dh .tvk-c, #dh .tvk-n { position: absolute; display: block; box-sizing: border-box; }
+        #dh .tvk-v { border: 1px solid #000; } #dh .tvk-l { border: 1px solid #000; } #dh .tvk-w { background: #e9e6dc; border: 1px solid #000; background-image: linear-gradient(#222 0 0), linear-gradient(#222 0 0), linear-gradient(#222 0 0); background-size: 70% 2px, 85% 2px, 60% 2px; background-position: 6px 7px, 6px 13px, 6px 19px; background-repeat: no-repeat; }
+        #dh .tvk-c { background: #0b0b0c; border: 2px solid #3a3a3f; display: flex; flex-wrap: wrap; gap: 6px 8px; padding: 6px 8px; } #dh .tvk-c b { width: 11px; height: 11px; border-radius: 50%; background: radial-gradient(circle at 40% 35%,#d8dbe0,#6b6f77 70%); border: 1px solid #000; }
+        #dh .tvk-n { width: 10px; height: 10px; border-radius: 50%; background: radial-gradient(circle at 40% 35%,#d8dbe0,#6b6f77 70%); border: 1px solid #000; } #dh .tvf.ant { border: 0; }
         #dh:not(.hasstand) .dh-sb { display: none; }
         @media (max-width: 639px) { #dh .dh-sb { font-size: 11px; padding-left: 6px; padding-right: 6px; } }
         @media (max-width: 639px) { #dh .dh-lb { font-size: 0; } #dh .dh-lb::before { content: '💡'; font-size: 16px; } }
@@ -3692,6 +3696,19 @@
             + plane(w, h, 0, 0, d / 2, 0, 0, cls + ' tvf', face, extra) + plane(w, h, 0, 0, -d / 2, 0, 180, cls + ' tvf', '', side)
             + plane(d, h, -w / 2, 0, 0, 0, -90, cls + ' tvf', '', side) + plane(d, h, w / 2, 0, 0, 0, 90, cls + ' tvf', '', side)
             + plane(w, d, 0, -h / 2, 0, 90, 0, cls + ' tvf', '', side) + plane(w, d, 0, h / 2, 0, -90, 0, cls + ' tvf', '', side) + '</div>'; };
+        // the back of the TV: black plastic with vents, a stepped rear hump, a connector panel, a warning sticker, and a simple silver rabbit-ear antenna
+        const tvBackHtml = cy => {
+            const blk = 'background:linear-gradient(160deg,#2a2a2e,#141416);', vent = 'background:repeating-linear-gradient(90deg,#050506 0 3px,#222226 3px 7px);', slat = 'background:repeating-linear-gradient(0deg,#060607 0 3px,#26262b 3px 8px),#1a1a1d;';
+            const slv = (l, t, w, hh) => '<i class="tvk-v" style="left:' + l + 'px;top:' + t + 'px;width:' + w + 'px;height:' + hh + 'px;' + vent + '"></i>';
+            let s = plane(360, 270, 0, cy, -303, 0, 180, 'tvk', slv(14, 10, 70, 14) + slv(100, 10, 90, 14) + slv(206, 10, 80, 14) + slv(302, 10, 44, 14) + '<i class="tvk-v" style="left:150px;top:6px;width:20px;height:4px;background:#050506"></i>', blk);
+            s += box(280, 176, 34, 0, cy + 24, -321, 'tvk', '', slat, blk);
+            s += plane(280, 176, 0, cy + 24, -341, 0, 180, 'tvk', '<i class="tvk-v" style="left:12px;top:10px;width:256px;height:30px;' + slat + '"></i><i class="tvk-v" style="left:34px;top:46px;width:222px;height:26px;' + slat + '"></i>'
+                + '<i class="tvk-l" style="left:18px;top:88px;width:56px;height:30px;background:#1b1b1e"></i><i class="tvk-l" style="left:24px;top:124px;width:40px;height:16px;background:#e0826c"></i><i class="tvk-w" style="left:18px;top:144px;width:58px;height:28px"></i>'
+                + '<i class="tvk-c" style="left:128px;top:96px;width:84px;height:46px"><b></b><b></b><b></b><b></b><b></b><b></b></i><i class="tvk-n" style="left:172px;top:76px"></i>', blk);
+            const rod = a => '<div class="bx" style="transform:translate3d(0,0,0) rotateX(-9deg) rotateZ(' + a + 'deg)">' + box(4, 150, 4, 0, -75, 0, 'ant', '', 'background:linear-gradient(90deg,#8d9199,#f4f6fa 45%,#a4a8b0);') + box(9, 9, 9, 0, -152, 0, 'ant', '', 'background:radial-gradient(circle at 35% 30%,#fff,#b8bcc4 60%,#767a82);') + '</div>';
+            s += '<div class="bx" style="transform:translate3d(0,' + (cy - 135) + 'px,-250px)">' + box(46, 10, 34, 0, -4, 0, 'ant', '', 'background:linear-gradient(#5a5d64,#2a2b2f);') + box(16, 7, 16, 0, -12, 0, 'ant', '', 'background:linear-gradient(90deg,#8d9199,#f4f6fa 45%,#a4a8b0);') + '<div class="bx" style="transform:translate3d(0,-14px,0)">' + rod(-30) + rod(30) + '</div></div>';
+            return s;
+        };
         const SP = { plant: [78, 143, -400, -80], lamp: [73, 195, -385, -240], arcade: [105, 225, 395, -235], beanbag: [170, 105, 350, 150], lava: [70, 140, 290, -130], dolls: [110, 98, -230, 90], boombox: [96, 58, -320, -60] };
         let moved = null;
         const takeScreen = () => {
@@ -3969,7 +3986,7 @@
             const front = 'background:' + sk.pv + ';' + (sk.pr ? 'box-shadow:' + sk.pr.split(/,(?![^(]*\))/)[0] + ';' : ''), side = 'background:linear-gradient(160deg,rgba(255,255,255,.12),rgba(0,0,0,.18)),' + (sk.pd || '#707068') + ';';
             let h = plane(900, 800, 0, FY, 90, 90, 0, 'w-floor') + plane(900, WH, 0, FY - WH / 2, -310, 0, 0, 'w-wall back hid') + plane(800, WH, -450, FY - WH / 2, 90, 0, 90, 'w-wall hid') + plane(800, WH, 450, FY - WH / 2, 90, 0, -90, 'w-wall hid');
             h += windowHtml(have.includes('plant')) + curtainsHtml() + ledLampHtml() + cordHtml() + wallShelfHtml() + doorHtml() + switchHtml() + pendantHtml() + tvReflHtml() + tvBeamHtml();
-            h += '<div class="bx tvg" style="transform:scale3d(' + TVS + ',' + TVS + ',' + TVS + ');transform-origin:0 ' + FY + 'px -210px">' + (hasStand ? standHtml() : box(400, 62, 180, 0, FY - 31, -210, 'stand', '')) + box(360, 270, 170, 0, FY - 62 - UP - 135, -215, 'tvbody', scr, front, side);
+            h += '<div class="bx tvg" style="transform:scale3d(' + TVS + ',' + TVS + ',' + TVS + ');transform-origin:0 ' + FY + 'px -210px">' + (hasStand ? standHtml() : box(400, 62, 180, 0, FY - 31, -210, 'stand', '')) + box(360, 270, 170, 0, FY - 62 - UP - 135, -215, 'tvbody', scr, front, side) + tvBackHtml(FY - 62 - UP - 135);
             if (lk.halo) h += plane(620, 480, 0, FY - 62 - UP - 135, -132, 0, 0, '', '', 'pointer-events:none;background:radial-gradient(closest-side,rgba(' + lk.halo + ',.42),rgba(' + lk.halo + ',.14) 55%,transparent);');
             h += '</div>';
             if (have.includes('rug')) h += plane(450, 314, 0, FY - 5, 0, 90, 0, '', itemSvg(ITEM_BY.rug, true));
