@@ -1310,6 +1310,12 @@
         .tc-tier { margin: 16px 0 8px; font: 400 18px/1 'VT323', monospace; letter-spacing: .24em; color: var(--tc); text-shadow: 0 0 10px color-mix(in srgb, var(--tc) 60%, transparent); display: flex; align-items: center; gap: 10px; }
         .tc-tier::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, var(--tc), transparent); opacity: .5; }
         .tc-tier:first-child { margin-top: 4px; }
+        .tc-tcount { font-size: 15px; letter-spacing: .1em; color: #a8905f; text-shadow: none; }
+        .tc-tlock { font-size: 14px; letter-spacing: .12em; color: #9a8860; text-shadow: none; }
+        .tc-tier.locked { opacity: .85; }
+        .tc-card.row-locked { opacity: .55; filter: saturate(.55); }
+        .tc-card.row-locked .tc-prev { filter: brightness(.7); }
+        .tc-price { text-align: center; font: 400 15px/1 'VT323', monospace; color: #7c6a44; letter-spacing: .1em; background: none; height: auto; border: 0; overflow: visible; }
         .tc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 12px; }
         .tc-grid .tc-tier { grid-column: 1 / -1; }
         .tc-card { border-color: color-mix(in srgb, var(--tc, #3a2800) 45%, #2a1e00); }
@@ -3153,6 +3159,11 @@
             { id: 'cosmic', tier: 'legendary', name: 'Cosmic Nebula', price: 800, desc: 'Twinkling stars and the odd shooting star.', pv: 'radial-gradient(ellipse at 20% 15%,rgba(255,80,200,.6),transparent 55%),radial-gradient(ellipse at 85% 85%,rgba(0,200,255,.55),transparent 55%),linear-gradient(160deg,#120a3a,#050314)', pr: '0 0 0 2px #7aa8ff, 0 0 16px 3px rgba(122,100,255,.6)', pd: '#1a1450' },
             { id: 'holo', tier: 'legendary', name: 'Holographic Prism', price: 1200, desc: 'A living rainbow foil that never stops shifting.', pv: 'linear-gradient(115deg,#ff9ad5,#ffd29a 18%,#fff59a 32%,#b6ffcf 48%,#9ad1ff 64%,#c39aff 80%,#ff9ad5)', pr: '0 0 0 2px #fff, 0 0 16px 3px rgba(154,209,255,.7)', pd: '#6a6a8a' }
         ];
+        // Rows (tiers) unlock in order: you must own every skin in a row before you can buy from the next one.
+        const TIER_ORDER = Object.keys(TIERS);
+        const missingBefore = (owned, tier) => SKINS.filter(k => TIER_ORDER.indexOf(k.tier) < TIER_ORDER.indexOf(tier) && !owned.includes(k.id));
+        const rowLocked = (owned, tier) => missingBefore(owned, tier).length > 0;
+        const prevTier = tier => TIER_ORDER[TIER_ORDER.indexOf(tier) - 1];
         const $ = id => document.getElementById(id), body = document.body, hud = $('tcHud'), cta = $('tcCta'), vid = $('vid');
         const esc = t => String(t).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
         const pad = n => String(n).padStart(2, '0');
@@ -3195,7 +3206,7 @@
                 if (name === 'create_profile') { const n = { username: a.p_username, watch_seconds: 0, coins_spent: 0, owned_skins: ['default'], equipped_skin: 'default' }; pv.put(n); return J(n); }
                 if (!p) throw new Error('no_profile');
                 if (name === 'sync_watch') { p.watch_seconds += Math.max(0, a.p_seconds | 0); pv.put(p); return J(p); }
-                if (name === 'buy_skin') { const k = SKINS.find(z => z.id === a.p_skin); if (!k) throw new Error('unknown_skin'); if (p.owned_skins.includes(k.id)) throw new Error('already_owned'); if (Math.floor(p.watch_seconds / 60) - p.coins_spent < k.price) throw new Error('not_enough_coins'); p.coins_spent += k.price; p.owned_skins.push(k.id); p.equipped_skin = k.id; pv.put(p); return J(p); }
+                if (name === 'buy_skin') { const k = SKINS.find(z => z.id === a.p_skin); if (!k) throw new Error('unknown_skin'); if (p.owned_skins.includes(k.id)) throw new Error('already_owned'); if (rowLocked(p.owned_skins, k.tier)) throw new Error('tier_locked'); if (Math.floor(p.watch_seconds / 60) - p.coins_spent < k.price) throw new Error('not_enough_coins'); p.coins_spent += k.price; p.owned_skins.push(k.id); p.equipped_skin = k.id; pv.put(p); return J(p); }
                 if (name === 'equip_skin') { if (!p.owned_skins.includes(a.p_skin)) throw new Error('not_owned'); p.equipped_skin = a.p_skin; pv.put(p); return J(p); }
                 if (name === 'delete_my_account') { try { localStorage.removeItem(PREV_KEY); } catch (e) { } return null; }
                 throw new Error('unknown_function');
@@ -3204,7 +3215,7 @@
         const api = PREVIEW ? preview : real;
         const FRIENDLY = [[/invalid login credentials/i, 'Wrong email or password.'], [/email not confirmed/i, 'Please confirm your email first. Check your inbox for the link.'], [/already registered|already been registered/i, 'That email already has an account. Try signing in.'],
             [/username_taken|duplicate key|unique/i, 'That username is taken. Try another.'], [/bad_username|violates check/i, 'Usernames are 3-16 letters, numbers or underscores.'], [/not_enough_coins/i, 'Not enough coins yet. Keep watching!'],
-            [/already_owned/i, 'You already own that skin.'], [/password.*(short|least|weak)|weak_password/i, 'Choose a longer password (at least 8 characters).'], [/rate limit|too many|over_email_send_rate/i, 'Too many attempts. Please wait a minute and try again.'],
+            [/already_owned/i, 'You already own that skin.'], [/tier_locked/i, 'Finish the row above first: own every skin in it to unlock the next row.'], [/password.*(short|least|weak)|weak_password/i, 'Choose a longer password (at least 8 characters).'], [/rate limit|too many|over_email_send_rate/i, 'Too many attempts. Please wait a minute and try again.'],
             [/failed to fetch|networkerror|load failed/i, "Couldn't reach the server. Check your connection and try again."], [/jwt|expired/i, 'Your session expired. Please sign in again.']];
         const friendly = e => { const m = (e && e.message) || String(e); const f = FRIENDLY.find(x => x[0].test(m)); return f ? f[1] : m; };
 
@@ -3329,7 +3340,7 @@
 
         // ================= modals =================
         const mk = (id, html) => { const d = document.createElement('div'); d.className = 'tc-modal-bg'; d.id = id; d.innerHTML = html; document.body.appendChild(d); return d; };
-        const shop = mk('tcModal', '<div class="tc-modal" role="dialog" aria-modal="true" aria-label="Treasure chest"><div class="tc-hdr"><span class="tc-title">🪙 TREASURE CHEST</span><button class="tc-close" data-close type="button">✕ CLOSE</button></div><div class="tc-body"><div class="tc-acct" id="tcAcct"></div><div class="tc-stats"><div class="tc-stat"><span>TOTAL WATCH TIME</span><b id="tcWatch"></b></div><div class="tc-stat"><span>COINS</span><b id="tcBal"></b></div></div><p class="tc-note">Earn 1 coin for every minute you watch. Spend them on TV skins.</p><div class="tc-grid" id="tcGrid"></div></div></div>');
+        const shop = mk('tcModal', '<div class="tc-modal" role="dialog" aria-modal="true" aria-label="Treasure chest"><div class="tc-hdr"><span class="tc-title">🪙 TREASURE CHEST</span><button class="tc-close" data-close type="button">✕ CLOSE</button></div><div class="tc-body"><div class="tc-acct" id="tcAcct"></div><div class="tc-stats"><div class="tc-stat"><span>TOTAL WATCH TIME</span><b id="tcWatch"></b></div><div class="tc-stat"><span>COINS</span><b id="tcBal"></b></div></div><p class="tc-note">Earn 1 coin for every minute you watch. Own every skin in a row to unlock the next row.</p><div class="tc-grid" id="tcGrid"></div></div></div>');
         const auth = mk('tcAuth', '<div class="tc-modal tc-narrow" role="dialog" aria-modal="true" aria-label="Sign in"><div class="tc-hdr"><span class="tc-title" id="tcAuthTitle"></span><button class="tc-close" data-close type="button">✕ CLOSE</button></div><div class="tc-body" id="tcAuthBody"></div></div>');
         let pendingBuy = null, pendingT = 0, pendingDel = false, delT = 0;
         const closeShop = () => shop.classList.remove('show');
@@ -3343,14 +3354,17 @@
             $('tcWatch').textContent = fmtLong(st.secs); $('tcBal').textContent = coins();
             $('tcAcct').innerHTML = '<div><span>SIGNED IN AS</span> <b>' + esc(st.username) + '</b>' + (PREVIEW ? ' <em class="tc-pill">PREVIEW</em>' : '') + (st.email ? '<small>' + esc(st.email) + '</small>' : '') + '</div><div class="tc-acct-btns"><button class="tc-link" data-act="signout" type="button">SIGN OUT</button><button class="tc-link danger" data-act="delete" type="button">' + (pendingDel ? 'TAP AGAIN: DELETE FOR GOOD' : 'DELETE ACCOUNT') + '</button></div>';
             let html = '';
-            Object.keys(TIERS).forEach(t => {
+            TIER_ORDER.forEach(t => {
                 const list = SKINS.filter(k => k.tier === t); if (!list.length) return;
-                html += '<h3 class="tc-tier" style="--tc:' + TIERS[t][1] + '">' + TIERS[t][0] + '</h3>' + list.map(k => {
+                const locked = rowLocked(st.owned, t), pt = prevTier(t), have = list.filter(k => st.owned.includes(k.id)).length;
+                const head = TIERS[t][0] + ' <span class="tc-tcount">' + have + '/' + list.length + '</span>' + (locked ? ' <span class="tc-tlock">🔒 OWN EVERY ' + TIERS[pt][0] + ' SKIN TO UNLOCK</span>' : '');
+                html += '<h3 class="tc-tier' + (locked ? ' locked' : '') + '" style="--tc:' + TIERS[t][1] + '">' + head + '</h3>' + list.map(k => {
                     const owned = st.owned.includes(k.id), on = st.skin === k.id, need = k.price - coins();
                     const btn = on ? '<button class="tc-btn equipped" disabled>✓ EQUIPPED</button>' : owned ? '<button class="tc-btn" data-eq="' + k.id + '">EQUIP</button>'
+                        : locked ? '<button class="tc-btn" disabled>🔒 FINISH ' + TIERS[pt][0] + ' FIRST</button><div class="tc-prog tc-price"><span>' + k.price + ' ●</span></div>'
                         : need <= 0 ? '<button class="tc-btn' + (pendingBuy === k.id ? ' confirm' : '') + '" data-buy="' + k.id + '">' + (pendingBuy === k.id ? 'TAP AGAIN TO BUY' : 'BUY · ' + k.price + ' ●') + '</button>'
                         : '<button class="tc-btn" disabled>🔒 ' + k.price + ' ● · ' + need + ' MORE</button><div class="tc-prog"><i style="width:' + Math.max(2, Math.min(100, coins() / k.price * 100)).toFixed(1) + '%"></i></div>';
-                    return '<div class="tc-card t-' + k.tier + (on ? ' on' : '') + '" style="--tc:' + TIERS[k.tier][1] + '"><div class="tc-prev"><i style="--pv:' + k.pv + ';--pr:' + (k.pr || 'none') + ';--pd:' + (k.pd || '#707068') + '"></i></div><div class="tc-name">' + k.name + '</div><div class="tc-desc">' + k.desc + '</div>' + btn + '</div>';
+                    return '<div class="tc-card t-' + k.tier + (on ? ' on' : '') + (locked && !owned ? ' row-locked' : '') + '" style="--tc:' + TIERS[k.tier][1] + '"><div class="tc-prev"><i style="--pv:' + k.pv + ';--pr:' + (k.pr || 'none') + ';--pd:' + (k.pd || '#707068') + '"></i></div><div class="tc-name">' + k.name + '</div><div class="tc-desc">' + k.desc + '</div>' + btn + '</div>';
                 }).join('');
             });
             $('tcGrid').innerHTML = html;
@@ -3368,6 +3382,7 @@
                 if (t.dataset.eq) { await flush(); adopt(await call('equip_skin', { p_skin: t.dataset.eq })); applySkin(); renderShop(); click(); return; }
                 if (t.dataset.buy) {
                     const k = SKINS.find(z => z.id === t.dataset.buy); if (!k || coins() < k.price || st.owned.includes(k.id)) return;
+                    if (rowLocked(st.owned, k.tier)) { toast(friendly(new Error('tier_locked'))); renderShop(); return; }
                     if (k.price >= 250 && pendingBuy !== k.id) { pendingBuy = k.id; clearTimeout(pendingT); pendingT = setTimeout(() => { pendingBuy = null; if (shop.classList.contains('show')) renderShop(); }, 4000); renderShop(); return; }
                     pendingBuy = null; clearTimeout(pendingT); await flush();
                     adopt(await call('buy_skin', { p_skin: k.id })); applySkin(); render(); renderShop(); jingleSound(); toast('Unlocked: ' + k.name + '!');
