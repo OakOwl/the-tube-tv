@@ -1597,6 +1597,8 @@
         @media (prefers-reduced-motion: reduce) { #dh .ledw, #dh .ledf { animation: none; } }
         #dh .chest { cursor: pointer; }
         .tc-modal-bg { z-index: 100001 !important; }
+        #dh .dh-cam { will-change: transform; } #dh .pl, #dh .bx { -webkit-backface-visibility: visible; }
+        @media (hover: none) and (pointer: coarse) { #dh .cs, #dh .ledw, #dh .ledf, #dh .pcb3 svg { animation: none !important; } #dh .ledw { opacity: .85; } #dh .dc-in { animation: none; } }
         #dh .stand { background: repeating-linear-gradient(92deg, rgba(0,0,0,.16) 0 2px, transparent 2px 9px), linear-gradient(#9a6630, #6e4620); }
         #dh .sp { position: absolute; left: 0; top: 0; filter: drop-shadow(0 8px 8px rgba(0,0,0,.45)); }
         #dh .sp svg { display: block; width: 100%; height: 100%; overflow: visible; }
@@ -3594,7 +3596,7 @@
         const cam = dh.querySelector('.dh-cam'), roomEl = dh.querySelector('.dh-room'), listEl = dh.querySelector('.dh-list');
         const V = { y: 22, p: -26, z: 0, ty: 40 }, V0 = { y: 22, p: -26, z: 0, ty: 40 };
         const clampV = () => { V.p = Math.max(-82, Math.min(-2, V.p)); V.z = Math.max(-420, Math.min(900, V.z)); };
-        const baseSc = () => Math.max(.5, Math.min(1.35, Math.min(window.innerWidth, window.innerHeight * 1.5) / (window.innerWidth < 640 ? 1230 : 1470)));
+        const baseSc = () => Math.max(.5, Math.min(1.35, Math.min(window.innerWidth, window.innerHeight * 1.5) / (window.innerWidth < 640 ? 1500 : 1470)));
         const applyV = () => {
             clampV(); cam.style.setProperty('--sc', (baseSc() * Math.exp(V.z / 500)).toFixed(4));
             cam.style.setProperty('--y', V.y.toFixed(2) + 'deg'); cam.style.setProperty('--p', V.p.toFixed(2) + 'deg'); cam.style.setProperty('--ty', V.ty.toFixed(0) + 'px');
@@ -3660,10 +3662,10 @@
         };
         const couchHtml = id => {
             const k = id && COUCH[id]; if (!k) return '';
-            const sz = 160, SW = k.W - 60, f = (extra) => 'background:' + (extra || '') + 'linear-gradient(160deg,rgba(255,255,255,.14),rgba(0,0,0,.2)),' + k.c1 + ';', fb = 'background:' + k.pat + 'linear-gradient(160deg,rgba(255,255,255,.1),rgba(0,0,0,.25)),' + k.c2 + ';';
+            const sz = 225, SW = k.W - 60, f = (extra) => 'background:' + (extra || '') + 'linear-gradient(160deg,rgba(255,255,255,.14),rgba(0,0,0,.2)),' + k.c1 + ';', fb = 'background:' + k.pat + 'linear-gradient(160deg,rgba(255,255,255,.1),rgba(0,0,0,.25)),' + k.c2 + ';';
             const seatTop = FY - 10 - 36, cush = 'background:linear-gradient(90deg,transparent calc(33.3% - 1px),rgba(0,0,0,.32) 33.3%,transparent calc(33.3% + 1px),transparent calc(66.6% - 1px),rgba(0,0,0,.32) 66.6%,transparent calc(66.6% + 1px)),linear-gradient(160deg,rgba(255,255,255,.2),rgba(0,0,0,.15)),' + k.c1 + ';';
             let h = '';
-            if (k.halo) h += plane(k.W + 160, 300, 0, FY - 1, sz, 90, 0, '', '', 'pointer-events:none;background:radial-gradient(closest-side,rgba(' + k.halo + ',.4),rgba(' + k.halo + ',.12) 60%,transparent);');
+            if (k.halo) h += plane(k.W + 160, 300, 0, FY - 3, sz, 90, 0, '', '', 'pointer-events:none;background:radial-gradient(closest-side,rgba(' + k.halo + ',.4),rgba(' + k.halo + ',.12) 60%,transparent);');
             [[-1, -1], [1, -1], [-1, 1], [1, 1]].forEach(p => { h += box(10, 10, 10, p[0] * (k.W / 2 - 12), FY - 5, sz + p[1] * 46, 'cb', '', 'background:' + k.legs + ';'); });
             h += box(30, k.armH, 120, -(k.W / 2 - 15), FY - 10 - k.armH / 2, sz, 'cb', '', f()) + box(30, k.armH, 120, k.W / 2 - 15, FY - 10 - k.armH / 2, sz, 'cb', '', f());
             h += box(SW, 36, 112, 0, FY - 10 - 18, sz, 'cb', '', f());
@@ -3699,7 +3701,7 @@
             const src = document.querySelector('#popcorn svg'); if (!src) return '';
             let sv = src.outerHTML; (sv.match(/id="([^"]+)"/g) || []).forEach(m => { const id = m.slice(4, -1); sv = sv.split('id="' + id + '"').join('id="' + id + '3"').split('#' + id + ')').join('#' + id + '3)').split('#' + id + '"').join('#' + id + '3"'); });
             const wood = 'background:repeating-linear-gradient(90deg,rgba(0,0,0,.18) 0 2px,transparent 2px 14px),linear-gradient(160deg,#a8703a,#7a4a22);', dark = 'background:#5a3418;', TH = 52, S = 84;
-            let h = plane(S + 60, S + 60, 0, FY - 1, 0, 90, 0, '', '', 'pointer-events:none;background:radial-gradient(closest-side,rgba(0,0,0,.45),transparent);');
+            let h = plane(S + 60, S + 60, 0, FY - 2, 0, 90, 0, '', '', 'pointer-events:none;background:radial-gradient(closest-side,rgba(0,0,0,.45),transparent);');
             [[-1, -1], [1, -1], [-1, 1], [1, 1]].forEach(p => { h += box(7, TH, 7, p[0] * (S / 2 - 8), FY - TH / 2, p[1] * (S / 2 - 8), 'cb', '', dark); });
             h += box(S - 14, 4, S - 14, 0, FY - 16, 0, 'cb', '', dark) + box(S, 6, S, 0, FY - TH - 3, 0, 'cb', '', wood, wood);
             const w = 84, hh = 109;
@@ -3709,24 +3711,24 @@
         // red walls, a white window and velvet curtains behind the TV, with the same pull-tassel as the 2D page
         let drawn = false;
         const curtainsHtml = () => {
-            const RY = FY - (WH - 18), CH = WH - 24, Z = -304, rod = 'background:linear-gradient(#f0d070,#a8791c);';
+            const RY = FY - (WH - 18), CH = WH - 24, Z = -298, rod = 'background:linear-gradient(#f0d070,#a8791c);';
             const panel = side => { const L = side < 0; return '<div class="bx" style="transform:translate3d(' + (L ? -450 : 450) + 'px,' + (RY + 8 + CH / 2) + 'px,' + Z + 'px)">' + '<div class="pl cpan" style="width:456px;height:' + CH + 'px;margin:' + (-CH / 2) + 'px 0 0 ' + (L ? 0 : -456) + 'px;"><div class="cf ' + (L ? 'cl' : 'cr') + '"><div class="cs"></div></div></div></div>'; };
             let h = '';
-            h += plane(900, 6, 0, RY, -300, 0, 0, '', '', rod) + box(900, 6, 10, 0, RY, -304, 'cb', '', rod, rod);
-            h += [-450, 450].map(x => box(16, 16, 16, x, RY, -304, 'cb', '', 'background:radial-gradient(circle at 35% 30%,#ffe9a8,#c89a34 55%,#6a4a12);')).join('');
+            h += box(900, 6, 10, 0, RY, -302, 'cb', '', rod, rod);
+            h += [-450, 450].map(x => box(16, 16, 16, x, RY, -302, 'cb', '', 'background:radial-gradient(circle at 35% 30%,#ffe9a8,#c89a34 55%,#6a4a12);')).join('');
             h += panel(-1) + panel(1);
             return h;
         };
         const windowHtml = () => {
-            const W = 140, H = 150, X = 285, Y = FY - 260, Z = -309.4;
+            const W = 140, H = 150, X = 285, Y = FY - 260, Z = -306;
             const panes = '<i class="dw-p" style="left:8px;top:8px;width:' + (W / 2 - 11) + 'px;height:' + (H / 2 - 11) + 'px"></i><i class="dw-p" style="left:' + (W / 2 + 3) + 'px;top:8px;width:' + (W / 2 - 11) + 'px;height:' + (H / 2 - 11) + 'px"></i><i class="dw-p" style="left:8px;top:' + (H / 2 + 3) + 'px;width:' + (W / 2 - 11) + 'px;height:' + (H / 2 - 11) + 'px"></i><i class="dw-p" style="left:' + (W / 2 + 3) + 'px;top:' + (H / 2 + 3) + 'px;width:' + (W / 2 - 11) + 'px;height:' + (H / 2 - 11) + 'px"></i>';
-            return plane(W + 70, H + 70, X, Y, Z + .3, 0, 0, '', '', 'pointer-events:none;background:radial-gradient(closest-side,rgba(255,250,225,.45),transparent);')
+            return plane(W + 70, H + 70, X, Y, Z - 1.5, 0, 0, '', '', 'pointer-events:none;background:radial-gradient(closest-side,rgba(255,250,225,.45),transparent);')
                 + plane(W, H, X, Y, Z, 0, 0, 'dwin', panes, '') + plane(W + 16, 8, X, Y + H / 2 + 4, Z + 3, 0, 0, '', '', 'background:linear-gradient(#fff,#cfc6b0);box-shadow:0 2px 4px rgba(0,0,0,.4);')
-                + plane(W * 1.35, 150, X + 6, FY - 1, -230, 90, 0, 'dlight', '', 'pointer-events:none;background:linear-gradient(105deg,rgba(255,250,225,.30),rgba(255,250,225,.06) 70%,transparent);clip-path:polygon(18% 0,82% 0,100% 100%,0 100%);');
+                + plane(W * 1.35, 150, X + 6, FY - 4, -230, 90, 0, 'dlight', '', 'pointer-events:none;background:linear-gradient(105deg,rgba(255,250,225,.30),rgba(255,250,225,.06) 70%,transparent);clip-path:polygon(18% 0,82% 0,100% 100%,0 100%);');
         };
         const cordHtml = () => {
             const w = 36, hh = 150, X = -200, Y0 = FY - (WH - 18) + 4;
-            return '<div class="sp dh-cord" data-act="cord" title="Pull for curtains" style="width:' + w + 'px;height:' + hh + 'px;margin:0 0 0 ' + (-w / 2) + 'px;transform:translate3d(' + X + 'px,' + Y0 + 'px,-298px) rotateY(calc(var(--y) * -1));transform-origin:50% 0;filter:none"><span class="dc-in"><i class="dc-ros"></i><i class="dc-rope"></i><i class="dc-knob"></i><i class="dc-fr"></i></span></div>';
+            return '<div class="sp dh-cord" data-act="cord" title="Pull for curtains" style="width:' + w + 'px;height:' + hh + 'px;margin:0 0 0 ' + (-w / 2) + 'px;transform:translate3d(' + X + 'px,' + Y0 + 'px,-289px) rotateY(calc(var(--y) * -1));transform-origin:50% 0;filter:none"><span class="dc-in"><i class="dc-ros"></i><i class="dc-rope"></i><i class="dc-knob"></i><i class="dc-fr"></i></span></div>';
         };
         const toggleCurtains = on => {
             drawn = on == null ? !drawn : on; dh.classList.toggle('drawn', drawn);
@@ -3736,13 +3738,13 @@
         };
         // RGB corner floor lamp (always in the room): a slim black L-pole with a cyan-to-green LED strip washing the walls
         const ledLampHtml = () => {
-            const X = -396, Z = -292, PH = 330, LED = 'linear-gradient(180deg,#8ff6ff,#38f0c8 45%,#22e07a)', WASH = 'linear-gradient(180deg,rgba(127,240,255,.8),rgba(58,240,192,.95) 55%,rgba(34,224,122,1))';
+            const X = -396, Z = -284, PH = 330, LED = 'linear-gradient(180deg,#8ff6ff,#38f0c8 45%,#22e07a)', WASH = 'linear-gradient(180deg,rgba(127,240,255,.8),rgba(58,240,192,.95) 55%,rgba(34,224,122,1))';
             const mk = m => 'mask-image:' + m + ';-webkit-mask-image:' + m + ';';
             const maskB = mk('radial-gradient(ellipse 215px 335px at 54px 80%,#000 0,rgba(0,0,0,.92) 15%,rgba(0,0,0,.74) 30%,rgba(0,0,0,.5) 45%,rgba(0,0,0,.3) 60%,rgba(0,0,0,.15) 75%,rgba(0,0,0,.05) 90%,transparent 100%)');
             const maskL = mk('radial-gradient(ellipse 215px 335px at 246px 80%,#000 0,rgba(0,0,0,.92) 15%,rgba(0,0,0,.74) 30%,rgba(0,0,0,.5) 45%,rgba(0,0,0,.3) 60%,rgba(0,0,0,.15) 75%,rgba(0,0,0,.05) 90%,transparent 100%)');
-            let h = plane(300, WH, -300, FY - WH / 2, -302.6, 0, 0, 'ledw', '', 'pointer-events:none;background:' + WASH + ';' + maskB)
-                + plane(300, WH, -449.2, FY - WH / 2, -160, 0, 90, 'ledw hid', '', 'pointer-events:none;background:' + WASH + ';' + maskL)
-                + plane(240, 240, X + 50, FY - 1, Z + 50, 90, 0, 'ledf', '', 'pointer-events:none;background:radial-gradient(closest-side,rgba(60,240,170,.5),rgba(60,220,200,.16) 60%,transparent);');
+            let h = plane(300, WH, -300, FY - WH / 2, -295, 0, 0, 'ledw', '', 'pointer-events:none;background:' + WASH + ';' + maskB)
+                + plane(300, WH, -443, FY - WH / 2, -160, 0, 90, 'ledw hid', '', 'pointer-events:none;background:' + WASH + ';' + maskL)
+                + plane(240, 240, X + 50, FY - 3, Z + 50, 90, 0, 'ledf', '', 'pointer-events:none;background:radial-gradient(closest-side,rgba(60,240,170,.5),rgba(60,220,200,.16) 60%,transparent);');
             h += '<div class="bx" style="transform:translate3d(' + X + 'px,0,' + Z + 'px)">' + box(5, PH, 5, 0, FY - PH / 2, 0, 'cb', '', 'background:#0c0c0e;')
                 + plane(3, PH - 6, 0, FY - PH / 2, 2.7, 0, 0, 'ledl', '', 'background:' + LED + ';') + plane(3, PH - 6, 2.7, FY - PH / 2, 0, 0, 90, 'ledl', '', 'background:' + LED + ';')
                 + box(40, 3, 5, 20, FY - 1.5, 0, 'cb', '', 'background:#0c0c0e;') + box(5, 3, 40, 0, FY - 1.5, 20, 'cb', '', 'background:#0c0c0e;') + '</div>';
@@ -3767,12 +3769,12 @@
             h += '<div class="bx tvg" style="transform:scale3d(' + TVS + ',' + TVS + ',' + TVS + ');transform-origin:0 ' + FY + 'px -210px">' + box(400, 62, 180, 0, FY - 31, -210, 'stand', '') + box(360, 270, 170, 0, FY - 62 - 135, -215, 'tvbody', scr, front, side);
             if (lk.halo) h += plane(620, 480, 0, FY - 62 - 135, -132, 0, 0, '', '', 'pointer-events:none;background:radial-gradient(closest-side,rgba(' + lk.halo + ',.42),rgba(' + lk.halo + ',.14) 55%,transparent);');
             h += '</div>';
-            if (have.includes('rug')) h += plane(450, 314, 0, FY - 1, -45, 90, 0, '', itemSvg(ITEM_BY.rug, true));
-            if (have.includes('poster')) h += plane(104, 143, -449, -62, -120, 0, 90, 'hid', itemSvg(ITEM_BY.poster));
-            if (have.includes('neon')) h += plane(140, 100, 449, -98, -60, 0, -90, 'hid neon-s', itemSvg(ITEM_BY.neon));
-            if (have.includes('shelf')) h += plane(150, 112, -300, -195, -309, 0, 0, 'hid', itemSvg(ITEM_BY.shelf));
+            if (have.includes('rug')) h += plane(450, 314, 0, FY - 5, 0, 90, 0, '', itemSvg(ITEM_BY.rug, true));
+            if (have.includes('poster')) h += plane(104, 143, -446, -62, -120, 0, 90, 'hid', itemSvg(ITEM_BY.poster));
+            if (have.includes('neon')) h += plane(140, 100, 446, -98, -60, 0, -90, 'hid neon-s', itemSvg(ITEM_BY.neon));
+            if (have.includes('shelf')) h += plane(150, 112, -300, -195, -305, 0, 0, 'hid', itemSvg(ITEM_BY.shelf));
             Object.keys(SP).forEach(id => { if (!have.includes(id)) return; const s = SP[id]; h += '<div class="sp" style="width:' + s[0] + 'px;height:' + s[1] + 'px;margin:' + (-s[1] / 2) + 'px 0 0 ' + (-s[0] / 2) + 'px;transform:translate3d(' + s[2] + 'px,' + (FY - s[1] / 2) + 'px,' + s[3] + 'px) rotateY(calc(var(--y) * -1))">' + itemSvg(ITEM_BY[id]) + '</div>'; });
-            h += chestHtml() + tableHtml() + couchHtml(sofaPick()) + (have.includes('skate') ? plane(150, 62, 290, FY - 1, 60, 90, 0, '', itemSvg(ITEM_BY.skate, true)) : '');
+            h += chestHtml() + tableHtml() + couchHtml(sofaPick()) + (have.includes('skate') ? plane(150, 62, 290, FY - 7, 60, 90, 0, '', itemSvg(ITEM_BY.skate, true)) : '');
             roomEl.innerHTML = h; chestPlate(); dh.classList.toggle('drawn', drawn);
             dh.querySelector('.dh-empty').textContent = have.length ? '' : 'Your room is empty. Buy room upgrades in the treasure chest to fill it.';
         };
