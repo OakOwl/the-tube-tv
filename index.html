@@ -3620,7 +3620,7 @@
         ];
         const sofaSvg = (c1, c2, leg, glow) => (glow ? '<ellipse cx="70" cy="76" rx="64" ry="7" fill="' + glow + '" opacity=".35"/>' : '') + '<g stroke="#2a1608" stroke-width="2.5" stroke-linejoin="round"><rect x="20" y="8" width="100" height="40" rx="12" fill="' + c2 + '"/><rect x="4" y="26" width="26" height="42" rx="10" fill="' + c1 + '"/><rect x="110" y="26" width="26" height="42" rx="10" fill="' + c1 + '"/><rect x="24" y="34" width="92" height="30" rx="7" fill="' + c1 + '"/></g><path d="M55 36 V62 M85 36 V62" stroke="#2a1608" stroke-opacity=".45" stroke-width="2"/><rect x="14" y="68" width="7" height="9" rx="2" fill="' + leg + '"/><rect x="119" y="68" width="7" height="9" rx="2" fill="' + leg + '"/>';
         ITEMS.push(
-            { id: 'couch_brown', d3: 1, name: 'Leather Sofa', price: 150, desc: 'A big brown leather sofa facing the TV.', vb: '0 0 140 80', svg: sofaSvg('#8a5530', '#6a3e20', '#2a1608') },
+            { id: 'couch_brown', d3: 1, name: 'Worn Leather Sofa', price: 150, desc: 'A rough, well-loved leather sofa with plenty of character.', vb: '0 0 140 80', svg: sofaSvg('#a8662c', '#7a4220', '#2a1608') + '<g stroke="#47220f" stroke-width="1.4" stroke-linejoin="round"><path d="M62 12 L96 9 L104 20 L84 28 L66 22Z" fill="#e0cc9f"/><path d="M70 14 L92 12 L94 20 L78 24Z" fill="#3a1d0e"/><path d="M30 40 L58 36 L64 50 L44 58 L32 52Z" fill="#e0cc9f"/><path d="M76 44 L104 42 L108 56 L88 58Z" fill="#e0cc9f"/><path d="M10 34 L20 31 L22 42 L12 44Z" fill="#e0cc9f"/></g>' },
             { id: 'couch_green', d3: 1, name: 'Retro Green Sofa', price: 220, desc: 'A tufted 70s sofa in avocado green.', vb: '0 0 140 80', svg: sofaSvg('#46997a', '#2f735a', '#d9b26a') },
             { id: 'couch_orange', d3: 1, name: 'Striped 70s Sofa', price: 300, desc: 'A long, low orange sofa with stripes.', vb: '0 0 140 80', svg: sofaSvg('#ec8a30', '#c06a1c', '#5a3418') },
             { id: 'couch_neon', d3: 1, name: 'Neon Pink Sofa', price: 450, desc: 'A glowing hot-pink sofa for the very rich.', vb: '0 0 140 80', svg: sofaSvg('#ff58c8', '#b02aa0', '#00e5ff', '#ff3cc8') },
@@ -3723,7 +3723,7 @@
         };
         // sofas: built from boxes so they look right from every side. The couch faces the TV, so from the front of the room you see its back.
         const COUCH = {
-            couch_brown: { c1: '#8a5530', c2: '#6a3e20', W: 270, armH: 78, backH: 66, pat: '', legs: '#2a1608' },
+            couch_brown: { c1: '#a8662c', c2: '#7a4220', W: 270, armH: 78, backH: 66, pat: '', legs: '#2a1608', wear: 1 },
             couch_green: { c1: '#46997a', c2: '#2f735a', W: 270, armH: 66, backH: 84, pat: 'radial-gradient(circle,rgba(0,0,0,.35) 2px,transparent 3px) 0 0/24px 24px,', legs: '#d9b26a' },
             couch_orange: { c1: '#ec8a30', c2: '#c06a1c', W: 330, armH: 56, backH: 56, pat: 'repeating-linear-gradient(90deg,rgba(255,236,190,.35) 0 10px,transparent 10px 20px),', legs: '#5a3418' },
             couch_neon: { c1: '#ff58c8', c2: '#b02aa0', W: 300, armH: 70, backH: 70, pat: 'linear-gradient(180deg,rgba(255,255,255,.28),transparent 30%),', legs: '#00e5ff', halo: '255,60,200' }
@@ -3733,15 +3733,28 @@
             let pref = null; try { pref = localStorage.getItem('thetube.sofa.v1'); } catch (e) { }
             return own.includes(pref) ? pref : own[own.length - 1];
         };
+        // worn, peeling leather: the textures are tiny hand-drawn SVGs laid over the leather colour
+        const WEAR = (() => {
+            const g = '<filter id="n"><feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="2" seed="4"/><feColorMatrix values="0 0 0 0 .12 0 0 0 0 .05 0 0 0 0 .01 0 0 0 .55 0"/></filter><filter id="b"><feGaussianBlur stdDeviation="2.2"/></filter><linearGradient id="f" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ead9b4"/><stop offset="1" stop-color="#c2aa7c"/></linearGradient>';
+            const patch = (d, dark) => '<path d="' + d + '" fill="url(#f)" stroke="#47220f" stroke-width="2.4" stroke-linejoin="round"/>' + (dark ? '<path d="' + dark + '" fill="#3a1d0e" stroke="#26100a" stroke-width="1.4" stroke-linejoin="round"/>' : '') + '<path d="' + d + '" fill="none" stroke="#f3e8cc" stroke-width="1.1" stroke-dasharray="5 4" opacity=".75" transform="translate(1.5,1.5)"/>';
+            const svg = (vw, vh, body) => 'url(data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + vw + ' ' + vh + '" preserveAspectRatio="none"><defs>' + g + '</defs><rect width="100%" height="100%" filter="url(#n)" opacity=".5"/>' + body + '</svg>').replace(/[!'()*]/g, c => '%' + c.charCodeAt(0).toString(16)) + ') 0 0/100% 100%';
+            const stains = '<g filter="url(#b)"><ellipse cx="60" cy="70" rx="38" ry="12" fill="#2a1208" opacity=".38"/><ellipse cx="150" cy="22" rx="30" ry="9" fill="#2a1208" opacity=".3"/><ellipse cx="110" cy="60" rx="26" ry="14" fill="#ffd9a0" opacity=".22"/></g>';
+            const cracks = '<path d="M20 40 l14 4 l8 -6 l12 5 M120 70 l10 -6 l13 4 l7 -7 M86 14 l9 6 l12 -2" stroke="#2a1208" stroke-opacity=".6" fill="none" stroke-width="1.3"/>';
+            const back = svg(320, 100, stains + patch('M180 8 L238 4 L262 20 L300 14 L312 38 L270 52 L282 70 L236 62 L214 78 L196 52 L170 40Z', 'M196 14 L248 12 L262 26 L226 38 L200 30Z') + patch('M26 12 L62 6 L76 22 L52 34 L32 26Z') + patch('M96 62 L128 56 L136 72 L112 82Z') + cracks);
+            const seat = svg(300, 140, stains + patch('M20 30 L130 18 L146 40 L118 52 L140 78 L60 92 L24 70Z', 'M70 50 L140 44 L146 78 L100 86Z') + patch('M170 40 L280 30 L292 60 L250 74 L210 66 L176 80Z', 'M212 44 L276 40 L280 58 L240 62Z') + cracks);
+            const arm = svg(100, 80, stains + patch('M8 18 L50 10 L62 30 L34 46 L12 38Z', 'M20 20 L46 16 L50 28 L28 34Z') + '<path d="M70 50 l10 4 l6 -6" stroke="#2a1208" stroke-opacity=".6" fill="none" stroke-width="1.3"/>');
+            return { back, seat, arm };
+        })();
         const couchHtml = id => {
-            const k = id && COUCH[id]; if (!k) return '';
-            const sz = 225, SW = k.W - 60, f = (extra) => 'background:' + (extra || '') + 'linear-gradient(160deg,rgba(255,255,255,.14),rgba(0,0,0,.2)),' + k.c1 + ';', fb = 'background:' + k.pat + 'linear-gradient(160deg,rgba(255,255,255,.1),rgba(0,0,0,.25)),' + k.c2 + ';';
-            const seatTop = FY - 10 - 36, cush = 'background:linear-gradient(90deg,transparent calc(33.3% - 1px),rgba(0,0,0,.32) 33.3%,transparent calc(33.3% + 1px),transparent calc(66.6% - 1px),rgba(0,0,0,.32) 66.6%,transparent calc(66.6% + 1px)),linear-gradient(160deg,rgba(255,255,255,.2),rgba(0,0,0,.15)),' + k.c1 + ';';
+            const k = id && COUCH[id]; if (!k) return ''; const wr = k.wear ? WEAR : null;
+            const sz = 225, SW = k.W - 60, f = (extra) => 'background:' + (extra || '') + 'linear-gradient(160deg,rgba(255,255,255,.14),rgba(0,0,0,.2)),' + k.c1 + ';', fb = 'background:' + (wr ? wr.back + ',' : '') + k.pat + 'linear-gradient(160deg,rgba(255,255,255,.1),rgba(0,0,0,.25)),' + k.c2 + ';';
+            const seatTop = FY - 10 - 36, cush = 'background:' + (wr ? wr.seat + ',' : '') + 'linear-gradient(90deg,transparent calc(33.3% - 1px),rgba(0,0,0,.32) 33.3%,transparent calc(33.3% + 1px),transparent calc(66.6% - 1px),rgba(0,0,0,.32) 66.6%,transparent calc(66.6% + 1px)),linear-gradient(160deg,rgba(255,255,255,.2),rgba(0,0,0,.15)),' + k.c1 + ';';
             let h = '';
             if (k.halo) h += plane(k.W + 160, 300, 0, FY - 3, sz, 90, 0, '', '', 'pointer-events:none;background:radial-gradient(closest-side,rgba(' + k.halo + ',.4),rgba(' + k.halo + ',.12) 60%,transparent);');
             [[-1, -1], [1, -1], [-1, 1], [1, 1]].forEach(p => { h += box(10, 10, 10, p[0] * (k.W / 2 - 12), FY - 5, sz + p[1] * 46, 'cb', '', 'background:' + k.legs + ';'); });
-            h += box(30, k.armH, 120, -(k.W / 2 - 15), FY - 10 - k.armH / 2, sz, 'cb', '', f()) + box(30, k.armH, 120, k.W / 2 - 15, FY - 10 - k.armH / 2, sz, 'cb', '', f());
-            h += box(SW, 36, 112, 0, FY - 10 - 18, sz, 'cb', '', f());
+            const fa = f(wr ? wr.arm + ',' : '');
+            h += box(30, k.armH, 120, -(k.W / 2 - 15), FY - 10 - k.armH / 2, sz, 'cb', '', fa) + box(30, k.armH, 120, k.W / 2 - 15, FY - 10 - k.armH / 2, sz, 'cb', '', fa);
+            h += box(SW, 36, 112, 0, FY - 10 - 18, sz, 'cb', '', f(wr ? wr.back + ',' : ''));
             h += box(SW, 14, 98, 0, seatTop - 7, sz - 6, 'cb', '', cush, cush);
             h += box(SW, k.backH, 28, 0, seatTop - 14 - k.backH / 2, sz + 42, 'cb', '', fb, f());
             return '<div class="bx" style="transform:scale3d(1.12,1.12,1.12);transform-origin:0 ' + FY + 'px ' + sz + 'px">' + h + '</div>';
