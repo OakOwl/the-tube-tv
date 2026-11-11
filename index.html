@@ -252,7 +252,7 @@
         .tv-shell {
             background: linear-gradient(160deg,#c8c8c0,#b0b0a8 30%,#989890 60%,#888880);
             border-radius: 12px 12px 16px 16px; padding: 14px 14px 12px;
-            box-shadow: 4px 4px 0 #707068,8px 8px 0 #606058,0 20px 60px rgba(0,0,0,.88),
+            box-shadow: var(--skinring, 0 0 0 0 transparent), 4px 4px 0 var(--skin-d1, #707068),8px 8px 0 var(--skin-d2, #606058),0 20px 60px rgba(0,0,0,.88),
                         inset 0 1px 0 rgba(255,255,255,.5),inset -2px -2px 0 rgba(0,0,0,.2);
             position: relative
         }
@@ -867,7 +867,7 @@
         @media (max-width: 639px) {
             .layout { grid-template-columns: minmax(0,1fr); grid-template-areas: "tv" "tabs" "side" "sched"; grid-template-rows: none; gap: 10px; padding: var(--sp-2) var(--sp-2) 0; }
             .tv-col { display: contents; }
-            .tv-shell { grid-area: tv; max-width: none; padding: 8px; border-radius: 10px; box-shadow: 0 0 0 8px var(--bg), 0 10px 24px rgba(0,0,0,.8); }
+            .tv-shell { grid-area: tv; max-width: none; padding: 8px; border-radius: 10px; box-shadow: var(--skinring, 0 0 0 0 transparent), 0 0 0 8px var(--bg), 0 10px 24px rgba(0,0,0,.8); }
             .tv-shell::before { display: none; }
             .tv-base, .src-note { display: none; }
             .schedule-widget-wrapper { grid-area: sched; margin: 0; }
@@ -949,7 +949,7 @@
         body.lights-down::before { opacity: .82; }
         .topbar, .layout > .ep-sidebar, .layout > .guide-col { transition: filter .45s ease, opacity .9s ease; }
         body.lights-down .topbar, body.lights-down .ep-sidebar, body.lights-down .guide-col { opacity: .16; filter: blur(2px); }
-        body.lights-down .tv-shell { box-shadow: 4px 4px 0 #707068, 8px 8px 0 #606058, 0 0 120px 20px var(--glow), 0 30px 80px rgba(0,0,0,.9), inset 0 1px 0 rgba(255,255,255,.5), inset -2px -2px 0 rgba(0,0,0,.2); }
+        body.lights-down .tv-shell { box-shadow: var(--skinring, 0 0 0 0 transparent), 4px 4px 0 var(--skin-d1, #707068), 8px 8px 0 var(--skin-d2, #606058), 0 0 120px 20px var(--glow), 0 30px 80px rgba(0,0,0,.9), inset 0 1px 0 rgba(255,255,255,.5), inset -2px -2px 0 rgba(0,0,0,.2); }
 
         /* TV sits on a wooden sideboard */
         .tv-shell { z-index: 3; transition: transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s ease; }
@@ -987,7 +987,7 @@
 
         /* hover spotlight: the TV lifts, the rest of the room blurs */
         @media (hover: hover) and (min-width: 861px) {
-            body.tv-spot .tv-shell { transform: translateY(-8px) scale(1.035); box-shadow: 4px 4px 0 #707068, 8px 8px 0 #606058, 0 0 90px 10px var(--glow), 0 40px 90px rgba(0,0,0,.92), inset 0 1px 0 rgba(255,255,255,.5), inset -2px -2px 0 rgba(0,0,0,.2); }
+            body.tv-spot .tv-shell { transform: translateY(-8px) scale(1.035); box-shadow: var(--skinring, 0 0 0 0 transparent), 4px 4px 0 var(--skin-d1, #707068), 8px 8px 0 var(--skin-d2, #606058), 0 0 90px 10px var(--glow), 0 40px 90px rgba(0,0,0,.92), inset 0 1px 0 rgba(255,255,255,.5), inset -2px -2px 0 rgba(0,0,0,.2); }
             body.tv-spot .topbar, body.tv-spot .ep-sidebar, body.tv-spot .guide-col { filter: blur(4px) brightness(.5); }
         }
         @media (max-width: 860px) { .tv-shell::after { display: none; } .tv-plate { display: none; } .guide-hdr { transform: none; } }
@@ -1175,7 +1175,7 @@
         body.room-dim::before { opacity: .86; }
         body.room-dim .topbar, body.room-dim .ep-sidebar, body.room-dim .guide-col { opacity: .14; }
         body.room-dim:not(.tv-spot) .topbar, body.room-dim:not(.tv-spot) .ep-sidebar, body.room-dim:not(.tv-spot) .guide-col { filter: blur(2px); }
-        body.room-dim .tv-shell { box-shadow: 4px 4px 0 #707068, 8px 8px 0 #606058, 0 0 120px 20px var(--glow), 0 30px 80px rgba(0,0,0,.9), inset 0 1px 0 rgba(255,255,255,.5), inset -2px -2px 0 rgba(0,0,0,.2); }
+        body.room-dim .tv-shell { box-shadow: var(--skinring, 0 0 0 0 transparent), 4px 4px 0 var(--skin-d1, #707068), 8px 8px 0 var(--skin-d2, #606058), 0 0 120px 20px var(--glow), 0 30px 80px rgba(0,0,0,.9), inset 0 1px 0 rgba(255,255,255,.5), inset -2px -2px 0 rgba(0,0,0,.2); }
 
         /* v44: a big bucket of popcorn slides in at the bottom-right once the curtains are closed */
         #popcorn { position: fixed; right: clamp(8px, 3vw, 52px); bottom: 12px; width: clamp(120px, 15vw, 200px); z-index: 52; pointer-events: none; opacity: 0;
@@ -1204,6 +1204,201 @@
         @keyframes tvHit { 0% { transform: translate(0,0) } 30% { transform: translate(-2px, 1px) } 65% { transform: translate(1.5px, -1px) } 100% { transform: translate(0,0) } }
         @media (prefers-reduced-motion: reduce) { #popcorn.pc-hint-on .pc-hint { animation: none; opacity: 1; } body.tv-hit .tv-shell { animation: none; } }
         @media (max-width: 639px) { .pc-hint { left: auto; right: 0; font-size: 16px; } @keyframes pcHintIn { 0% { opacity: 0; transform: translateY(8px) } 12%, 80% { opacity: 1; transform: translateY(0) } 100% { opacity: 0; transform: translateY(-6px) } } }
+
+        /* ================= v50: watch time, coins + treasure chest, skins ================= */
+        #tcHud { position: fixed; left: clamp(8px, 2vw, 28px); bottom: 12px; z-index: 52; display: flex; flex-direction: column; align-items: center; gap: 2px; width: auto; min-width: 92px; padding: 0; border: 0; background: none; cursor: pointer; -webkit-tap-highlight-color: transparent; transition: opacity .6s ease, transform .2s ease; }
+        #tcHud:hover { transform: translateY(-3px); } #tcHud:focus-visible { outline: 2px solid #f5a623; outline-offset: 3px; border-radius: 6px; }
+        #tcHud .ch-wrap { position: relative; display: block; width: 84px; filter: drop-shadow(0 6px 8px rgba(0,0,0,.6)); }
+        #tcHud svg { display: block; width: 100%; height: auto; overflow: visible; }
+        #tcHud .ch-lid { transform-origin: 10px 46px; transition: transform .22s cubic-bezier(.3,1.5,.5,1); }
+        #tcHud .ch-glow, #tcHud .ch-pile { opacity: 0; transition: opacity .2s ease; }
+        #tcHud.open .ch-lid { transform: translateY(-9px) rotate(-6deg); }
+        #tcHud.open .ch-glow { opacity: .95; } #tcHud.open .ch-pile { opacity: 1; }
+        #tcHud.bump .ch-wrap { animation: chBump .45s ease-out 1; }
+        @keyframes chBump { 0% { transform: scale(1) } 30% { transform: scale(1.1, .92) } 60% { transform: scale(.98, 1.04) } 100% { transform: scale(1) } }
+        #tcHud .ch-drop { position: absolute; left: 50%; top: -92px; width: 30px; height: 123px; margin-left: -15px; overflow: hidden; pointer-events: none; z-index: 2; }
+        #tcHud .ch-coin { position: absolute; left: 2px; top: 0; width: 26px; height: 26px; opacity: 0; }
+        #tcHud .ch-coin i { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; border-radius: 50%; font: 700 14px/1 'VT323', monospace; font-style: normal; color: #7a5410;
+            background: radial-gradient(circle at 35% 30%, #fff3b0, #f2c340 45%, #b8841c); box-shadow: inset 0 0 0 2px #e0a830, inset 0 0 0 4px #b8841c, 0 1px 2px rgba(0,0,0,.5); }
+        #tcHud.drop .ch-coin { animation: coinFall .85s cubic-bezier(.55,0,.8,.6) 1 forwards; }
+        #tcHud.drop .ch-coin i { animation: coinSpin .34s linear infinite; }
+        @keyframes coinFall { 0% { opacity: 1; transform: translateY(-4px) } 100% { opacity: 1; transform: translateY(126px) } }
+        @keyframes coinSpin { 0% { transform: scaleX(1) } 25% { transform: scaleX(.12) } 50% { transform: scaleX(-1) } 75% { transform: scaleX(.12) } 100% { transform: scaleX(1) } }
+        #tcHud .ch-plate { display: flex; flex-direction: column; align-items: center; align-self: stretch; min-width: 78px; padding: 3px 8px 4px; border: 1px solid #7a5a1c; border-radius: 4px; background: linear-gradient(#2a1a0a, #160d05); box-shadow: 0 2px 6px rgba(0,0,0,.6), inset 0 1px 0 rgba(255,220,160,.18); }
+        #tcHud .ch-plate b { font: 400 24px/1 'VT323', monospace; color: #ffd36a; letter-spacing: .06em; text-shadow: 0 0 8px rgba(255,190,60,.55); }
+        #tcHud .ch-plate b::before { content: '● '; font-size: 14px; color: #f2c340; vertical-align: 2px; }
+        #tcHud .ch-sub { font: 400 14px/1 'VT323', monospace; color: #c9a86a; letter-spacing: .08em; white-space: nowrap; }
+        #tcHud.tick .ch-plate b { animation: chTick .5s ease-out 1; }
+        @keyframes chTick { 0% { transform: scale(1) } 30% { transform: scale(1.35); color: #fff3b0 } 100% { transform: scale(1) } }
+        #tcHud .ch-plus { position: absolute; left: 50%; top: 20px; margin-left: -12px; font: 400 22px/1 'VT323', monospace; color: #fff3b0; text-shadow: 0 0 8px #f5a623, 0 2px 0 #000; opacity: 0; pointer-events: none; }
+        #tcHud.tick .ch-plus { animation: chPlus 1.1s ease-out 1; }
+        @keyframes chPlus { 0% { opacity: 0; transform: translateY(8px) } 15% { opacity: 1 } 100% { opacity: 0; transform: translateY(-34px) } }
+        body.room-dim #tcHud { opacity: .45; } body.room-dim #tcHud:hover { opacity: 1; }
+        @media (max-width: 639px) { #tcHud { bottom: 90px; min-width: 74px; } #tcHud .ch-wrap { width: 62px; } #tcHud .ch-drop { top: -74px; width: 24px; margin-left: -12px; height: 99px; } #tcHud .ch-coin { width: 20px; height: 20px; } #tcHud .ch-plate { min-width: 66px; } #tcHud .ch-plate b { font-size: 20px; } #tcHud .ch-sub { font-size: 12px; } }
+        @media (prefers-reduced-motion: reduce) { #tcHud.drop .ch-coin, #tcHud.drop .ch-coin i, #tcHud.bump .ch-wrap, #tcHud.tick .ch-plate b, #tcHud.tick .ch-plus { animation: none; } }
+
+        .tc-modal-bg { position: fixed; inset: 0; z-index: 10002; display: none; align-items: center; justify-content: center; padding: 20px; background: rgba(0,0,0,.86); }
+        .tc-modal-bg.show { display: flex; }
+        .tc-modal { width: 100%; max-width: 640px; max-height: 88vh; display: flex; flex-direction: column; overflow: hidden; border: 1px solid #5a3a1a; border-radius: 6px; background: linear-gradient(#1b130a, #0c0804); box-shadow: 0 24px 60px rgba(0,0,0,.8); }
+        .tc-hdr { display: flex; justify-content: space-between; align-items: center; padding: 12px 18px; border-bottom: 1px solid #2a1e00; background: #0d0a00; }
+        .tc-title { font: 400 var(--fs-lg, 26px)/1 'VT323', monospace; color: #f5a623; letter-spacing: .1em; }
+        .tc-close { font: 400 var(--fs-md, 20px)/1 'VT323', monospace; color: var(--text-dim); background: transparent; border: 0; cursor: pointer; letter-spacing: .1em; padding: 6px; }
+        .tc-close:hover { color: #f5a623; }
+        .tc-body { overflow-y: auto; padding: 16px 18px 20px; }
+        .tc-stats { display: flex; gap: 12px; margin-bottom: 8px; }
+        .tc-stat { flex: 1; padding: 10px 12px; border: 1px solid #3a2800; border-radius: 4px; background: #0f0b04; text-align: center; }
+        .tc-stat span { display: block; font: 400 14px/1 'VT323', monospace; color: #a8905f; letter-spacing: .14em; margin-bottom: 4px; }
+        .tc-stat b { font: 400 26px/1.1 'VT323', monospace; color: #ffd36a; letter-spacing: .06em; text-shadow: 0 0 8px rgba(255,190,60,.4); }
+        .tc-note { margin: 0 0 14px; font: 400 16px/1.3 'VT323', monospace; color: #a8905f; text-align: center; letter-spacing: .05em; }
+        .tc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 12px; }
+        .tc-card { display: flex; flex-direction: column; gap: 6px; padding: 10px; border: 1px solid #3a2800; border-radius: 5px; background: linear-gradient(#26231d, #121009); }
+        .tc-card.on { border-color: #f5a623; box-shadow: 0 0 12px rgba(245,166,35,.25); }
+        .tc-prev { position: relative; height: 74px; border-radius: 4px; background: radial-gradient(ellipse at 50% 60%, #2a1a0c, #0e0804); overflow: hidden; }
+        .tc-prev i { position: absolute; left: 50%; top: 50%; width: 92px; height: 58px; margin: -29px 0 0 -46px; border-radius: 6px 6px 8px 8px; background: var(--pv); box-shadow: var(--pr, none), 3px 3px 0 var(--pd, #707068); }
+        .tc-prev i::before { content: ''; position: absolute; left: 7px; top: 7px; width: 56px; height: 40px; border-radius: 4px; background: radial-gradient(ellipse at 35% 25%, #2d3a33, #0b100d 70%); box-shadow: inset 0 0 0 2px rgba(255,255,255,.18), inset 0 0 8px #000; }
+        .tc-prev i::after { content: ''; position: absolute; right: 7px; top: 12px; width: 14px; height: 14px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #888, #333); box-shadow: 0 20px 0 -2px #555, 0 -1px 0 1px rgba(255,255,255,.12); }
+        .tc-name { font: 400 22px/1 'VT323', monospace; color: #e8d3a0; letter-spacing: .05em; }
+        .tc-desc { font: 400 15px/1.2 'VT323', monospace; color: #a8905f; flex: 1; letter-spacing: .03em; }
+        .tc-btn { padding: 6px 8px; font: 400 18px/1 'VT323', monospace; letter-spacing: .1em; color: #120c00; background: #f5a623; border: 1px solid #f5a623; border-radius: 3px; cursor: pointer; }
+        .tc-btn:hover:not(:disabled) { background: #ffb938; }
+        .tc-btn:disabled { cursor: default; background: #2a2010; border-color: #3a2800; color: #7c6a44; }
+        .tc-btn.equipped { background: transparent; color: #7bd66b; border-color: #2c5a22; }
+
+        /* ---- skins ---- */
+        body.skin-wood .tv-shell { --skin-d1: #4a2c12; --skin-d2: #35200d;
+            background: linear-gradient(90deg, #c88a48, #8a5a2a 55%, #5a3618) left top / 9px 100% no-repeat, linear-gradient(270deg, #c88a48, #8a5a2a 55%, #5a3618) right top / 9px 100% no-repeat,
+                repeating-linear-gradient(92deg, rgba(0,0,0,.11) 0 2px, transparent 2px 7px, rgba(255,220,160,.07) 7px 8px, transparent 8px 17px),
+                linear-gradient(160deg, #b97d3f, #9a6430 35%, #7a4a22 65%, #603a1a); }
+        body.skin-wood .controls-panel { background: linear-gradient(180deg, #8d5c2c, #774a22); }
+        body.skin-wood .tv-brand-90s, body.skin-wood .tv-plate { color: #f3dca8; text-shadow: 0 1px 0 rgba(0,0,0,.55); }
+        body.skin-wood .screen-housing { box-shadow: 0 0 0 2px #f0d078, 0 0 0 3px #7a5a1c, 0 0 0 5px #c9a24a, 0 0 0 6px #5a3e10, inset 0 4px 8px rgba(0,0,0,.8); }
+
+        body.skin-neon .tv-shell { --skinring: 0 0 0 2px #ff2bd6, 0 0 20px 3px rgba(255,43,214,.6), 0 0 46px 8px rgba(0,229,255,.28); --skin-d1: #2a1346; --skin-d2: #1b0c30;
+            background: linear-gradient(90deg, #5a2a8a, #2d1650 60%, #1a0c30) left top / 9px 100% no-repeat, linear-gradient(270deg, #5a2a8a, #2d1650 60%, #1a0c30) right top / 9px 100% no-repeat,
+                linear-gradient(160deg, #2e2150, #1c1334 45%, #0f0a1d); }
+        body.skin-neon .controls-panel { background: linear-gradient(180deg, #1f1636, #150f26); box-shadow: inset 0 1px 0 rgba(0,229,255,.5), inset 0 2px 3px rgba(0,0,0,.4); }
+        body.skin-neon .tv-brand-90s { color: #ff7fe8; text-shadow: 0 0 8px #ff2bd6; }
+        body.skin-neon .tv-plate { color: #9a86e0; text-shadow: none; }
+        body.skin-neon .screen-housing { box-shadow: 0 0 0 2px #00e5ff, 0 0 0 3px #08323b, 0 0 14px 3px rgba(0,229,255,.55), inset 0 4px 8px rgba(0,0,0,.8); }
+
+        body.skin-red .tv-shell { --skin-d1: #7a1015; --skin-d2: #5a0b10;
+            background: linear-gradient(90deg, #f6ebc9, #d8c79c 55%, #b09c70) left top / 9px 100% no-repeat, linear-gradient(270deg, #f6ebc9, #d8c79c 55%, #b09c70) right top / 9px 100% no-repeat,
+                linear-gradient(160deg, #f0575c, #d4262e 35%, #b01c24 65%, #8d141b); }
+        body.skin-red .controls-panel { background: linear-gradient(180deg, #c42a32, #a81e26); }
+        body.skin-red .tv-brand-90s, body.skin-red .tv-plate { color: #fff0d0; text-shadow: 0 1px 0 rgba(0,0,0,.4); }
+
+        /* v50 polish: readable control labels on the dark/coloured skins, and a quieter chest on phones */
+        body.skin-wood .controls-panel, body.skin-neon .controls-panel, body.skin-red .controls-panel { color: #f3dca8; }
+        body.skin-wood .controls-panel .pwr-lbl, body.skin-wood .controls-panel .knob-unit span, body.skin-wood .controls-panel .static-lbl,
+        body.skin-red .controls-panel .pwr-lbl, body.skin-red .controls-panel .knob-unit span, body.skin-red .controls-panel .static-lbl { color: #fbeccb; text-shadow: 0 1px 0 rgba(0,0,0,.5); }
+        body.skin-neon .controls-panel .pwr-lbl, body.skin-neon .controls-panel .knob-unit span, body.skin-neon .controls-panel .static-lbl { color: #b9a6ff; }
+        @media (max-width: 639px) {
+            #tcHud { bottom: 12px; min-width: 0; gap: 1px; } #tcHud .ch-wrap { width: 46px; } #tcHud .ch-drop { top: -56px; height: 76px; width: 20px; margin-left: -10px; } #tcHud .ch-coin { width: 18px; height: 18px; }
+            #tcHud .ch-plate { min-width: 0; padding: 1px 7px 2px; } #tcHud .ch-sub { display: none; } #tcHud .ch-plate b { font-size: 20px; }
+            body.lights-down #tcHud { bottom: 92px; }
+            .tc-stat b { font-size: 22px; } .tc-title { font-size: 22px; }
+        }
+
+        /* ================= v51: more skins, by tier ================= */
+        .tc-tier { margin: 16px 0 8px; font: 400 18px/1 'VT323', monospace; letter-spacing: .24em; color: var(--tc); text-shadow: 0 0 10px color-mix(in srgb, var(--tc) 60%, transparent); display: flex; align-items: center; gap: 10px; }
+        .tc-tier::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, var(--tc), transparent); opacity: .5; }
+        .tc-tier:first-child { margin-top: 4px; }
+        .tc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 12px; }
+        .tc-grid .tc-tier { grid-column: 1 / -1; }
+        .tc-card { border-color: color-mix(in srgb, var(--tc, #3a2800) 45%, #2a1e00); }
+        .tc-card.t-epic { box-shadow: 0 0 14px color-mix(in srgb, var(--tc) 28%, transparent); }
+        .tc-card.t-legendary { box-shadow: 0 0 18px color-mix(in srgb, var(--tc) 38%, transparent), inset 0 0 22px color-mix(in srgb, var(--tc) 10%, transparent); }
+        .tc-card.on { border-color: #f5a623; }
+        .tc-btn.confirm { background: #ff6a3d; border-color: #ff6a3d; animation: tcPulse .7s ease-in-out infinite alternate; }
+        @keyframes tcPulse { from { filter: brightness(1) } to { filter: brightness(1.25) } }
+        .tc-prog { height: 5px; border-radius: 3px; background: #0b0803; border: 1px solid #2a1e00; overflow: hidden; }
+        .tc-prog i { display: block; height: 100%; background: linear-gradient(90deg, #b8841c, var(--tc, #f2c340)); }
+
+        /* animated layer: lives inside the shell, under the screen and controls, so the picture is never touched */
+        .skin-fx { position: absolute; inset: 0; z-index: -1; border-radius: inherit; overflow: hidden; pointer-events: none; display: none; }
+        .skin-fx::before, .skin-fx::after { content: ''; position: absolute; pointer-events: none; will-change: transform, opacity; }
+        body.skin-synth .skin-fx, body.skin-gold .skin-fx, body.skin-cosmic .skin-fx, body.skin-holo .skin-fx { display: block; }
+
+        /* shared label colours */
+        body.skin-mint .controls-panel .pwr-lbl, body.skin-mint .controls-panel .knob-unit span, body.skin-mint .controls-panel .static-lbl, body.skin-mint .tv-brand-90s, body.skin-mint .tv-plate { color: #0f3f3a; text-shadow: 0 1px 0 rgba(255,255,255,.35); }
+        body.skin-gold .controls-panel .pwr-lbl, body.skin-gold .controls-panel .knob-unit span, body.skin-gold .controls-panel .static-lbl, body.skin-gold .tv-brand-90s, body.skin-gold .tv-plate { color: #4a3004; text-shadow: 0 1px 0 rgba(255,245,190,.6); }
+        body.skin-holo .controls-panel .pwr-lbl, body.skin-holo .controls-panel .knob-unit span, body.skin-holo .controls-panel .static-lbl, body.skin-holo .tv-brand-90s, body.skin-holo .tv-plate { color: #3a2a5a; text-shadow: 0 1px 0 rgba(255,255,255,.6); }
+        body.skin-steam .controls-panel .pwr-lbl, body.skin-steam .controls-panel .knob-unit span, body.skin-steam .controls-panel .static-lbl { color: #fbe6b8; text-shadow: 0 1px 0 rgba(0,0,0,.55); } body.skin-steam .tv-brand-90s, body.skin-steam .tv-plate { color: #2a1608; text-shadow: 0 1px 0 rgba(255,225,160,.45); }
+        body.skin-synth .controls-panel .pwr-lbl, body.skin-synth .controls-panel .knob-unit span, body.skin-synth .controls-panel .static-lbl { color: #ffb3e6; }
+        body.skin-synth .tv-brand-90s { color: #ffd0f0; text-shadow: 0 0 8px #ff3da6; } body.skin-synth .tv-plate { color: #c8a0ff; text-shadow: none; }
+        body.skin-cosmic .controls-panel .pwr-lbl, body.skin-cosmic .controls-panel .knob-unit span, body.skin-cosmic .controls-panel .static-lbl { color: #b8c8ff; }
+        body.skin-cosmic .tv-brand-90s { color: #d8e0ff; text-shadow: 0 0 8px #6a7aff; } body.skin-cosmic .tv-plate { color: #98a8e8; text-shadow: none; }
+
+        /* Mint Diner (rare) */
+        body.skin-mint .tv-shell { --skin-d1: #2a7f78; --skin-d2: #1d5f5a;
+            background: linear-gradient(90deg, #fdf6e3, #e3d8b8 55%, #bfb08a) left top / 9px 100% no-repeat, linear-gradient(270deg, #fdf6e3, #e3d8b8 55%, #bfb08a) right top / 9px 100% no-repeat,
+                linear-gradient(180deg, transparent 0 94%, rgba(255,255,255,.7) 94% 96%, transparent 96%), linear-gradient(160deg, #a9ecdc, #6fd0be 35%, #4fb8a6 65%, #3a9a8a); }
+        body.skin-mint .controls-panel { background: linear-gradient(180deg, #58c3b1, #43a897); }
+        body.skin-mint .screen-housing { box-shadow: 0 0 0 2px #fff, 0 0 0 3px #7a8a88, 0 0 0 5px #e8f4f2, 0 0 0 6px #5a6a68, inset 0 4px 8px rgba(0,0,0,.8); }
+
+        /* Synthwave Sunset (epic) */
+        body.skin-synth .tv-shell { --skinring: 0 0 0 2px #ff3da6, 0 0 22px 3px rgba(255,61,166,.6), 0 0 52px 10px rgba(255,140,40,.3); --skin-d1: #2a0f45; --skin-d2: #1a0a30;
+            background: linear-gradient(90deg, #ff3da6, #6a1a90 60%, #2a0f45) left top / 9px 100% no-repeat, linear-gradient(270deg, #ff3da6, #6a1a90 60%, #2a0f45) right top / 9px 100% no-repeat,
+                repeating-linear-gradient(90deg, rgba(255,170,230,.28) 0 1px, transparent 1px 26px) 0 100% / 100% 30% no-repeat,
+                repeating-linear-gradient(0deg, rgba(255,170,230,.28) 0 1px, transparent 1px 10px) 0 100% / 100% 30% no-repeat,
+                linear-gradient(180deg, #1a0a30 0%, #2c1060 50%, #5a1a78 74%, #ff3da6 93%, #ffb347 100%); }
+        body.skin-synth .controls-panel { background: linear-gradient(180deg, #3a1470, #240c48); box-shadow: inset 0 1px 0 rgba(255,61,166,.7), inset 0 2px 3px rgba(0,0,0,.4); }
+        body.skin-synth .screen-housing { box-shadow: 0 0 0 2px #ffb347, 0 0 0 3px #3a0c40, 0 0 18px 4px rgba(255,61,166,.65), inset 0 4px 8px rgba(0,0,0,.8); }
+        body.skin-synth .skin-fx::before { left: 0; right: 0; top: 0; height: 22%; background: linear-gradient(transparent, rgba(255,90,200,.30), transparent); animation: fxScan 7s linear infinite; }
+        @keyframes fxScan { 0% { transform: translateY(-110%) } 100% { transform: translateY(520%) } }
+
+        /* Steampunk Brass (epic) */
+        body.skin-steam .tv-shell { --skinring: 0 0 0 2px #e6b866; --skin-d1: #4a2a10; --skin-d2: #2f1a0a;
+            background:
+                radial-gradient(circle at 50% 50%, #f8e0a0 0 1.6px, #4a2c0a 2.2px, transparent 3.4px) 5px 5px / 12px 12px no-repeat,
+                radial-gradient(circle at 50% 50%, #f8e0a0 0 1.6px, #4a2c0a 2.2px, transparent 3.4px) calc(100% - 5px) 5px / 12px 12px no-repeat,
+                radial-gradient(circle at 50% 50%, #f8e0a0 0 1.6px, #4a2c0a 2.2px, transparent 3.4px) 5px calc(100% - 5px) / 12px 12px no-repeat,
+                radial-gradient(circle at 50% 50%, #f8e0a0 0 1.6px, #4a2c0a 2.2px, transparent 3.4px) calc(100% - 5px) calc(100% - 5px) / 12px 12px no-repeat,
+                radial-gradient(circle at 50% 50%, #f8e0a0 0 1.6px, #4a2c0a 2.2px, transparent 3.4px) 50% 5px / 12px 12px no-repeat,
+                linear-gradient(90deg, #4a2c14, #2a180a) left top / 9px 100% no-repeat, linear-gradient(270deg, #4a2c14, #2a180a) right top / 9px 100% no-repeat,
+                repeating-linear-gradient(0deg, rgba(0,0,0,.08) 0 1px, transparent 1px 4px),
+                linear-gradient(160deg, #dcae60, #b88030 35%, #8e5e24 65%, #6a4418); }
+        body.skin-steam .controls-panel { background: linear-gradient(180deg, #7a4e1e, #5e3a14); box-shadow: inset 0 1px 0 rgba(255,225,160,.35), inset 0 2px 3px rgba(0,0,0,.35); }
+        body.skin-steam .screen-housing { box-shadow: 0 0 0 2px #f0c878, 0 0 0 3px #5a3a12, 0 0 0 6px #b0703a, 0 0 0 7px #3a2208, 0 0 0 9px #7aa890, inset 0 4px 8px rgba(0,0,0,.8); }
+
+        /* Gold Plated (epic) */
+        body.skin-gold .tv-shell { --skinring: 0 0 0 2px #ffe08a, 0 0 24px 4px rgba(255,200,60,.55), 0 0 60px 10px rgba(255,170,30,.25); --skin-d1: #8a6a10; --skin-d2: #5e4608;
+            background: linear-gradient(90deg, #7a5a0c, #4a3606) left top / 9px 100% no-repeat, linear-gradient(270deg, #7a5a0c, #4a3606) right top / 9px 100% no-repeat,
+                linear-gradient(160deg, #fff1b0, #f2c340 18%, #c8921c 40%, #f8da70 58%, #b8841c 78%, #e8b838); }
+        body.skin-gold .controls-panel { background: linear-gradient(180deg, #e0ae32, #bd8a20); box-shadow: inset 0 1px 0 rgba(255,250,200,.7), inset 0 2px 3px rgba(0,0,0,.25); }
+        body.skin-gold .screen-housing { box-shadow: 0 0 0 2px #fff6c8, 0 0 0 3px #8a6a10, 0 0 0 5px #f2c340, 0 0 0 6px #6a4c08, inset 0 4px 8px rgba(0,0,0,.8); }
+        body.skin-gold .skin-fx::before { top: -20%; bottom: -20%; left: -30%; width: 20%; background: linear-gradient(90deg, transparent, rgba(255,255,255,.75), transparent); transform: skewX(-20deg) translateX(-200%); animation: fxShine 5.5s ease-in-out infinite; }
+        @keyframes fxShine { 0%, 55% { transform: skewX(-20deg) translateX(-200%) } 100% { transform: skewX(-20deg) translateX(780%) } }
+        body.skin-gold .skin-fx::after { inset: 0;
+            background: radial-gradient(circle at 12% 18%, #fff 0 1.5px, transparent 2.5px), radial-gradient(circle at 88% 30%, #fff 0 1.5px, transparent 2.5px), radial-gradient(circle at 30% 92%, #fff 0 1.5px, transparent 2.5px), radial-gradient(circle at 74% 88%, #fff 0 1.5px, transparent 2.5px), radial-gradient(circle at 52% 6%, #fff 0 1.5px, transparent 2.5px);
+            animation: fxTwinkle 2.6s ease-in-out infinite alternate; }
+        @keyframes fxTwinkle { from { opacity: .15 } to { opacity: 1 } }
+
+        /* Cosmic Nebula (legendary) */
+        body.skin-cosmic .tv-shell { --skinring: 0 0 0 2px #7aa8ff, 0 0 26px 5px rgba(122,100,255,.6), 0 0 64px 12px rgba(0,200,255,.28); --skin-d1: #1a1450; --skin-d2: #0e0a30;
+            background:
+                radial-gradient(ellipse at 18% 14%, rgba(255,80,200,.55), transparent 50%), radial-gradient(ellipse at 88% 86%, rgba(0,200,255,.5), transparent 55%), radial-gradient(ellipse at 62% 32%, rgba(120,80,255,.45), transparent 60%),
+                linear-gradient(90deg, #5a4ad0, #1a1450 60%, #0e0a30) left top / 9px 100% no-repeat, linear-gradient(270deg, #5a4ad0, #1a1450 60%, #0e0a30) right top / 9px 100% no-repeat,
+                linear-gradient(160deg, #140c40, #0a0626 60%, #050314); }
+        body.skin-cosmic .controls-panel { background: linear-gradient(180deg, #1a1450, #0e0a30); box-shadow: inset 0 1px 0 rgba(122,168,255,.55), inset 0 2px 3px rgba(0,0,0,.4); }
+        body.skin-cosmic .screen-housing { box-shadow: 0 0 0 2px #7aa8ff, 0 0 0 3px #0a0626, 0 0 18px 4px rgba(122,100,255,.7), inset 0 4px 8px rgba(0,0,0,.8); }
+        body.skin-cosmic .skin-fx::before { inset: 0;
+            background: radial-gradient(circle at 8% 22%, #fff 0 1px, transparent 2px), radial-gradient(circle at 24% 80%, #cfe0ff 0 1px, transparent 2px), radial-gradient(circle at 42% 10%, #fff 0 1.2px, transparent 2.2px), radial-gradient(circle at 57% 92%, #fff 0 1px, transparent 2px),
+                radial-gradient(circle at 72% 18%, #d8c8ff 0 1px, transparent 2px), radial-gradient(circle at 90% 62%, #fff 0 1.3px, transparent 2.3px), radial-gradient(circle at 96% 12%, #fff 0 1px, transparent 2px), radial-gradient(circle at 4% 56%, #fff 0 1px, transparent 2px), radial-gradient(circle at 34% 44%, #fff 0 1px, transparent 2px);
+            animation: fxTwinkle 2.2s ease-in-out infinite alternate; }
+        body.skin-cosmic .skin-fx::after { left: 0; top: 0; width: 90px; height: 2px; border-radius: 2px; background: linear-gradient(90deg, transparent, #fff); transform: translate(-120px, 10%) rotate(28deg); opacity: 0; animation: fxShoot 8s ease-in infinite 2s; }
+        @keyframes fxShoot { 0% { opacity: 0; transform: translate(-120px, 6%) rotate(28deg) } 3% { opacity: 1 } 12% { opacity: 0; transform: translate(560px, 300px) rotate(28deg) } 100% { opacity: 0; transform: translate(560px, 300px) rotate(28deg) } }
+
+        /* Holographic Prism (legendary) */
+        body.skin-holo .tv-shell { --skinring: 0 0 0 2px #fff, 0 0 18px 3px rgba(255,154,213,.75), 0 0 38px 8px rgba(154,209,255,.55), 0 0 64px 14px rgba(182,255,207,.3); --skin-d1: #8a82b0; --skin-d2: #6a6290;
+            background: linear-gradient(90deg, #ffffff, #cfc8e8 55%, #9a92c0) left top / 9px 100% no-repeat, linear-gradient(270deg, #ffffff, #cfc8e8 55%, #9a92c0) right top / 9px 100% no-repeat, linear-gradient(160deg, #fff, #e8e0f5); }
+        body.skin-holo .controls-panel { background: linear-gradient(180deg, rgba(255,255,255,.55), rgba(215,205,240,.7)); box-shadow: inset 0 1px 0 #fff, inset 0 2px 3px rgba(0,0,0,.18); }
+        body.skin-holo .screen-housing { box-shadow: 0 0 0 2px #fff, 0 0 0 3px #8a82b0, 0 0 0 5px #f5e6ff, 0 0 0 6px #6a6290, 0 0 16px 4px rgba(154,209,255,.6), inset 0 4px 8px rgba(0,0,0,.8); }
+        body.skin-holo .skin-fx::before { top: 0; bottom: 0; left: 0; width: 300%; opacity: .88;
+            background: linear-gradient(115deg, #ff9ad5, #ffd29a 18%, #fff59a 32%, #b6ffcf 48%, #9ad1ff 64%, #c39aff 80%, #ff9ad5) 0 0 / 33.3333% 100% repeat-x; animation: fxHolo 9s linear infinite; }
+        @keyframes fxHolo { from { transform: translateX(0) } to { transform: translateX(-33.3333%) } }
+        body.skin-holo .skin-fx::after { top: -20%; bottom: -20%; left: -30%; width: 18%; background: linear-gradient(90deg, transparent, rgba(255,255,255,.8), transparent); transform: skewX(-20deg) translateX(-200%); animation: fxShine 6s ease-in-out infinite 1s; }
+        @media (prefers-reduced-motion: reduce) { .skin-fx::before, .skin-fx::after { animation: none !important; } }
 </style>
 </head>
 <body>
@@ -1232,6 +1427,20 @@
             <button class="hbtn help-btn" id="helpBtn" type="button" title="How to use The Tube" aria-label="Help"><span class="help-q">?</span><span class="help-word">HELP</span></button>
         </div>
     </header>
+    <button id="tcHud" type="button" title="Treasure chest: earn 1 coin for every minute you watch" aria-label="Open the treasure chest"><span class="ch-wrap"><span class="ch-drop" aria-hidden="true"><span class="ch-coin"><i>T</i></span></span><svg viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+<defs><clipPath id="chLidClip"><path d="M10 46 Q10 14 60 14 Q110 14 110 46 Z"/></clipPath>
+<radialGradient id="chGl"><stop offset="0" stop-color="#fff3b0"/><stop offset="1" stop-color="#f2a823" stop-opacity="0"/></radialGradient></defs>
+<ellipse cx="60" cy="95" rx="50" ry="5" fill="#000" opacity=".45"/>
+<ellipse class="ch-glow" cx="60" cy="40" rx="56" ry="26" fill="url(#chGl)"/>
+<g class="ch-pile" stroke="#b8841c" stroke-width="1.2" fill="#f2c340"><circle cx="34" cy="45" r="8"/><circle cx="50" cy="42" r="9"/><circle cx="68" cy="42" r="9"/><circle cx="84" cy="45" r="8"/><circle cx="59" cy="37" r="8" fill="#ffd96a"/></g>
+<rect x="10" y="46" width="100" height="46" rx="4" fill="#7a4a22" stroke="#3d240f" stroke-width="1.6"/>
+<path d="M10 61H110M10 76H110" stroke="#4b2c12" stroke-width="1.4"/><path d="M14 54H44M62 68H100M20 84H52M70 84H104" stroke="#9a6430" stroke-width="1" opacity=".6"/>
+<rect x="24" y="46" width="10" height="46" fill="#d9a53a" stroke="#7a5410" stroke-width="1.2"/><rect x="86" y="46" width="10" height="46" fill="#d9a53a" stroke="#7a5410" stroke-width="1.2"/>
+<rect x="52" y="52" width="16" height="19" rx="3" fill="#e8c25a" stroke="#7a5410" stroke-width="1.4"/><circle cx="60" cy="60" r="3" fill="#3d240f"/><rect x="58.8" y="61" width="2.4" height="6" fill="#3d240f"/>
+<g class="ch-lid"><path d="M10 46 Q10 14 60 14 Q110 14 110 46 Z" fill="#8e5a2a" stroke="#3d240f" stroke-width="1.6"/>
+<g clip-path="url(#chLidClip)"><rect x="24" y="10" width="10" height="40" fill="#d9a53a" stroke="#7a5410" stroke-width="1.2"/><rect x="86" y="10" width="10" height="40" fill="#d9a53a" stroke="#7a5410" stroke-width="1.2"/></g>
+<path d="M18 40 Q18 22 60 20" stroke="#c98a4a" stroke-width="3" fill="none" opacity=".5" stroke-linecap="round"/><rect x="8" y="43" width="104" height="5" rx="2" fill="#d9a53a" stroke="#7a5410" stroke-width="1.2"/></g>
+</svg></span><span class="ch-plus" aria-hidden="true">+1</span><span class="ch-plate"><b id="tcCoins">0</b><span class="ch-sub" id="tcTime">WATCHED 0S</span></span></button>
     <div id="popcorn" role="button" tabindex="-1" aria-label="Throw popcorn at the TV"><span class="pc-hint" aria-hidden="true">TAP THE POPCORN!</span><svg viewBox="0 0 200 260" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
 <defs><clipPath id="pcB"><path d="M38 110 L162 110 L146 244 Q145 250 138 250 L62 250 Q55 250 54 244 Z"/></clipPath>
 <linearGradient id="pcShade" x1="0" x2="1"><stop offset="0" stop-color="#000" stop-opacity=".35"/><stop offset=".3" stop-color="#fff" stop-opacity=".12"/><stop offset=".7" stop-color="#000" stop-opacity=".05"/><stop offset="1" stop-color="#000" stop-opacity=".4"/></linearGradient></defs>
@@ -2753,7 +2962,7 @@
         const arm = () => { clearTimeout(idleT); idleT = setTimeout(() => {
             if (body.classList.contains('lights-down') || body.classList.contains('room-dim')) return;
             if (Date.now() < quietUntil) { arm(); return; }
-            if (tvOn && vid && !vid.paused && !vid.ended && vid.getAttribute('src') && !document.querySelector('.modal-bg.show')) setRoom(true); else arm();
+            if (tvOn && vid && !vid.paused && !vid.ended && vid.getAttribute('src') && !document.querySelector('.modal-bg.show, .help-modal-bg.show, .cat-modal-bg.show, .tc-modal-bg.show')) setRoom(true); else arm();
         }, 6000); };
         ['mousemove', 'mousedown', 'keydown', 'touchstart', 'wheel'].forEach(ev => window.addEventListener(ev, () => {
             if (body.classList.contains('lights-down')) return;
@@ -2879,6 +3088,100 @@
             if (down) { loadPop(); readyT = setTimeout(() => { bucket.classList.add('pc-ready'); bucket.tabIndex = 0; if (hints < 2) { hints++; bucket.classList.remove('pc-hint-on'); void bucket.offsetWidth; bucket.classList.add('pc-hint-on'); } }, 2700); }
             else { bucket.classList.remove('pc-ready', 'pc-hint-on'); bucket.tabIndex = -1; }
         }).observe(body, { attributes: true, attributeFilter: ['class'] });
+    })();
+    </script>
+
+    <script>
+    // Watch time + coins + treasure chest + skins (v50). Stored per browser in localStorage (no accounts, no IP tracking).
+    (function () {
+        const KEY = 'thetube.v1', COIN_EVERY = 60;
+        const TIERS = { common: ['COMMON', '#a8a8a0'], rare: ['RARE', '#4aa8ff'], epic: ['EPIC', '#c07aff'], legendary: ['LEGENDARY', '#ffc83c'] };
+        const SKINS = [
+            { id: 'default', tier: 'common', name: 'Living Room Silver', price: 0, desc: 'The classic silver set with walnut cheeks.', pv: 'linear-gradient(160deg,#c8c8c0,#989890 60%,#888880)' },
+            { id: 'wood', tier: 'common', name: '70s Wood Grain', price: 30, desc: 'Walnut panels with brass trim.', pv: 'repeating-linear-gradient(92deg,rgba(0,0,0,.12) 0 2px,transparent 2px 7px),linear-gradient(160deg,#b97d3f,#7a4a22 65%,#603a1a)', pd: '#4a2c12' },
+            { id: 'neon', tier: 'rare', name: 'Neon Arcade', price: 60, desc: 'Dark chassis with glowing edges.', pv: 'linear-gradient(160deg,#2e2150,#0f0a1d)', pr: '0 0 0 2px #ff2bd6, 0 0 14px 2px rgba(255,43,214,.6)', pd: '#2a1346' },
+            { id: 'red', tier: 'rare', name: 'Candy Red', price: 90, desc: 'Glossy red plastic, cream trim.', pv: 'linear-gradient(160deg,#f0575c,#b01c24 65%,#8d141b)', pd: '#7a1015' },
+            { id: 'mint', tier: 'rare', name: 'Mint Diner', price: 120, desc: '50s milkshake-bar mint with chrome.', pv: 'linear-gradient(160deg,#9fe6d6,#4fb8a6 65%,#3a9a8a)', pd: '#2a7f78' },
+            { id: 'synth', tier: 'epic', name: 'Synthwave Sunset', price: 250, desc: 'Neon sunset, a glowing grid and a slow scan.', pv: 'linear-gradient(180deg,#1a0a30,#5a1a78 60%,#ff3da6 90%,#ffb347)', pr: '0 0 0 2px #ff3da6, 0 0 16px 3px rgba(255,61,166,.6)', pd: '#2a0f45' },
+            { id: 'steam', tier: 'epic', name: 'Steampunk Brass', price: 300, desc: 'Riveted brass plating and copper trim.', pv: 'radial-gradient(circle,#f6dc98 0 2px,transparent 3px) 6px 6px / 14px 14px no-repeat,linear-gradient(160deg,#d9a85a,#8a5a22 65%,#6a4418)', pd: '#4a2a10' },
+            { id: 'gold', tier: 'epic', name: 'Gold Plated', price: 500, desc: 'Polished gold with a shimmering shine.', pv: 'linear-gradient(160deg,#fff1b0,#f2c340 25%,#c8921c 50%,#f6d36a 70%,#b8841c)', pr: '0 0 0 2px #ffe08a, 0 0 16px 3px rgba(255,200,60,.6)', pd: '#8a6a10' },
+            { id: 'cosmic', tier: 'legendary', name: 'Cosmic Nebula', price: 800, desc: 'Twinkling stars and the odd shooting star.', pv: 'radial-gradient(ellipse at 20% 15%,rgba(255,80,200,.6),transparent 55%),radial-gradient(ellipse at 85% 85%,rgba(0,200,255,.55),transparent 55%),linear-gradient(160deg,#120a3a,#050314)', pr: '0 0 0 2px #7aa8ff, 0 0 16px 3px rgba(122,100,255,.6)', pd: '#1a1450' },
+            { id: 'holo', tier: 'legendary', name: 'Holographic Prism', price: 1200, desc: 'A living rainbow foil that never stops shifting.', pv: 'linear-gradient(115deg,#ff9ad5,#ffd29a 18%,#fff59a 32%,#b6ffcf 48%,#9ad1ff 64%,#c39aff 80%,#ff9ad5)', pr: '0 0 0 2px #fff, 0 0 16px 3px rgba(154,209,255,.7)', pd: '#6a6a8a' }
+        ];
+        let st = { secs: 0, earned: 0, spent: 0, owned: ['default'], skin: 'default' };
+        try { const raw = JSON.parse(localStorage.getItem(KEY) || 'null'); if (raw && typeof raw === 'object') st = Object.assign(st, raw); } catch (e) { }
+        if (!Array.isArray(st.owned) || !st.owned.includes('default')) st.owned = ['default'].concat(Array.isArray(st.owned) ? st.owned : []);
+        if (!SKINS.some(k => k.id === st.skin) || !st.owned.includes(st.skin)) st.skin = 'default';
+        const save = () => { try { localStorage.setItem(KEY, JSON.stringify(st)); } catch (e) { } };
+        const $ = id => document.getElementById(id), body = document.body, hud = $('tcHud'), vid = $('vid');
+        const coins = () => st.earned - st.spent;
+        const pad = n => String(n).padStart(2, '0');
+        const fmt = s => { const h = Math.floor(s / 3600), m = Math.floor(s % 3600 / 60), x = s % 60; return h ? h + 'H ' + pad(m) + 'M' : m ? m + 'M ' + pad(x) + 'S' : x + 'S'; };
+        const fmtLong = s => { const h = Math.floor(s / 3600), m = Math.floor(s % 3600 / 60); return (h ? h + (h === 1 ? ' hour ' : ' hours ') : '') + m + (m === 1 ? ' minute' : ' minutes'); };
+        const applySkin = () => { SKINS.forEach(k => body.classList.remove('skin-' + k.id)); if (st.skin !== 'default') body.classList.add('skin-' + st.skin); };
+        const render = () => { $('tcCoins').textContent = coins(); $('tcTime').textContent = 'WATCHED ' + fmt(st.secs); if (modal.classList.contains('show')) renderModal(); };
+
+        // ----- the coin drop -----
+        const flash = (cls, ms) => { hud.classList.remove(cls); void hud.offsetWidth; hud.classList.add(cls); setTimeout(() => hud.classList.remove(cls), ms); };
+        const earnCoin = () => {
+            st.earned++; flash('drop', 900);
+            setTimeout(() => { hud.classList.add('open'); flash('bump', 480); flash('tick', 1150); render(); }, 720);
+            setTimeout(() => hud.classList.remove('open'), 1250);
+            save();
+        };
+
+        // ----- count real watching only -----
+        setInterval(() => {
+            let playing = false;
+            try { playing = tvOn && vid && !vid.paused && !vid.ended && vid.readyState >= 3 && vid.getAttribute('src') && !document.hidden; } catch (e) { }
+            if (!playing) return;
+            st.secs++;
+            if (st.secs % COIN_EVERY === 0) earnCoin();
+            if (st.secs % 10 === 0) save();
+            $('tcTime').textContent = 'WATCHED ' + fmt(st.secs);
+            if (modal.classList.contains('show')) $('tcWatch').textContent = fmtLong(st.secs);
+        }, 1000);
+        window.addEventListener('pagehide', save); document.addEventListener('visibilitychange', () => { if (document.hidden) save(); });
+
+        // ----- the chest / skin shop -----
+        const modal = document.createElement('div'); modal.className = 'tc-modal-bg'; modal.id = 'tcModal';
+        modal.innerHTML = '<div class="tc-modal" role="dialog" aria-modal="true" aria-label="Treasure chest"><div class="tc-hdr"><span class="tc-title">🪙 TREASURE CHEST</span><button class="tc-close" id="tcClose" type="button">✕ CLOSE</button></div><div class="tc-body"><div class="tc-stats"><div class="tc-stat"><span>TOTAL WATCH TIME</span><b id="tcWatch"></b></div><div class="tc-stat"><span>COINS</span><b id="tcBal"></b></div></div><p class="tc-note">Earn 1 coin for every minute you watch. Spend them on TV skins.</p><div class="tc-grid" id="tcGrid"></div></div></div>';
+        document.body.appendChild(modal);
+        let pendingBuy = null, pendingT = 0;
+        const renderModal = () => {
+            $('tcWatch').textContent = fmtLong(st.secs); $('tcBal').textContent = coins();
+            let html = '';
+            Object.keys(TIERS).forEach(t => {
+                const list = SKINS.filter(k => k.tier === t); if (!list.length) return;
+                html += '<h3 class="tc-tier" style="--tc:' + TIERS[t][1] + '">' + TIERS[t][0] + '</h3>' + list.map(k => {
+                    const owned = st.owned.includes(k.id), on = st.skin === k.id, need = k.price - coins();
+                    const btn = on ? '<button class="tc-btn equipped" disabled>✓ EQUIPPED</button>' : owned ? '<button class="tc-btn" data-eq="' + k.id + '">EQUIP</button>'
+                        : need <= 0 ? '<button class="tc-btn' + (pendingBuy === k.id ? ' confirm' : '') + '" data-buy="' + k.id + '">' + (pendingBuy === k.id ? 'TAP AGAIN TO BUY' : 'BUY · ' + k.price + ' ●') + '</button>'
+                        : '<button class="tc-btn" disabled>🔒 ' + k.price + ' ● · ' + need + ' MORE</button><div class="tc-prog"><i style="width:' + Math.max(2, Math.min(100, coins() / k.price * 100)).toFixed(1) + '%"></i></div>';
+                    return '<div class="tc-card t-' + k.tier + (on ? ' on' : '') + '" style="--tc:' + TIERS[k.tier][1] + '"><div class="tc-prev"><i style="--pv:' + k.pv + ';--pr:' + (k.pr || 'none') + ';--pd:' + (k.pd || '#707068') + '"></i></div><div class="tc-name">' + k.name + '</div><div class="tc-desc">' + k.desc + '</div>' + btn + '</div>';
+                }).join('');
+            });
+            $('tcGrid').innerHTML = html;
+        };
+        const openShop = () => { renderModal(); modal.classList.add('show'); body.classList.remove('tv-spot'); };
+        const closeShop = () => { modal.classList.remove('show'); try { hud.focus({ preventScroll: true }); } catch (e) { } };
+        hud.addEventListener('click', () => { try { sndClick(); } catch (e) { } openShop(); });
+        $('tcClose').addEventListener('click', closeShop);
+        modal.addEventListener('click', e => { if (e.target === modal) closeShop(); });
+        window.addEventListener('keydown', e => { if (e.key === 'Escape' && modal.classList.contains('show')) { e.stopPropagation(); closeShop(); } }, true);
+        $('tcGrid').addEventListener('click', e => {
+            const t = e.target.closest('button'); if (!t) return;
+            if (t.dataset.eq) { st.skin = t.dataset.eq; applySkin(); save(); renderModal(); try { sndClick(); } catch (x) { } }
+            else if (t.dataset.buy) {
+                const k = SKINS.find(z => z.id === t.dataset.buy); if (!k || coins() < k.price || st.owned.includes(k.id)) return;
+                if (k.price >= 250 && pendingBuy !== k.id) { pendingBuy = k.id; clearTimeout(pendingT); pendingT = setTimeout(() => { pendingBuy = null; if (modal.classList.contains('show')) renderModal(); }, 4000); renderModal(); return; }
+                pendingBuy = null; clearTimeout(pendingT);
+                st.spent += k.price; st.owned.push(k.id); st.skin = k.id; applySkin(); save(); render(); renderModal();
+                try { showToast('Unlocked: ' + k.name + '!'); } catch (x) { }
+            }
+        });
+        const shellEl = document.querySelector('.tv-shell'); if (shellEl && !shellEl.querySelector('.skin-fx')) { const fx = document.createElement('div'); fx.className = 'skin-fx'; fx.setAttribute('aria-hidden', 'true'); shellEl.insertBefore(fx, shellEl.firstChild); }
+        applySkin(); render();
     })();
     </script>
 </body>
