@@ -1578,6 +1578,11 @@
         #dh .dc-fr { top: 100px; width: 26px; height: 48px; margin-left: -13px; background: repeating-linear-gradient(90deg, #ecc45a 0 2px, #7c5a1c 2px 4px); clip-path: polygon(30% 0, 70% 0, 100% 78%, 94% 100%, 6% 100%, 0 78%); }
         #dh .dc-fr::before { content: ''; position: absolute; left: 0; right: 0; top: 0; height: 14px; background: linear-gradient(90deg, #8a6418, #f0cd6a 50%, #8a6418); }
         @media (prefers-reduced-motion: reduce) { #dh .cf { transition: none; } #dh .cs, #dh .dc-in { animation: none; } }
+        #dh .dh-cb .cb-o { display: none; } #dh.drawn .dh-cb .cb-o { display: inline; } #dh.drawn .dh-cb .cb-c { display: none; }
+        #dh.drawn .dh-cb { background: #f5a623; color: #120c00; }
+        #dh .dh-cord::before { content: ''; position: absolute; left: -14px; right: -14px; top: 0; bottom: -10px; }
+        @media (max-width: 639px) { #dh .dh-cb .cb-c, #dh.drawn .dh-cb .cb-o { font-size: 0; } #dh .dh-cb .cb-c::before { content: '🎭'; font-size: 16px; } #dh.drawn .dh-cb .cb-o::before { content: '☀'; font-size: 16px; } }
+        #dh .cpan, #dh .cpan * { pointer-events: none; }
         #dh .stand { background: repeating-linear-gradient(92deg, rgba(0,0,0,.16) 0 2px, transparent 2px 9px), linear-gradient(#9a6630, #6e4620); }
         #dh .sp { position: absolute; left: 0; top: 0; filter: drop-shadow(0 8px 8px rgba(0,0,0,.45)); }
         #dh .sp svg { display: block; width: 100%; height: 100%; overflow: visible; }
@@ -3567,7 +3572,7 @@
         // The real TV screen (video, static, effects, on-screen text) is moved into the 3D TV while the room is open, so you watch the live picture there.
         const dh = document.createElement('div'); dh.id = 'dh'; dh.setAttribute('role', 'dialog'); dh.setAttribute('aria-modal', 'true'); dh.setAttribute('aria-label', 'Your room in 3D');
         dh.innerHTML = '<div class="dh-stage"><div class="dh-cam"><div class="dh-room"></div></div></div>'
-            + '<div class="dh-ui"><span class="dh-title">🏠 ROOM</span><button class="dh-b" data-d="watch" type="button">📺 WATCH</button><button class="dh-b" data-d="in" type="button" aria-label="Zoom in">＋</button><button class="dh-b" data-d="out" type="button" aria-label="Zoom out">－</button><button class="dh-b" data-d="reset" type="button">ROOM</button><button class="dh-b" data-d="close" type="button">✕ EXIT</button></div>'
+            + '<div class="dh-ui"><span class="dh-title">🏠 ROOM</span><button class="dh-b dh-cb" data-act="cord" type="button" aria-label="Curtains"><span class="cb-c">🎭 CURTAINS</span><span class="cb-o">☀ OPEN CURTAINS</span></button><button class="dh-b" data-d="watch" type="button">📺 WATCH</button><button class="dh-b" data-d="in" type="button" aria-label="Zoom in">＋</button><button class="dh-b" data-d="out" type="button" aria-label="Zoom out">－</button><button class="dh-b" data-d="reset" type="button">ROOM</button><button class="dh-b" data-d="close" type="button">✕ EXIT</button></div>'
             + '<div class="dh-remote"><button class="dh-b" data-r="pwrBtn" type="button" aria-label="Power">⏻</button><button class="dh-b" data-r="tRew" type="button" aria-label="Rewind 15 seconds">⏪</button><button class="dh-b" data-r="tPlay" type="button" aria-label="Play or pause">⏯</button><button class="dh-b" data-r="tFF" type="button" aria-label="Forward 15 seconds">⏩</button><button class="dh-b" data-d="guide" type="button">📋 GUIDE</button></div>'
             + '<div class="dh-drawer" role="region" aria-label="Programme guide"><div class="dh-dh">PROGRAMME GUIDE <button class="dh-x" data-d="guide" type="button" aria-label="Close guide">✕</button></div><div class="dh-list"></div></div>'
             + '<div class="dh-empty"></div><div class="dh-hint">DRAG TO LOOK AROUND · SCROLL OR PINCH TO ZOOM · ESC TO EXIT</div>';
