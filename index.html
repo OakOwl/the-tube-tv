@@ -1603,6 +1603,15 @@
         #dh .pk1 { opacity: 0; animation: pcHop 3.6s ease-out .4s infinite; } #dh .pk2 { opacity: 0; animation: pcHop 4.4s ease-out 1.6s infinite; } #dh .pk3 { opacity: 0; animation: pcHop 5.2s ease-out 2.8s infinite; }
         #dh .pc-lab { position: absolute; left: 50%; top: 28%; width: 38px; margin-left: -19px; padding: 2px 0 3px; text-align: center; font: 700 9px/1.05 'Special Elite', Impact, sans-serif; font-style: normal; color: #6d0a10; background: #ffd23c; border: 1.5px solid #6d0a10; border-radius: 3px; } #dh .pc-lab b { display: block; font-size: 12px; color: #b00f1b; }
         @media (hover: none) and (pointer: coarse) { #dh .pk1, #dh .pk2, #dh .pk3 { animation: none; } }
+        #dh .dr-pan { position: absolute; box-sizing: border-box; border: 2px solid #d4cdb9; border-radius: 2px; background: linear-gradient(160deg,#f2eee2,#fff); box-shadow: inset 0 0 4px rgba(0,0,0,.18); }
+        #dh .dh-sw { cursor: pointer; pointer-events: auto; } #dh .sw-plate { position: absolute; left: 7px; top: 8px; width: 16px; height: 30px; border-radius: 3px; background: linear-gradient(160deg,#fff,#d9d2bf); box-shadow: 0 0 0 1px #b8b09a, 0 1px 3px rgba(0,0,0,.5); }
+        #dh .sw-rock { position: absolute; left: 4px; top: 4px; width: 8px; height: 22px; border-radius: 2px; background: linear-gradient(90deg,#e8e2d2,#fff); box-shadow: inset 0 -9px 0 rgba(0,0,0,.12); transition: transform .12s ease; transform: perspective(40px) rotateX(-16deg); } #dh.lamp-off .sw-rock { transform: perspective(40px) rotateX(16deg); box-shadow: inset 0 9px 0 rgba(0,0,0,.12); }
+        #dh .lshade { background: linear-gradient(180deg,#fff1c4,#f4c96c); box-shadow: inset 0 0 8px rgba(255,255,255,.5); } #dh.lamp-off .lshade { background: linear-gradient(180deg,#b9a97c,#8e7e55); box-shadow: none; }
+        #dh .lbulbp { transition: opacity .3s; } #dh.lamp-off .lbulbp { opacity: 0; }
+        #dh .lcord { background: linear-gradient(180deg,rgba(20,20,20,0),#1c1c1c 35%); } #dh .lhalo { border-radius: 50%; background: radial-gradient(closest-side,rgba(255,226,150,.6),rgba(255,200,100,.18) 55%,transparent); transition: opacity .35s; } #dh.lamp-off .lhalo { opacity: 0; }
+        #dh .lpool { background: radial-gradient(closest-side,rgba(255,226,150,.42),rgba(255,210,120,.16) 55%,transparent); transition: opacity .35s; } #dh.lamp-off .lpool { opacity: 0; }
+        #dh .dh-dim { position: absolute; inset: 0; z-index: 2; pointer-events: none; opacity: 0; transition: opacity .5s ease; background: radial-gradient(ellipse 60% 55% at 50% 46%, rgba(4,6,22,.18), rgba(3,4,16,.62)); } #dh.lamp-off .dh-dim { opacity: 1; }
+        #dh .dh-ui, #dh .dh-remote, #dh .dh-drawer, #dh .dh-hint, #dh .dh-pick { z-index: 5; }
         #dh .stand { background: repeating-linear-gradient(92deg, rgba(0,0,0,.16) 0 2px, transparent 2px 9px), linear-gradient(#9a6630, #6e4620); }
         #dh .sp { position: absolute; left: 0; top: 0; filter: drop-shadow(0 8px 8px rgba(0,0,0,.45)); }
         #dh .sp svg { display: block; width: 100%; height: 100%; overflow: visible; }
@@ -3595,7 +3604,7 @@
             + '<div class="dh-ui"><span class="dh-title">🏠 ROOM</span><button class="dh-b dh-cb" data-act="cord" type="button" aria-label="Curtains"><span class="cb-c">🎭 CURTAINS</span><span class="cb-o">☀ OPEN CURTAINS</span></button><button class="dh-b" data-d="watch" type="button">📺 WATCH</button><button class="dh-b" data-d="in" type="button" aria-label="Zoom in">＋</button><button class="dh-b" data-d="out" type="button" aria-label="Zoom out">－</button><button class="dh-b" data-d="reset" type="button">ROOM</button><button class="dh-b" data-d="close" type="button">✕ EXIT</button></div>'
             + '<div class="dh-remote"><button class="dh-b" data-r="pwrBtn" type="button" aria-label="Power">⏻</button><button class="dh-b" data-r="tRew" type="button" aria-label="Rewind 15 seconds">⏪</button><button class="dh-b" data-r="tPlay" type="button" aria-label="Play or pause">⏯</button><button class="dh-b" data-r="tFF" type="button" aria-label="Forward 15 seconds">⏩</button><button class="dh-b" data-d="guide" type="button">📋 GUIDE</button></div>'
             + '<div class="dh-drawer" role="region" aria-label="Programme guide"><div class="dh-dh">PROGRAMME GUIDE <button class="dh-x" data-d="guide" type="button" aria-label="Close guide">✕</button></div><div class="dh-list"></div></div>'
-            + '<div class="dh-empty"></div><div class="dh-hint">DRAG TO LOOK AROUND · SCROLL OR PINCH TO ZOOM · TAP WALLS OR CURTAINS TO RECOLOUR · ESC TO EXIT</div>';
+            + '<div class="dh-dim"></div><div class="dh-empty"></div><div class="dh-hint">DRAG TO LOOK AROUND · SCROLL OR PINCH TO ZOOM · TAP WALLS OR CURTAINS TO RECOLOUR · ESC TO EXIT</div>';
         document.body.appendChild(dh);
         const cam = dh.querySelector('.dh-cam'), roomEl = dh.querySelector('.dh-room'), listEl = dh.querySelector('.dh-list');
         const V = { y: 22, p: -26, z: 0, ty: 40 }, V0 = { y: 22, p: -26, z: 0, ty: 40 };
@@ -3722,24 +3731,54 @@
         // red walls, a white window and velvet curtains behind the TV, with the same pull-tassel as the 2D page
         let drawn = false;
         const curtainsHtml = () => {
-            const RY = FY - (WH - 18), CH = WH - 24, Z = -298, rod = 'background:linear-gradient(#f0d070,#a8791c);';
+            const RY = FY - (WH - 18), CH = WH - 24, Z = -286, rod = 'background:linear-gradient(#f0d070,#a8791c);';
             const panel = side => { const L = side < 0; return '<div class="bx" style="transform:translate3d(' + (L ? -450 : 450) + 'px,' + (RY + 8 + CH / 2) + 'px,' + Z + 'px)">' + '<div class="pl cpan" style="width:456px;height:' + CH + 'px;margin:' + (-CH / 2) + 'px 0 0 ' + (L ? 0 : -456) + 'px;"><div class="cf ' + (L ? 'cl' : 'cr') + '"><div class="cs"></div></div></div></div>'; };
             let h = '';
-            h += box(900, 6, 10, 0, RY, -302, 'cb', '', rod, rod);
-            h += [-450, 450].map(x => box(16, 16, 16, x, RY, -302, 'cb', '', 'background:radial-gradient(circle at 35% 30%,#ffe9a8,#c89a34 55%,#6a4a12);')).join('');
+            h += box(900, 6, 10, 0, RY, -290, 'cb', '', rod, rod);
+            h += [-450, 450].map(x => box(16, 16, 16, x, RY, -290, 'cb', '', 'background:radial-gradient(circle at 35% 30%,#ffe9a8,#c89a34 55%,#6a4a12);')).join('');
             h += panel(-1) + panel(1);
             return h;
         };
-        const windowHtml = () => {
-            const W = 140, H = 150, X = 285, Y = FY - 260, Z = -306;
-            const panes = '<i class="dw-p" style="left:8px;top:8px;width:' + (W / 2 - 11) + 'px;height:' + (H / 2 - 11) + 'px"></i><i class="dw-p" style="left:' + (W / 2 + 3) + 'px;top:8px;width:' + (W / 2 - 11) + 'px;height:' + (H / 2 - 11) + 'px"></i><i class="dw-p" style="left:8px;top:' + (H / 2 + 3) + 'px;width:' + (W / 2 - 11) + 'px;height:' + (H / 2 - 11) + 'px"></i><i class="dw-p" style="left:' + (W / 2 + 3) + 'px;top:' + (H / 2 + 3) + 'px;width:' + (W / 2 - 11) + 'px;height:' + (H / 2 - 11) + 'px"></i>';
-            return plane(W + 70, H + 70, X, Y, Z - 1.5, 0, 0, '', '', 'pointer-events:none;background:radial-gradient(closest-side,rgba(255,250,225,.45),transparent);')
-                + plane(W, H, X, Y, Z, 0, 0, 'dwin', panes, '') + plane(W + 16, 8, X, Y + H / 2 + 4, Z + 3, 0, 0, '', '', 'background:linear-gradient(#fff,#cfc6b0);box-shadow:0 2px 4px rgba(0,0,0,.4);')
+        const windowHtml = (plantOn) => {
+            const W = 140, H = 150, X = 285, Y = FY - 260, Z = -306, wh = 'background:linear-gradient(160deg,#fffdf6,#d9d2bf);';
+            const panes = [[8, 8], [W / 2 + 3, 8], [8, H / 2 + 3], [W / 2 + 3, H / 2 + 3]].map(p => '<i class="dw-p" style="left:' + p[0] + 'px;top:' + p[1] + 'px;width:' + (W / 2 - 11) + 'px;height:' + (H / 2 - 11) + 'px"></i>').join('');
+            let h = plane(W + 90, H + 90, X, Y, Z - 1.5, 0, 0, '', '', 'pointer-events:none;background:radial-gradient(closest-side,rgba(255,250,225,.45),transparent);')
+                + plane(W, H, X, Y, Z, 0, 0, 'dwin', panes, '')
+                + box(10, H + 22, 12, X - W / 2 - 3, Y, -304, 'cb', '', wh, wh) + box(10, H + 22, 12, X + W / 2 + 3, Y, -304, 'cb', '', wh, wh) + box(W + 26, 11, 12, X, Y - H / 2 - 5, -304, 'cb', '', wh, wh)
+                + box(W + 44, 8, 20, X, Y + H / 2 + 3, -300, 'cb', '', wh, wh)
                 + plane(W * 1.35, 150, X + 6, FY - 4, -230, 90, 0, 'dlight', '', 'pointer-events:none;background:linear-gradient(105deg,rgba(255,250,225,.30),rgba(255,250,225,.06) 70%,transparent);clip-path:polygon(18% 0,82% 0,100% 100%,0 100%);');
+            if (plantOn && ITEM_BY.plant) h += '<div class="sp" style="width:58px;height:98px;margin:-98px 0 0 -29px;transform:translate3d(' + (X + 30) + 'px,' + (Y + H / 2 - 1) + 'px,-298px) rotateY(calc(var(--y) * -1))">' + itemSvg(ITEM_BY.plant) + '</div>';
+            return h;
+        };
+        // a white panelled door on the right wall, a light switch beside it and a pendant lamp you can switch on and off
+        let lampOn = true;
+        const doorHtml = () => {
+            const Z0 = 345, Dw = 96, Dh = 210, wh = 'background:linear-gradient(160deg,#ffffff,#e6e1d2);';
+            const pan = (w, h, x, y) => '<i class="dr-pan" style="left:' + x + 'px;top:' + y + 'px;width:' + w + 'px;height:' + h + 'px"></i>';
+            const inner = pan(30, 70, 11, 12) + pan(30, 70, 55, 12) + pan(30, 84, 11, 96) + pan(30, 84, 55, 96);
+            return plane(Dw + 14, Dh + 8, 447, FY - (Dh + 8) / 2, Z0, 0, -90, 'hid', '', wh + 'box-shadow:0 0 6px rgba(0,0,0,.35);')
+                + plane(Dw, Dh, 444, FY - Dh / 2, Z0, 0, -90, 'hid dr-door', inner, wh + 'box-shadow:inset 0 0 0 2px #d4cdb9;')
+                + box(6, 6, 6, 440, FY - 100, Z0 - 36, 'cb', '', 'background:radial-gradient(circle at 35% 30%,#ffe9a8,#b8892c);') + box(3, 22, 8, 441.5, FY - 100, Z0 - 36, 'cb', '', 'background:#c89a34;');
+        };
+        const switchHtml = () => '<div class="pl hid dh-sw" title="Light switch" style="width:30px;height:46px;margin:-23px 0 0 -15px;transform:translate3d(446px,' + (FY - 115) + 'px,272px) rotateY(-90deg)"><i class="sw-plate"><i class="sw-rock"></i></i></div>';
+        const pendantHtml = () => {
+            const PX = -260, PZ = 330, top = FY - WH + 30, cord = 110, sy = top + cord, SH = 34, TOP = 12, BOT = 36, tilt = Math.atan((BOT - TOP) / SH) * 180 / Math.PI, FH = SH / Math.cos(tilt * Math.PI / 180), mz = (TOP + BOT) / 2;
+            const face = 'clip-path:polygon(' + (50 - 50 * TOP / BOT).toFixed(1) + '% 0,' + (50 + 50 * TOP / BOT).toFixed(1) + '% 0,100% 100%,0 100%);';
+            let s = '';
+            for (let k = 0; k < 4; k++) s += '<div class="bx" style="transform:rotateY(' + k * 90 + 'deg)">' + plane(BOT * 2, FH, 0, sy + SH / 2, mz, tilt, 0, 'lshade', '', face) + '</div>';
+            s += plane(BOT * 2, BOT * 2, 0, sy + SH, 0, 90, 0, 'lbulbp', '', 'pointer-events:none;background:radial-gradient(closest-side,#fffbe6,#ffe9a8 55%,rgba(255,200,90,.0));');
+            const bb = (cls, w, hh, y, inner, st) => '<div class="sp ' + cls + '" style="width:' + w + 'px;height:' + hh + 'px;margin:' + (-hh / 2) + 'px 0 0 ' + (-w / 2) + 'px;transform:translate3d(0,' + y + 'px,0) rotateY(calc(var(--y) * -1));filter:none;pointer-events:none;' + (st || '') + '">' + (inner || '') + '</div>';
+            s += bb('lcord', 3, cord, top + cord / 2, '', '') + bb('lhalo', 230, 230, sy + SH + 6, '', '');
+            const pool = plane(480, 480, PX, FY - 6, PZ, 90, 0, 'lpool', '', 'pointer-events:none;');
+            return pool + '<div class="bx" style="transform:translate3d(' + PX + 'px,0,' + PZ + 'px)">' + s + '</div>';
+        };
+        const toggleLamp = on => {
+            lampOn = on == null ? !lampOn : on; dh.classList.toggle('lamp-off', !lampOn);
+            try { makeTone(1100, 420, .045, 'square', .09); makeNoise(.02, 2600, null, .6, .06); } catch (e) { }
         };
         const cordHtml = () => {
             const w = 36, hh = 150, X = -200, Y0 = FY - (WH - 18) + 4;
-            return '<div class="sp dh-cord" data-act="cord" title="Pull for curtains" style="width:' + w + 'px;height:' + hh + 'px;margin:0 0 0 ' + (-w / 2) + 'px;transform:translate3d(' + X + 'px,' + Y0 + 'px,-289px) rotateY(calc(var(--y) * -1));transform-origin:50% 0;filter:none"><span class="dc-in"><i class="dc-ros"></i><i class="dc-rope"></i><i class="dc-knob"></i><i class="dc-fr"></i></span></div>';
+            return '<div class="sp dh-cord" data-act="cord" title="Pull for curtains" style="width:' + w + 'px;height:' + hh + 'px;margin:0 0 0 ' + (-w / 2) + 'px;transform:translate3d(' + X + 'px,' + Y0 + 'px,-272px) rotateY(calc(var(--y) * -1));transform-origin:50% 0;filter:none"><span class="dc-in"><i class="dc-ros"></i><i class="dc-rope"></i><i class="dc-knob"></i><i class="dc-fr"></i></span></div>';
         };
         const toggleCurtains = on => {
             drawn = on == null ? !drawn : on; dh.classList.toggle('drawn', drawn);
@@ -3749,11 +3788,11 @@
         };
         // RGB corner floor lamp (always in the room): a slim black L-pole with a cyan-to-green LED strip washing the walls
         const ledLampHtml = () => {
-            const X = -396, Z = -284, PH = 330, LED = 'linear-gradient(180deg,#8ff6ff,#38f0c8 45%,#22e07a)', WASH = 'linear-gradient(180deg,rgba(127,240,255,.8),rgba(58,240,192,.95) 55%,rgba(34,224,122,1))';
+            const X = -396, Z = -268, PH = 330, LED = 'linear-gradient(180deg,#8ff6ff,#38f0c8 45%,#22e07a)', WASH = 'linear-gradient(180deg,rgba(127,240,255,.8),rgba(58,240,192,.95) 55%,rgba(34,224,122,1))';
             const mk = m => 'mask-image:' + m + ';-webkit-mask-image:' + m + ';';
             const maskB = mk('radial-gradient(ellipse 215px 335px at 54px 80%,#000 0,rgba(0,0,0,.92) 15%,rgba(0,0,0,.74) 30%,rgba(0,0,0,.5) 45%,rgba(0,0,0,.3) 60%,rgba(0,0,0,.15) 75%,rgba(0,0,0,.05) 90%,transparent 100%)');
             const maskL = mk('radial-gradient(ellipse 215px 335px at 246px 80%,#000 0,rgba(0,0,0,.92) 15%,rgba(0,0,0,.74) 30%,rgba(0,0,0,.5) 45%,rgba(0,0,0,.3) 60%,rgba(0,0,0,.15) 75%,rgba(0,0,0,.05) 90%,transparent 100%)');
-            let h = plane(300, WH, -300, FY - WH / 2, -295, 0, 0, 'ledw', '', 'pointer-events:none;background:' + WASH + ';' + maskB)
+            let h = plane(300, WH, -300, FY - WH / 2, -280, 0, 0, 'ledw', '', 'pointer-events:none;background:' + WASH + ';' + maskB)
                 + plane(300, WH, -443, FY - WH / 2, -160, 0, 90, 'ledw hid', '', 'pointer-events:none;background:' + WASH + ';' + maskL)
                 + plane(240, 240, X + 50, FY - 3, Z + 50, 90, 0, 'ledf', '', 'pointer-events:none;background:radial-gradient(closest-side,rgba(60,240,170,.5),rgba(60,220,200,.16) 60%,transparent);');
             h += '<div class="bx" style="transform:translate3d(' + X + 'px,0,' + Z + 'px)">' + box(5, PH, 5, 0, FY - PH / 2, 0, 'cb', '', 'background:#0c0c0e;')
@@ -3789,7 +3828,7 @@
             const scr = (lk.fx && srcFx ? srcFx.outerHTML : '') + (lk.ring && srcRing ? srcRing.outerHTML : '') + '<div class="tv-scr" style="' + (lk.trim ? 'box-shadow:' + lk.trim + ',0 0 34px rgba(255,170,70,.28);' : '') + '"></div><span class="tv-knob" style="left:316px;top:40px"></span><span class="tv-knob" style="left:316px;top:84px"></span><span class="tv-grille"></span><span class="tv-led"></span><span class="tv-brand" style="' + (lk.brand ? 'color:' + lk.brand + ';' : '') + '">NOSTALGIVISION</span>' + stk + riv;
             const front = 'background:' + sk.pv + ';' + (sk.pr ? 'box-shadow:' + sk.pr.split(/,(?![^(]*\))/)[0] + ';' : ''), side = 'background:linear-gradient(160deg,rgba(255,255,255,.12),rgba(0,0,0,.18)),' + (sk.pd || '#707068') + ';';
             let h = plane(900, 800, 0, FY, 90, 90, 0, 'w-floor') + plane(900, WH, 0, FY - WH / 2, -310, 0, 0, 'w-wall back hid') + plane(800, WH, -450, FY - WH / 2, 90, 0, 90, 'w-wall hid') + plane(800, WH, 450, FY - WH / 2, 90, 0, -90, 'w-wall hid');
-            h += windowHtml() + curtainsHtml() + ledLampHtml() + cordHtml() + wallShelfHtml();
+            h += windowHtml(have.includes('plant')) + curtainsHtml() + ledLampHtml() + cordHtml() + wallShelfHtml() + doorHtml() + switchHtml() + pendantHtml();
             h += '<div class="bx tvg" style="transform:scale3d(' + TVS + ',' + TVS + ',' + TVS + ');transform-origin:0 ' + FY + 'px -210px">' + box(400, 62, 180, 0, FY - 31, -210, 'stand', '') + box(360, 270, 170, 0, FY - 62 - 135, -215, 'tvbody', scr, front, side);
             if (lk.halo) h += plane(620, 480, 0, FY - 62 - 135, -132, 0, 0, '', '', 'pointer-events:none;background:radial-gradient(closest-side,rgba(' + lk.halo + ',.42),rgba(' + lk.halo + ',.14) 55%,transparent);');
             h += '</div>';
@@ -3797,9 +3836,9 @@
             if (have.includes('poster')) h += plane(104, 143, -446, -62, -120, 0, 90, 'hid', itemSvg(ITEM_BY.poster));
             if (have.includes('neon')) h += plane(140, 100, 446, -98, -60, 0, -90, 'hid neon-s', itemSvg(ITEM_BY.neon));
             if (have.includes('shelf')) h += plane(150, 112, -300, -195, -305, 0, 0, 'hid', itemSvg(ITEM_BY.shelf));
-            Object.keys(SP).forEach(id => { if (!have.includes(id)) return; const s = SP[id]; h += '<div class="sp" style="width:' + s[0] + 'px;height:' + s[1] + 'px;margin:' + (-s[1] / 2) + 'px 0 0 ' + (-s[0] / 2) + 'px;transform:translate3d(' + s[2] + 'px,' + (FY - s[1] / 2) + 'px,' + s[3] + 'px) rotateY(calc(var(--y) * -1))">' + itemSvg(ITEM_BY[id]) + '</div>'; });
+            Object.keys(SP).forEach(id => { if (!have.includes(id) || id === 'plant') return; const s = SP[id]; h += '<div class="sp" style="width:' + s[0] + 'px;height:' + s[1] + 'px;margin:' + (-s[1] / 2) + 'px 0 0 ' + (-s[0] / 2) + 'px;transform:translate3d(' + s[2] + 'px,' + (FY - s[1] / 2) + 'px,' + s[3] + 'px) rotateY(calc(var(--y) * -1))">' + itemSvg(ITEM_BY[id]) + '</div>'; });
             h += chestHtml() + tableHtml() + couchHtml(sofaPick()) + (have.includes('skate') ? plane(150, 62, 290, FY - 7, 60, 90, 0, '', itemSvg(ITEM_BY.skate, true)) : '');
-            roomEl.innerHTML = h; chestPlate(); dh.classList.toggle('drawn', drawn);
+            roomEl.innerHTML = h; chestPlate(); dh.classList.toggle('drawn', drawn); dh.classList.toggle('lamp-off', !lampOn);
             dh.querySelector('.dh-empty').textContent = have.length ? '' : 'Your room is empty. Buy room upgrades in the treasure chest to fill it.';
         };
         // colour wheel: tap a wall or a curtain to recolour it (free for everyone, remembered in this browser)
@@ -3845,6 +3884,7 @@
             if (!dh.classList.contains('show') || dh.classList.contains('guide')) return;
             const list = document.elementsFromPoint(x, y);
             for (const el of list) {
+                if (el.closest('.dh-sw')) { closePick(); toggleLamp(); return; }
                 if (el.closest('.dh-cord')) { closePick(); toggleCurtains(); return; }
                 if (el.closest('.dh-pick, .dh-ui, .dh-remote, .dh-drawer')) return;
                 if (el.closest('.chest')) { closePick(); openChestShop(); return; }
@@ -3888,6 +3928,7 @@
             if (e.key === 'Escape') { e.stopPropagation(); if (!pick.hidden) { closePick(); return; } if (dh.classList.contains('guide')) toggleGuide(false); else closeRoom(); return; }
             if (e.target && /INPUT|TEXTAREA/.test(e.target.tagName)) return;
             if (e.key === 'c' || e.key === 'C') { toggleCurtains(); return; }
+            if (e.key === 'l' || e.key === 'L') { toggleLamp(); return; }
             const k = { ArrowLeft: () => V.y -= 8, ArrowRight: () => V.y += 8, ArrowUp: () => V.p -= 5, ArrowDown: () => V.p += 5, '+': () => V.z += 90, '=': () => V.z += 90, '-': () => V.z -= 90 }[e.key];
             if (k) { e.preventDefault(); e.stopPropagation(); cancelAnimationFrame(tw); dh.cu = false; k(); applyV(); }
         }, true);
