@@ -1527,7 +1527,7 @@
         #dh .pl.hid { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
         #dh .pl svg { display: block; width: 100%; height: 100%; overflow: visible; }
         #dh .w-floor { background: repeating-linear-gradient(90deg, rgba(0,0,0,.28) 0 2px, transparent 2px 46px), repeating-linear-gradient(0deg, rgba(0,0,0,.12) 0 1px, transparent 1px 130px), linear-gradient(180deg, #7a5028, #5e3a1a); box-shadow: inset 0 0 60px rgba(0,0,0,.5); }
-        #dh .w-wall { background: repeating-linear-gradient(90deg, #5e0e17 0 26px, #560c14 26px 52px); box-shadow: inset 0 -30px 40px rgba(0,0,0,.35), inset 0 0 40px rgba(0,0,0,.4); }
+        #dh .w-wall { background: repeating-linear-gradient(90deg, var(--wall) 0 26px, color-mix(in srgb, var(--wall) 92%, #000) 26px 52px); box-shadow: inset 0 -30px 40px rgba(0,0,0,.35), inset 0 0 40px rgba(0,0,0,.4); }
         #dh .w-wall.back::after, #dh .w-wall::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 16px; background: linear-gradient(#e8dcc0, #b8a880); box-shadow: 0 -2px 0 rgba(0,0,0,.35); }
         #dh .tvf { box-sizing: border-box; border: 2px solid rgba(0,0,0,.55); }
         #dh .tv-scr { position: absolute; left: 22px; top: 22px; width: 270px; height: 202px; border-radius: 16px / 14px; background: #000; overflow: hidden; box-shadow: 0 0 0 5px rgba(0,0,0,.55), 0 0 34px rgba(255,170,70,.28); }
@@ -1567,7 +1567,7 @@
         #dh .cs { position: absolute; inset: 0; animation: cIdle 7s ease-in-out infinite; transform-origin: 50% 0;
             background: linear-gradient(180deg,rgba(0,0,0,.55) 0,rgba(0,0,0,.1) 12%,transparent 28%,transparent 80%,rgba(0,0,0,.4)),
                 repeating-linear-gradient(90deg,rgba(0,0,0,.5) 0,rgba(0,0,0,0) 14px,rgba(255,140,120,.22) 27px,rgba(0,0,0,0) 38px,rgba(0,0,0,.45) 58px),
-                linear-gradient(90deg,#8a0f18,#b01a22 45%,#7a0c14); box-shadow: inset 0 -10px 0 #c9a24a, 0 0 18px rgba(0,0,0,.6); }
+                linear-gradient(90deg,color-mix(in srgb,var(--curt) 80%,#000),var(--curt) 45%,color-mix(in srgb,var(--curt) 68%,#000)); box-shadow: inset 0 -10px 0 #c9a24a, 0 0 18px rgba(0,0,0,.6); }
         #dh .cpel { background: linear-gradient(#a1161c,#5a0a10); box-shadow: 0 3px 6px rgba(0,0,0,.5); }
         #dh .dh-cord { cursor: pointer; pointer-events: auto; } #dh .dc-in { display: block; position: relative; width: 100%; height: 100%; filter: drop-shadow(2px 4px 3px rgba(0,0,0,.55)); transform-origin: 50% 0; animation: cordSwing 5.2s ease-in-out infinite; }
         #dh .dc-in i { position: absolute; left: 50%; display: block; } #dh .dc-in.tug { animation: cordTug .6s cubic-bezier(.3,.1,.3,1) 1, cordSwing 5.2s ease-in-out .6s infinite; }
@@ -1582,7 +1582,16 @@
         #dh.drawn .dh-cb { background: #f5a623; color: #120c00; }
         #dh .dh-cord::before { content: ''; position: absolute; left: -14px; right: -14px; top: 0; bottom: -10px; }
         @media (max-width: 639px) { #dh .dh-cb .cb-c, #dh.drawn .dh-cb .cb-o { font-size: 0; } #dh .dh-cb .cb-c::before { content: '🎭'; font-size: 16px; } #dh.drawn .dh-cb .cb-o::before { content: '☀'; font-size: 16px; } }
-        #dh .cpan, #dh .cpan * { pointer-events: none; }
+        #dh { --wall: #5e0e17; --curt: #b01a22; } #dh .w-wall, #dh .cs { cursor: pointer; }
+        #dh .dh-pick { position: absolute; z-index: 6; width: 232px; box-sizing: border-box; padding: 10px; background: rgba(18,12,4,.94); border: 1px solid #c47d0e; border-radius: 4px; box-shadow: 0 8px 30px rgba(0,0,0,.7), 0 0 16px rgba(255,140,40,.25); font-family: 'VT323', monospace; color: #ffe2a8; touch-action: none; }
+        #dh .dh-pick[hidden] { display: none; } #dh .dp-h { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; } #dh .dp-t { font-weight: 400; font-size: 20px; letter-spacing: .12em; color: #f5a623; }
+        #dh .dp-x, #dh .dp-rs { font: 400 16px/1 'VT323', monospace; color: #ffe2a8; background: #1c1306; border: 1px solid #7a5a1c; border-radius: 3px; padding: 4px 8px; cursor: pointer; } #dh .dp-x:hover, #dh .dp-rs:hover { background: #f5a623; color: #120c00; }
+        #dh .dp-wheel { position: relative; width: 150px; height: 150px; margin: 0 auto 10px; border-radius: 50%; cursor: crosshair; touch-action: none; background: radial-gradient(circle closest-side, #fff, rgba(255,255,255,0)), conic-gradient(from 90deg, #f00, #ff0, #0f0, #0ff, #00f, #f0f, #f00); box-shadow: 0 0 0 2px #7a5a1c; }
+        #dh .dp-wheel::after { content: ''; position: absolute; inset: 0; border-radius: 50%; background: #000; opacity: var(--dv, 0); pointer-events: none; }
+        #dh .dp-dot { position: absolute; z-index: 1; width: 16px; height: 16px; margin: -8px 0 0 -8px; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 0 0 1.5px #000, 0 1px 4px rgba(0,0,0,.6); pointer-events: none; }
+        #dh .dp-v input { width: 100%; margin: 0 0 8px; accent-color: #f5a623; } #dh .dp-row { display: flex; gap: 6px; align-items: center; margin-bottom: 8px; }
+        #dh .dp-sw { width: 26px; height: 26px; border-radius: 3px; border: 1px solid #7a5a1c; flex: none; } #dh .dp-hex { flex: 1; min-width: 0; font: 400 18px/1 'VT323', monospace; letter-spacing: .08em; color: #ffe2a8; background: #0c0803; border: 1px solid #7a5a1c; border-radius: 3px; padding: 4px 6px; }
+        #dh .dp-pre { display: grid; grid-template-columns: repeat(6, 1fr); gap: 5px; } #dh .dp-pre button { height: 22px; border: 1px solid rgba(255,255,255,.25); border-radius: 3px; cursor: pointer; padding: 0; } #dh .dp-pre button:hover { outline: 2px solid #f5a623; }
         #dh .stand { background: repeating-linear-gradient(92deg, rgba(0,0,0,.16) 0 2px, transparent 2px 9px), linear-gradient(#9a6630, #6e4620); }
         #dh .sp { position: absolute; left: 0; top: 0; filter: drop-shadow(0 8px 8px rgba(0,0,0,.45)); }
         #dh .sp svg { display: block; width: 100%; height: 100%; overflow: visible; }
@@ -3575,7 +3584,7 @@
             + '<div class="dh-ui"><span class="dh-title">🏠 ROOM</span><button class="dh-b dh-cb" data-act="cord" type="button" aria-label="Curtains"><span class="cb-c">🎭 CURTAINS</span><span class="cb-o">☀ OPEN CURTAINS</span></button><button class="dh-b" data-d="watch" type="button">📺 WATCH</button><button class="dh-b" data-d="in" type="button" aria-label="Zoom in">＋</button><button class="dh-b" data-d="out" type="button" aria-label="Zoom out">－</button><button class="dh-b" data-d="reset" type="button">ROOM</button><button class="dh-b" data-d="close" type="button">✕ EXIT</button></div>'
             + '<div class="dh-remote"><button class="dh-b" data-r="pwrBtn" type="button" aria-label="Power">⏻</button><button class="dh-b" data-r="tRew" type="button" aria-label="Rewind 15 seconds">⏪</button><button class="dh-b" data-r="tPlay" type="button" aria-label="Play or pause">⏯</button><button class="dh-b" data-r="tFF" type="button" aria-label="Forward 15 seconds">⏩</button><button class="dh-b" data-d="guide" type="button">📋 GUIDE</button></div>'
             + '<div class="dh-drawer" role="region" aria-label="Programme guide"><div class="dh-dh">PROGRAMME GUIDE <button class="dh-x" data-d="guide" type="button" aria-label="Close guide">✕</button></div><div class="dh-list"></div></div>'
-            + '<div class="dh-empty"></div><div class="dh-hint">DRAG TO LOOK AROUND · SCROLL OR PINCH TO ZOOM · ESC TO EXIT</div>';
+            + '<div class="dh-empty"></div><div class="dh-hint">DRAG TO LOOK AROUND · SCROLL OR PINCH TO ZOOM · TAP WALLS OR CURTAINS TO RECOLOUR · ESC TO EXIT</div>';
         document.body.appendChild(dh);
         const cam = dh.querySelector('.dh-cam'), roomEl = dh.querySelector('.dh-room'), listEl = dh.querySelector('.dh-list');
         const V = { y: 22, p: -26, z: 0, ty: 0 }, V0 = { y: 22, p: -26, z: 0, ty: 0 };
@@ -3748,11 +3757,56 @@
             roomEl.innerHTML = h; chestPlate(); dh.classList.toggle('drawn', drawn);
             dh.querySelector('.dh-empty').textContent = have.length ? '' : 'Your room is empty. Buy room upgrades in the treasure chest to fill it.';
         };
+        // colour wheel: tap a wall or a curtain to recolour it (free for everyone, remembered in this browser)
+        const COLKEY = 'thetube.roomcolors.v1', COLDEF = { wall: '#5e0e17', curt: '#b01a22' };
+        let cols = { ...COLDEF }; try { Object.assign(cols, JSON.parse(localStorage.getItem(COLKEY) || '{}')); } catch (e) { }
+        const applyCols = () => { dh.style.setProperty('--wall', cols.wall); dh.style.setProperty('--curt', cols.curt); try { localStorage.setItem(COLKEY, JSON.stringify(cols)); } catch (e) { } };
+        applyCols();
+        const hex2hsv = h => { const n = parseInt(h.slice(1), 16), r = (n >> 16 & 255) / 255, g = (n >> 8 & 255) / 255, b = (n & 255) / 255, mx = Math.max(r, g, b), mn = Math.min(r, g, b), d = mx - mn; let hh = 0; if (d) { hh = mx === r ? ((g - b) / d) % 6 : mx === g ? (b - r) / d + 2 : (r - g) / d + 4; hh *= 60; if (hh < 0) hh += 360; } return { h: hh, s: mx ? d / mx : 0, v: mx }; };
+        const hsv2hex = (h, s, v) => { const f = n => { const k = (n + h / 60) % 6, x = v - v * s * Math.max(0, Math.min(k, 4 - k, 1)); return Math.round(x * 255).toString(16).padStart(2, '0'); }; return '#' + f(5) + f(3) + f(1); };
+        const SWATCH = ['#5e0e17', '#7a1020', '#c0392b', '#e08a2e', '#e9c46a', '#2f6f4f', '#1f7a8c', '#274690', '#5a3a8a', '#b04fa0', '#f2e6d0', '#2b2b33'];
+        const pick = document.createElement('div'); pick.className = 'dh-pick'; pick.hidden = true;
+        pick.innerHTML = '<div class="dp-h"><b class="dp-t">WALLPAPER</b><button type="button" class="dp-x" aria-label="Close">✕</button></div><div class="dp-wheel"><i class="dp-dot"></i></div><div class="dp-v"><input type="range" min="8" max="100" value="100" aria-label="Brightness"></div><div class="dp-row"><span class="dp-sw"></span><input class="dp-hex" type="text" maxlength="7" spellcheck="false" aria-label="Hex colour"><button type="button" class="dp-rs">RESET</button></div><div class="dp-pre">' + SWATCH.map(c => '<button type="button" style="background:' + c + '" data-c="' + c + '" aria-label="' + c + '"></button>').join('') + '</div>';
+        dh.appendChild(pick);
+        const pkw = pick.querySelector('.dp-wheel'), pkdot = pick.querySelector('.dp-dot'), pkv = pick.querySelector('input[type=range]'), pkhex = pick.querySelector('.dp-hex'), pksw = pick.querySelector('.dp-sw');
+        let ptarget = 'wall', hsv = { h: 0, s: 1, v: 1 };
+        const paintPick = (fromHex) => {
+            const hx = hsv2hex(hsv.h, hsv.s, hsv.v); cols[ptarget] = hx; applyCols();
+            const r = pkw.clientWidth / 2, a = hsv.h * Math.PI / 180; pkdot.style.left = (r + Math.cos(a) * hsv.s * r) + 'px'; pkdot.style.top = (r + Math.sin(a) * hsv.s * r) + 'px';
+            pkw.style.setProperty('--dv', (1 - hsv.v).toFixed(3)); pkv.value = Math.round(hsv.v * 100); pksw.style.background = hx; if (!fromHex) pkhex.value = hx;
+        };
+        const setFromHex = hx => { hsv = hex2hsv(hx); paintPick(); };
+        const wheelAt = e => { const b = pkw.getBoundingClientRect(), r = b.width / 2, dx = e.clientX - b.x - r, dy = e.clientY - b.y - r; let h = Math.atan2(dy, dx) * 180 / Math.PI; if (h < 0) h += 360; hsv.h = h; hsv.s = Math.min(1, Math.hypot(dx, dy) / r); paintPick(); };
+        pkw.addEventListener('pointerdown', e => { e.stopPropagation(); pkw.setPointerCapture(e.pointerId); wheelAt(e); pkw.onpointermove = wheelAt; });
+        pkw.addEventListener('pointerup', e => { pkw.onpointermove = null; });
+        pkv.addEventListener('input', () => { hsv.v = pkv.value / 100; paintPick(); });
+        pkhex.addEventListener('input', () => { const v = pkhex.value.trim(); if (/^#?[0-9a-fA-F]{6}$/.test(v)) { hsv = hex2hsv(v[0] === '#' ? v : '#' + v); paintPick(true); } });
+        pick.querySelector('.dp-rs').addEventListener('click', () => setFromHex(COLDEF[ptarget]));
+        pick.querySelector('.dp-x').addEventListener('click', () => closePick());
+        pick.querySelector('.dp-pre').addEventListener('click', e => { const b = e.target.closest('[data-c]'); if (b) setFromHex(b.dataset.c); });
+        const closePick = () => { pick.hidden = true; };
+        const openPick = (which, x, y) => {
+            ptarget = which; pick.querySelector('.dp-t').textContent = which === 'wall' ? 'WALLPAPER' : 'CURTAINS'; pick.hidden = false;
+            const W = window.innerWidth, H = window.innerHeight, pw0 = 232, ph0 = 330; pick.style.left = Math.max(8, Math.min(x + 14, W - pw0 - 8)) + 'px'; pick.style.top = Math.max(8, Math.min(y + 14, H - ph0 - 8)) + 'px';
+            setFromHex(cols[which]);
+        };
+        const tapAt = (x, y) => {
+            if (!dh.classList.contains('show') || dh.classList.contains('guide')) return;
+            const list = document.elementsFromPoint(x, y);
+            for (const el of list) {
+                if (el.closest('.dh-cord')) { closePick(); toggleCurtains(); return; }
+                if (el.closest('.dh-pick, .dh-ui, .dh-remote, .dh-drawer')) return;
+                if (el.closest('.cpan')) { openPick('curt', x, y); return; }
+                if (el.closest('.w-wall')) { openPick('wall', x, y); return; }
+                if (el.closest('.dh-room') && !el.closest('.dwin')) { closePick(); return; }
+            }
+            closePick();
+        };
         const toggleGuide = on => { dh.classList.toggle('guide', on == null ? !dh.classList.contains('guide') : on); if (dh.classList.contains('guide')) buildGuide(); };
         const openRoom = () => { if (!st) return; closeShop(); returnScreen(); buildRoom(); takeScreen(); toggleGuide(false); Object.assign(V, V0); applyV(); dh.classList.add('show'); body.classList.remove('tv-spot'); const b = dh.querySelector('[data-d=close]'); try { b.focus({ preventScroll: true }); } catch (e) { } };
-        const closeRoom = () => { cancelAnimationFrame(tw); dh.classList.remove('show'); dh.classList.remove('guide'); returnScreen(); };
+        const closeRoom = () => { closePick(); cancelAnimationFrame(tw); dh.classList.remove('show'); dh.classList.remove('guide'); returnScreen(); };
         const pts = new Map(); let pinch0 = 0, z0 = 0;
-        const noDrag = t => t.closest('.dh-ui, .dh-remote, .dh-drawer, .tv-scr, .dh-cord');
+        const noDrag = t => t.closest('.dh-ui, .dh-remote, .dh-drawer, .tv-scr, .dh-pick');
         dh.addEventListener('pointerdown', e => { if (noDrag(e.target)) return; cancelAnimationFrame(tw); pts.set(e.pointerId, { x: e.clientX, y: e.clientY }); dh.classList.add('drag'); try { dh.setPointerCapture(e.pointerId); } catch (er) { } if (pts.size === 2) { const [a, b] = [...pts.values()]; pinch0 = Math.hypot(a.x - b.x, a.y - b.y); z0 = V.z; } });
         dh.addEventListener('pointermove', e => {
             const p = pts.get(e.pointerId); if (!p) return;
@@ -3762,6 +3816,9 @@
             applyV();
         });
         const endPtr = e => { pts.delete(e.pointerId); if (!pts.size) dh.classList.remove('drag'); };
+        let tap0 = null;
+        dh.addEventListener('pointerdown', e => { tap0 = (!noDrag(e.target) && e.isPrimary) ? { x: e.clientX, y: e.clientY, t: performance.now() } : null; }, true);
+        dh.addEventListener('pointerup', e => { const t = tap0; tap0 = null; if (!t || Math.hypot(e.clientX - t.x, e.clientY - t.y) > 6 || performance.now() - t.t > 600) return; tapAt(e.clientX, e.clientY); });
         dh.addEventListener('pointerup', endPtr); dh.addEventListener('pointercancel', endPtr);
         dh.addEventListener('wheel', e => { if (e.target.closest('.dh-drawer')) return; e.preventDefault(); cancelAnimationFrame(tw); V.z -= e.deltaY * .9; applyV(); }, { passive: false });
         dh.addEventListener('click', e => {
@@ -3775,7 +3832,7 @@
         });
         window.addEventListener('keydown', e => {
             if (!dh.classList.contains('show')) return;
-            if (e.key === 'Escape') { e.stopPropagation(); if (dh.classList.contains('guide')) toggleGuide(false); else closeRoom(); return; }
+            if (e.key === 'Escape') { e.stopPropagation(); if (!pick.hidden) { closePick(); return; } if (dh.classList.contains('guide')) toggleGuide(false); else closeRoom(); return; }
             if (e.target && /INPUT|TEXTAREA/.test(e.target.tagName)) return;
             if (e.key === 'c' || e.key === 'C') { toggleCurtains(); return; }
             const k = { ArrowLeft: () => V.y -= 8, ArrowRight: () => V.y += 8, ArrowUp: () => V.p -= 5, ArrowDown: () => V.p += 5, '+': () => V.z += 90, '=': () => V.z += 90, '-': () => V.z -= 90 }[e.key];
