@@ -1521,7 +1521,7 @@
         #dh { position: fixed; inset: 0; z-index: 99999; display: none; background: radial-gradient(ellipse at 50% 38%, #3a2a24 0%, #170f0c 62%, #090605 100%); overflow: hidden; touch-action: none; user-select: none; -webkit-user-select: none; cursor: grab; }
         #dh.show { display: block; } #dh.drag { cursor: grabbing; }
         #dh .dh-stage { position: absolute; left: 50%; top: 52%; width: 0; height: 0; perspective: 1500px; }
-        #dh .dh-cam { position: absolute; left: 0; top: 0; width: 0; height: 0; transform-style: preserve-3d; transform: scale(var(--sc, 1)) translateZ(var(--z, 0px)) rotateX(var(--p, -24deg)) rotateY(var(--y, 0deg)); }
+        #dh .dh-cam { position: absolute; left: 0; top: 0; width: 0; height: 0; transform-style: preserve-3d; transform: translateY(var(--ty, 0px)) scale(var(--sc, 1)) rotateX(var(--p, -24deg)) rotateY(var(--y, 0deg)); }
         #dh .dh-room, #dh .bx { position: absolute; left: 0; top: 0; width: 0; height: 0; transform-style: preserve-3d; }
         #dh .pl { position: absolute; left: 0; top: 0; transform-style: preserve-3d; }
         #dh .pl.hid { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
@@ -1530,18 +1530,11 @@
         #dh .w-wall { background: repeating-linear-gradient(90deg, #4a3560 0 26px, #43305a 26px 52px); box-shadow: inset 0 -30px 40px rgba(0,0,0,.35), inset 0 0 40px rgba(0,0,0,.4); }
         #dh .w-wall.back::after, #dh .w-wall::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 16px; background: linear-gradient(#e8dcc0, #b8a880); box-shadow: 0 -2px 0 rgba(0,0,0,.35); }
         #dh .tvf { box-sizing: border-box; border: 2px solid rgba(0,0,0,.55); }
-        #dh .tv-scr { position: absolute; left: 22px; top: 20px; width: 190px; height: 142px; border-radius: 22px / 18px; background: #06100a; overflow: hidden; box-shadow: inset 0 0 22px #000, 0 0 0 5px rgba(0,0,0,.5), 0 0 28px rgba(255,170,70,.35); }
-        #dh .tv-scr i { position: absolute; inset: 0; }
-        #dh .tv-scr .a { background: repeating-linear-gradient(0deg, rgba(255,255,255,.07) 0 2px, transparent 2px 4px), radial-gradient(ellipse at 50% 45%, #2b4a38, #0a160f 80%); }
-        #dh .tv-scr .b { background: linear-gradient(180deg, transparent 40%, rgba(255,190,100,.16) 50%, transparent 60%); animation: dhRoll 3.2s linear infinite; }
-        #dh .tv-scr .c { background: repeating-radial-gradient(circle at 30% 40%, rgba(255,255,255,.05) 0 1px, transparent 1px 3px); animation: dhNoise .25s steps(3) infinite; }
-        #dh .tv-scr b { position: absolute; left: 0; right: 0; top: 50%; transform: translateY(-50%); text-align: center; font: 400 22px/1 'VT323', monospace; letter-spacing: .08em; color: #ffd68a; text-shadow: 0 0 8px rgba(255,170,70,.9); padding: 0 8px; }
-        #dh .tv-scr small { position: absolute; left: 10px; top: 8px; font: 400 14px/1 'VT323', monospace; color: #7aff9a; text-shadow: 0 0 6px rgba(80,255,140,.8); }
-        @keyframes dhRoll { from { transform: translateY(-100%); } to { transform: translateY(100%); } }
-        @keyframes dhNoise { 0% { transform: translate(0,0); } 33% { transform: translate(-3px,2px); } 66% { transform: translate(2px,-3px); } }
-        #dh .tv-knob { position: absolute; width: 18px; height: 18px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #d8d8d0, #55554e); border: 1px solid #222; bottom: 26px; }
-        #dh .tv-led { position: absolute; width: 10px; height: 10px; border-radius: 50%; background: #ff3a2a; box-shadow: 0 0 8px #ff3a2a; right: 22px; bottom: 30px; }
-        #dh .tv-grille { position: absolute; right: 52px; bottom: 22px; width: 36px; height: 22px; background: repeating-linear-gradient(0deg, rgba(0,0,0,.55) 0 2px, transparent 2px 5px); }
+        #dh .tv-scr { position: absolute; left: 22px; top: 22px; width: 270px; height: 202px; border-radius: 16px / 14px; background: #000; overflow: hidden; box-shadow: 0 0 0 5px rgba(0,0,0,.55), 0 0 34px rgba(255,170,70,.28); }
+        #dh .tv-knob { position: absolute; width: 22px; height: 22px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #d8d8d0, #55554e); border: 1px solid #222; box-shadow: 0 2px 3px rgba(0,0,0,.5); }
+        #dh .tv-led { position: absolute; width: 11px; height: 11px; border-radius: 50%; background: #ff3a2a; box-shadow: 0 0 8px #ff3a2a; left: 322px; top: 134px; }
+        #dh .tv-grille { position: absolute; left: 306px; top: 160px; width: 42px; height: 54px; background: repeating-linear-gradient(0deg, rgba(0,0,0,.55) 0 2px, transparent 2px 6px); }
+        #dh .tv-brand { position: absolute; left: 24px; bottom: 12px; font: 400 13px/1 'VT323', monospace; letter-spacing: .3em; color: rgba(0,0,0,.55); }
         #dh .stand { background: repeating-linear-gradient(92deg, rgba(0,0,0,.16) 0 2px, transparent 2px 9px), linear-gradient(#9a6630, #6e4620); }
         #dh .sp { position: absolute; left: 0; top: 0; filter: drop-shadow(0 8px 8px rgba(0,0,0,.45)); }
         #dh .sp svg { display: block; width: 100%; height: 100%; overflow: visible; }
@@ -1553,9 +1546,19 @@
         #dh .dh-title { font: 400 26px/1 'VT323', monospace; letter-spacing: .12em; color: #ffd36a; text-shadow: 0 0 10px rgba(245,166,35,.5); margin-right: auto; }
         #dh .dh-b { font: 400 20px/1 'VT323', monospace; letter-spacing: .08em; color: #ffd36a; background: linear-gradient(#2a1a0a, #160d05); border: 1px solid #7a5a1c; border-radius: 4px; padding: 8px 12px; cursor: pointer; min-width: 40px; }
         #dh .dh-b:hover { color: #fff3b0; border-color: #f5a623; } #dh .dh-b:focus-visible { outline: 2px solid #f5a623; outline-offset: 2px; }
-        #dh .dh-hint { position: absolute; left: 0; right: 0; bottom: 14px; text-align: center; font: 400 18px/1.2 'VT323', monospace; letter-spacing: .06em; color: rgba(255,226,168,.65); pointer-events: none; padding: 0 12px; }
-        #dh .dh-empty { position: absolute; left: 0; right: 0; bottom: 48px; text-align: center; font: 400 20px/1.2 'VT323', monospace; color: #ffd36a; pointer-events: none; padding: 0 16px; }
-        @media (max-width: 639px) { #dh .dh-title { font-size: 0; } #dh .dh-title::first-letter { font-size: 24px; } #dh .dh-b { white-space: nowrap; } #dh .dh-stage { top: 47%; } #dh .dh-b { min-width: 0; } #dh .dh-b { padding: 8px 10px; font-size: 18px; } }
+        #dh .dh-remote { position: absolute; left: 0; right: 0; bottom: 44px; display: flex; justify-content: center; gap: 8px; padding: 0 10px; pointer-events: none; flex-wrap: wrap; }
+        #dh .dh-remote > * { pointer-events: auto; }
+        #dh .dh-drawer { position: absolute; top: 64px; right: 12px; bottom: 96px; width: min(360px, calc(100vw - 24px)); display: none; flex-direction: column; background: rgba(14,9,5,.96); border: 1px solid #7a5a1c; border-radius: 6px; box-shadow: 0 10px 30px rgba(0,0,0,.6); cursor: default; }
+        #dh.guide .dh-drawer { display: flex; }
+        #dh .dh-dh { display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; font: 400 20px/1 'VT323', monospace; letter-spacing: .12em; color: #ffd36a; border-bottom: 1px solid #4b3a18; }
+        #dh .dh-x { font: 400 18px/1 'VT323', monospace; color: #ffd36a; background: none; border: 1px solid #7a5a1c; border-radius: 4px; padding: 4px 8px; cursor: pointer; }
+        #dh .dh-list { flex: 1; overflow-y: auto; overscroll-behavior: contain; padding: 6px; }
+        #dh .dh-li { display: grid; grid-template-columns: 62px 26px 1fr; align-items: center; gap: 6px; width: 100%; text-align: left; padding: 8px 8px; margin: 0 0 3px; background: #1d130a; border: 1px solid #3a2a12; border-radius: 4px; color: #e8d3a0; font: 400 17px/1.15 'VT323', monospace; cursor: pointer; }
+        #dh .dh-li b { font-weight: 400; color: #fff0c8; } #dh .dh-li:hover, #dh .dh-li:focus-visible { border-color: #f5a623; background: #2a1c0c; outline: none; }
+        #dh .dh-none { color: #a8905f; font: 400 18px/1.3 'VT323', monospace; padding: 10px; }
+        #dh .dh-hint { position: absolute; left: 0; right: 0; bottom: 12px; text-align: center; font: 400 18px/1.2 'VT323', monospace; letter-spacing: .06em; color: rgba(255,226,168,.65); pointer-events: none; padding: 0 12px; }
+        #dh .dh-empty { position: absolute; left: 0; right: 0; bottom: 92px; text-align: center; font: 400 20px/1.2 'VT323', monospace; color: #ffd36a; pointer-events: none; padding: 0 16px; }
+        @media (max-width: 639px) { #dh .dh-ui { gap: 5px; padding: 10px 8px; } #dh .dh-b { padding: 8px 7px; font-size: 16px; } #dh .dh-hint { display: none; } #dh .dh-remote { bottom: 16px; } #dh .dh-title { display: none; } #dh .dh-ui { justify-content: flex-end; flex-wrap: wrap; } #dh .dh-b { white-space: nowrap; } #dh .dh-stage { top: 47%; } #dh .dh-b { min-width: 0; } #dh .dh-b { padding: 8px 10px; font-size: 18px; } }
         @media (prefers-reduced-motion: reduce) { .room-items .ri, #dh .lv, #dh .tv-scr .b, #dh .tv-scr .c { animation: none !important; } }
 </style>
 </head>
@@ -3508,16 +3511,28 @@
         };
 
         // ================= DOLLHOUSE: zoom out, orbit and zoom around your room in 3D =================
+        // The real TV screen (video, static, effects, on-screen text) is moved into the 3D TV while the room is open, so you watch the live picture there.
         const dh = document.createElement('div'); dh.id = 'dh'; dh.setAttribute('role', 'dialog'); dh.setAttribute('aria-modal', 'true'); dh.setAttribute('aria-label', 'Your room in 3D');
-        dh.innerHTML = '<div class="dh-stage"><div class="dh-cam"><div class="dh-room"></div></div></div><div class="dh-ui"><span class="dh-title">🏠 ROOM</span><button class="dh-b" data-d="in" type="button" aria-label="Zoom in">＋</button><button class="dh-b" data-d="out" type="button" aria-label="Zoom out">－</button><button class="dh-b" data-d="reset" type="button">RESET</button><button class="dh-b" data-d="close" type="button">✕ EXIT</button></div><div class="dh-empty"></div><div class="dh-hint">DRAG TO LOOK AROUND · SCROLL OR PINCH TO ZOOM · ESC TO EXIT</div>';
+        dh.innerHTML = '<div class="dh-stage"><div class="dh-cam"><div class="dh-room"></div></div></div>'
+            + '<div class="dh-ui"><span class="dh-title">🏠 ROOM</span><button class="dh-b" data-d="watch" type="button">📺 WATCH</button><button class="dh-b" data-d="in" type="button" aria-label="Zoom in">＋</button><button class="dh-b" data-d="out" type="button" aria-label="Zoom out">－</button><button class="dh-b" data-d="reset" type="button">ROOM</button><button class="dh-b" data-d="close" type="button">✕ EXIT</button></div>'
+            + '<div class="dh-remote"><button class="dh-b" data-r="pwrBtn" type="button" aria-label="Power">⏻</button><button class="dh-b" data-r="tRew" type="button" aria-label="Rewind 15 seconds">⏪</button><button class="dh-b" data-r="tPlay" type="button" aria-label="Play or pause">⏯</button><button class="dh-b" data-r="tFF" type="button" aria-label="Forward 15 seconds">⏩</button><button class="dh-b" data-d="guide" type="button">📋 GUIDE</button></div>'
+            + '<div class="dh-drawer" role="region" aria-label="Programme guide"><div class="dh-dh">PROGRAMME GUIDE <button class="dh-x" data-d="guide" type="button" aria-label="Close guide">✕</button></div><div class="dh-list"></div></div>'
+            + '<div class="dh-empty"></div><div class="dh-hint">DRAG TO LOOK AROUND · SCROLL OR PINCH TO ZOOM · ESC TO EXIT</div>';
         document.body.appendChild(dh);
-        const cam = dh.querySelector('.dh-cam'), roomEl = dh.querySelector('.dh-room');
-        const V = { y: 22, p: -26, z: 0 }, V0 = { y: 22, p: -26, z: 0 };
-        const clampV = () => { V.p = Math.max(-82, Math.min(-4, V.p)); V.z = Math.max(-500, Math.min(650, V.z)); };
+        const cam = dh.querySelector('.dh-cam'), roomEl = dh.querySelector('.dh-room'), listEl = dh.querySelector('.dh-list');
+        const V = { y: 22, p: -26, z: 0, ty: 0 }, V0 = { y: 22, p: -26, z: 0, ty: 0 };
+        const clampV = () => { V.p = Math.max(-82, Math.min(-2, V.p)); V.z = Math.max(-420, Math.min(900, V.z)); };
+        const baseSc = () => Math.max(.5, Math.min(1.35, Math.min(window.innerWidth, window.innerHeight * 1.5) / (window.innerWidth < 640 ? 840 : 960)));
         const applyV = () => {
-            clampV(); const w = Math.min(window.innerWidth, window.innerHeight * 1.5);
-            cam.style.setProperty('--sc', Math.max(.5, Math.min(1.35, w / (window.innerWidth < 640 ? 760 : 860))).toFixed(3));
-            cam.style.setProperty('--y', V.y.toFixed(2) + 'deg'); cam.style.setProperty('--p', V.p.toFixed(2) + 'deg'); cam.style.setProperty('--z', V.z.toFixed(0) + 'px');
+            clampV(); cam.style.setProperty('--sc', (baseSc() * Math.exp(V.z / 500)).toFixed(4));
+            cam.style.setProperty('--y', V.y.toFixed(2) + 'deg'); cam.style.setProperty('--p', V.p.toFixed(2) + 'deg'); cam.style.setProperty('--ty', V.ty.toFixed(0) + 'px');
+        };
+        let tw = 0;
+        const tweenTo = T => { cancelAnimationFrame(tw); const from = { ...V }, t0 = performance.now(), D = 650; const step = now => { const u = Math.min(1, (now - t0) / D), e = u < .5 ? 2 * u * u : 1 - Math.pow(-2 * u + 2, 2) / 2; ['y', 'p', 'z', 'ty'].forEach(k => { V[k] = from[k] + (T[k] - from[k]) * e; }); applyV(); if (u < 1) tw = requestAnimationFrame(step); }; tw = requestAnimationFrame(step); };
+        const SCR = { w: 270, h: 202, cy: -109, cz: -40 };         // the TV screen in room coordinates
+        const closeUp = () => {                                       // camera preset that fills the view with the screen (zoom is a real scale, so it stays sharp)
+            const vw = window.innerWidth, vh = window.innerHeight, target = Math.min(vw * (vw < 640 ? .96 : .8), vh * (vw < 640 ? .6 : .68) * 4 / 3), f = 1500 / (1500 - SCR.cz), sct = target / (SCR.w * f);
+            return { y: 0, p: -2, z: 500 * Math.log(sct / baseSc()), ty: -SCR.cy * sct * f - 26 };
         };
         const FY = 100;                                       // floor height in the room's coordinates
         const plane = (w, h, x, y, z, rx, ry, cls, inner, extra) => '<div class="pl ' + (cls || '') + '" style="width:' + w + 'px;height:' + h + 'px;margin:' + (-h / 2) + 'px 0 0 ' + (-w / 2) + 'px;transform:translate3d(' + x + 'px,' + y + 'px,' + z + 'px) rotateX(' + (rx || 0) + 'deg) rotateY(' + (ry || 0) + 'deg);' + (extra || '') + '">' + (inner || '') + '</div>';
@@ -3525,26 +3540,46 @@
             + plane(w, h, 0, 0, d / 2, 0, 0, cls + ' tvf', face, extra) + plane(w, h, 0, 0, -d / 2, 0, 180, cls + ' tvf', '', extra)
             + plane(d, h, -w / 2, 0, 0, 0, -90, cls + ' tvf', '', extra) + plane(d, h, w / 2, 0, 0, 0, 90, cls + ' tvf', '', extra)
             + plane(w, d, 0, -h / 2, 0, 90, 0, cls + ' tvf', '', extra) + plane(w, d, 0, h / 2, 0, -90, 0, cls + ' tvf', '', extra) + '</div>';
-        const SP = { plant: [78, 143, -255, -10], lamp: [73, 195, -200, -150], arcade: [105, 225, 235, -150], beanbag: [170, 105, 190, 80], lava: [70, 140, 150, -20] };
+        const SP = { plant: [78, 143, -305, -20], lamp: [73, 195, -295, -170], arcade: [105, 225, 300, -165], beanbag: [170, 105, 235, 105], lava: [70, 140, 215, -35] };
+        let moved = null;
+        const takeScreen = () => {
+            const wrap = $('screenWrap'), host = roomEl.querySelector('.tv-scr'); if (!wrap || !host || moved) return;
+            const r = wrap.getBoundingClientRect(), w = Math.round(r.width) || 568, h = Math.round(r.height) || 426;
+            const ph = document.createElement('div'); ph.style.cssText = 'width:' + w + 'px;height:' + h + 'px;'; wrap.parentNode.insertBefore(ph, wrap);
+            moved = { wrap, ph, style: wrap.getAttribute('style') };
+            wrap.style.cssText = (moved.style || '') + ';position:absolute;left:0;top:0;width:' + w + 'px;height:' + h + 'px;max-width:none;transform-origin:0 0;transform:scale(' + (SCR.w / w).toFixed(4) + ');border-radius:0;';
+            host.appendChild(wrap);
+            const was = !vid.paused; if (was && vid.paused) vid.play().catch(() => { });
+        };
+        const returnScreen = () => {
+            if (!moved) return; const { wrap, ph, style } = moved; moved = null; const was = !vid.paused;
+            if (style == null) wrap.removeAttribute('style'); else wrap.setAttribute('style', style);
+            ph.parentNode.replaceChild(wrap, ph); if (was && vid.paused) vid.play().catch(() => { });
+        };
+        const buildGuide = () => {
+            const cards = Array.from(document.querySelectorAll('#showList .show-card'));
+            listEl.innerHTML = cards.map((c, i) => { const t = (c.querySelector('.s-time') || {}).textContent || '', e = (c.querySelector('.s-emoji') || {}).textContent || '', n = (c.querySelector('.s-name') || {}).textContent || ''; return '<button type="button" class="dh-li" data-i="' + i + '"><span>' + esc(t.trim()) + '</span><span>' + esc(e.trim()) + '</span><b>' + esc(n.trim()) + '</b></button>'; }).join('') || '<p class="dh-none">No shows in the guide right now.</p>';
+        };
         const buildRoom = () => {
             const have = ownedItems().filter(id => ITEM_BY[id]), sk = SKINS.find(k => st && k.id === st.skin) || SKINS[0];
-            const title = (document.getElementById('epShowName') || {}).textContent || 'THE TUBE';
-            const scr = '<div class="tv-scr"><i class="a"></i><i class="c"></i><i class="b"></i><small>CH 03</small><b>' + esc(/SELECT/i.test(title) ? 'THE TUBE' : title.slice(0, 22)) + '</b></div><span class="tv-knob" style="left:30px"></span><span class="tv-knob" style="left:58px"></span><span class="tv-grille"></span><span class="tv-led"></span>';
-            let h = plane(600, 400, 0, FY, 0, 90, 0, 'w-floor') + plane(600, 320, 0, FY - 160, -200, 0, 0, 'w-wall back hid') + plane(400, 320, -300, FY - 160, 0, 0, 90, 'w-wall hid') + plane(400, 320, 300, FY - 160, 0, 0, -90, 'w-wall hid');
-            h += box(300, 62, 150, 0, FY - 31, -105, 'stand', '');
-            h += box(240, 190, 170, 0, FY - 62 - 95, -105, 'tvbody', scr, 'background:' + sk.pv + ';');
-            if (have.includes('rug')) h += plane(380, 140, 0, FY - 1, 30, 90, 0, '', itemSvg(ITEM_BY.rug, true));
-            if (have.includes('poster')) h += plane(104, 143, -299, -62, -40, 0, 90, 'hid', itemSvg(ITEM_BY.poster));
-            if (have.includes('neon')) h += plane(140, 100, 299, -98, 40, 0, -90, 'hid neon-s', itemSvg(ITEM_BY.neon));
-            if (have.includes('shelf')) h += plane(150, 112, 200, -178, -199, 0, 0, 'hid', itemSvg(ITEM_BY.shelf));
-            Object.keys(SP).forEach(id => { if (!have.includes(id)) return; const s = SP[id]; h += '<div class="sp" data-bb="1" style="width:' + s[0] + 'px;height:' + s[1] + 'px;margin:' + (-s[1] / 2) + 'px 0 0 ' + (-s[0] / 2) + 'px;transform:translate3d(' + s[2] + 'px,' + (FY - s[1] / 2) + 'px,' + s[3] + 'px) rotateY(calc(var(--y) * -1))">' + itemSvg(ITEM_BY[id]) + '</div>'; });
+            const scr = '<div class="tv-scr"></div><span class="tv-knob" style="left:316px;top:40px"></span><span class="tv-knob" style="left:316px;top:84px"></span><span class="tv-grille"></span><span class="tv-led"></span><span class="tv-brand">NOSTALGIVISION</span>';
+            let h = plane(700, 440, 0, FY, 0, 90, 0, 'w-floor') + plane(700, 340, 0, FY - 170, -220, 0, 0, 'w-wall back hid') + plane(440, 340, -350, FY - 170, 0, 0, 90, 'w-wall hid') + plane(440, 340, 350, FY - 170, 0, 0, -90, 'w-wall hid');
+            h += box(400, 62, 180, 0, FY - 31, -120, 'stand', '');
+            h += box(360, 270, 170, 0, FY - 62 - 135, -125, 'tvbody', scr, 'background:' + sk.pv + ';');
+            if (have.includes('rug')) h += plane(440, 160, 0, FY - 1, 30, 90, 0, '', itemSvg(ITEM_BY.rug, true));
+            if (have.includes('poster')) h += plane(104, 143, -349, -62, -60, 0, 90, 'hid', itemSvg(ITEM_BY.poster));
+            if (have.includes('neon')) h += plane(140, 100, 349, -98, -10, 0, -90, 'hid neon-s', itemSvg(ITEM_BY.neon));
+            if (have.includes('shelf')) h += plane(150, 112, 255, -195, -219, 0, 0, 'hid', itemSvg(ITEM_BY.shelf));
+            Object.keys(SP).forEach(id => { if (!have.includes(id)) return; const s = SP[id]; h += '<div class="sp" style="width:' + s[0] + 'px;height:' + s[1] + 'px;margin:' + (-s[1] / 2) + 'px 0 0 ' + (-s[0] / 2) + 'px;transform:translate3d(' + s[2] + 'px,' + (FY - s[1] / 2) + 'px,' + s[3] + 'px) rotateY(calc(var(--y) * -1))">' + itemSvg(ITEM_BY[id]) + '</div>'; });
             roomEl.innerHTML = h;
             dh.querySelector('.dh-empty').textContent = have.length ? '' : 'Your room is empty. Buy room upgrades in the treasure chest to fill it.';
         };
-        const openRoom = () => { if (!st) return; closeShop(); buildRoom(); Object.assign(V, V0); applyV(); dh.classList.add('show'); body.classList.remove('tv-spot'); const b = dh.querySelector('[data-d=close]'); try { b.focus({ preventScroll: true }); } catch (e) { } };
-        const closeRoom = () => { dh.classList.remove('show'); };
+        const toggleGuide = on => { dh.classList.toggle('guide', on == null ? !dh.classList.contains('guide') : on); if (dh.classList.contains('guide')) buildGuide(); };
+        const openRoom = () => { if (!st) return; closeShop(); returnScreen(); buildRoom(); takeScreen(); toggleGuide(false); Object.assign(V, V0); applyV(); dh.classList.add('show'); body.classList.remove('tv-spot'); const b = dh.querySelector('[data-d=close]'); try { b.focus({ preventScroll: true }); } catch (e) { } };
+        const closeRoom = () => { cancelAnimationFrame(tw); dh.classList.remove('show'); dh.classList.remove('guide'); returnScreen(); };
         const pts = new Map(); let pinch0 = 0, z0 = 0;
-        dh.addEventListener('pointerdown', e => { if (e.target.closest('.dh-ui')) return; pts.set(e.pointerId, { x: e.clientX, y: e.clientY }); dh.classList.add('drag'); try { dh.setPointerCapture(e.pointerId); } catch (er) { } if (pts.size === 2) { const [a, b] = [...pts.values()]; pinch0 = Math.hypot(a.x - b.x, a.y - b.y); z0 = V.z; } });
+        const noDrag = t => t.closest('.dh-ui, .dh-remote, .dh-drawer, .tv-scr');
+        dh.addEventListener('pointerdown', e => { if (noDrag(e.target)) return; cancelAnimationFrame(tw); pts.set(e.pointerId, { x: e.clientX, y: e.clientY }); dh.classList.add('drag'); try { dh.setPointerCapture(e.pointerId); } catch (er) { } if (pts.size === 2) { const [a, b] = [...pts.values()]; pinch0 = Math.hypot(a.x - b.x, a.y - b.y); z0 = V.z; } });
         dh.addEventListener('pointermove', e => {
             const p = pts.get(e.pointerId); if (!p) return;
             if (pts.size === 1) { V.y += (e.clientX - p.x) * .45; V.p += (e.clientY - p.y) * .3; }
@@ -3554,13 +3589,21 @@
         });
         const endPtr = e => { pts.delete(e.pointerId); if (!pts.size) dh.classList.remove('drag'); };
         dh.addEventListener('pointerup', endPtr); dh.addEventListener('pointercancel', endPtr);
-        dh.addEventListener('wheel', e => { e.preventDefault(); V.z -= e.deltaY * .9; applyV(); }, { passive: false });
-        dh.addEventListener('click', e => { const b = e.target.closest('[data-d]'); if (!b) return; const d = b.dataset.d; if (d === 'close') closeRoom(); else if (d === 'in') V.z += 90; else if (d === 'out') V.z -= 90; else if (d === 'reset') Object.assign(V, V0); applyV(); });
+        dh.addEventListener('wheel', e => { if (e.target.closest('.dh-drawer')) return; e.preventDefault(); cancelAnimationFrame(tw); V.z -= e.deltaY * .9; applyV(); }, { passive: false });
+        dh.addEventListener('click', e => {
+            const li = e.target.closest('.dh-li'); if (li) { const c = document.querySelectorAll('#showList .show-card')[+li.dataset.i]; if (c) { c.click(); toggleGuide(false); } return; }
+            const r = e.target.closest('[data-r]'); if (r) { const t = $(r.dataset.r); if (t) t.click(); return; }
+            const b = e.target.closest('[data-d]'); if (!b) return; const d = b.dataset.d;
+            if (d === 'close') closeRoom(); else if (d === 'guide') toggleGuide();
+            else if (d === 'watch') tweenTo(closeUp()); else if (d === 'reset') tweenTo(V0);
+            else { cancelAnimationFrame(tw); if (d === 'in') V.z += 110; else if (d === 'out') V.z -= 110; applyV(); }
+        });
         window.addEventListener('keydown', e => {
             if (!dh.classList.contains('show')) return;
-            if (e.key === 'Escape') { e.stopPropagation(); closeRoom(); return; }
-            const k = { ArrowLeft: () => V.y -= 8, ArrowRight: () => V.y += 8, ArrowUp: () => V.p -= 5, ArrowDown: () => V.p += 5, '+': () => V.z += 70, '=': () => V.z += 70, '-': () => V.z -= 70 }[e.key];
-            if (k) { e.preventDefault(); e.stopPropagation(); k(); applyV(); }
+            if (e.key === 'Escape') { e.stopPropagation(); if (dh.classList.contains('guide')) toggleGuide(false); else closeRoom(); return; }
+            if (e.target && /INPUT|TEXTAREA/.test(e.target.tagName)) return;
+            const k = { ArrowLeft: () => V.y -= 8, ArrowRight: () => V.y += 8, ArrowUp: () => V.p -= 5, ArrowDown: () => V.p += 5, '+': () => V.z += 90, '=': () => V.z += 90, '-': () => V.z -= 90 }[e.key];
+            if (k) { e.preventDefault(); e.stopPropagation(); cancelAnimationFrame(tw); k(); applyV(); }
         }, true);
         window.addEventListener('resize', () => { if (dh.classList.contains('show')) applyV(); });
         const roomBtn = $('tcRoomBtn'); roomBtn.addEventListener('click', e => { e.stopPropagation(); openRoom(); });
