@@ -1668,6 +1668,7 @@
 
         #dh .dh-lb { }
         @media (max-width: 639px) { #dh .dh-lb { font-size: 0; } #dh .dh-lb::before { content: '💡'; font-size: 16px; } }
+        #dh .tvr-f.live .rb, #dh .tvr-w.live { animation: none !important; filter: none; } #dh .tvr-f.live .rb { opacity: 1; transition: none; }
 </style>
 </head>
 <body>
@@ -2344,7 +2345,7 @@
                     const ad = getNextCommercial();
                     showToast(`📢 ${ad.name}`);
                     commVid.ontimeupdate = null; commVid.onended = null; commVid.onerror = null;
-                    consumePre(ad.url); commVid.src = ad.url; setTimeout(peekPreloadAd, 3000);
+                    consumePre(ad.url); window.tubeCors && tubeCors(commVid); commVid.src = ad.url; setTimeout(peekPreloadAd, 3000);
                     if (ad.start !== undefined) commVid.currentTime = ad.start;
                     let watchdog = setTimeout(() => { if (commVid.paused || commVid.readyState < 2) loadNextAd(); }, 5000);
                     commVid.play().catch(() => { clearTimeout(watchdog); if (isPlayingCommercials) loadNextAd(); });
@@ -2376,7 +2377,7 @@
                 const ad = getNextCommercial();
                 showToast(`📢 ${ad.name}`);
                 commVid.ontimeupdate = null; commVid.onended = null; commVid.onerror = null;
-                consumePre(ad.url); commVid.src = ad.url; setTimeout(peekPreloadAd, 3000);
+                consumePre(ad.url); window.tubeCors && tubeCors(commVid); commVid.src = ad.url; setTimeout(peekPreloadAd, 3000);
                 if (ad.start !== undefined) commVid.currentTime = ad.start;
                 let watchdog = setTimeout(() => {
                     if (commVid.paused || commVid.readyState < 2) { console.warn('⚠️ Ad stalled, skipping:', ad.name); loadNextAd(); }
@@ -2608,7 +2609,7 @@
             } catch (e) { }
             window._curFile = f; window._curUrl = startUrl; window._stalls = 0; window._lastStall = 0; window._lastSwitch = 0;
             consumePre(startUrl);
-            vid.src = startUrl;
+            window.tubeCors && tubeCors(vid); vid.src = startUrl;
             vid.volume = volumeVal;
             vid.load();
             // Setup resume saving
@@ -3813,6 +3814,36 @@
         const isNight = () => { const hr = new Date().getHours(); return hr >= 18 || hr < 6; };
         let nightForce = null;
         const applyNight = () => dh.classList.toggle('night', nightForce == null ? isNight() : nightForce);
+
+        // live TV light: read the colours of the real picture and throw them into the dark room
+        window.tubeCors = el => { try { if (window._corsOK) el.crossOrigin = 'anonymous'; } catch (e) { } };
+        try { fetch('https://archive.org/download/SilentFilmFrenzy/silent_film_frenzy_512kb.mp4', { method: 'HEAD', mode: 'cors' }).then(() => { window._corsOK = true; }).catch(() => { window._corsOK = false; }); } catch (e) { }
+        document.addEventListener('error', ev => { const v = ev.target; if (v && v.tagName === 'VIDEO' && v.crossOrigin && !v._corsRetry) { v._corsRetry = 1; window._corsOK = false; const t = v.currentTime, s = v.currentSrc || v.src; v.removeAttribute('crossorigin'); v.src = s; v.load(); try { v.currentTime = t; } catch (e2) { } v.play().catch(() => { }); } }, true);
+        const tvCv = document.createElement('canvas'); tvCv.width = 16; tvCv.height = 12; const tvCx = tvCv.getContext('2d', { willReadFrequently: true });
+        const tvPrev = []; let tvLiveOn = false;
+        const tvRegions = [[0, 0, 8, 6], [8, 0, 16, 6], [4, 3, 12, 9], [0, 6, 8, 12], [8, 6, 16, 12]];
+        const tvAvg = (d, r) => { let R = 0, G = 0, B = 0, n = 0; for (let y = r[1]; y < r[3]; y++) for (let x = r[0]; x < r[2]; x++) { const i = (y * 16 + x) * 4; R += d[i]; G += d[i + 1]; B += d[i + 2]; n++; } return [R / n, G / n, B / n]; };
+        const tvCol = (rgb, k) => { // saturate, keep the colour pure, put the brightness into the alpha
+            const m = (rgb[0] + rgb[1] + rgb[2]) / 3, c = rgb.map(x => Math.max(0, Math.min(255, m + (x - m) * 1.7))), mx = Math.max(c[0], c[1], c[2], 1);
+            const cur = [c[0] / mx * 255, c[1] / mx * 255, c[2] / mx * 255, Math.pow(Math.max(rgb[0], rgb[1], rgb[2]) / 255, .8)];
+            const p = tvPrev[k] || cur; const o = cur.map((x, i) => p[i] + (x - p[i]) * (i === 3 ? .65 : .4)); tvPrev[k] = o; return o;
+        };
+        const tvSet = (el, g) => { if (el) el.style.background = g; };
+        const tvTick = () => {
+            if (!dh.classList.contains('show') || !dh.classList.contains('drawn') || !dh.classList.contains('lamp-off')) return;
+            const f = roomEl.querySelector('.tvr-f'); if (!f) return;
+            let q = null;
+            const v = [...document.querySelectorAll('#screenWrap video')].find(x => x.videoWidth && !x.paused && x.readyState >= 2 && x.style.display !== 'none');
+            if (v) { try { tvCx.drawImage(v, 0, 0, 16, 12); const d = tvCx.getImageData(0, 0, 16, 12).data; q = tvRegions.map((r, k) => tvCol(tvAvg(d, r), k)); } catch (e) { q = null; } }
+            const ws = roomEl.querySelectorAll('.tvr-w');
+            if (!q) { if (tvLiveOn) { tvLiveOn = false; f.classList.remove('live'); f.style.background = ''; f.querySelectorAll('.rb').forEach(b => b.style.background = ''); ws.forEach(w => { w.classList.remove('live'); w.style.background = ''; }); } return; }
+            tvLiveOn = true; f.classList.add('live'); ws.forEach(w => w.classList.add('live'));
+            const fl = 1 + (Math.random() - .5) * .14, rgba = (c, a) => 'rgba(' + (c[0] | 0) + ',' + (c[1] | 0) + ',' + (c[2] | 0) + ',' + Math.min(.97, a).toFixed(3) + ')';
+            f.querySelectorAll('.rb').forEach((b, i) => { const c = q[i]; b.style.background = 'radial-gradient(closest-side,' + rgba(c, (.06 + c[3] * .78) * fl) + ',transparent)'; });
+            const o = q[2]; f.style.background = 'radial-gradient(closest-side,' + rgba(o, (.06 + o[3] * .3) * fl) + ',transparent)';
+            ws.forEach(w => { w.style.background = 'radial-gradient(ellipse 46% 52% at 50% 62%,' + rgba(o, (.08 + o[3] * .62) * fl) + ',' + rgba(q[0], (.04 + q[0][3] * .22) * fl) + ' 55%,transparent)'; });
+        };
+        setInterval(tvTick, 50);
         const toggleLamp = on => {
             lampOn = on == null ? !lampOn : on; dh.classList.toggle('lamp-off', !lampOn);
             try { makeTone(1100, 420, .045, 'square', .09); makeNoise(.02, 2600, null, .6, .06); } catch (e) { }
