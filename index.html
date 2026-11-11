@@ -3826,7 +3826,7 @@
         };
 
         // TV light bouncing round a dark room: only when the curtains are shut and the main light is off
-        const tvReflHtml = () => plane(620, 460, 0, FY - 14, -10, 90, 0, 'tvr tvr-f', '<i class="rb rb1"></i><i class="rb rb2"></i><i class="rb rb3"></i><i class="rb rb4"></i><i class="rb rb5"></i>', 'pointer-events:none;')
+        const tvReflHtml = () => plane(620, 460, 0, FY - 14, -10, 90, 0, 'tvr tvr-f', '<i class="rb rb3"></i>', 'pointer-events:none;')
             + plane(640, 400, 0, FY - 250, -308.5, 0, 0, 'tvr tvr-w', '', 'pointer-events:none;')
             + plane(520, 300, -447, FY - 190, -120, 0, 90, 'tvr tvr-w tvr-l hid', '', 'pointer-events:none;');
         const BL = 320;
@@ -3861,7 +3861,7 @@
             if (!q) { if (tvLiveOn) { tvLiveOn = false; const bm0 = roomEl.querySelector('.tvr-b'); if (bm0) { bm0.classList.remove('live'); bm0.style.removeProperty('--bm'); bm0.style.removeProperty('--bi'); } f.classList.remove('live'); f.style.background = ''; f.querySelectorAll('.rb').forEach(b => b.style.background = ''); ws.forEach(w => { w.classList.remove('live'); w.style.background = ''; }); } return; }
             tvLiveOn = true; f.classList.add('live'); ws.forEach(w => w.classList.add('live'));
             const fl = 1 + (Math.random() - .5) * .14, rgba = (c, a) => 'rgba(' + (c[0] | 0) + ',' + (c[1] | 0) + ',' + (c[2] | 0) + ',' + Math.min(.97, a).toFixed(3) + ')';
-            f.querySelectorAll('.rb').forEach((b, i) => { const c = q[i]; b.style.background = 'radial-gradient(closest-side,' + rgba(c, (.04 + c[3] * .5) * fl) + ',transparent)'; });
+            f.querySelectorAll('.rb').forEach(b => { const c = q[2]; b.style.background = 'radial-gradient(closest-side,' + rgba(c, (.04 + c[3] * .5) * fl) + ',transparent)'; });
             const o = q[2]; f.style.background = 'radial-gradient(closest-side,' + rgba(o, (.04 + o[3] * .2) * fl) + ',transparent)';
             const bm = roomEl.querySelector('.tvr-b'); if (bm) { bm.classList.add('live'); const dip = Math.random() < .04 ? .7 : 1; bm.style.setProperty('--bm', [0, 1, 2].map(i => Math.round(o[i] * .55 + 255 * .45)).join(',')); bm.style.setProperty('--bi', Math.min(.9, Math.pow(o[3], 1.1) * .95 * fl * dip).toFixed(3)); }
             ws.forEach(w => { w.style.background = 'radial-gradient(ellipse 46% 52% at 50% 62%,' + rgba(o, (.06 + o[3] * .4) * fl) + ',' + rgba(q[0], (.03 + q[0][3] * .15) * fl) + ' 55%,transparent)'; });
