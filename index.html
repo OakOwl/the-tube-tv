@@ -1531,14 +1531,24 @@
         #dh .w-wall.back::after, #dh .w-wall::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 16px; background: linear-gradient(#e8dcc0, #b8a880); box-shadow: 0 -2px 0 rgba(0,0,0,.35); }
         #dh .tvf { box-sizing: border-box; border: 2px solid rgba(0,0,0,.55); }
         #dh .tv-scr { position: absolute; left: 22px; top: 22px; width: 270px; height: 202px; border-radius: 16px / 14px; background: #000; overflow: hidden; box-shadow: 0 0 0 5px rgba(0,0,0,.55), 0 0 34px rgba(255,170,70,.28); }
-        #dh .tv-knob { position: absolute; width: 22px; height: 22px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #d8d8d0, #55554e); border: 1px solid #222; box-shadow: 0 2px 3px rgba(0,0,0,.5); }
-        #dh .tv-led { position: absolute; width: 11px; height: 11px; border-radius: 50%; background: #ff3a2a; box-shadow: 0 0 8px #ff3a2a; left: 322px; top: 134px; }
-        #dh .tv-grille { position: absolute; left: 306px; top: 160px; width: 42px; height: 54px; background: repeating-linear-gradient(0deg, rgba(0,0,0,.55) 0 2px, transparent 2px 6px); }
+        #dh .tv-knob { position: absolute; width: 26px; height: 26px; border-radius: 50%; background: conic-gradient(from 20deg, #8e8e86, #f0f0e8, #7c7c74, #e2e2da, #6a6a62, #ececE4, #8e8e86); border: 1px solid #1a1a1a; box-shadow: 0 0 0 3px rgba(0,0,0,.5), 0 0 0 4px rgba(255,255,255,.16), 0 4px 5px rgba(0,0,0,.65); }
+        #dh .tv-knob::before { content: ''; position: absolute; inset: 3px; border-radius: 50%; background: repeating-conic-gradient(rgba(0,0,0,.38) 0 5deg, transparent 5deg 10deg), radial-gradient(circle at 35% 30%, #f4f4ec, #6e6e66 80%); box-shadow: inset 0 0 0 1px rgba(0,0,0,.35); }
+        #dh .tv-knob::after { content: ''; position: absolute; left: 50%; top: 2px; width: 3px; height: 10px; margin-left: -1.5px; border-radius: 1px; background: #121212; box-shadow: 0 0 0 .5px rgba(255,255,255,.25); transform-origin: 50% 11px; transform: rotate(var(--ka,-40deg)); }
+        #dh .tv-tick { position: absolute; width: 42px; height: 42px; border-radius: 50%; background: repeating-conic-gradient(from -135deg, rgba(0,0,0,.55) 0 2.5deg, transparent 2.5deg 27deg); -webkit-mask: radial-gradient(circle, transparent 0 17px, #000 17.5px, #000 20px, transparent 20.5px); mask: radial-gradient(circle, transparent 0 17px, #000 17.5px, #000 20px, transparent 20.5px); }
+        #dh .tv-lbl { position: absolute; width: 42px; text-align: center; font: 400 8px/8px 'VT323', monospace; letter-spacing: .14em; color: rgba(0,0,0,.62); text-shadow: 0 1px 0 rgba(255,255,255,.22); font-style: normal; pointer-events: none; }
+        #dh .tv-led { position: absolute; width: 16px; height: 16px; border-radius: 50%; left: 319px; top: 137px; cursor: pointer; border: 1px solid #3a0a05; background: radial-gradient(circle at 36% 30%, #ff9a8a, #d3220f 52%, #6e0c05); box-shadow: 0 0 0 3px #2a2a28, 0 0 0 4px #9a9a94, 0 3px 4px rgba(0,0,0,.6); filter: saturate(.6) brightness(.62); transition: filter .5s ease, box-shadow .5s ease, transform .1s; }
+        #dh .tv-led::before { content: ''; position: absolute; inset: -10px; border-radius: 50%; } #dh .tv-led:active { transform: scale(.88); }
+        #dh.tvon .tv-led { filter: none; box-shadow: 0 0 0 3px #2a2a28, 0 0 0 4px #9a9a94, 0 0 9px 3px rgba(255,58,42,.9), 0 0 24px 7px rgba(255,58,42,.42); }
+        #dh .tv-grille { position: absolute; left: 306px; top: 176px; width: 42px; height: 44px; border-radius: 3px; border: 1px solid rgba(0,0,0,.55); background: repeating-linear-gradient(0deg, #0a0a0a 0 3px, rgba(255,255,255,.1) 3px 4px, rgba(0,0,0,.18) 4px 7px); box-shadow: inset 0 2px 4px rgba(0,0,0,.5), 0 1px 0 rgba(255,255,255,.18); }
+        #dh .tv-bez { position: absolute; left: 12px; top: 12px; width: 290px; height: 222px; border-radius: 22px / 19px; background: linear-gradient(145deg, rgba(0,0,0,.42), rgba(255,255,255,.1)); box-shadow: inset 0 3px 7px rgba(0,0,0,.6), 0 1px 0 rgba(255,255,255,.3); z-index: 1; }
+        #dh .tv-scr::after { content: ''; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; z-index: 6; background: linear-gradient(122deg, rgba(255,255,255,.17) 0, rgba(255,255,255,.05) 24%, transparent 38%), radial-gradient(ellipse 75% 70% at 50% 50%, transparent 55%, rgba(0,0,0,.34) 100%); box-shadow: inset 0 0 14px rgba(0,0,0,.5); }
+        #dh .tv-mdl { position: absolute; right: 24px; bottom: 13px; font: 400 10px/1 'VT323', monospace; letter-spacing: .18em; color: rgba(0,0,0,.5); font-style: normal; z-index: 2; }
+        #dh .tv-scw { position: absolute; width: 7px; height: 7px; border-radius: 50%; z-index: 2; background: radial-gradient(circle at 35% 30%, #d8d8d0, #6a6a62); box-shadow: 0 1px 1px rgba(0,0,0,.6); } #dh .tv-scw::after { content: ''; position: absolute; left: 1px; right: 1px; top: 3px; height: 1px; background: rgba(0,0,0,.65); }
         #dh .tv-brand { position: absolute; left: 24px; bottom: 12px; font: 400 13px/1 'VT323', monospace; letter-spacing: .3em; color: rgba(0,0,0,.55); }
         #dh .skin-fx { z-index: 0; border-radius: 0; } #dh .skin-ring { z-index: 0; }
         #dh .dh-stk { position: absolute; z-index: 3; overflow: visible; filter: drop-shadow(0 1.5px 1.5px rgba(0,0,0,.38)); }
         #dh .dh-riv { position: absolute; z-index: 3; width: 12px; height: 12px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #f6dc98, #9a6a2a 70%); box-shadow: 0 1px 2px rgba(0,0,0,.6); }
-        #dh .tv-scr, #dh .tv-knob, #dh .tv-grille, #dh .tv-led, #dh .tv-brand { z-index: 2; }
+        #dh .tv-scr, #dh .tv-knob, #dh .tv-grille, #dh .tv-led, #dh .tv-brand, #dh .tv-tick, #dh .tv-lbl { z-index: 2; }
         #dh .chp { box-sizing: border-box; border: 1.5px solid rgba(40,20,6,.7); }
         #dh .cb-band { position: absolute; top: -1px; bottom: -1px; width: 16px; background: linear-gradient(90deg,#b8841c,#f2c340 40%,#d9a53a); border: 1.5px solid #7a5410; box-sizing: border-box; }
         #dh .cb-lock { position: absolute; left: 50%; top: 10px; width: 24px; height: 28px; margin-left: -12px; border-radius: 4px; background: linear-gradient(#f0d070,#c9962a); border: 1.5px solid #7a5410; box-sizing: border-box; }
@@ -1613,7 +1623,7 @@
         #dh .lcord { background: linear-gradient(180deg,rgba(20,20,20,0),#1c1c1c 35%); } #dh .lhalo { border-radius: 50%; background: radial-gradient(closest-side,rgba(255,226,150,.6),rgba(255,200,100,.18) 55%,transparent); transition: opacity .9s ease; } #dh.lamp-off .lhalo { opacity: 0; }
         #dh .lpool { background: radial-gradient(closest-side,rgba(255,226,150,.42),rgba(255,210,120,.16) 55%,transparent); transition: opacity .9s ease; } #dh.lamp-off .lpool { opacity: 0; }
         #dh .dh-dim { position: absolute; inset: 0; z-index: 2; pointer-events: none; opacity: 0; transition: opacity 1.4s cubic-bezier(.4,0,.2,1); background: radial-gradient(ellipse 60% 55% at 50% 46%, rgba(4,6,22,.18), rgba(3,4,16,.62)); } #dh.lamp-off .dh-dim { opacity: 1; }
-        #dh .dh-dim::after { content: ''; position: absolute; inset: 0; opacity: 0; transition: opacity 1.8s cubic-bezier(.4,0,.2,1); background: radial-gradient(ellipse 62% 56% at 50% 46%, rgba(2,3,12,.22), rgba(1,2,8,.63)); } #dh.drawn.lamp-off .dh-dim::after { opacity: 1; }
+        #dh .dh-dim::after { content: ''; position: absolute; inset: 0; opacity: 0; transition: opacity 1.8s cubic-bezier(.4,0,.2,1); background: radial-gradient(ellipse 46% 42% at var(--vx,48%) var(--vy,46%), rgba(0,0,0,0) 0, rgba(1,2,8,.3) 42%, rgba(1,2,8,.74) 74%, rgba(0,1,5,.93) 100%); } #dh.drawn.lamp-off .dh-dim::after { opacity: 1; }
         #dh .dh-ui, #dh .dh-remote, #dh .dh-drawer, #dh .dh-hint, #dh .dh-pick { z-index: 5; }
         #dh .stand { background: repeating-linear-gradient(92deg, rgba(0,0,0,.16) 0 2px, transparent 2px 9px), linear-gradient(#9a6630, #6e4620); }
         #dh .sp { position: absolute; left: 0; top: 0; filter: drop-shadow(0 8px 8px rgba(0,0,0,.45)); }
@@ -3721,6 +3731,7 @@
             s += plane(280, 176, 0, cy + 24, -341, 0, 180, 'tvk', '<i class="tvk-v" style="left:12px;top:10px;width:256px;height:30px;' + slat + '"></i><i class="tvk-v" style="left:34px;top:46px;width:222px;height:26px;' + slat + '"></i>'
                 + '<i class="tvk-l" style="left:18px;top:88px;width:56px;height:30px;background:#1b1b1e"></i><i class="tvk-l" style="left:24px;top:124px;width:40px;height:16px;background:#e0826c"></i><i class="tvk-w" style="left:18px;top:144px;width:58px;height:28px"></i>'
                 + '<i class="tvk-c" style="left:128px;top:96px;width:84px;height:46px"><b></b><b></b><b></b><b></b><b></b><b></b></i><i class="tvk-n" style="left:172px;top:76px"></i>', blk);
+            s += plane(250, 78, 0, cy - 135 - 5, -250, 90, 0, 'tvk', '', 'pointer-events:none;background:repeating-linear-gradient(90deg,rgba(0,0,0,.6) 0 3px,rgba(255,255,255,.07) 3px 4px,transparent 4px 10px);');
             const rod = a => '<div class="bx" style="transform:translate3d(0,0,0) rotateX(-9deg) rotateZ(' + a + 'deg)">' + box(4, 150, 4, 0, -75, 0, 'ant', '', 'background:linear-gradient(90deg,#8d9199,#f4f6fa 45%,#a4a8b0);') + box(9, 9, 9, 0, -152, 0, 'ant', '', 'background:radial-gradient(circle at 35% 30%,#fff,#b8bcc4 60%,#767a82);') + '</div>';
             s += '<div class="bx" style="transform:translate3d(0,' + (cy - 135) + 'px,-250px) scale3d(.68,.68,.68)">' + box(46, 10, 34, 0, -4, 0, 'ant', '', 'background:linear-gradient(#5a5d64,#2a2b2f);') + box(16, 7, 16, 0, -12, 0, 'ant', '', 'background:linear-gradient(90deg,#8d9199,#f4f6fa 45%,#a4a8b0);') + '<div class="bx" style="transform:translate3d(0,-14px,0)">' + rod(-30) + rod(30) + '</div></div>';
             return s;
@@ -3943,6 +3954,7 @@
         const tvSet = (el, g) => { if (el) el.style.background = g; };
         const tvTick = () => {
             if (!dh.classList.contains('show') || !dh.classList.contains('drawn') || !dh.classList.contains('lamp-off')) { dh.classList.remove('tvoff'); return; }
+            try { const sc = roomEl.querySelector('.tv-scr'); if (sc) { const r = sc.getBoundingClientRect(), d = dh.getBoundingClientRect(); if (r.width) { dh.style.setProperty('--vx', ((r.left + r.width / 2 - d.left) / d.width * 100).toFixed(1) + '%'); dh.style.setProperty('--vy', ((r.top + r.height / 2 - d.top) / d.height * 100).toFixed(1) + '%'); } } } catch (e) { }
             const f = roomEl.querySelector('.tvr-f'); if (!f) return;
             let q = null;
             const v = [...document.querySelectorAll('#screenWrap video')].find(x => x.videoWidth && !x.paused && x.readyState >= 2 && x.style.display !== 'none');
@@ -4012,8 +4024,14 @@
             const sk = SKINS.find(k => st && k.id === st.skin) || SKINS[0];
             const lk = LOOK[sk.id] || {}, srcFx = document.querySelector('.tv-shell .skin-fx'), srcRing = document.querySelector('.tv-shell .skin-ring');
             const stk = lk.stickers ? '<svg class="dh-stk" style="left:212px;bottom:7px;width:27px;height:27px;transform:rotate(-10deg)"><use href="#stk-bolt"/></svg><svg class="dh-stk" style="left:244px;bottom:9px;width:24px;height:24px;transform:rotate(8deg)"><use href="#stk-star"/></svg><svg class="dh-stk" style="left:274px;bottom:7px;width:27px;height:27px;transform:rotate(-6deg)"><use href="#stk-gem"/></svg>' : '';
+            const lc2 = lk.brand ? ';color:' + lk.brand : '';
             const riv = lk.rivets ? [[8, 8], [342, 8], [8, 252], [342, 252]].map(p => '<i class="dh-riv" style="left:' + p[0] + 'px;top:' + p[1] + 'px"></i>').join('') : '';
-            const scr = (lk.fx && srcFx ? srcFx.outerHTML : '') + (lk.ring && srcRing ? srcRing.outerHTML : '') + '<div class="tv-scr" style="' + (lk.trim ? 'box-shadow:' + lk.trim + ',0 0 34px rgba(255,170,70,.28);' : '') + '"></div><span class="tv-knob" style="left:316px;top:40px"></span><span class="tv-knob" style="left:316px;top:84px"></span><span class="tv-grille"></span><span class="tv-led"></span><span class="tv-brand" style="' + (lk.brand ? 'color:' + lk.brand + ';' : '') + '">NOSTALGIVISION</span>' + stk + riv;
+            const scr = (lk.fx && srcFx ? srcFx.outerHTML : '') + (lk.ring && srcRing ? srcRing.outerHTML : '') + '<i class="tv-bez"></i><div class="tv-scr" style="' + (lk.trim ? 'box-shadow:' + lk.trim + ',0 0 34px rgba(255,170,70,.28);' : '') + '"></div>'
+                + '<i class="tv-tick" style="left:306px;top:32px"></i><span class="tv-knob" style="left:314px;top:40px;--ka:-42deg"></span><i class="tv-lbl" style="left:306px;top:71px' + lc2 + '">VOL</i>'
+                + '<i class="tv-tick" style="left:306px;top:84px"></i><span class="tv-knob" style="left:314px;top:92px;--ka:28deg"></span><i class="tv-lbl" style="left:306px;top:123px' + lc2 + '">CH</i>'
+                + '<span class="tv-led" title="Power"></span><i class="tv-lbl" style="left:306px;top:157px' + lc2 + '">POWER</i><span class="tv-grille"></span>'
+                + '<span class="tv-brand" style="' + (lk.brand ? 'color:' + lk.brand + ';' : '') + '">NOSTALGIVISION</span><i class="tv-mdl" style="' + (lk.brand ? 'color:' + lk.brand + ';' : '') + '">NV-90</i>'
+                + (lk.rivets ? '' : [[7, 7], [346, 7], [7, 256], [346, 256]].map(p => '<i class="tv-scw" style="left:' + p[0] + 'px;top:' + p[1] + 'px;transform:rotate(' + (p[0] * 7 % 90) + 'deg)"></i>').join('')) + stk + riv;
             const front = 'background:' + sk.pv + ';' + (sk.pr ? 'box-shadow:' + sk.pr.split(/,(?![^(]*\))/)[0] + ';' : ''), side = 'background:linear-gradient(160deg,rgba(255,255,255,.12),rgba(0,0,0,.18)),' + (sk.pd || '#707068') + ';';
             let h = plane(900, 800, 0, FY, 90, 90, 0, 'w-floor') + plane(900, WH, 0, FY - WH / 2, -310, 0, 0, 'w-wall back hid') + plane(800, WH, -450, FY - WH / 2, 90, 0, 90, 'w-wall hid') + plane(800, WH, 450, FY - WH / 2, 90, 0, -90, 'w-wall hid');
             h += windowHtml(have.includes('plant')) + curtainsHtml() + ledLampHtml() + cordHtml() + wallShelfHtml() + doorHtml() + switchHtml() + pendantHtml() + tvReflHtml() + tvBeamHtml();
@@ -4075,6 +4093,7 @@
         const tapAt = (x, y) => {
             if (!dh.classList.contains('show') || dh.classList.contains('guide')) return;
             const list = document.elementsFromPoint(x, y);
+            if (Math.cos(V.y * Math.PI / 180) > .2 && list.slice(0, 3).some(el => el.classList && el.classList.contains('tv-led'))) { closePick(); $('pwrBtn').click(); return; }
             for (const el of list) {
                 if (el.closest('.led-hit')) { openPick('led', x, y); return; }
                 if (el.closest('.dh-sw')) { closePick(); toggleLamp(); return; }
@@ -4092,6 +4111,7 @@
         const closeRoom = () => { dh.cu = false; closePick(); cancelAnimationFrame(tw); dh.classList.remove('show'); dh.classList.remove('guide'); returnScreen(); };
         const pts = new Map(); let pinch0 = 0, z0 = 0;
         // volume buttons: the same steps, click sound, TV volume overlay, toast and saved setting as the knob in 2D mode (one click up or down, 0 to 100%)
+        const syncPwr = () => dh.classList.toggle('tvon', $('pwrBtn').classList.contains('on')); syncPwr(); try { new MutationObserver(syncPwr).observe($('pwrBtn'), { attributes: true, attributeFilter: ['class'] }); } catch (e) { }
         const roomVol = d => {
             sndKnob(); vClicks = Math.max(0, Math.min(10, vClicks + d)); volumeVal = vClicks / 10; vid.volume = volumeVal;
             if (window.activeCommercialVideo) window.activeCommercialVideo.volume = volumeVal;
