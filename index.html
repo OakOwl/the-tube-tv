@@ -1281,6 +1281,9 @@
         .stk-b { left: calc(50% - 20px); transform: rotate(8deg); bottom: 14px; }
         .stk-c { left: calc(50% + 22px); transform: rotate(-6deg); }
         @media (max-width: 900px) { .stk { width: 22px; height: 22px; bottom: 14px; left: auto; } .stk-a { display: none; } .stk-b { right: 54px; } .stk-c { right: 78px; } }
+        .tc-card.k-holo .tc-prev::after { content: ''; position: absolute; top: -20%; bottom: -20%; left: -30%; width: 22%; background: linear-gradient(90deg, transparent, rgba(255,255,255,.85), transparent); transform: skewX(-20deg) translateX(-150%); animation: fxShine 3.6s ease-in-out infinite; pointer-events: none; }
+        .tc-card.k-holo .tc-prev i { animation: tcHoloHue 7s linear infinite; }
+        @keyframes tcHoloHue { to { filter: hue-rotate(360deg); } }
         .tc-stk { position: absolute; width: 30px; height: 30px; filter: drop-shadow(0 1px 1px rgba(0,0,0,.5)); }
         .tc-stk.s1 { right: 14px; top: 4px; transform: rotate(14deg); } .tc-stk.s2 { left: 14px; bottom: 3px; transform: rotate(-13deg); }
         /* ---- skins ---- */
@@ -1342,6 +1345,8 @@
         /* animated layer: lives inside the shell, under the screen and controls, so the picture is never touched */
         .skin-fx { position: absolute; inset: 0; z-index: -1; border-radius: inherit; overflow: hidden; pointer-events: none; display: none; }
         .skin-fx::before, .skin-fx::after { content: ''; position: absolute; pointer-events: none; will-change: transform, opacity; }
+        .skin-fx > i { position: absolute; display: none; pointer-events: none; will-change: transform, opacity; }
+        .skin-ring { position: absolute; z-index: -1; display: none; pointer-events: none; }
         body.skin-synth .skin-fx, body.skin-gold .skin-fx, body.skin-cosmic .skin-fx, body.skin-holo .skin-fx { display: block; }
 
         /* shared label colours */
@@ -1415,15 +1420,34 @@
         @keyframes fxShoot { 0% { opacity: 0; transform: translate(-120px, 6%) rotate(28deg) } 3% { opacity: 1 } 12% { opacity: 0; transform: translate(560px, 300px) rotate(28deg) } 100% { opacity: 0; transform: translate(560px, 300px) rotate(28deg) } }
 
         /* Holographic Prism (legendary) */
-        body.skin-holo .tv-shell { --skinring: 0 0 0 2px #fff, 0 0 18px 3px rgba(255,154,213,.75), 0 0 38px 8px rgba(154,209,255,.55), 0 0 64px 14px rgba(182,255,207,.3); --skin-d1: #8a82b0; --skin-d2: #6a6290;
-            background: linear-gradient(90deg, #ffffff, #cfc8e8 55%, #9a92c0) left top / 9px 100% no-repeat, linear-gradient(270deg, #ffffff, #cfc8e8 55%, #9a92c0) right top / 9px 100% no-repeat, linear-gradient(160deg, #fff, #e8e0f5); }
-        body.skin-holo .controls-panel { background: linear-gradient(180deg, rgba(255,255,255,.55), rgba(215,205,240,.7)); box-shadow: inset 0 1px 0 #fff, inset 0 2px 3px rgba(0,0,0,.18); }
-        body.skin-holo .screen-housing { box-shadow: 0 0 0 2px #fff, 0 0 0 3px #8a82b0, 0 0 0 5px #f5e6ff, 0 0 0 6px #6a6290, 0 0 16px 4px rgba(154,209,255,.6), inset 0 4px 8px rgba(0,0,0,.8); }
-        body.skin-holo .skin-fx::before { top: 0; bottom: 0; left: 0; width: 300%; opacity: .88;
-            background: linear-gradient(115deg, #ff9ad5, #ffd29a 18%, #fff59a 32%, #b6ffcf 48%, #9ad1ff 64%, #c39aff 80%, #ff9ad5) 0 0 / 33.3333% 100% repeat-x; animation: fxHolo 9s linear infinite; }
-        @keyframes fxHolo { from { transform: translateX(0) } to { transform: translateX(-33.3333%) } }
-        body.skin-holo .skin-fx::after { top: -20%; bottom: -20%; left: -30%; width: 18%; background: linear-gradient(90deg, transparent, rgba(255,255,255,.8), transparent); transform: skewX(-20deg) translateX(-200%); animation: fxShine 6s ease-in-out infinite 1s; }
-        @media (prefers-reduced-motion: reduce) { .skin-fx::before, .skin-fx::after { animation: none !important; } }
+        /* Holographic Prism (legendary): pearl chassis under a constantly flowing rainbow foil, drifting prism bands,
+           two shimmer sweeps, twinkling glints and a slowly orbiting rainbow edge. All motion is transform/opacity (plus one conic angle). */
+        @property --ha { syntax: '<angle>'; inherits: false; initial-value: 0deg; }
+        body.skin-holo .tv-shell { --skinring: 0 0 0 2px #fff, 0 0 20px 4px rgba(255,140,220,.65), 0 0 44px 10px rgba(130,200,255,.5), 0 0 76px 18px rgba(170,140,255,.32); --skin-d1: #8a82b0; --skin-d2: #5f5788; --spk: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14'%3E%3Cpath d='M7 0L8.5 5.5L14 7L8.5 8.5L7 14L5.5 8.5L0 7L5.5 5.5Z' fill='%23fff'/%3E%3C/svg%3E");
+            background: linear-gradient(90deg, #ffffff, #d9d2f0 55%, #a79fd0) left top / 9px 100% no-repeat, linear-gradient(270deg, #ffffff, #d9d2f0 55%, #a79fd0) right top / 9px 100% no-repeat, linear-gradient(160deg, #ffffff, #ece6fa 45%, #d8d0f0); }
+        body.skin-holo .controls-panel { background: linear-gradient(180deg, rgba(255,255,255,.5), rgba(220,210,245,.62)); box-shadow: inset 0 1px 0 #fff, inset 0 2px 3px rgba(0,0,0,.16); }
+        body.skin-holo .screen-housing { box-shadow: 0 0 0 2px #fff, 0 0 0 3px #8a82b0, 0 0 0 5px #fbeeff, 0 0 0 6px #6a6290, 0 0 18px 5px rgba(160,200,255,.65), inset 0 4px 8px rgba(0,0,0,.8); }
+        body.skin-holo .skin-ring, body.skin-holo .skin-fx > i { display: block; }
+        /* 1) flowing rainbow foil */
+        body.skin-holo .skin-fx::before { top: 0; bottom: 0; left: 0; width: 300%; opacity: .72;
+            background: linear-gradient(90deg, #ff7ad9, #ffb36b 14%, #fff07a 27%, #7affc4 41%, #6fc2ff 56%, #a98bff 71%, #ff7ad9 86%, #ff7ad9) 0 0 / 33.3333% 100% repeat-x; animation: fxHolo 10s linear infinite; }
+        @keyframes fxHolo { from { transform: translateX(0) skewX(-16deg) } to { transform: translateX(-33.3333%) skewX(-16deg) } }
+        /* 2) soft prism bands drifting the other way */
+        body.skin-holo .skin-fx .fx2 { top: 0; bottom: 0; left: 0; width: 300%; opacity: .55;
+            background: linear-gradient(90deg, transparent 0 12%, rgba(255,255,255,.75) 17%, transparent 23%, transparent 46%, rgba(160,120,255,.4) 52%, rgba(120,230,255,.4) 58%, transparent 64%, transparent 80%, rgba(255,255,255,.6) 85%, transparent 90%) 0 0 / 33.3333% 100% repeat-x; animation: fxHoloBack 15s linear infinite; }
+        @keyframes fxHoloBack { from { transform: translateX(-33.3333%) skewX(18deg) } to { transform: translateX(0) skewX(18deg) } }
+        /* 3) two shimmer sweeps at different speeds */
+        body.skin-holo .skin-fx::after { top: -20%; bottom: -20%; left: -30%; width: 20%; background: linear-gradient(90deg, transparent, rgba(255,255,255,.9), transparent); transform: skewX(-20deg) translateX(-200%); animation: fxShine 4.2s ease-in-out infinite .5s; }
+        body.skin-holo .skin-fx .fx3 { top: -20%; bottom: -20%; left: -30%; width: 9%; background: linear-gradient(90deg, transparent, rgba(255,255,255,.7), transparent); transform: skewX(-20deg) translateX(-200%); animation: fxShine 6.5s ease-in-out infinite 2.4s; }
+        /* 4) twinkling four-point glints, three groups so they never pulse in unison */
+        body.skin-holo .skin-fx .fx4 { inset: 0; background: var(--spk) 8% 18% / 15px no-repeat, var(--spk) 61% 9% / 11px no-repeat, var(--spk) 93% 41% / 13px no-repeat, var(--spk) 27% 86% / 10px no-repeat; animation: fxTwinkle 2.3s ease-in-out infinite alternate; }
+        body.skin-holo .skin-fx .fx5 { inset: 0; background: var(--spk) 36% 28% / 10px no-repeat, var(--spk) 78% 88% / 15px no-repeat, var(--spk) 3% 64% / 11px no-repeat, var(--spk) 86% 7% / 9px no-repeat; animation: fxTwinkle 3.1s ease-in-out infinite alternate -1.4s; }
+        /* 5) orbiting rainbow edge around the whole TV */
+        body.skin-holo .skin-ring { inset: -6px; border-radius: 19px; padding: 4px; background: conic-gradient(from var(--ha), #ff7ad9, #ffd27a, #7affc4, #6fc2ff, #a98bff, #ff7ad9);
+            -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+            filter: drop-shadow(0 0 7px rgba(200,160,255,.85)); animation: fxSpin 6s linear infinite; }
+        @keyframes fxSpin { to { --ha: 360deg; } }
+        @media (prefers-reduced-motion: reduce) { .skin-fx::before, .skin-fx::after, .skin-fx > i, .skin-ring { animation: none !important; } }
 
         /* ================= v52: sign-in button, account pages ================= */
         #tcHud, #tcCta { display: none; }
@@ -3173,7 +3197,7 @@
             { id: 'steam', tier: 'epic', name: 'Steampunk Brass', price: 300, desc: 'Riveted brass plating and copper trim.', pv: 'radial-gradient(circle,#f6dc98 0 2px,transparent 3px) 6px 6px / 14px 14px no-repeat,linear-gradient(160deg,#d9a85a,#8a5a22 65%,#6a4418)', pd: '#4a2a10' },
             { id: 'gold', tier: 'epic', name: 'Gold Plated', price: 500, desc: 'Polished gold with a shimmering shine.', pv: 'linear-gradient(160deg,#fff1b0,#f2c340 25%,#c8921c 50%,#f6d36a 70%,#b8841c)', pr: '0 0 0 2px #ffe08a, 0 0 16px 3px rgba(255,200,60,.6)', pd: '#8a6a10' },
             { id: 'cosmic', tier: 'legendary', name: 'Cosmic Nebula', price: 800, desc: 'Twinkling stars and the odd shooting star.', pv: 'radial-gradient(ellipse at 20% 15%,rgba(255,80,200,.6),transparent 55%),radial-gradient(ellipse at 85% 85%,rgba(0,200,255,.55),transparent 55%),linear-gradient(160deg,#120a3a,#050314)', pr: '0 0 0 2px #7aa8ff, 0 0 16px 3px rgba(122,100,255,.6)', pd: '#1a1450' },
-            { id: 'holo', tier: 'legendary', name: 'Holographic Prism', price: 1200, desc: 'A living rainbow foil that never stops shifting.', pv: 'linear-gradient(115deg,#ff9ad5,#ffd29a 18%,#fff59a 32%,#b6ffcf 48%,#9ad1ff 64%,#c39aff 80%,#ff9ad5)', pr: '0 0 0 2px #fff, 0 0 16px 3px rgba(154,209,255,.7)', pd: '#6a6a8a' }
+            { id: 'holo', tier: 'legendary', name: 'Holographic Prism', price: 1200, desc: 'A living rainbow foil that never stops shifting.', pv: 'linear-gradient(115deg,#ff7ad9,#ffb36b 18%,#fff07a 32%,#7affc4 48%,#6fc2ff 64%,#a98bff 80%,#ff7ad9)', pr: '0 0 0 2px #fff, 0 0 18px 4px rgba(190,150,255,.8), 0 0 30px 6px rgba(120,200,255,.5)', pd: '#6a6a8a' }
         ];
         // Rows (tiers) unlock in order: you must own every skin in a row before you can buy from the next one.
         const TIER_ORDER = Object.keys(TIERS);
@@ -3356,6 +3380,15 @@
 
         // ================= modals =================
         const mk = (id, html) => { const d = document.createElement('div'); d.className = 'tc-modal-bg'; d.id = id; d.innerHTML = html; document.body.appendChild(d); return d; };
+        // effects layer for the animated skins (synth / gold / cosmic / holo); stays hidden for every other skin
+        (() => {
+            const sh = document.querySelector('.tv-shell');
+            if (!sh || sh.querySelector('.skin-fx')) return;
+            const fx = document.createElement('div'); fx.className = 'skin-fx'; fx.setAttribute('aria-hidden', 'true');
+            fx.innerHTML = '<i class="fx2"></i><i class="fx3"></i><i class="fx4"></i><i class="fx5"></i>';
+            sh.insertBefore(fx, sh.firstChild);
+            const ring = document.createElement('div'); ring.className = 'skin-ring'; ring.setAttribute('aria-hidden', 'true'); sh.insertBefore(ring, sh.firstChild);
+        })();
         const shop = mk('tcModal', '<div class="tc-modal" role="dialog" aria-modal="true" aria-label="Treasure chest"><div class="tc-hdr"><span class="tc-title">🪙 TREASURE CHEST</span><button class="tc-close" data-close type="button">✕ CLOSE</button></div><div class="tc-body"><div class="tc-acct" id="tcAcct"></div><div class="tc-stats"><div class="tc-stat"><span>TOTAL WATCH TIME</span><b id="tcWatch"></b></div><div class="tc-stat"><span>COINS</span><b id="tcBal"></b></div></div><p class="tc-note">Earn 1 coin for every minute you watch. Own every skin in a row to unlock the next row.</p><div class="tc-grid" id="tcGrid"></div></div></div>');
         const auth = mk('tcAuth', '<div class="tc-modal tc-narrow" role="dialog" aria-modal="true" aria-label="Sign in"><div class="tc-hdr"><span class="tc-title" id="tcAuthTitle"></span><button class="tc-close" data-close type="button">✕ CLOSE</button></div><div class="tc-body" id="tcAuthBody"></div></div>');
         let pendingBuy = null, pendingT = 0, pendingDel = false, delT = 0;
@@ -3380,7 +3413,7 @@
                         : locked ? '<button class="tc-btn" disabled>🔒 FINISH ' + TIERS[pt][0] + ' FIRST</button><div class="tc-prog tc-price"><span>' + k.price + ' ●</span></div>'
                         : need <= 0 ? '<button class="tc-btn' + (pendingBuy === k.id ? ' confirm' : '') + '" data-buy="' + k.id + '">' + (pendingBuy === k.id ? 'TAP AGAIN TO BUY' : 'BUY · ' + k.price + ' ●') + '</button>'
                         : '<button class="tc-btn" disabled>🔒 ' + k.price + ' ● · ' + need + ' MORE</button><div class="tc-prog"><i style="width:' + Math.max(2, Math.min(100, coins() / k.price * 100)).toFixed(1) + '%"></i></div>';
-                    return '<div class="tc-card t-' + k.tier + (on ? ' on' : '') + (locked && !owned ? ' row-locked' : '') + '" style="--tc:' + TIERS[k.tier][1] + '"><div class="tc-prev"><i style="--pv:' + k.pv + ';--pr:' + (k.pr || 'none') + ';--pd:' + (k.pd || '#707068') + '"></i>' + (k.id === 'mint' ? '<svg class="tc-stk s1"><use href="#stk-bolt"/></svg><svg class="tc-stk s2"><use href="#stk-star"/></svg>' : '') + '</div><div class="tc-name">' + k.name + '</div><div class="tc-desc">' + k.desc + '</div>' + btn + '</div>';
+                    return '<div class="tc-card t-' + k.tier + ' k-' + k.id + (on ? ' on' : '') + (locked && !owned ? ' row-locked' : '') + '" style="--tc:' + TIERS[k.tier][1] + '"><div class="tc-prev"><i style="--pv:' + k.pv + ';--pr:' + (k.pr || 'none') + ';--pd:' + (k.pd || '#707068') + '"></i>' + (k.id === 'mint' ? '<svg class="tc-stk s1"><use href="#stk-bolt"/></svg><svg class="tc-stk s2"><use href="#stk-star"/></svg>' : '') + '</div><div class="tc-name">' + k.name + '</div><div class="tc-desc">' + k.desc + '</div>' + btn + '</div>';
                 }).join('');
             });
             $('tcGrid').innerHTML = html;
