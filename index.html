@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- build: the-tube v65 / 2026-11-11 20:41 (room: stand, beam, worn sofa, Customize Your Room label) -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <title>The Tube · Classic Television Archive</title>
@@ -1668,6 +1667,8 @@
         @media (pointer: coarse) { #dh .rb, #dh .tvr-w { animation: none !important; } }
 
         #dh .dh-lb { }
+        #dh:not(.hasstand) .dh-sb { display: none; }
+        @media (max-width: 639px) { #dh .dh-sb { font-size: 11px; padding-left: 6px; padding-right: 6px; } }
         @media (max-width: 639px) { #dh .dh-lb { font-size: 0; } #dh .dh-lb::before { content: '💡'; font-size: 16px; } }
         #dh .tvr-f.live .rb, #dh .tvr-w.live { animation: none !important; filter: none; } #dh .tvr-f.live .rb { opacity: 1; transition: none; }
 
@@ -3651,7 +3652,7 @@
                 + '<p class="tc-room-note">Spend spare coins on your room. Items show up around the TV and in the 3D room. Sofas, the skateboard, dolls and boombox are 3D room only. You can own several sofas and choose which one sits in the room.</p><button class="tc-btn tc-viewroom" data-act="room" type="button">🏠 VIEW MY ROOM IN 3D</button>'
                 + ITEMS.map(k => {
                     const owned = have.includes(k.id), need = k.price - coins();
-                    const btn = owned ? (COUCH[k.id] ? (sofaPick() === k.id ? '<button class="tc-btn equipped" disabled>✓ IN YOUR ROOM</button>' : '<button class="tc-btn" data-sofa="' + k.id + '">PLACE IN ROOM</button>') : '<button class="tc-btn equipped" disabled>✓ IN YOUR ROOM</button>')
+                    const btn = owned ? (k.id === 'lamp' ? (standOff() ? '<button class="tc-btn" data-stand="1">PLACE IN ROOM</button>' : '<button class="tc-btn" data-stand="0">✓ IN ROOM · TAP TO REMOVE</button>') : COUCH[k.id] ? (sofaPick() === k.id ? '<button class="tc-btn equipped" disabled>✓ IN YOUR ROOM</button>' : '<button class="tc-btn" data-sofa="' + k.id + '">PLACE IN ROOM</button>') : '<button class="tc-btn equipped" disabled>✓ IN YOUR ROOM</button>')
                         : need <= 0 ? '<button class="tc-btn' + (pendingBuy === k.id ? ' confirm' : '') + '" data-buyi="' + k.id + '">' + (pendingBuy === k.id ? 'TAP AGAIN TO BUY' : 'BUY · ' + k.price + ' ●') + '</button>'
                             : '<button class="tc-btn" disabled>🔒 ' + k.price + ' ● · ' + need + ' MORE</button><div class="tc-prog"><i style="width:' + Math.max(2, Math.min(100, coins() / k.price * 100)).toFixed(1) + '%"></i></div>';
                     return '<div class="tc-card t-room k-' + k.id + (owned ? ' on' : '') + '" style="--tc:#7fd4a0"><div class="tc-prev">' + itemSvg(k) + '</div><div class="tc-name">' + k.name + '</div><div class="tc-desc">' + k.desc + (k.d3 ? ' <em class="tc-pill">3D ROOM</em>' : '') + '</div>' + btn + '</div>';
@@ -3662,7 +3663,7 @@
         // The real TV screen (video, static, effects, on-screen text) is moved into the 3D TV while the room is open, so you watch the live picture there.
         const dh = document.createElement('div'); dh.id = 'dh'; dh.setAttribute('role', 'dialog'); dh.setAttribute('aria-modal', 'true'); dh.setAttribute('aria-label', 'Your room in 3D');
         dh.innerHTML = '<div class="dh-stage"><div class="dh-cam"><div class="dh-room"></div></div></div>'
-            + '<div class="dh-ui"><span class="dh-title">🏠 ROOM</span><button class="dh-b dh-cb" data-act="cord" type="button" aria-label="Curtains"><span class="cb-c">🎭 CURTAINS</span><span class="cb-o">☀ OPEN CURTAINS</span></button><button class="dh-b dh-lb" data-act="led" type="button" aria-label="LED colour">💡 LED</button><button class="dh-b" data-d="watch" type="button">📺 WATCH</button><button class="dh-b" data-d="in" type="button" aria-label="Zoom in">＋</button><button class="dh-b" data-d="out" type="button" aria-label="Zoom out">－</button><button class="dh-b" data-d="reset" type="button">ROOM</button><button class="dh-b" data-d="close" type="button">✕ EXIT</button></div>'
+            + '<div class="dh-ui"><span class="dh-title">🏠 ROOM</span><button class="dh-b dh-cb" data-act="cord" type="button" aria-label="Curtains"><span class="cb-c">🎭 CURTAINS</span><span class="cb-o">☀ OPEN CURTAINS</span></button><button class="dh-b dh-sb" data-act="stand" type="button" aria-label="Toggle TV stand">🪑 STAND</button><button class="dh-b dh-lb" data-act="led" type="button" aria-label="LED colour">💡 LED</button><button class="dh-b" data-d="watch" type="button">📺 WATCH</button><button class="dh-b" data-d="in" type="button" aria-label="Zoom in">＋</button><button class="dh-b" data-d="out" type="button" aria-label="Zoom out">－</button><button class="dh-b" data-d="reset" type="button">ROOM</button><button class="dh-b" data-d="close" type="button">✕ EXIT</button></div>'
             + '<div class="dh-remote"><button class="dh-b" data-r="pwrBtn" type="button" aria-label="Power">⏻</button><button class="dh-b" data-r="tRew" type="button" aria-label="Rewind 15 seconds">⏪</button><button class="dh-b" data-r="tPlay" type="button" aria-label="Play or pause">⏯</button><button class="dh-b" data-r="tFF" type="button" aria-label="Forward 15 seconds">⏩</button><button class="dh-b" data-d="guide" type="button">📋 GUIDE</button></div>'
             + '<div class="dh-drawer" role="region" aria-label="Programme guide"><div class="dh-dh">PROGRAMME GUIDE <button class="dh-x" data-d="guide" type="button" aria-label="Close guide">✕</button></div><div class="dh-list"></div></div>'
             + '<div class="dh-dim"></div><div class="dh-empty"></div><div class="dh-hint">DRAG TO LOOK AROUND · SCROLL OR PINCH TO ZOOM · TAP WALLS OR CURTAINS TO RECOLOUR · ESC TO EXIT</div>';
@@ -3749,6 +3750,7 @@
         })();
         // the big black media console: the TV sits on top of it (the lower stand is replaced and the TV rises a little)
         const STAND_H = 102, STAND_UP = STAND_H - 62;
+        const standOff = () => { try { return localStorage.getItem('thetube.nostand.v1') === '1'; } catch (e) { return false; } };
         const standHtml = () => {
             const blk = 'background:repeating-linear-gradient(90deg,rgba(255,255,255,.05) 0 1px,transparent 1px 7px),linear-gradient(160deg,#2c2c31,#121215);', slat = 'background:repeating-linear-gradient(0deg,rgba(255,255,255,.08) 0 2px,rgba(0,0,0,.4) 2px 7px),#1a1a1e;', inn = 'background:linear-gradient(#0c0c0e,#1b1b1f);';
             const W = 560, D = 190, Z = -210, top = FY - STAND_H, bw = (cx, y, w, h, d, cz, col) => box(w, h, d, cx, y, cz == null ? Z : cz, 'cb', '', col);
@@ -3958,7 +3960,7 @@
         };
         dh.playCoin = chestPlay;
         const buildRoom = () => {
-            const have = ownedItems().filter(id => ITEM_BY[id]); const UP = have.includes('lamp') ? STAND_UP : 0; curUp = UP * TVS; SCR.cy = 100 + (-209 - UP) * TVS;
+            const have = ownedItems().filter(id => ITEM_BY[id]); const hasStand = have.includes('lamp') && !standOff(); dh.classList.toggle('hasstand', have.includes('lamp')); const sbtn = dh.querySelector('.dh-sb'); if (sbtn) sbtn.textContent = hasStand ? '🪑 STAND: ON' : '🪑 STAND: OFF'; const UP = hasStand ? STAND_UP : 0; curUp = UP * TVS; SCR.cy = 100 + (-209 - UP) * TVS;
             const sk = SKINS.find(k => st && k.id === st.skin) || SKINS[0];
             const lk = LOOK[sk.id] || {}, srcFx = document.querySelector('.tv-shell .skin-fx'), srcRing = document.querySelector('.tv-shell .skin-ring');
             const stk = lk.stickers ? '<svg class="dh-stk" style="left:212px;bottom:7px;width:27px;height:27px;transform:rotate(-10deg)"><use href="#stk-bolt"/></svg><svg class="dh-stk" style="left:244px;bottom:9px;width:24px;height:24px;transform:rotate(8deg)"><use href="#stk-star"/></svg><svg class="dh-stk" style="left:274px;bottom:7px;width:27px;height:27px;transform:rotate(-6deg)"><use href="#stk-gem"/></svg>' : '';
@@ -3967,7 +3969,7 @@
             const front = 'background:' + sk.pv + ';' + (sk.pr ? 'box-shadow:' + sk.pr.split(/,(?![^(]*\))/)[0] + ';' : ''), side = 'background:linear-gradient(160deg,rgba(255,255,255,.12),rgba(0,0,0,.18)),' + (sk.pd || '#707068') + ';';
             let h = plane(900, 800, 0, FY, 90, 90, 0, 'w-floor') + plane(900, WH, 0, FY - WH / 2, -310, 0, 0, 'w-wall back hid') + plane(800, WH, -450, FY - WH / 2, 90, 0, 90, 'w-wall hid') + plane(800, WH, 450, FY - WH / 2, 90, 0, -90, 'w-wall hid');
             h += windowHtml(have.includes('plant')) + curtainsHtml() + ledLampHtml() + cordHtml() + wallShelfHtml() + doorHtml() + switchHtml() + pendantHtml() + tvReflHtml() + tvBeamHtml();
-            h += '<div class="bx tvg" style="transform:scale3d(' + TVS + ',' + TVS + ',' + TVS + ');transform-origin:0 ' + FY + 'px -210px">' + (have.includes('lamp') ? standHtml() : box(400, 62, 180, 0, FY - 31, -210, 'stand', '')) + box(360, 270, 170, 0, FY - 62 - UP - 135, -215, 'tvbody', scr, front, side);
+            h += '<div class="bx tvg" style="transform:scale3d(' + TVS + ',' + TVS + ',' + TVS + ');transform-origin:0 ' + FY + 'px -210px">' + (hasStand ? standHtml() : box(400, 62, 180, 0, FY - 31, -210, 'stand', '')) + box(360, 270, 170, 0, FY - 62 - UP - 135, -215, 'tvbody', scr, front, side);
             if (lk.halo) h += plane(620, 480, 0, FY - 62 - UP - 135, -132, 0, 0, '', '', 'pointer-events:none;background:radial-gradient(closest-side,rgba(' + lk.halo + ',.42),rgba(' + lk.halo + ',.14) 55%,transparent);');
             h += '</div>';
             if (have.includes('rug')) h += plane(450, 314, 0, FY - 5, 0, 90, 0, '', itemSvg(ITEM_BY.rug, true));
@@ -4057,6 +4059,7 @@
         dh.addEventListener('click', e => {
             const li = e.target.closest('.dh-li'); if (li) { const c = document.querySelectorAll('#showList .show-card')[+li.dataset.i]; if (c) { c.click(); toggleGuide(false); } return; }
             if (e.target.closest('[data-act=led]')) { const bb = e.target.closest('[data-act=led]').getBoundingClientRect(); if (pick.hidden || ptarget !== 'led') openPick('led', bb.x - 120, bb.bottom); else closePick(); return; }
+            if (e.target.closest('[data-act=stand]')) { try { localStorage.setItem('thetube.nostand.v1', standOff() ? '0' : '1'); } catch (e2) { } returnScreen(); buildRoom(); takeScreen(); return; }
             if (e.target.closest('[data-act=cord]')) { toggleCurtains(); return; }
             const r = e.target.closest('[data-r]'); if (r) { const t = $(r.dataset.r); if (t) t.click(); return; }
             const b = e.target.closest('[data-d]'); if (!b) return; const d = b.dataset.d;
@@ -4120,6 +4123,7 @@
                     pendingDel = false; await call('delete_my_account'); await signOut(true); toast('Your account and data were deleted'); return;
                 }
                 if (t.dataset.act === 'room') { openRoom(); return; }
+                if (t.dataset.stand) { try { localStorage.setItem('thetube.nostand.v1', t.dataset.stand === '0' ? '1' : '0'); } catch (e2) { } renderShop(); click(); toast(t.dataset.stand === '0' ? 'Stand removed. Back to the brown box.' : 'Wide TV Stand placed in your room'); return; }
                 if (t.dataset.sofa) { try { localStorage.setItem('thetube.sofa.v1', t.dataset.sofa); } catch (e2) { } renderShop(); click(); toast('Placed in your room: ' + ITEM_BY[t.dataset.sofa].name); return; }
                 if (t.dataset.buyi) {
                     const k = ITEM_BY[t.dataset.buyi]; if (!k || coins() < k.price || ownedItems().includes(k.id)) return;
