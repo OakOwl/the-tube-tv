@@ -1399,6 +1399,42 @@
         @keyframes fxHolo { from { transform: translateX(0) } to { transform: translateX(-33.3333%) } }
         body.skin-holo .skin-fx::after { top: -20%; bottom: -20%; left: -30%; width: 18%; background: linear-gradient(90deg, transparent, rgba(255,255,255,.8), transparent); transform: skewX(-20deg) translateX(-200%); animation: fxShine 6s ease-in-out infinite 1s; }
         @media (prefers-reduced-motion: reduce) { .skin-fx::before, .skin-fx::after { animation: none !important; } }
+
+        /* ================= v52: sign-in button, account pages ================= */
+        #tcHud, #tcCta { display: none; }
+        body.tc-in #tcHud { display: flex; }
+        #tcCta { position: fixed; left: clamp(8px, 2vw, 28px); bottom: 14px; z-index: 52; align-items: center; gap: 10px; white-space: nowrap; padding: 9px 18px 9px 12px; border: 1px solid #f5a623; border-radius: 999px; text-align: left; cursor: pointer;
+            background: linear-gradient(#2e1d0b, #170e05); color: #ffd36a; font: 400 20px/1.05 'VT323', monospace; letter-spacing: .08em; box-shadow: 0 0 0 1px rgba(0,0,0,.6), 0 6px 14px rgba(0,0,0,.6), 0 0 14px rgba(245,166,35,.3);
+            -webkit-tap-highlight-color: transparent; transition: transform .2s ease, opacity .6s ease, background .2s; animation: ctaGlow 2.6s ease-in-out infinite alternate; }
+        body.tc-out #tcCta { display: flex; }
+        #tcCta:hover { transform: translateY(-3px); background: linear-gradient(#3a2610, #1f1308); } #tcCta:focus-visible { outline: 2px solid #fff3b0; outline-offset: 3px; }
+        #tcCta .cta-coin { font-size: 26px; line-height: 1; }
+        @keyframes ctaGlow { from { box-shadow: 0 0 0 1px rgba(0,0,0,.6), 0 6px 14px rgba(0,0,0,.6), 0 0 8px rgba(245,166,35,.2) } to { box-shadow: 0 0 0 1px rgba(0,0,0,.6), 0 6px 14px rgba(0,0,0,.6), 0 0 22px rgba(245,166,35,.6) } }
+        body.room-dim #tcCta { opacity: .5; } body.room-dim #tcCta:hover { opacity: 1; }
+        @media (max-width: 639px) { #tcCta { bottom: 12px; max-width: 176px; white-space: normal; padding: 6px 11px 6px 9px; border-radius: 14px; font-size: 16px; gap: 7px; } #tcCta .cta-coin { font-size: 20px; } body.lights-down #tcCta { bottom: 92px; } }
+        @media (prefers-reduced-motion: reduce) { #tcCta { animation: none; } }
+
+        .tc-narrow { max-width: 440px; }
+        .tc-tabs { display: flex; margin-bottom: 14px; border: 1px solid #3a2800; border-radius: 4px; overflow: hidden; }
+        .tc-tabs button { flex: 1; padding: 9px 6px; border: 0; background: #0f0b04; color: #a8905f; font: 400 18px/1 'VT323', monospace; letter-spacing: .12em; cursor: pointer; }
+        .tc-tabs button.on { background: #f5a623; color: #120c00; }
+        .tc-field { display: block; margin-bottom: 12px; }
+        .tc-field span { display: block; margin-bottom: 4px; font: 400 15px/1 'VT323', monospace; letter-spacing: .16em; color: #a8905f; }
+        .tc-input { width: 100%; box-sizing: border-box; padding: 10px 12px; border: 1px solid #5a3a1a; border-radius: 4px; background: #0b0803; color: #ffe2a8; font: 400 20px/1.1 'VT323', monospace; letter-spacing: .05em; }
+        .tc-input:focus { outline: none; border-color: #f5a623; box-shadow: 0 0 8px rgba(245,166,35,.4); }
+        .tc-check { display: flex; gap: 10px; align-items: flex-start; margin: 4px 0 12px; font: 400 16px/1.25 'VT323', monospace; color: #a8905f; letter-spacing: .03em; cursor: pointer; }
+        .tc-check input { margin-top: 3px; accent-color: #f5a623; flex: none; }
+        .tc-err { min-height: 20px; margin-bottom: 8px; font: 400 18px/1.2 'VT323', monospace; color: #ff7a6a; letter-spacing: .03em; }
+        .tc-btn.big { width: 100%; padding: 12px 8px; font-size: 22px; }
+        .tc-msg { margin: 0 0 14px; font: 400 20px/1.3 'VT323', monospace; color: #d9c08a; text-align: center; letter-spacing: .03em; }
+        .tc-info { margin: 0 0 12px; padding: 8px 10px; border-radius: 4px; font: 400 16px/1.25 'VT323', monospace; color: #a8905f; }
+        .tc-info.warn { color: #ffd36a; background: rgba(245,166,35,.1); border: 1px solid rgba(245,166,35,.35); }
+        .tc-link { display: block; margin: 12px auto 0; padding: 4px 6px; border: 0; background: none; color: #c9a86a; font: 400 17px/1 'VT323', monospace; letter-spacing: .08em; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+        .tc-link:hover { color: #ffd36a; } .tc-link.danger { color: #c9786a; }
+        .tc-acct { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; padding: 9px 12px; border: 1px solid #3a2800; border-radius: 4px; background: #0f0b04; font: 400 16px/1.2 'VT323', monospace; color: #a8905f; letter-spacing: .1em; }
+        .tc-acct b { font-size: 22px; color: #ffd36a; letter-spacing: .06em; } .tc-acct small { display: block; font-size: 15px; color: #7c6a44; letter-spacing: .04em; }
+        .tc-acct-btns { display: flex; gap: 14px; } .tc-acct-btns .tc-link { margin: 0; }
+        .tc-pill { padding: 1px 6px; border-radius: 3px; background: #f5a623; color: #120c00; font-style: normal; font-size: 13px; letter-spacing: .1em; vertical-align: 2px; }
 </style>
 </head>
 <body>
@@ -1427,6 +1463,7 @@
             <button class="hbtn help-btn" id="helpBtn" type="button" title="How to use The Tube" aria-label="Help"><span class="help-q">?</span><span class="help-word">HELP</span></button>
         </div>
     </header>
+    <button id="tcCta" type="button" aria-label="Sign in, watch, earn cosmetics"><span class="cta-coin" aria-hidden="true">🪙</span><span class="cta-txt">Sign in, watch, earn cosmetics</span></button>
     <button id="tcHud" type="button" title="Treasure chest: earn 1 coin for every minute you watch" aria-label="Open the treasure chest"><span class="ch-wrap"><span class="ch-drop" aria-hidden="true"><span class="ch-coin"><i>T</i></span></span><svg viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
 <defs><clipPath id="chLidClip"><path d="M10 46 Q10 14 60 14 Q110 14 110 46 Z"/></clipPath>
 <radialGradient id="chGl"><stop offset="0" stop-color="#fff3b0"/><stop offset="1" stop-color="#f2a823" stop-opacity="0"/></radialGradient></defs>
@@ -3092,9 +3129,13 @@
     </script>
 
     <script>
-    // Watch time + coins + treasure chest + skins (v50). Stored per browser in localStorage (no accounts, no IP tracking).
+    // Accounts + watch time + coins + treasure chest + skins (v52).
+    // Sign-in, username and stats live in a Supabase project (see SETUP-ACCOUNTS.md). With no keys below the site runs in PREVIEW mode:
+    // you can try the whole flow, but nothing leaves your browser.
     (function () {
-        const KEY = 'thetube.v1', COIN_EVERY = 60;
+        const CFG = { url: 'https://bwrodjpdlkdcgfgtkskk.supabase.co', anonKey: 'sb_publishable_tr0I7EQTnRNq0ew09wuFWQ_Xt6N6a66' };   // <- paste your Supabase Project URL into url. The key is the *publishable* (public) key. Never paste a secret / service_role key.
+        const PREVIEW = !(CFG.url && CFG.anonKey);
+        const AUTH_KEY = 'thetube.auth.v1', PREV_KEY = 'thetube.preview.v1', COIN_EVERY = 60, FLUSH_MS = 30000;
         const TIERS = { common: ['COMMON', '#a8a8a0'], rare: ['RARE', '#4aa8ff'], epic: ['EPIC', '#c07aff'], legendary: ['LEGENDARY', '#ffc83c'] };
         const SKINS = [
             { id: 'default', tier: 'common', name: 'Living Room Silver', price: 0, desc: 'The classic silver set with walnut cheeks.', pv: 'linear-gradient(160deg,#c8c8c0,#989890 60%,#888880)' },
@@ -3108,48 +3149,132 @@
             { id: 'cosmic', tier: 'legendary', name: 'Cosmic Nebula', price: 800, desc: 'Twinkling stars and the odd shooting star.', pv: 'radial-gradient(ellipse at 20% 15%,rgba(255,80,200,.6),transparent 55%),radial-gradient(ellipse at 85% 85%,rgba(0,200,255,.55),transparent 55%),linear-gradient(160deg,#120a3a,#050314)', pr: '0 0 0 2px #7aa8ff, 0 0 16px 3px rgba(122,100,255,.6)', pd: '#1a1450' },
             { id: 'holo', tier: 'legendary', name: 'Holographic Prism', price: 1200, desc: 'A living rainbow foil that never stops shifting.', pv: 'linear-gradient(115deg,#ff9ad5,#ffd29a 18%,#fff59a 32%,#b6ffcf 48%,#9ad1ff 64%,#c39aff 80%,#ff9ad5)', pr: '0 0 0 2px #fff, 0 0 16px 3px rgba(154,209,255,.7)', pd: '#6a6a8a' }
         ];
-        let st = { secs: 0, earned: 0, spent: 0, owned: ['default'], skin: 'default' };
-        try { const raw = JSON.parse(localStorage.getItem(KEY) || 'null'); if (raw && typeof raw === 'object') st = Object.assign(st, raw); } catch (e) { }
-        if (!Array.isArray(st.owned) || !st.owned.includes('default')) st.owned = ['default'].concat(Array.isArray(st.owned) ? st.owned : []);
-        if (!SKINS.some(k => k.id === st.skin) || !st.owned.includes(st.skin)) st.skin = 'default';
-        const save = () => { try { localStorage.setItem(KEY, JSON.stringify(st)); } catch (e) { } };
-        const $ = id => document.getElementById(id), body = document.body, hud = $('tcHud'), vid = $('vid');
-        const coins = () => st.earned - st.spent;
+        const $ = id => document.getElementById(id), body = document.body, hud = $('tcHud'), cta = $('tcCta'), vid = $('vid');
+        const esc = t => String(t).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
         const pad = n => String(n).padStart(2, '0');
         const fmt = s => { const h = Math.floor(s / 3600), m = Math.floor(s % 3600 / 60), x = s % 60; return h ? h + 'H ' + pad(m) + 'M' : m ? m + 'M ' + pad(x) + 'S' : x + 'S'; };
         const fmtLong = s => { const h = Math.floor(s / 3600), m = Math.floor(s % 3600 / 60); return (h ? h + (h === 1 ? ' hour ' : ' hours ') : '') + m + (m === 1 ? ' minute' : ' minutes'); };
-        const applySkin = () => { SKINS.forEach(k => body.classList.remove('skin-' + k.id)); if (st.skin !== 'default') body.classList.add('skin-' + st.skin); };
-        const render = () => { $('tcCoins').textContent = coins(); $('tcTime').textContent = 'WATCHED ' + fmt(st.secs); if (modal.classList.contains('show')) renderModal(); };
+        const toast = m => { try { showToast(m); } catch (e) { } };
+        const click = () => { try { sndClick(); } catch (e) { } };
 
-        // ----- the coin drop -----
-        const flash = (cls, ms) => { hud.classList.remove(cls); void hud.offsetWidth; hud.classList.add(cls); setTimeout(() => hud.classList.remove(cls), ms); };
-        const earnCoin = () => {
-            st.earned++; flash('drop', 900);
-            setTimeout(() => { hud.classList.add('open'); flash('bump', 480); flash('tick', 1150); render(); }, 720);
-            setTimeout(() => hud.classList.remove('open'), 1250);
-            save();
+        // ================= backend =================
+        const base = (CFG.url || '').replace(/\/+$/, '');
+        async function http(path, o) {
+            o = o || {};
+            const r = await fetch(base + path, { method: o.method || 'POST', keepalive: !!o.keepalive, headers: Object.assign({ apikey: CFG.anonKey, 'Content-Type': 'application/json' }, o.token && o.token !== CFG.anonKey ? { Authorization: 'Bearer ' + o.token } : {}), body: o.body ? JSON.stringify(o.body) : undefined });
+            let j = null; try { j = await r.json(); } catch (e) { }
+            if (!r.ok) { const e = new Error((j && (j.error_description || j.msg || j.message || j.error)) || ('Error ' + r.status)); e.status = r.status; e.code = j && (j.error_code || j.code); throw e; }
+            return j;
+        }
+        const toSession = j => ({ access_token: j.access_token, refresh_token: j.refresh_token, expires_at: j.expires_at || Math.floor(Date.now() / 1000) + (j.expires_in || 3600), user: j.user || null });
+        const real = {
+            signUp: (email, password, username) => http('/auth/v1/signup', { body: { email, password, data: { username } } }),
+            signIn: async (email, password) => toSession(await http('/auth/v1/token?grant_type=password', { body: { email, password } })),
+            refresh: async rt => toSession(await http('/auth/v1/token?grant_type=refresh_token', { body: { refresh_token: rt } })),
+            user: token => http('/auth/v1/user', { method: 'GET', token }),
+            recover: email => http('/auth/v1/recover', { body: { email } }),
+            setPassword: (token, password) => http('/auth/v1/user', { method: 'PUT', token, body: { password } }),
+            signOut: async token => { try { await http('/auth/v1/logout', { token }); } catch (e) { } },
+            rpc: (name, args, token, ka) => http('/rest/v1/rpc/' + name, { body: args || {}, token, keepalive: ka })
+        };
+        // PREVIEW backend: same interface, but everything stays in this browser and no password is kept.
+        const pv = { get() { try { return JSON.parse(localStorage.getItem(PREV_KEY) || 'null'); } catch (e) { return null; } }, put(p) { try { localStorage.setItem(PREV_KEY, JSON.stringify(p)); } catch (e) { } } };
+        const prevSession = (email, name) => ({ access_token: 'preview', refresh_token: '', expires_at: 4102444800, user: { email: email || 'preview@local', user_metadata: { username: name } } });
+        const preview = {
+            async signUp(email, password, username) { pv.put({ username, watch_seconds: 0, coins_spent: 0, owned_skins: ['default'], equipped_skin: 'default', email }); return prevSession(email, username); },
+            async signIn(email) { const p = pv.get(); if (!p) throw new Error('No preview account yet. Create one first.'); return prevSession(email, p.username); },
+            async refresh() { return prevSession(); }, async user() { return prevSession(); }, async recover() { return {}; }, async setPassword() { return {}; }, async signOut() { },
+            async rpc(name, a) {
+                const p = pv.get(); const J = x => Object.assign({}, x, { coins_earned: Math.floor(x.watch_seconds / 60) });
+                if (name === 'username_available') return !(p && p.username.toLowerCase() === String(a.p_username).toLowerCase());
+                if (name === 'get_profile') return p ? J(p) : null;
+                if (name === 'create_profile') { const n = { username: a.p_username, watch_seconds: 0, coins_spent: 0, owned_skins: ['default'], equipped_skin: 'default' }; pv.put(n); return J(n); }
+                if (!p) throw new Error('no_profile');
+                if (name === 'sync_watch') { p.watch_seconds += Math.max(0, a.p_seconds | 0); pv.put(p); return J(p); }
+                if (name === 'buy_skin') { const k = SKINS.find(z => z.id === a.p_skin); if (!k) throw new Error('unknown_skin'); if (p.owned_skins.includes(k.id)) throw new Error('already_owned'); if (Math.floor(p.watch_seconds / 60) - p.coins_spent < k.price) throw new Error('not_enough_coins'); p.coins_spent += k.price; p.owned_skins.push(k.id); p.equipped_skin = k.id; pv.put(p); return J(p); }
+                if (name === 'equip_skin') { if (!p.owned_skins.includes(a.p_skin)) throw new Error('not_owned'); p.equipped_skin = a.p_skin; pv.put(p); return J(p); }
+                if (name === 'delete_my_account') { try { localStorage.removeItem(PREV_KEY); } catch (e) { } return null; }
+                throw new Error('unknown_function');
+            }
+        };
+        const api = PREVIEW ? preview : real;
+        const FRIENDLY = [[/invalid login credentials/i, 'Wrong email or password.'], [/email not confirmed/i, 'Please confirm your email first. Check your inbox for the link.'], [/already registered|already been registered/i, 'That email already has an account. Try signing in.'],
+            [/username_taken|duplicate key|unique/i, 'That username is taken. Try another.'], [/bad_username|violates check/i, 'Usernames are 3-16 letters, numbers or underscores.'], [/not_enough_coins/i, 'Not enough coins yet. Keep watching!'],
+            [/already_owned/i, 'You already own that skin.'], [/password.*(short|least|weak)|weak_password/i, 'Choose a longer password (at least 8 characters).'], [/rate limit|too many|over_email_send_rate/i, 'Too many attempts. Please wait a minute and try again.'],
+            [/failed to fetch|networkerror|load failed/i, "Couldn't reach the server. Check your connection and try again."], [/jwt|expired/i, 'Your session expired. Please sign in again.']];
+        const friendly = e => { const m = (e && e.message) || String(e); const f = FRIENDLY.find(x => x[0].test(m)); return f ? f[1] : m; };
+
+        // ================= state =================
+        let session = null, st = null, pending = 0, flushing = false;
+        const persist = () => { try { if (session) localStorage.setItem(AUTH_KEY, JSON.stringify(session)); else localStorage.removeItem(AUTH_KEY); } catch (e) { } };
+        const coins = () => st ? Math.floor(st.secs / COIN_EVERY) - st.spent : 0;
+        const adopt = j => { const had = st; st = { secs: Number(j.watch_seconds) + pending, spent: Number(j.coins_spent), owned: j.owned_skins || ['default'], skin: j.equipped_skin || 'default', username: j.username, email: (session && session.user && session.user.email) || (had && had.email) || '' }; if (!st.owned.includes(st.skin)) st.skin = 'default'; };
+        async function token() {
+            if (!session) throw new Error('Not signed in');
+            if (!PREVIEW && session.expires_at * 1000 - Date.now() < 60000) { try { session = await api.refresh(session.refresh_token); persist(); } catch (e) { await signOut(true); throw new Error('Your session expired. Please sign in again.'); } }
+            return session.access_token;
+        }
+        const call = async (name, args, ka) => api.rpc(name, args, await token(), ka);
+        const applySkin = () => { SKINS.forEach(k => body.classList.remove('skin-' + k.id)); if (st && st.skin !== 'default') body.classList.add('skin-' + st.skin); };
+        const setMode = () => { body.classList.toggle('tc-in', !!st); body.classList.toggle('tc-out', !st); applySkin(); render(); };
+        const render = () => {
+            if (st) { $('tcCoins').textContent = coins(); $('tcTime').textContent = 'WATCHED ' + fmt(st.secs); hud.title = st.username + ' · ' + coins() + ' coins · 1 coin per minute watched'; }
+            if (shop.classList.contains('show')) renderShop();
         };
 
-        // ----- count real watching only -----
+        // ================= coin drop + counting real watch time =================
+        const flash = (cls, ms) => { hud.classList.remove(cls); void hud.offsetWidth; hud.classList.add(cls); setTimeout(() => hud.classList.remove(cls), ms); };
+        const earnCoin = () => { flash('drop', 900); setTimeout(() => { hud.classList.add('open'); flash('bump', 480); flash('tick', 1150); render(); }, 720); setTimeout(() => hud.classList.remove('open'), 1250); };
+        async function flush(ka) {
+            if (!st || flushing || pending <= 0) return; flushing = true; const n = pending; pending = 0;
+            try { const j = await call('sync_watch', { p_seconds: n }, ka); st.secs = Number(j.watch_seconds) + pending; st.spent = Number(j.coins_spent); }
+            catch (e) { pending += n; } finally { flushing = false; }
+        }
         setInterval(() => {
+            if (!st) return;
             let playing = false;
             try { playing = tvOn && vid && !vid.paused && !vid.ended && vid.readyState >= 3 && vid.getAttribute('src') && !document.hidden; } catch (e) { }
             if (!playing) return;
-            st.secs++;
+            st.secs++; pending++;
             if (st.secs % COIN_EVERY === 0) earnCoin();
-            if (st.secs % 10 === 0) save();
             $('tcTime').textContent = 'WATCHED ' + fmt(st.secs);
-            if (modal.classList.contains('show')) $('tcWatch').textContent = fmtLong(st.secs);
+            if (shop.classList.contains('show')) $('tcWatch').textContent = fmtLong(st.secs);
         }, 1000);
-        window.addEventListener('pagehide', save); document.addEventListener('visibilitychange', () => { if (document.hidden) save(); });
+        setInterval(() => flush(), FLUSH_MS);
+        window.addEventListener('pagehide', () => flush(true)); document.addEventListener('visibilitychange', () => { if (document.hidden) flush(true); });
 
-        // ----- the chest / skin shop -----
-        const modal = document.createElement('div'); modal.className = 'tc-modal-bg'; modal.id = 'tcModal';
-        modal.innerHTML = '<div class="tc-modal" role="dialog" aria-modal="true" aria-label="Treasure chest"><div class="tc-hdr"><span class="tc-title">🪙 TREASURE CHEST</span><button class="tc-close" id="tcClose" type="button">✕ CLOSE</button></div><div class="tc-body"><div class="tc-stats"><div class="tc-stat"><span>TOTAL WATCH TIME</span><b id="tcWatch"></b></div><div class="tc-stat"><span>COINS</span><b id="tcBal"></b></div></div><p class="tc-note">Earn 1 coin for every minute you watch. Spend them on TV skins.</p><div class="tc-grid" id="tcGrid"></div></div></div>';
-        document.body.appendChild(modal);
-        let pendingBuy = null, pendingT = 0;
-        const renderModal = () => {
+        // ================= sign in / out =================
+        async function loadProfile() {
+            let p = await call('get_profile');
+            if (!p) {
+                let name = session.user && session.user.user_metadata && session.user.user_metadata.username;
+                if (!name && !PREVIEW) { try { const u = await api.user(session.access_token); session.user = u; persist(); name = u && u.user_metadata && u.user_metadata.username; } catch (e) { } }
+                if (name && /^[A-Za-z0-9_]{3,16}$/.test(name)) { try { p = await call('create_profile', { p_username: name }); } catch (e) { p = null; } }
+            }
+            if (!p) { setMode(); openAuth('username'); return false; }
+            adopt(p); setMode(); return true;
+        }
+        async function signedIn(s) { session = s; persist(); try { if (await loadProfile()) { closeAuth(); toast('Welcome, ' + st.username + '!'); } } catch (e) { session = null; persist(); st = null; setMode(); throw e; } }
+        async function signOut(silent) {
+            const s = session; try { await flush(); } catch (e) { } session = null; st = null; pending = 0; persist(); setMode(); closeShop();
+            if (s && !silent) { try { await api.signOut(s.access_token); } catch (e) { } toast('Signed out'); }
+        }
+
+        // ================= modals =================
+        const mk = (id, html) => { const d = document.createElement('div'); d.className = 'tc-modal-bg'; d.id = id; d.innerHTML = html; document.body.appendChild(d); return d; };
+        const shop = mk('tcModal', '<div class="tc-modal" role="dialog" aria-modal="true" aria-label="Treasure chest"><div class="tc-hdr"><span class="tc-title">🪙 TREASURE CHEST</span><button class="tc-close" data-close type="button">✕ CLOSE</button></div><div class="tc-body"><div class="tc-acct" id="tcAcct"></div><div class="tc-stats"><div class="tc-stat"><span>TOTAL WATCH TIME</span><b id="tcWatch"></b></div><div class="tc-stat"><span>COINS</span><b id="tcBal"></b></div></div><p class="tc-note">Earn 1 coin for every minute you watch. Spend them on TV skins.</p><div class="tc-grid" id="tcGrid"></div></div></div>');
+        const auth = mk('tcAuth', '<div class="tc-modal tc-narrow" role="dialog" aria-modal="true" aria-label="Sign in"><div class="tc-hdr"><span class="tc-title" id="tcAuthTitle"></span><button class="tc-close" data-close type="button">✕ CLOSE</button></div><div class="tc-body" id="tcAuthBody"></div></div>');
+        let pendingBuy = null, pendingT = 0, pendingDel = false, delT = 0;
+        const closeShop = () => shop.classList.remove('show');
+        const closeAuth = () => auth.classList.remove('show');
+        const anyOpen = () => shop.classList.contains('show') || auth.classList.contains('show');
+        window.addEventListener('keydown', e => { if (e.key === 'Escape' && anyOpen()) { e.stopPropagation(); closeAuth(); closeShop(); } }, true);
+        [shop, auth].forEach(m => m.addEventListener('click', e => { if (e.target === m || e.target.closest('[data-close]')) { if (m === auth) closeAuth(); else closeShop(); } }));
+
+        function renderShop() {
+            if (!st) return;
             $('tcWatch').textContent = fmtLong(st.secs); $('tcBal').textContent = coins();
+            $('tcAcct').innerHTML = '<div><span>SIGNED IN AS</span> <b>' + esc(st.username) + '</b>' + (PREVIEW ? ' <em class="tc-pill">PREVIEW</em>' : '') + (st.email ? '<small>' + esc(st.email) + '</small>' : '') + '</div><div class="tc-acct-btns"><button class="tc-link" data-act="signout" type="button">SIGN OUT</button><button class="tc-link danger" data-act="delete" type="button">' + (pendingDel ? 'TAP AGAIN: DELETE FOR GOOD' : 'DELETE ACCOUNT') + '</button></div>';
             let html = '';
             Object.keys(TIERS).forEach(t => {
                 const list = SKINS.filter(k => k.tier === t); if (!list.length) return;
@@ -3162,26 +3287,89 @@
                 }).join('');
             });
             $('tcGrid').innerHTML = html;
-        };
-        const openShop = () => { renderModal(); modal.classList.add('show'); body.classList.remove('tv-spot'); };
-        const closeShop = () => { modal.classList.remove('show'); try { hud.focus({ preventScroll: true }); } catch (e) { } };
-        hud.addEventListener('click', () => { try { sndClick(); } catch (e) { } openShop(); });
-        $('tcClose').addEventListener('click', closeShop);
-        modal.addEventListener('click', e => { if (e.target === modal) closeShop(); });
-        window.addEventListener('keydown', e => { if (e.key === 'Escape' && modal.classList.contains('show')) { e.stopPropagation(); closeShop(); } }, true);
-        $('tcGrid').addEventListener('click', e => {
+        }
+        const openShop = () => { if (!st) return; renderShop(); shop.classList.add('show'); body.classList.remove('tv-spot'); };
+        hud.addEventListener('click', () => { click(); openShop(); });
+        shop.addEventListener('click', async e => {
             const t = e.target.closest('button'); if (!t) return;
-            if (t.dataset.eq) { st.skin = t.dataset.eq; applySkin(); save(); renderModal(); try { sndClick(); } catch (x) { } }
-            else if (t.dataset.buy) {
-                const k = SKINS.find(z => z.id === t.dataset.buy); if (!k || coins() < k.price || st.owned.includes(k.id)) return;
-                if (k.price >= 250 && pendingBuy !== k.id) { pendingBuy = k.id; clearTimeout(pendingT); pendingT = setTimeout(() => { pendingBuy = null; if (modal.classList.contains('show')) renderModal(); }, 4000); renderModal(); return; }
-                pendingBuy = null; clearTimeout(pendingT);
-                st.spent += k.price; st.owned.push(k.id); st.skin = k.id; applySkin(); save(); render(); renderModal();
-                try { showToast('Unlocked: ' + k.name + '!'); } catch (x) { }
-            }
+            try {
+                if (t.dataset.act === 'signout') { await signOut(); return; }
+                if (t.dataset.act === 'delete') {
+                    if (!pendingDel) { pendingDel = true; clearTimeout(delT); delT = setTimeout(() => { pendingDel = false; if (shop.classList.contains('show')) renderShop(); }, 5000); renderShop(); return; }
+                    pendingDel = false; await call('delete_my_account'); await signOut(true); toast('Your account and data were deleted'); return;
+                }
+                if (t.dataset.eq) { await flush(); adopt(await call('equip_skin', { p_skin: t.dataset.eq })); applySkin(); renderShop(); click(); return; }
+                if (t.dataset.buy) {
+                    const k = SKINS.find(z => z.id === t.dataset.buy); if (!k || coins() < k.price || st.owned.includes(k.id)) return;
+                    if (k.price >= 250 && pendingBuy !== k.id) { pendingBuy = k.id; clearTimeout(pendingT); pendingT = setTimeout(() => { pendingBuy = null; if (shop.classList.contains('show')) renderShop(); }, 4000); renderShop(); return; }
+                    pendingBuy = null; clearTimeout(pendingT); await flush();
+                    adopt(await call('buy_skin', { p_skin: k.id })); applySkin(); render(); renderShop(); toast('Unlocked: ' + k.name + '!');
+                }
+            } catch (err) { pendingBuy = null; toast(friendly(err)); if (shop.classList.contains('show')) renderShop(); }
         });
-        const shellEl = document.querySelector('.tv-shell'); if (shellEl && !shellEl.querySelector('.skin-fx')) { const fx = document.createElement('div'); fx.className = 'skin-fx'; fx.setAttribute('aria-hidden', 'true'); shellEl.insertBefore(fx, shellEl.firstChild); }
-        applySkin(); render();
+
+        // ---- the sign-in / create-account / username pages ----
+        let authView = 'signin';
+        const note = () => PREVIEW ? '<p class="tc-info warn">PREVIEW MODE: accounts aren\'t connected to a server yet, so everything stays in this browser and any password works.</p>' : '';
+        const tabs = v => '<div class="tc-tabs"><button type="button" data-view="signin" class="' + (v === 'signin' ? 'on' : '') + '">SIGN IN</button><button type="button" data-view="signup" class="' + (v === 'signup' ? 'on' : '') + '">CREATE ACCOUNT</button></div>';
+        const field = (label, name, type, extra) => '<label class="tc-field"><span>' + label + '</span><input class="tc-input" name="' + name + '" type="' + type + '" ' + (extra || '') + '></label>';
+        const VIEWS = {
+            signin: () => ['🪙 SIGN IN · WATCH · EARN', note() + tabs('signin') + '<form data-form="signin" novalidate>' + field('EMAIL', 'email', 'email', 'autocomplete="email" required') + field('PASSWORD', 'password', 'password', 'autocomplete="current-password" required') + '<div class="tc-err" role="alert"></div><button class="tc-btn big" type="submit">SIGN IN</button><button class="tc-link" type="button" data-view="forgot">Forgot your password?</button></form>'],
+            signup: () => ['🪙 CREATE YOUR ACCOUNT', note() + tabs('signup') + '<form data-form="signup" novalidate>' + field('USERNAME', 'username', 'text', 'autocomplete="username" maxlength="16" placeholder="3-16 letters, numbers, _" required') + field('EMAIL', 'email', 'email', 'autocomplete="email" required') + field('PASSWORD', 'password', 'password', 'autocomplete="new-password" minlength="8" placeholder="at least 8 characters" required') +
+                '<label class="tc-check"><input type="checkbox" name="ok"><span>I\'m 13 or older and I\'m happy for The Tube to store my email, username and watch stats to run the treasure chest. You can delete your account and data any time.</span></label><div class="tc-err" role="alert"></div><button class="tc-btn big" type="submit">CREATE ACCOUNT</button></form>'],
+            verify: m => ['📬 CHECK YOUR EMAIL', '<p class="tc-msg">We sent a confirmation link to <b>' + esc(m || 'your email') + '</b>.<br>Click it, then come back and sign in.</p><button class="tc-btn big" type="button" data-view="signin">BACK TO SIGN IN</button>'],
+            username: () => ['🪙 CHOOSE YOUR USERNAME', '<form data-form="username" novalidate><p class="tc-msg">Pick the name that goes with your treasure chest.</p>' + field('USERNAME', 'username', 'text', 'maxlength="16" placeholder="3-16 letters, numbers, _" required') + '<div class="tc-err" role="alert"></div><button class="tc-btn big" type="submit">CONTINUE</button></form>'],
+            forgot: () => ['🔑 RESET PASSWORD', '<form data-form="forgot" novalidate><p class="tc-msg">Enter your email and we\'ll send you a reset link.</p>' + field('EMAIL', 'email', 'email', 'autocomplete="email" required') + '<div class="tc-err" role="alert"></div><button class="tc-btn big" type="submit">SEND RESET LINK</button><button class="tc-link" type="button" data-view="signin">Back to sign in</button></form>'],
+            reset: () => ['🔑 NEW PASSWORD', '<form data-form="reset" novalidate>' + field('NEW PASSWORD', 'password', 'password', 'autocomplete="new-password" minlength="8" required') + '<div class="tc-err" role="alert"></div><button class="tc-btn big" type="submit">SAVE PASSWORD</button></form>']
+        };
+        function openAuth(view, arg) {
+            authView = view; const v = VIEWS[view](arg); $('tcAuthTitle').textContent = v[0]; $('tcAuthBody').innerHTML = v[1];
+            auth.classList.add('show'); body.classList.remove('tv-spot'); closeShop();
+            setTimeout(() => { const i = $('tcAuthBody').querySelector('input:not([type=checkbox])'); if (i) i.focus(); }, 30);
+        }
+        const showErr = (form, m) => { form.querySelector('.tc-err').textContent = m || ''; };
+        const USER_RE = /^[A-Za-z0-9_]{3,16}$/, MAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        auth.addEventListener('click', e => { const b = e.target.closest('[data-view]'); if (b) { click(); openAuth(b.dataset.view); } });
+        auth.addEventListener('submit', async e => {
+            e.preventDefault(); const f = e.target, kind = f.dataset.form, v = n => (f.elements[n] ? f.elements[n].value.trim() : ''), btn = f.querySelector('button[type=submit]'); showErr(f, '');
+            const lock = on => { btn.disabled = on; btn.dataset.t = btn.dataset.t || btn.textContent; btn.textContent = on ? 'PLEASE WAIT…' : btn.dataset.t; };
+            try {
+                if (kind === 'signin') {
+                    if (!MAIL_RE.test(v('email'))) return showErr(f, 'Enter a valid email address.'); if (!f.elements.password.value) return showErr(f, 'Enter your password.');
+                    lock(true); await signedIn(await api.signIn(v('email'), f.elements.password.value));
+                } else if (kind === 'signup') {
+                    const u = v('username'), em = v('email'), pw = f.elements.password.value;
+                    if (!USER_RE.test(u)) return showErr(f, 'Usernames are 3-16 letters, numbers or underscores.'); if (!MAIL_RE.test(em)) return showErr(f, 'Enter a valid email address.');
+                    if (pw.length < 8) return showErr(f, 'Choose a password of at least 8 characters.'); if (!f.elements.ok.checked) return showErr(f, 'Please tick the box to continue.');
+                    lock(true);
+                    if (!(await api.rpc('username_available', { p_username: u }, CFG.anonKey))) return showErr(f, 'That username is taken. Try another.');
+                    const r = await api.signUp(em, pw, u);
+                    if (r && r.access_token) await signedIn(PREVIEW ? r : toSession(r)); else openAuth('verify', em);
+                } else if (kind === 'username') {
+                    const u = v('username'); if (!USER_RE.test(u)) return showErr(f, 'Usernames are 3-16 letters, numbers or underscores.');
+                    lock(true); adopt(await call('create_profile', { p_username: u })); setMode(); closeAuth(); toast('Welcome, ' + st.username + '!');
+                } else if (kind === 'forgot') {
+                    if (!MAIL_RE.test(v('email'))) return showErr(f, 'Enter a valid email address.'); lock(true); await api.recover(v('email'));
+                    $('tcAuthBody').innerHTML = '<p class="tc-msg">If that email has an account, a reset link is on its way.</p><button class="tc-btn big" type="button" data-view="signin">BACK TO SIGN IN</button>';
+                } else if (kind === 'reset') {
+                    const pw = f.elements.password.value; if (pw.length < 8) return showErr(f, 'Choose a password of at least 8 characters.');
+                    lock(true); await api.setPassword(session.access_token, pw); closeAuth(); toast('Password updated');
+                }
+            } catch (err) { showErr(f, friendly(err)); } finally { if (document.body.contains(btn)) lock(false); }
+        });
+        cta.addEventListener('click', () => { click(); openAuth(session && !st ? 'username' : 'signin'); });
+
+        // ================= start-up: restore a session, or handle a link from a confirmation / reset email =================
+        (async function boot() {
+            let recovery = false;
+            if (!PREVIEW && location.hash.indexOf('access_token=') > -1) {
+                const h = new URLSearchParams(location.hash.slice(1));
+                try { session = { access_token: h.get('access_token'), refresh_token: h.get('refresh_token'), expires_at: Math.floor(Date.now() / 1000) + Number(h.get('expires_in') || 3600), user: null }; recovery = h.get('type') === 'recovery'; persist(); } catch (e) { session = null; }
+                try { history.replaceState(null, '', location.pathname + location.search); } catch (e) { }
+            } else { try { session = JSON.parse(localStorage.getItem(AUTH_KEY) || 'null'); } catch (e) { session = null; } }
+            if (session) { try { if (recovery) { setMode(); openAuth('reset'); return; } await loadProfile(); } catch (e) { if (e && e.status === 401) { session = null; persist(); } } }
+            setMode();
+        })();
     })();
     </script>
 </body>
