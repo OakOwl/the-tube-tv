@@ -3612,7 +3612,7 @@
             + plane(w, h, 0, 0, d / 2, 0, 0, cls + ' tvf', face, extra) + plane(w, h, 0, 0, -d / 2, 0, 180, cls + ' tvf', '', side)
             + plane(d, h, -w / 2, 0, 0, 0, -90, cls + ' tvf', '', side) + plane(d, h, w / 2, 0, 0, 0, 90, cls + ' tvf', '', side)
             + plane(w, d, 0, -h / 2, 0, 90, 0, cls + ' tvf', '', side) + plane(w, d, 0, h / 2, 0, -90, 0, cls + ' tvf', '', side) + '</div>'; };
-        const SP = { plant: [78, 143, -400, -80], lamp: [73, 195, -385, -240], arcade: [105, 225, 395, -235], beanbag: [170, 105, 350, 150], lava: [70, 140, 290, -130], dolls: [110, 98, -230, 90], boombox: [96, 58, -250, -150] };
+        const SP = { plant: [78, 143, -400, -80], lamp: [73, 195, -385, -240], arcade: [105, 225, 395, -235], beanbag: [170, 105, 350, 150], lava: [70, 140, 290, -130], dolls: [110, 98, -230, 90], boombox: [96, 58, -320, -60] };
         let moved = null;
         const takeScreen = () => {
             const wrap = $('screenWrap'), host = roomEl.querySelector('.tv-scr'); if (!wrap || !host || moved) return;
@@ -3658,7 +3658,7 @@
         };
         const couchHtml = id => {
             const k = id && COUCH[id]; if (!k) return '';
-            const sz = 95, SW = k.W - 60, f = (extra) => 'background:' + (extra || '') + 'linear-gradient(160deg,rgba(255,255,255,.14),rgba(0,0,0,.2)),' + k.c1 + ';', fb = 'background:' + k.pat + 'linear-gradient(160deg,rgba(255,255,255,.1),rgba(0,0,0,.25)),' + k.c2 + ';';
+            const sz = 160, SW = k.W - 60, f = (extra) => 'background:' + (extra || '') + 'linear-gradient(160deg,rgba(255,255,255,.14),rgba(0,0,0,.2)),' + k.c1 + ';', fb = 'background:' + k.pat + 'linear-gradient(160deg,rgba(255,255,255,.1),rgba(0,0,0,.25)),' + k.c2 + ';';
             const seatTop = FY - 10 - 36, cush = 'background:linear-gradient(90deg,transparent calc(33.3% - 1px),rgba(0,0,0,.32) 33.3%,transparent calc(33.3% + 1px),transparent calc(66.6% - 1px),rgba(0,0,0,.32) 66.6%,transparent calc(66.6% + 1px)),linear-gradient(160deg,rgba(255,255,255,.2),rgba(0,0,0,.15)),' + k.c1 + ';';
             let h = '';
             if (k.halo) h += plane(k.W + 160, 300, 0, FY - 1, sz, 90, 0, '', '', 'pointer-events:none;background:radial-gradient(closest-side,rgba(' + k.halo + ',.4),rgba(' + k.halo + ',.12) 60%,transparent);');
@@ -3670,7 +3670,7 @@
             return '<div class="bx" style="transform:scale3d(1.12,1.12,1.12);transform-origin:0 ' + FY + 'px ' + sz + 'px">' + h + '</div>';
         };
         // the 3D treasure chest: same look and the same coin-drop sequence as the one in the corner of the page
-        const CHX = -335, CHZ = 150;
+        const CHX = -255, CHZ = -255;
         const chestHtml = () => {
             const W = 130, H = 62, D = 84, R = 36, n = 8, wood = 'repeating-linear-gradient(0deg,rgba(0,0,0,.28) 0 2px,transparent 2px 20px),linear-gradient(160deg,#8a5528,#6a3e1c)', gold = 'linear-gradient(90deg,#b8841c,#f2c340 40%,#d9a53a)';
             const bands = '<i class="cb-band" style="left:16px"></i><i class="cb-band" style="right:16px"></i>';
@@ -3689,7 +3689,7 @@
                 + plane(W + 90, D + 90, 0, FY - H - 2, 0, 90, 0, 'cglow', '', 'background:radial-gradient(closest-side,rgba(255,225,120,.75),rgba(242,168,35,.25) 55%,transparent);');
             const bb = (cls, w, h, y, z, inner) => '<div class="sp ' + cls + '" style="width:' + w + 'px;height:' + h + 'px;margin:' + (-h / 2) + 'px 0 0 ' + (-w / 2) + 'px;transform:translate3d(0,' + y + 'px,' + z + 'px) rotateY(calc(var(--y) * -1));filter:none">' + inner + '</div>';
             return '<div class="bx chest" style="transform:translate3d(' + CHX + 'px,0,' + CHZ + 'px)"><div class="bx cgrp" style="transform-origin:0 ' + FY + 'px 0">' + body + lid + pile + '</div>'
-                + bb('chcoin', 30, 30, FY - H - 4, 0, '<i class="cc">T</i>') + bb('chplus', 40, 24, FY - H - 40, 0, '<b>+1</b>') + bb('chplate', 96, 40, FY - H - 62, 0, '<b class="cpn">● 0</b><small>COINS</small>') + '</div>';
+                + bb('chcoin', 30, 30, FY - H - 4, 0, '<i class="cc">T</i>') + bb('chplus', 40, 24, FY - H - 58, 0, '<b>+1</b>') + bb('chplate', 96, 40, FY - H - 84, 0, '<b class="cpn">● 0</b><small>COINS</small>') + '</div>';
         };
         // side table with the same popcorn bucket as the 2D page (cloned, with its idle bob + hopping kernels)
         const TBX = 215, TBZ = -35;
