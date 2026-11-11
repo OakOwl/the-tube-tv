@@ -1582,7 +1582,7 @@
         #dh.drawn .dh-cb { background: #f5a623; color: #120c00; }
         #dh .dh-cord::before { content: ''; position: absolute; left: -14px; right: -14px; top: 0; bottom: -10px; }
         @media (max-width: 639px) { #dh .dh-cb .cb-c, #dh.drawn .dh-cb .cb-o { font-size: 0; } #dh .dh-cb .cb-c::before { content: '🎭'; font-size: 16px; } #dh.drawn .dh-cb .cb-o::before { content: '☀'; font-size: 16px; } }
-        #dh { --wall: #5e0e17; --curt: #b01a22; } #dh .w-wall, #dh .cs { cursor: pointer; }
+        #dh { --wall: #5e0e17; --curt: #b01a22; --led: #22e07a; } #dh .w-wall, #dh .cs { cursor: pointer; }
         #dh .dh-pick { position: absolute; z-index: 6; width: 232px; box-sizing: border-box; padding: 10px; background: rgba(18,12,4,.94); border: 1px solid #c47d0e; border-radius: 4px; box-shadow: 0 8px 30px rgba(0,0,0,.7), 0 0 16px rgba(255,140,40,.25); font-family: 'VT323', monospace; color: #ffe2a8; touch-action: none; }
         #dh .dh-pick[hidden] { display: none; } #dh .dp-h { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; } #dh .dp-t { font-weight: 400; font-size: 20px; letter-spacing: .12em; color: #f5a623; }
         #dh .dp-x, #dh .dp-rs { font: 400 16px/1 'VT323', monospace; color: #ffe2a8; background: #1c1306; border: 1px solid #7a5a1c; border-radius: 3px; padding: 4px 8px; cursor: pointer; } #dh .dp-x:hover, #dh .dp-rs:hover { background: #f5a623; color: #120c00; }
@@ -1592,7 +1592,7 @@
         #dh .dp-v input { width: 100%; margin: 0 0 8px; accent-color: #f5a623; } #dh .dp-row { display: flex; gap: 6px; align-items: center; margin-bottom: 8px; }
         #dh .dp-sw { width: 26px; height: 26px; border-radius: 3px; border: 1px solid #7a5a1c; flex: none; } #dh .dp-hex { flex: 1; min-width: 0; font: 400 18px/1 'VT323', monospace; letter-spacing: .08em; color: #ffe2a8; background: #0c0803; border: 1px solid #7a5a1c; border-radius: 3px; padding: 4px 6px; }
         #dh .dp-pre { display: grid; grid-template-columns: repeat(6, 1fr); gap: 5px; } #dh .dp-pre button { height: 22px; border: 1px solid rgba(255,255,255,.25); border-radius: 3px; cursor: pointer; padding: 0; } #dh .dp-pre button:hover { outline: 2px solid #f5a623; }
-        #dh .ledl { box-shadow: 0 0 8px 1px rgba(90,255,210,.9); } #dh .ledw { opacity: .85; animation: ledBreathe 6s ease-in-out infinite; } #dh .ledf { animation: ledBreathe 6s ease-in-out infinite; }
+        #dh .ledl { box-shadow: 0 0 8px 1px var(--ledg), 0 0 22px 4px color-mix(in srgb,var(--ledg) 60%,transparent); } #dh .ledw { opacity: .85; animation: ledBreathe 6s ease-in-out infinite; } #dh .ledf { animation: ledBreathe 6s ease-in-out infinite; }
         @keyframes ledBreathe { 0%,100% { opacity: .8 } 50% { opacity: 1 } }
         @media (prefers-reduced-motion: reduce) { #dh .ledw, #dh .ledf { animation: none; } }
         #dh .chest { cursor: pointer; }
@@ -1665,6 +1665,9 @@
         #dh .tvr-l { background: radial-gradient(ellipse 50% 50% at 90% 60%, rgba(120,200,255,.28), transparent); }
         @keyframes tvHue { from { filter: hue-rotate(0deg) } to { filter: hue-rotate(360deg) } }
         @media (pointer: coarse) { #dh .rb, #dh .tvr-w { animation: none !important; } }
+
+        #dh .dh-lb { }
+        @media (max-width: 639px) { #dh .dh-lb { font-size: 0; } #dh .dh-lb::before { content: '💡'; font-size: 16px; } }
 </style>
 </head>
 <body>
@@ -3629,7 +3632,7 @@
         // The real TV screen (video, static, effects, on-screen text) is moved into the 3D TV while the room is open, so you watch the live picture there.
         const dh = document.createElement('div'); dh.id = 'dh'; dh.setAttribute('role', 'dialog'); dh.setAttribute('aria-modal', 'true'); dh.setAttribute('aria-label', 'Your room in 3D');
         dh.innerHTML = '<div class="dh-stage"><div class="dh-cam"><div class="dh-room"></div></div></div>'
-            + '<div class="dh-ui"><span class="dh-title">🏠 ROOM</span><button class="dh-b dh-cb" data-act="cord" type="button" aria-label="Curtains"><span class="cb-c">🎭 CURTAINS</span><span class="cb-o">☀ OPEN CURTAINS</span></button><button class="dh-b" data-d="watch" type="button">📺 WATCH</button><button class="dh-b" data-d="in" type="button" aria-label="Zoom in">＋</button><button class="dh-b" data-d="out" type="button" aria-label="Zoom out">－</button><button class="dh-b" data-d="reset" type="button">ROOM</button><button class="dh-b" data-d="close" type="button">✕ EXIT</button></div>'
+            + '<div class="dh-ui"><span class="dh-title">🏠 ROOM</span><button class="dh-b dh-cb" data-act="cord" type="button" aria-label="Curtains"><span class="cb-c">🎭 CURTAINS</span><span class="cb-o">☀ OPEN CURTAINS</span></button><button class="dh-b dh-lb" data-act="led" type="button" aria-label="LED colour">💡 LED</button><button class="dh-b" data-d="watch" type="button">📺 WATCH</button><button class="dh-b" data-d="in" type="button" aria-label="Zoom in">＋</button><button class="dh-b" data-d="out" type="button" aria-label="Zoom out">－</button><button class="dh-b" data-d="reset" type="button">ROOM</button><button class="dh-b" data-d="close" type="button">✕ EXIT</button></div>'
             + '<div class="dh-remote"><button class="dh-b" data-r="pwrBtn" type="button" aria-label="Power">⏻</button><button class="dh-b" data-r="tRew" type="button" aria-label="Rewind 15 seconds">⏪</button><button class="dh-b" data-r="tPlay" type="button" aria-label="Play or pause">⏯</button><button class="dh-b" data-r="tFF" type="button" aria-label="Forward 15 seconds">⏩</button><button class="dh-b" data-d="guide" type="button">📋 GUIDE</button></div>'
             + '<div class="dh-drawer" role="region" aria-label="Programme guide"><div class="dh-dh">PROGRAMME GUIDE <button class="dh-x" data-d="guide" type="button" aria-label="Close guide">✕</button></div><div class="dh-list"></div></div>'
             + '<div class="dh-dim"></div><div class="dh-empty"></div><div class="dh-hint">DRAG TO LOOK AROUND · SCROLL OR PINCH TO ZOOM · TAP WALLS OR CURTAINS TO RECOLOUR · ESC TO EXIT</div>';
@@ -3826,16 +3829,17 @@
         };
         // RGB corner floor lamp (always in the room): a slim black L-pole with a cyan-to-green LED strip washing the walls
         const ledLampHtml = () => {
-            const X = -396, Z = -268, PH = 330, LED = 'linear-gradient(180deg,#8ff6ff,#38f0c8 45%,#22e07a)', WASH = 'linear-gradient(180deg,rgba(127,240,255,.8),rgba(58,240,192,.95) 55%,rgba(34,224,122,1))';
+            const X = -396, Z = -268, PH = 330, LED = 'linear-gradient(180deg,color-mix(in srgb,var(--led) 50%,#fff),var(--led) 50%,color-mix(in srgb,var(--led) 88%,#000))', WASH = 'linear-gradient(180deg,color-mix(in srgb,var(--ledg) 80%,transparent),var(--ledg) 60%,var(--ledg))';
             const mk = m => 'mask-image:' + m + ';-webkit-mask-image:' + m + ';';
             const maskB = mk('radial-gradient(ellipse 215px 335px at 54px 80%,#000 0,rgba(0,0,0,.92) 15%,rgba(0,0,0,.74) 30%,rgba(0,0,0,.5) 45%,rgba(0,0,0,.3) 60%,rgba(0,0,0,.15) 75%,rgba(0,0,0,.05) 90%,transparent 100%)');
             const maskL = mk('radial-gradient(ellipse 215px 335px at 246px 80%,#000 0,rgba(0,0,0,.92) 15%,rgba(0,0,0,.74) 30%,rgba(0,0,0,.5) 45%,rgba(0,0,0,.3) 60%,rgba(0,0,0,.15) 75%,rgba(0,0,0,.05) 90%,transparent 100%)');
             let h = plane(300, WH, -300, FY - WH / 2, -280, 0, 0, 'ledw', '', 'pointer-events:none;background:' + WASH + ';' + maskB)
                 + plane(300, WH, -443, FY - WH / 2, -160, 0, 90, 'ledw hid', '', 'pointer-events:none;background:' + WASH + ';' + maskL)
-                + plane(240, 240, X + 50, FY - 3, Z + 50, 90, 0, 'ledf', '', 'pointer-events:none;background:radial-gradient(closest-side,rgba(60,240,170,.5),rgba(60,220,200,.16) 60%,transparent);');
+                + plane(240, 240, X + 50, FY - 3, Z + 50, 90, 0, 'ledf', '', 'pointer-events:none;background:radial-gradient(closest-side,color-mix(in srgb,var(--ledg) 65%,transparent),color-mix(in srgb,var(--ledg) 22%,transparent) 60%,transparent);');
             h += '<div class="bx" style="transform:translate3d(' + X + 'px,0,' + Z + 'px)">' + box(5, PH, 5, 0, FY - PH / 2, 0, 'cb', '', 'background:#0c0c0e;')
                 + plane(3, PH - 6, 0, FY - PH / 2, 2.7, 0, 0, 'ledl', '', 'background:' + LED + ';') + plane(3, PH - 6, 2.7, FY - PH / 2, 0, 0, 90, 'ledl', '', 'background:' + LED + ';')
-                + box(40, 3, 5, 20, FY - 1.5, 0, 'cb', '', 'background:#0c0c0e;') + box(5, 3, 40, 0, FY - 1.5, 20, 'cb', '', 'background:#0c0c0e;') + '</div>';
+                + box(40, 3, 5, 20, FY - 1.5, 0, 'cb', '', 'background:#0c0c0e;') + box(5, 3, 40, 0, FY - 1.5, 20, 'cb', '', 'background:#0c0c0e;')
+                + '<div class="sp led-hit" title="Change LED colour" style="width:46px;height:' + PH + 'px;margin:' + (-PH) + 'px 0 0 -23px;transform:translate3d(0,' + FY + 'px,6px) rotateY(calc(var(--y) * -1));cursor:pointer;pointer-events:auto;filter:none;"></div></div>';
             return h;
         };
         // two wall shelves on the right-hand wall: books, a little plant and some trinkets
@@ -3880,20 +3884,22 @@
             dh.querySelector('.dh-empty').textContent = have.length ? '' : 'Your room is empty. Buy room upgrades in the treasure chest to fill it.';
         };
         // colour wheel: tap a wall or a curtain to recolour it (free for everyone, remembered in this browser)
-        const COLKEY = 'thetube.roomcolors.v1', COLDEF = { wall: '#5e0e17', curt: '#b01a22' };
+        const COLKEY = 'thetube.roomcolors.v1', COLDEF = { wall: '#5e0e17', curt: '#b01a22', led: '#22e07a' };
         let cols = { ...COLDEF }; try { Object.assign(cols, JSON.parse(localStorage.getItem(COLKEY) || '{}')); } catch (e) { }
-        const applyCols = () => { dh.style.setProperty('--wall', cols.wall); dh.style.setProperty('--curt', cols.curt); try { localStorage.setItem(COLKEY, JSON.stringify(cols)); } catch (e) { } };
-        applyCols();
+        const applyCols = () => { dh.style.setProperty('--wall', cols.wall); dh.style.setProperty('--curt', cols.curt); const lc = cols.led || COLDEF.led; dh.style.setProperty('--led', lc); try { const q = hex2hsv(lc); dh.style.setProperty('--ledg', hsv2hex(q.h, Math.min(q.s, .72), 1)); } catch (e) { } try { localStorage.setItem(COLKEY, JSON.stringify(cols)); } catch (e) { } };
         const hex2hsv = h => { const n = parseInt(h.slice(1), 16), r = (n >> 16 & 255) / 255, g = (n >> 8 & 255) / 255, b = (n & 255) / 255, mx = Math.max(r, g, b), mn = Math.min(r, g, b), d = mx - mn; let hh = 0; if (d) { hh = mx === r ? ((g - b) / d) % 6 : mx === g ? (b - r) / d + 2 : (r - g) / d + 4; hh *= 60; if (hh < 0) hh += 360; } return { h: hh, s: mx ? d / mx : 0, v: mx }; };
         const hsv2hex = (h, s, v) => { const f = n => { const k = (n + h / 60) % 6, x = v - v * s * Math.max(0, Math.min(k, 4 - k, 1)); return Math.round(x * 255).toString(16).padStart(2, '0'); }; return '#' + f(5) + f(3) + f(1); };
+        applyCols();
         const SWATCH = ['#5e0e17', '#7a1020', '#c0392b', '#e08a2e', '#e9c46a', '#2f6f4f', '#1f7a8c', '#274690', '#5a3a8a', '#b04fa0', '#f2e6d0', '#2b2b33'];
+        const LEDSW = ['#22e07a', '#00ffd5', '#18c8ff', '#2f6bff', '#8a4bff', '#ff2bd6', '#ff3b5c', '#ff8a1f', '#ffe14a', '#ffffff'];
+        const preHtml = list => list.map(c => '<button type="button" style="background:' + c + '" data-c="' + c + '" aria-label="' + c + '"></button>').join('');
         const pick = document.createElement('div'); pick.className = 'dh-pick'; pick.hidden = true;
         pick.innerHTML = '<div class="dp-h"><b class="dp-t">WALLPAPER</b><button type="button" class="dp-x" aria-label="Close">✕</button></div><div class="dp-wheel"><i class="dp-dot"></i></div><div class="dp-v"><input type="range" min="8" max="100" value="100" aria-label="Brightness"></div><div class="dp-row"><span class="dp-sw"></span><input class="dp-hex" type="text" maxlength="7" spellcheck="false" aria-label="Hex colour"><button type="button" class="dp-rs">RESET</button></div><div class="dp-pre">' + SWATCH.map(c => '<button type="button" style="background:' + c + '" data-c="' + c + '" aria-label="' + c + '"></button>').join('') + '</div>';
         dh.appendChild(pick);
         const pkw = pick.querySelector('.dp-wheel'), pkdot = pick.querySelector('.dp-dot'), pkv = pick.querySelector('input[type=range]'), pkhex = pick.querySelector('.dp-hex'), pksw = pick.querySelector('.dp-sw');
         let ptarget = 'wall', hsv = { h: 0, s: 1, v: 1 };
         const paintPick = (fromHex) => {
-            const hx = hsv2hex(hsv.h, hsv.s, hsv.v); cols[ptarget] = hx; applyCols();
+            if (ptarget === 'led' && hsv.v < .6) hsv.v = .6; const hx = hsv2hex(hsv.h, hsv.s, hsv.v); cols[ptarget] = hx; applyCols();
             const r = pkw.clientWidth / 2, a = hsv.h * Math.PI / 180; pkdot.style.left = (r + Math.cos(a) * hsv.s * r) + 'px'; pkdot.style.top = (r + Math.sin(a) * hsv.s * r) + 'px';
             pkw.style.setProperty('--dv', (1 - hsv.v).toFixed(3)); pkv.value = Math.round(hsv.v * 100); pksw.style.background = hx; if (!fromHex) pkhex.value = hx;
         };
@@ -3908,7 +3914,7 @@
         pick.querySelector('.dp-pre').addEventListener('click', e => { const b = e.target.closest('[data-c]'); if (b) setFromHex(b.dataset.c); });
         const closePick = () => { pick.hidden = true; };
         const openPick = (which, x, y) => {
-            ptarget = which; pick.querySelector('.dp-t').textContent = which === 'wall' ? 'WALLPAPER' : 'CURTAINS'; pick.hidden = false;
+            ptarget = which; pick.querySelector('.dp-t').textContent = which === 'wall' ? 'WALLPAPER' : which === 'led' ? 'LED LAMP' : 'CURTAINS'; pick.querySelector('.dp-pre').innerHTML = preHtml(which === 'led' ? LEDSW : SWATCH); pick.hidden = false;
             const W = window.innerWidth, H = window.innerHeight, pw0 = 232, ph0 = 330; pick.style.left = Math.max(8, Math.min(x + 14, W - pw0 - 8)) + 'px'; pick.style.top = Math.max(8, Math.min(y + 14, H - ph0 - 8)) + 'px';
             setFromHex(cols[which]);
         };
@@ -3922,6 +3928,7 @@
             if (!dh.classList.contains('show') || dh.classList.contains('guide')) return;
             const list = document.elementsFromPoint(x, y);
             for (const el of list) {
+                if (el.closest('.led-hit')) { openPick('led', x, y); return; }
                 if (el.closest('.dh-sw')) { closePick(); toggleLamp(); return; }
                 if (el.closest('.dh-cord')) { closePick(); toggleCurtains(); return; }
                 if (el.closest('.dh-pick, .dh-ui, .dh-remote, .dh-drawer')) return;
@@ -3953,6 +3960,7 @@
         dh.addEventListener('wheel', e => { if (e.target.closest('.dh-drawer')) return; e.preventDefault(); cancelAnimationFrame(tw); dh.cu = false; V.z -= e.deltaY * .9; applyV(); }, { passive: false });
         dh.addEventListener('click', e => {
             const li = e.target.closest('.dh-li'); if (li) { const c = document.querySelectorAll('#showList .show-card')[+li.dataset.i]; if (c) { c.click(); toggleGuide(false); } return; }
+            if (e.target.closest('[data-act=led]')) { const bb = e.target.closest('[data-act=led]').getBoundingClientRect(); if (pick.hidden || ptarget !== 'led') openPick('led', bb.x - 120, bb.bottom); else closePick(); return; }
             if (e.target.closest('[data-act=cord]')) { toggleCurtains(); return; }
             const r = e.target.closest('[data-r]'); if (r) { const t = $(r.dataset.r); if (t) t.click(); return; }
             const b = e.target.closest('[data-d]'); if (!b) return; const d = b.dataset.d;
