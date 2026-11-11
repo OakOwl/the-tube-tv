@@ -1484,6 +1484,79 @@
         .tc-acct b { font-size: 22px; color: #ffd36a; letter-spacing: .06em; } .tc-acct small { display: block; font-size: 15px; color: #7c6a44; letter-spacing: .04em; }
         .tc-acct-btns { display: flex; gap: 14px; } .tc-acct-btns .tc-link { margin: 0; }
         .tc-pill { padding: 1px 6px; border-radius: 3px; background: #f5a623; color: #120c00; font-style: normal; font-size: 13px; letter-spacing: .1em; vertical-align: 2px; }
+        /* ================= ROOM UPGRADES (2D scene) ================= */
+        .tv-col { position: relative; }
+        .room-items { display: none; position: absolute; inset: 0; pointer-events: none; z-index: 3; }
+        body.tc-in .room-items { display: block; }
+        .room-items .ri { position: absolute; display: block; filter: drop-shadow(0 6px 6px rgba(0,0,0,.55)); animation: riIn .5s cubic-bezier(.2,1.4,.4,1) both; }
+        .room-items .ri svg { display: block; width: 100%; height: 100%; overflow: visible; }
+        @keyframes riIn { from { opacity: 0; transform: translateY(14px) scale(.9); } to { opacity: 1; transform: none; } }
+        .ri-rug { left: 50%; margin-left: -250px; width: 500px; height: 52px; top: calc(var(--fy, 748px) - 34px); z-index: 1; filter: none; }
+        .ri-plant { left: -14px; width: 48px; height: 88px; top: calc(var(--fy, 748px) - 80px); }
+        .ri-lamp { left: 24px; width: 46px; height: 124px; top: calc(var(--fy, 748px) - 116px); }
+        .ri-arcade { right: -4px; width: 64px; height: 138px; top: calc(var(--fy, 748px) - 132px); }
+        .ri-beanbag { right: 8px; width: 78px; height: 48px; top: calc(var(--fy, 748px) - 36px); z-index: 2; }
+        .ri-lava { right: 56px; width: 40px; height: 80px; top: calc(var(--fy, 748px) - 74px); }
+        .ri-poster { left: 8px; width: 60px; height: 82px; top: 36px; }
+        .ri-shelf { left: 4px; width: 72px; height: 54px; top: 150px; }
+        .ri-neon { right: 4px; width: 72px; height: 52px; top: 40px; }
+        .ri-neon svg { filter: drop-shadow(0 0 5px #ff2bd6) drop-shadow(0 0 12px rgba(255,43,214,.7)); animation: neonFl 4s infinite; }
+        @keyframes neonFl { 0%,100% { opacity: 1; } 46% { opacity: 1; } 48% { opacity: .55; } 50% { opacity: 1; } 53% { opacity: .7; } 55% { opacity: 1; } }
+        .ri-lamp .glow { animation: lampG 3.4s ease-in-out infinite; } @keyframes lampG { 50% { opacity: .85; } }
+        .ri .lv { animation: lvF 5s ease-in-out infinite; } .ri .lv2 { animation-delay: -2.2s; animation-duration: 6.5s; }
+        @keyframes lvF { 0%,100% { transform: translateY(8px); } 50% { transform: translateY(-14px); } }
+        .ri .scr { animation: scrB 1.6s steps(2) infinite; } @keyframes scrB { 50% { opacity: .2; } }
+        @media (max-width: 1180px) { .room-items { display: none !important; } }
+        /* ---- room button next to the mute button ---- */
+        #tcRoomBtn { position: fixed; left: 0; top: 0; z-index: 51; display: none; align-items: center; justify-content: center; width: 28px; height: 28px; padding: 0; border-radius: 50%; border: 1px solid #7a5a1c; background: linear-gradient(#2a1a0a, #160d05); color: #ffd36a; cursor: pointer; transform: translateX(-50%); box-shadow: 0 2px 6px rgba(0,0,0,.6), inset 0 0 0 1px rgba(255,211,106,.12); transition: opacity .6s ease, color .15s ease, border-color .15s ease; -webkit-tap-highlight-color: transparent; }
+        #tcRoomBtn svg { width: 16px; height: 16px; display: block; } #tcRoomBtn:hover { color: #fff3b0; border-color: #f5a623; } #tcRoomBtn:focus-visible { outline: 2px solid #f5a623; outline-offset: 2px; }
+        body.tc-in #tcRoomBtn { display: flex; } body.room-dim #tcRoomBtn { opacity: .45; } body.room-dim #tcRoomBtn:hover { opacity: 1; }
+        @media (max-width: 639px) { #tcRoomBtn { width: 32px; height: 32px; } }
+        /* ---- room section in the treasure chest ---- */
+        .tc-room-note { margin: 0 0 10px; font: 400 17px/1.25 'VT323', monospace; color: #a8905f; }
+        .tc-room-note, .tc-viewroom { grid-column: 1 / -1; } .tc-viewroom { margin: 0 0 6px; width: 100%; height: auto; }
+        .tc-card.t-room .tc-prev { display: flex; align-items: flex-end; justify-content: center; background: radial-gradient(ellipse at 50% 110%, rgba(255,200,120,.2), transparent 70%), #17100a; }
+        .tc-card.t-room .tc-prev svg { height: 100%; width: auto; max-width: 92%; padding: 6px 0; box-sizing: border-box; overflow: visible; }
+        /* ================= DOLLHOUSE (3D view) ================= */
+        #dh { position: fixed; inset: 0; z-index: 99999; display: none; background: radial-gradient(ellipse at 50% 38%, #3a2a24 0%, #170f0c 62%, #090605 100%); overflow: hidden; touch-action: none; user-select: none; -webkit-user-select: none; cursor: grab; }
+        #dh.show { display: block; } #dh.drag { cursor: grabbing; }
+        #dh .dh-stage { position: absolute; left: 50%; top: 52%; width: 0; height: 0; perspective: 1500px; }
+        #dh .dh-cam { position: absolute; left: 0; top: 0; width: 0; height: 0; transform-style: preserve-3d; transform: scale(var(--sc, 1)) translateZ(var(--z, 0px)) rotateX(var(--p, -24deg)) rotateY(var(--y, 0deg)); }
+        #dh .dh-room, #dh .bx { position: absolute; left: 0; top: 0; width: 0; height: 0; transform-style: preserve-3d; }
+        #dh .pl { position: absolute; left: 0; top: 0; transform-style: preserve-3d; }
+        #dh .pl.hid { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+        #dh .pl svg { display: block; width: 100%; height: 100%; overflow: visible; }
+        #dh .w-floor { background: repeating-linear-gradient(90deg, rgba(0,0,0,.28) 0 2px, transparent 2px 46px), repeating-linear-gradient(0deg, rgba(0,0,0,.12) 0 1px, transparent 1px 130px), linear-gradient(180deg, #7a5028, #5e3a1a); box-shadow: inset 0 0 60px rgba(0,0,0,.5); }
+        #dh .w-wall { background: repeating-linear-gradient(90deg, #4a3560 0 26px, #43305a 26px 52px); box-shadow: inset 0 -30px 40px rgba(0,0,0,.35), inset 0 0 40px rgba(0,0,0,.4); }
+        #dh .w-wall.back::after, #dh .w-wall::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 16px; background: linear-gradient(#e8dcc0, #b8a880); box-shadow: 0 -2px 0 rgba(0,0,0,.35); }
+        #dh .tvf { box-sizing: border-box; border: 2px solid rgba(0,0,0,.55); }
+        #dh .tv-scr { position: absolute; left: 22px; top: 20px; width: 190px; height: 142px; border-radius: 22px / 18px; background: #06100a; overflow: hidden; box-shadow: inset 0 0 22px #000, 0 0 0 5px rgba(0,0,0,.5), 0 0 28px rgba(255,170,70,.35); }
+        #dh .tv-scr i { position: absolute; inset: 0; }
+        #dh .tv-scr .a { background: repeating-linear-gradient(0deg, rgba(255,255,255,.07) 0 2px, transparent 2px 4px), radial-gradient(ellipse at 50% 45%, #2b4a38, #0a160f 80%); }
+        #dh .tv-scr .b { background: linear-gradient(180deg, transparent 40%, rgba(255,190,100,.16) 50%, transparent 60%); animation: dhRoll 3.2s linear infinite; }
+        #dh .tv-scr .c { background: repeating-radial-gradient(circle at 30% 40%, rgba(255,255,255,.05) 0 1px, transparent 1px 3px); animation: dhNoise .25s steps(3) infinite; }
+        #dh .tv-scr b { position: absolute; left: 0; right: 0; top: 50%; transform: translateY(-50%); text-align: center; font: 400 22px/1 'VT323', monospace; letter-spacing: .08em; color: #ffd68a; text-shadow: 0 0 8px rgba(255,170,70,.9); padding: 0 8px; }
+        #dh .tv-scr small { position: absolute; left: 10px; top: 8px; font: 400 14px/1 'VT323', monospace; color: #7aff9a; text-shadow: 0 0 6px rgba(80,255,140,.8); }
+        @keyframes dhRoll { from { transform: translateY(-100%); } to { transform: translateY(100%); } }
+        @keyframes dhNoise { 0% { transform: translate(0,0); } 33% { transform: translate(-3px,2px); } 66% { transform: translate(2px,-3px); } }
+        #dh .tv-knob { position: absolute; width: 18px; height: 18px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #d8d8d0, #55554e); border: 1px solid #222; bottom: 26px; }
+        #dh .tv-led { position: absolute; width: 10px; height: 10px; border-radius: 50%; background: #ff3a2a; box-shadow: 0 0 8px #ff3a2a; right: 22px; bottom: 30px; }
+        #dh .tv-grille { position: absolute; right: 52px; bottom: 22px; width: 36px; height: 22px; background: repeating-linear-gradient(0deg, rgba(0,0,0,.55) 0 2px, transparent 2px 5px); }
+        #dh .stand { background: repeating-linear-gradient(92deg, rgba(0,0,0,.16) 0 2px, transparent 2px 9px), linear-gradient(#9a6630, #6e4620); }
+        #dh .sp { position: absolute; left: 0; top: 0; filter: drop-shadow(0 8px 8px rgba(0,0,0,.45)); }
+        #dh .sp svg { display: block; width: 100%; height: 100%; overflow: visible; }
+        #dh .lv { animation: lvF 5s ease-in-out infinite; } #dh .lv2 { animation-delay: -2.2s; animation-duration: 6.5s; }
+        #dh .scr { animation: scrB 1.6s steps(2) infinite; } #dh .glow { animation: lampG 3.4s ease-in-out infinite; }
+        #dh .neon-s svg { filter: drop-shadow(0 0 6px #ff2bd6) drop-shadow(0 0 14px rgba(255,43,214,.7)); animation: neonFl 4s infinite; }
+        #dh .dh-ui { position: absolute; left: 0; right: 0; top: 0; display: flex; align-items: center; gap: 10px; padding: 12px 14px; pointer-events: none; }
+        #dh .dh-ui > * { pointer-events: auto; }
+        #dh .dh-title { font: 400 26px/1 'VT323', monospace; letter-spacing: .12em; color: #ffd36a; text-shadow: 0 0 10px rgba(245,166,35,.5); margin-right: auto; }
+        #dh .dh-b { font: 400 20px/1 'VT323', monospace; letter-spacing: .08em; color: #ffd36a; background: linear-gradient(#2a1a0a, #160d05); border: 1px solid #7a5a1c; border-radius: 4px; padding: 8px 12px; cursor: pointer; min-width: 40px; }
+        #dh .dh-b:hover { color: #fff3b0; border-color: #f5a623; } #dh .dh-b:focus-visible { outline: 2px solid #f5a623; outline-offset: 2px; }
+        #dh .dh-hint { position: absolute; left: 0; right: 0; bottom: 14px; text-align: center; font: 400 18px/1.2 'VT323', monospace; letter-spacing: .06em; color: rgba(255,226,168,.65); pointer-events: none; padding: 0 12px; }
+        #dh .dh-empty { position: absolute; left: 0; right: 0; bottom: 48px; text-align: center; font: 400 20px/1.2 'VT323', monospace; color: #ffd36a; pointer-events: none; padding: 0 16px; }
+        @media (max-width: 639px) { #dh .dh-title { font-size: 0; } #dh .dh-title::first-letter { font-size: 24px; } #dh .dh-b { white-space: nowrap; } #dh .dh-stage { top: 47%; } #dh .dh-b { min-width: 0; } #dh .dh-b { padding: 8px 10px; font-size: 18px; } }
+        @media (prefers-reduced-motion: reduce) { .room-items .ri, #dh .lv, #dh .tv-scr .b, #dh .tv-scr .c { animation: none !important; } }
 </style>
 </head>
 <body>
@@ -1531,6 +1604,7 @@
         <svg class="mu-on" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5h3.6L12 5.8v12.4l-4.4-3.7H4z" fill="currentColor"/><path d="M15.2 9.2a4 4 0 0 1 0 5.6M17.6 6.9a7.3 7.3 0 0 1 0 10.2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
         <svg class="mu-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5h3.6L12 5.8v12.4l-4.4-3.7H4z" fill="currentColor"/><path d="M15.5 9.5l5 5M20.5 9.5l-5 5" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>
     </button>
+    <button id="tcRoomBtn" type="button" aria-label="Open your room in 3D" title="Your room in 3D"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M6 10.5V20h12v-9.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M10 20v-5h4v5" fill="currentColor"/></svg></button>
     <div id="popcorn" role="button" tabindex="-1" aria-label="Throw popcorn at the TV"><span class="pc-hint" aria-hidden="true">TAP THE POPCORN!</span><svg viewBox="0 0 200 260" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
 <defs><clipPath id="pcB"><path d="M38 110 L162 110 L146 244 Q145 250 138 250 L62 250 Q55 250 54 244 Z"/></clipPath>
 <linearGradient id="pcShade" x1="0" x2="1"><stop offset="0" stop-color="#000" stop-opacity=".35"/><stop offset=".3" stop-color="#fff" stop-opacity=".12"/><stop offset=".7" stop-color="#000" stop-opacity=".05"/><stop offset="1" stop-color="#000" stop-opacity=".4"/></linearGradient></defs>
@@ -3236,17 +3310,18 @@
         const pv = { get() { try { return JSON.parse(localStorage.getItem(PREV_KEY) || 'null'); } catch (e) { return null; } }, put(p) { try { localStorage.setItem(PREV_KEY, JSON.stringify(p)); } catch (e) { } } };
         const prevSession = (email, name) => ({ access_token: 'preview', refresh_token: '', expires_at: 4102444800, user: { email: email || 'preview@local', user_metadata: { username: name } } });
         const preview = {
-            async signUp(email, password, username) { pv.put({ username, watch_seconds: 0, coins_spent: 0, owned_skins: ['default'], equipped_skin: 'default', email }); return prevSession(email, username); },
+            async signUp(email, password, username) { pv.put({ username, watch_seconds: 0, coins_spent: 0, owned_skins: ['default'], owned_items: [], equipped_skin: 'default', email }); return prevSession(email, username); },
             async signIn(email) { const p = pv.get(); if (!p) throw new Error('No preview account yet. Create one first.'); return prevSession(email, p.username); },
             async refresh() { return prevSession(); }, async user() { return prevSession(); }, async recover() { return {}; }, async setPassword() { return {}; }, async signOut() { },
             async rpc(name, a) {
                 const p = pv.get(); const J = x => Object.assign({}, x, { coins_earned: Math.floor(x.watch_seconds / 60) });
                 if (name === 'username_available') return !(p && p.username.toLowerCase() === String(a.p_username).toLowerCase());
                 if (name === 'get_profile') return p ? J(p) : null;
-                if (name === 'create_profile') { const n = { username: a.p_username, watch_seconds: 0, coins_spent: 0, owned_skins: ['default'], equipped_skin: 'default' }; pv.put(n); return J(n); }
-                if (!p) throw new Error('no_profile');
+                if (name === 'create_profile') { const n = { username: a.p_username, watch_seconds: 0, coins_spent: 0, owned_skins: ['default'], owned_items: [], equipped_skin: 'default' }; pv.put(n); return J(n); }
+                if (!p) throw new Error('no_profile'); p.owned_items = p.owned_items || [];
                 if (name === 'sync_watch') { p.watch_seconds += Math.max(0, a.p_seconds | 0); pv.put(p); return J(p); }
                 if (name === 'buy_skin') { const k = SKINS.find(z => z.id === a.p_skin); if (!k) throw new Error('unknown_skin'); if (p.owned_skins.includes(k.id)) throw new Error('already_owned'); if (rowLocked(p.owned_skins, k.tier)) throw new Error('tier_locked'); if (Math.floor(p.watch_seconds / 60) - p.coins_spent < k.price) throw new Error('not_enough_coins'); p.coins_spent += k.price; p.owned_skins.push(k.id); p.equipped_skin = k.id; pv.put(p); return J(p); }
+                if (name === 'buy_item') { const k = ITEM_BY[a.p_item]; if (!k) throw new Error('unknown_item'); if (p.owned_items.includes(k.id)) throw new Error('already_owned'); if (Math.floor(p.watch_seconds / 60) - p.coins_spent < k.price) throw new Error('not_enough_coins'); p.coins_spent += k.price; p.owned_items.push(k.id); pv.put(p); return J(p); }
                 if (name === 'equip_skin') { if (!p.owned_skins.includes(a.p_skin)) throw new Error('not_owned'); p.equipped_skin = a.p_skin; pv.put(p); return J(p); }
                 if (name === 'delete_my_account') { try { localStorage.removeItem(PREV_KEY); } catch (e) { } return null; }
                 throw new Error('unknown_function');
@@ -3255,7 +3330,7 @@
         const api = PREVIEW ? preview : real;
         const FRIENDLY = [[/invalid login credentials/i, 'Wrong email or password.'], [/email not confirmed/i, 'Please confirm your email first. Check your inbox for the link.'], [/already registered|already been registered/i, 'That email already has an account. Try signing in.'],
             [/username_taken|duplicate key|unique/i, 'That username is taken. Try another.'], [/bad_username|violates check/i, 'Usernames are 3-16 letters, numbers or underscores.'], [/not_enough_coins/i, 'Not enough coins yet. Keep watching!'],
-            [/already_owned/i, 'You already own that skin.'], [/tier_locked/i, 'Finish the row above first: own every skin in it to unlock the next row.'], [/password.*(short|least|weak)|weak_password/i, 'Choose a longer password (at least 8 characters).'], [/rate limit|too many|over_email_send_rate/i, 'Too many attempts. Please wait a minute and try again.'],
+            [/already_owned/i, 'You already own that.'], [/tier_locked/i, 'Finish the row above first: own every skin in it to unlock the next row.'], [/password.*(short|least|weak)|weak_password/i, 'Choose a longer password (at least 8 characters).'], [/rate limit|too many|over_email_send_rate/i, 'Too many attempts. Please wait a minute and try again.'],
             [/failed to fetch|networkerror|load failed/i, "Couldn't reach the server. Check your connection and try again."], [/jwt|expired/i, 'Your session expired. Please sign in again.']];
         const friendly = e => { const m = (e && e.message) || String(e); const f = FRIENDLY.find(x => x[0].test(m)); return f ? f[1] : m; };
 
@@ -3263,7 +3338,7 @@
         let session = null, st = null, pending = 0, flushing = false;
         const persist = () => { try { if (session) localStorage.setItem(AUTH_KEY, JSON.stringify(session)); else localStorage.removeItem(AUTH_KEY); } catch (e) { } };
         const coins = () => st ? Math.floor(st.secs / COIN_EVERY) - st.spent : 0;
-        const adopt = j => { const had = st; st = { secs: Number(j.watch_seconds) + pending, spent: Number(j.coins_spent), owned: j.owned_skins || ['default'], skin: j.equipped_skin || 'default', username: j.username, email: (session && session.user && session.user.email) || (had && had.email) || '' }; if (!st.owned.includes(st.skin)) st.skin = 'default'; };
+        const adopt = j => { const had = st; st = { secs: Number(j.watch_seconds) + pending, spent: Number(j.coins_spent), owned: j.owned_skins || ['default'], items: j.owned_items || [], skin: j.equipped_skin || 'default', username: j.username, email: (session && session.user && session.user.email) || (had && had.email) || '' }; if (!st.owned.includes(st.skin)) st.skin = 'default'; };
         async function token() {
             if (!session) throw new Error('Not signed in');
             if (!PREVIEW && session.expires_at * 1000 - Date.now() < 60000) { try { session = await api.refresh(session.refresh_token); persist(); } catch (e) { await signOut(true); throw new Error('Your session expired. Please sign in again.'); } }
@@ -3275,6 +3350,7 @@
         const render = () => {
             if (st) { $('tcCoins').textContent = coins(); $('tcTime').textContent = 'WATCHED ' + fmt(st.secs); hud.title = st.username + ' · ' + coins() + ' coins · 1 coin per minute watched'; }
             if (shop.classList.contains('show')) renderShop();
+            try { paintRoom(); } catch (e) { }
         };
 
         // ================= coin drop + counting real watch time =================
@@ -3329,7 +3405,8 @@
         const placeMute = () => {
             if (!st || !muteBtn) return;
             const cx = hud.offsetLeft + hud.offsetWidth / 2, top = hud.offsetTop + wrapEl.offsetTop;
-            muteBtn.style.left = cx + 'px'; muteBtn.style.top = Math.max(4, top - muteBtn.offsetHeight - 6) + 'px';
+            muteBtn.style.left = (cx - 19) + 'px'; muteBtn.style.top = Math.max(4, top - muteBtn.offsetHeight - 6) + 'px';
+            const rb = $('tcRoomBtn'); if (rb) { rb.style.left = (cx + 19) + 'px'; rb.style.top = muteBtn.style.top; }
         };
         const paintMute = () => { muteBtn.setAttribute('aria-pressed', coinMuted ? 'true' : 'false'); muteBtn.title = coinMuted ? 'Coin and shop sounds: off (click to turn on)' : 'Coin and shop sounds: on (click to mute)'; muteBtn.setAttribute('aria-label', coinMuted ? 'Unmute coin and shop sounds' : 'Mute coin and shop sounds'); };
         muteBtn.addEventListener('click', e => {
@@ -3389,7 +3466,106 @@
             sh.insertBefore(fx, sh.firstChild);
             const ring = document.createElement('div'); ring.className = 'skin-ring'; ring.setAttribute('aria-hidden', 'true'); sh.insertBefore(ring, sh.firstChild);
         })();
-        const shop = mk('tcModal', '<div class="tc-modal" role="dialog" aria-modal="true" aria-label="Treasure chest"><div class="tc-hdr"><span class="tc-title">🪙 TREASURE CHEST</span><button class="tc-close" data-close type="button">✕ CLOSE</button></div><div class="tc-body"><div class="tc-acct" id="tcAcct"></div><div class="tc-stats"><div class="tc-stat"><span>TOTAL WATCH TIME</span><b id="tcWatch"></b></div><div class="tc-stat"><span>COINS</span><b id="tcBal"></b></div></div><p class="tc-note">Earn 1 coin for every minute you watch. Own every skin in a row to unlock the next row.</p><div class="tc-grid" id="tcGrid"></div></div></div>');
+        // ================= ROOM UPGRADES: items you buy with spare coins =================
+        const ITEMS = [
+            { id: 'rug', name: 'Shag Rug', price: 40, desc: 'A cosy rug under the set.', vb: '0 0 200 50', svg: '<ellipse cx="100" cy="28" rx="97" ry="19" fill="#000" opacity=".25"/><ellipse cx="100" cy="24" rx="96" ry="20" fill="#a3282f" stroke="#3a0d10" stroke-width="2.5"/><ellipse cx="100" cy="24" rx="78" ry="15" fill="none" stroke="#f1d9a0" stroke-width="3" stroke-dasharray="6 4"/><ellipse cx="100" cy="24" rx="52" ry="9" fill="#e0a93a" stroke="#3a0d10" stroke-width="1.5"/><ellipse cx="100" cy="24" rx="22" ry="4" fill="#2b7a78"/>' },
+            { id: 'plant', name: 'Potted Fern', price: 50, desc: 'A leafy friend for the corner.', vb: '0 0 60 110', svg: '<path d="M14 72 H46 L42 106 H18 Z" fill="#c9683a" stroke="#4a210f" stroke-width="2.5" stroke-linejoin="round"/><rect x="11" y="66" width="38" height="9" rx="2" fill="#dd7a47" stroke="#4a210f" stroke-width="2.5"/><path d="M30 68 C10 56 6 30 14 10 C28 24 34 46 30 68Z" fill="#3fa356" stroke="#16421f" stroke-width="2.5"/><path d="M30 68 C50 54 56 30 46 8 C32 24 26 46 30 68Z" fill="#58c26d" stroke="#16421f" stroke-width="2.5"/><path d="M30 68 C26 48 28 26 30 4 C36 28 36 50 30 68Z" fill="#2f8a45" stroke="#16421f" stroke-width="2.5"/>' },
+            { id: 'poster', name: 'Retro Poster', price: 60, desc: 'A framed 80s sunset on the wall.', vb: '0 0 64 88', svg: '<rect x="3" y="3" width="58" height="82" fill="#1c1030" stroke="#d9a53a" stroke-width="3"/><rect x="8" y="8" width="48" height="52" fill="#ff5fa8"/><circle cx="32" cy="36" r="13" fill="#ffd23c"/><rect x="8" y="42" width="48" height="18" fill="#3a1a6a"/><path d="M8 46 H56 M8 52 H56 M8 57 H56" stroke="#ff5fa8" stroke-width="2"/><text x="32" y="76" text-anchor="middle" font-family="Impact,sans-serif" font-size="10" fill="#ffe94d">RETRO TV</text>' },
+            { id: 'lamp', name: 'Floor Lamp', price: 80, desc: 'A warm glow for late-night viewing.', vb: '0 0 56 150', svg: '<ellipse cx="28" cy="144" rx="18" ry="5" fill="#2a2a2a" stroke="#000" stroke-width="2"/><rect x="25" y="52" width="6" height="92" fill="#8c6a2a" stroke="#3a2a0a" stroke-width="2"/><ellipse class="glow" cx="28" cy="56" rx="27" ry="9" fill="#ffd98a" opacity=".55"/><path d="M8 52 L16 14 H40 L48 52 Z" fill="#ffd98a" stroke="#6b4a10" stroke-width="2.5" stroke-linejoin="round"/><path d="M13 50 L19 18 H37 L43 50 Z" fill="#fff3c4" opacity=".6"/>' },
+            { id: 'beanbag', name: 'Bean Bag', price: 90, desc: 'The comfiest seat in the house.', vb: '0 0 100 62', svg: '<ellipse cx="50" cy="58" rx="44" ry="4" fill="#000" opacity=".3"/><path d="M8 54 C4 30 22 12 44 12 C70 8 96 28 92 54 C92 58 8 58 8 54Z" fill="#e8742a" stroke="#5a2408" stroke-width="3" stroke-linejoin="round"/><path d="M30 20 C40 28 46 36 44 52 M66 18 C60 28 58 38 62 52" stroke="#a8480f" stroke-width="2.5" fill="none"/><path d="M20 32 C26 24 34 20 40 20" stroke="#ffb070" stroke-width="3" fill="none" stroke-linecap="round"/>' },
+            { id: 'shelf', name: 'VHS Shelf', price: 100, desc: 'A wall shelf stacked with tapes.', vb: '0 0 80 60', svg: '<g stroke="#111" stroke-width="1.5"><rect x="8" y="10" width="9" height="32" fill="#d63a3a"/><rect x="18" y="14" width="9" height="28" fill="#3a7ad6"/><rect x="28" y="8" width="9" height="34" fill="#e8c43a"/><rect x="38" y="12" width="9" height="30" fill="#3ab36a"/><rect x="48" y="10" width="9" height="32" fill="#a83ad6"/><rect x="58" y="16" width="9" height="26" fill="#e8823a"/></g><rect x="2" y="42" width="76" height="8" fill="#8a5a2a" stroke="#3a2210" stroke-width="2.5"/><path d="M12 50 V58 M68 50 V58" stroke="#3a2210" stroke-width="3"/>' },
+            { id: 'lava', name: 'Lava Lamp', price: 120, desc: 'Slow glowing blobs on a side table.', vb: '0 0 60 120', svg: '<rect x="6" y="70" width="48" height="5" rx="2" fill="#6a3a1a" stroke="#2a1608" stroke-width="2"/><path d="M12 75 L8 118 M48 75 L52 118" stroke="#2a1608" stroke-width="3.5" stroke-linecap="round"/><path d="M20 70 L23 66 H37 L40 70Z" fill="#555" stroke="#111" stroke-width="2"/><path d="M23 66 L27 16 H33 L37 66 Z" fill="#ff3d8a" stroke="#111" stroke-width="2"/><ellipse class="lv" cx="30" cy="50" rx="5" ry="6" fill="#ffd23c"/><ellipse class="lv lv2" cx="30" cy="34" rx="3.5" ry="4.5" fill="#ffd23c"/><path d="M26 16 L28 8 H32 L34 16Z" fill="#555" stroke="#111" stroke-width="2"/>' },
+            { id: 'neon', name: 'ON AIR Neon', price: 200, desc: 'A flickering neon sign.', vb: '0 0 90 64', svg: '<rect x="3" y="3" width="84" height="58" rx="12" fill="#12041c" stroke="#ff2bd6" stroke-width="3"/><text x="45" y="29" text-anchor="middle" font-family="Impact,\'Arial Black\',sans-serif" font-size="20" fill="#ff7be8" stroke="#ff2bd6" stroke-width=".8">ON</text><text x="45" y="53" text-anchor="middle" font-family="Impact,\'Arial Black\',sans-serif" font-size="20" fill="#ff7be8" stroke="#ff2bd6" stroke-width=".8">AIR</text>' },
+            { id: 'arcade', name: 'Arcade Cabinet', price: 300, desc: 'A blinking 90s arcade machine.', vb: '0 0 70 150', svg: '<path d="M10 148 V40 L18 6 H52 L60 40 V148Z" fill="#2a2a7a" stroke="#0a0a30" stroke-width="3" stroke-linejoin="round"/><rect x="16" y="2" width="38" height="14" fill="#ffd23c" stroke="#0a0a30" stroke-width="2.5"/><text x="35" y="12.5" text-anchor="middle" font-family="Impact,sans-serif" font-size="8.5" fill="#b0141d">ARCADE</text><rect x="16" y="26" width="38" height="36" rx="3" fill="#05281a" stroke="#000" stroke-width="2.5"/><rect class="scr" x="20" y="30" width="30" height="28" fill="#2aff8a" opacity=".55"/><path d="M10 78 H60 V94 H10Z" fill="#3a3a9a" stroke="#0a0a30" stroke-width="2"/><circle cx="24" cy="86" r="4" fill="#ff3a3a"/><rect x="36" y="83" width="6" height="6" fill="#ffd23c"/><rect x="46" y="83" width="6" height="6" fill="#3aa0ff"/>' }
+        ];
+        const ITEM_BY = Object.fromEntries(ITEMS.map(i => [i.id, i]));
+        const itemSvg = (i, none) => '<svg viewBox="' + i.vb + '" preserveAspectRatio="' + (none ? 'none' : 'xMidYMax meet') + '" aria-hidden="true">' + i.svg + '</svg>';
+        const ownedItems = () => (st && st.items) || [];
+        const paintRoom = () => {
+            const host = document.querySelector('.tv-col'); if (!host) return;
+            let layer = host.querySelector('.room-items');
+            if (!layer) { layer = document.createElement('div'); layer.className = 'room-items'; layer.setAttribute('aria-hidden', 'true'); host.appendChild(layer); }
+            const sh = host.querySelector('.tv-shell'); if (sh) layer.style.setProperty('--fy', (sh.offsetTop + sh.offsetHeight + 62) + 'px');
+            const have = ownedItems().filter(id => ITEM_BY[id]);
+            const cur = Array.from(layer.children).map(e => e.dataset.id).join(',');
+            if (cur === have.join(',')) return;
+            const old = new Set(Array.from(layer.children).map(e => e.dataset.id));
+            layer.innerHTML = have.map(id => '<span class="ri ri-' + id + '" data-id="' + id + '"' + (old.has(id) ? ' style="animation:none"' : '') + '>' + itemSvg(ITEM_BY[id], id === 'rug') + '</span>').join('');
+        };
+        window.addEventListener('resize', () => { try { paintRoom(); } catch (e) { } });
+        try { const sh0 = document.querySelector('.tv-shell'); if (sh0) new ResizeObserver(() => { try { paintRoom(); } catch (e) { } }).observe(sh0); } catch (e) { }
+        const roomShopHtml = () => {
+            const have = ownedItems();
+            return '<h3 class="tc-tier" style="--tc:#7fd4a0">ROOM UPGRADES <span class="tc-tcount">' + have.filter(id => ITEM_BY[id]).length + '/' + ITEMS.length + '</span></h3>'
+                + '<p class="tc-room-note">Spend spare coins on your room. Items show up around the TV, and in the 3D dollhouse view.</p><button class="tc-btn tc-viewroom" data-act="room" type="button">🏠 VIEW MY ROOM IN 3D</button>'
+                + ITEMS.map(k => {
+                    const owned = have.includes(k.id), need = k.price - coins();
+                    const btn = owned ? '<button class="tc-btn equipped" disabled>✓ IN YOUR ROOM</button>'
+                        : need <= 0 ? '<button class="tc-btn' + (pendingBuy === k.id ? ' confirm' : '') + '" data-buyi="' + k.id + '">' + (pendingBuy === k.id ? 'TAP AGAIN TO BUY' : 'BUY · ' + k.price + ' ●') + '</button>'
+                            : '<button class="tc-btn" disabled>🔒 ' + k.price + ' ● · ' + need + ' MORE</button><div class="tc-prog"><i style="width:' + Math.max(2, Math.min(100, coins() / k.price * 100)).toFixed(1) + '%"></i></div>';
+                    return '<div class="tc-card t-room k-' + k.id + (owned ? ' on' : '') + '" style="--tc:#7fd4a0"><div class="tc-prev">' + itemSvg(k) + '</div><div class="tc-name">' + k.name + '</div><div class="tc-desc">' + k.desc + '</div>' + btn + '</div>';
+                }).join('');
+        };
+
+        // ================= DOLLHOUSE: zoom out, orbit and zoom around your room in 3D =================
+        const dh = document.createElement('div'); dh.id = 'dh'; dh.setAttribute('role', 'dialog'); dh.setAttribute('aria-modal', 'true'); dh.setAttribute('aria-label', 'Your room in 3D');
+        dh.innerHTML = '<div class="dh-stage"><div class="dh-cam"><div class="dh-room"></div></div></div><div class="dh-ui"><span class="dh-title">🏠 ROOM</span><button class="dh-b" data-d="in" type="button" aria-label="Zoom in">＋</button><button class="dh-b" data-d="out" type="button" aria-label="Zoom out">－</button><button class="dh-b" data-d="reset" type="button">RESET</button><button class="dh-b" data-d="close" type="button">✕ EXIT</button></div><div class="dh-empty"></div><div class="dh-hint">DRAG TO LOOK AROUND · SCROLL OR PINCH TO ZOOM · ESC TO EXIT</div>';
+        document.body.appendChild(dh);
+        const cam = dh.querySelector('.dh-cam'), roomEl = dh.querySelector('.dh-room');
+        const V = { y: 22, p: -26, z: 0 }, V0 = { y: 22, p: -26, z: 0 };
+        const clampV = () => { V.p = Math.max(-82, Math.min(-4, V.p)); V.z = Math.max(-500, Math.min(650, V.z)); };
+        const applyV = () => {
+            clampV(); const w = Math.min(window.innerWidth, window.innerHeight * 1.5);
+            cam.style.setProperty('--sc', Math.max(.5, Math.min(1.35, w / (window.innerWidth < 640 ? 760 : 860))).toFixed(3));
+            cam.style.setProperty('--y', V.y.toFixed(2) + 'deg'); cam.style.setProperty('--p', V.p.toFixed(2) + 'deg'); cam.style.setProperty('--z', V.z.toFixed(0) + 'px');
+        };
+        const FY = 100;                                       // floor height in the room's coordinates
+        const plane = (w, h, x, y, z, rx, ry, cls, inner, extra) => '<div class="pl ' + (cls || '') + '" style="width:' + w + 'px;height:' + h + 'px;margin:' + (-h / 2) + 'px 0 0 ' + (-w / 2) + 'px;transform:translate3d(' + x + 'px,' + y + 'px,' + z + 'px) rotateX(' + (rx || 0) + 'deg) rotateY(' + (ry || 0) + 'deg);' + (extra || '') + '">' + (inner || '') + '</div>';
+        const box = (w, h, d, cx, cy, cz, cls, face, extra) => '<div class="bx" style="transform:translate3d(' + cx + 'px,' + cy + 'px,' + cz + 'px)">'
+            + plane(w, h, 0, 0, d / 2, 0, 0, cls + ' tvf', face, extra) + plane(w, h, 0, 0, -d / 2, 0, 180, cls + ' tvf', '', extra)
+            + plane(d, h, -w / 2, 0, 0, 0, -90, cls + ' tvf', '', extra) + plane(d, h, w / 2, 0, 0, 0, 90, cls + ' tvf', '', extra)
+            + plane(w, d, 0, -h / 2, 0, 90, 0, cls + ' tvf', '', extra) + plane(w, d, 0, h / 2, 0, -90, 0, cls + ' tvf', '', extra) + '</div>';
+        const SP = { plant: [78, 143, -255, -10], lamp: [73, 195, -200, -150], arcade: [105, 225, 235, -150], beanbag: [170, 105, 190, 80], lava: [70, 140, 150, -20] };
+        const buildRoom = () => {
+            const have = ownedItems().filter(id => ITEM_BY[id]), sk = SKINS.find(k => st && k.id === st.skin) || SKINS[0];
+            const title = (document.getElementById('epShowName') || {}).textContent || 'THE TUBE';
+            const scr = '<div class="tv-scr"><i class="a"></i><i class="c"></i><i class="b"></i><small>CH 03</small><b>' + esc(/SELECT/i.test(title) ? 'THE TUBE' : title.slice(0, 22)) + '</b></div><span class="tv-knob" style="left:30px"></span><span class="tv-knob" style="left:58px"></span><span class="tv-grille"></span><span class="tv-led"></span>';
+            let h = plane(600, 400, 0, FY, 0, 90, 0, 'w-floor') + plane(600, 320, 0, FY - 160, -200, 0, 0, 'w-wall back hid') + plane(400, 320, -300, FY - 160, 0, 0, 90, 'w-wall hid') + plane(400, 320, 300, FY - 160, 0, 0, -90, 'w-wall hid');
+            h += box(300, 62, 150, 0, FY - 31, -105, 'stand', '');
+            h += box(240, 190, 170, 0, FY - 62 - 95, -105, 'tvbody', scr, 'background:' + sk.pv + ';');
+            if (have.includes('rug')) h += plane(380, 140, 0, FY - 1, 30, 90, 0, '', itemSvg(ITEM_BY.rug, true));
+            if (have.includes('poster')) h += plane(104, 143, -299, -62, -40, 0, 90, 'hid', itemSvg(ITEM_BY.poster));
+            if (have.includes('neon')) h += plane(140, 100, 299, -98, 40, 0, -90, 'hid neon-s', itemSvg(ITEM_BY.neon));
+            if (have.includes('shelf')) h += plane(150, 112, 200, -178, -199, 0, 0, 'hid', itemSvg(ITEM_BY.shelf));
+            Object.keys(SP).forEach(id => { if (!have.includes(id)) return; const s = SP[id]; h += '<div class="sp" data-bb="1" style="width:' + s[0] + 'px;height:' + s[1] + 'px;margin:' + (-s[1] / 2) + 'px 0 0 ' + (-s[0] / 2) + 'px;transform:translate3d(' + s[2] + 'px,' + (FY - s[1] / 2) + 'px,' + s[3] + 'px) rotateY(calc(var(--y) * -1))">' + itemSvg(ITEM_BY[id]) + '</div>'; });
+            roomEl.innerHTML = h;
+            dh.querySelector('.dh-empty').textContent = have.length ? '' : 'Your room is empty. Buy room upgrades in the treasure chest to fill it.';
+        };
+        const openRoom = () => { if (!st) return; closeShop(); buildRoom(); Object.assign(V, V0); applyV(); dh.classList.add('show'); body.classList.remove('tv-spot'); const b = dh.querySelector('[data-d=close]'); try { b.focus({ preventScroll: true }); } catch (e) { } };
+        const closeRoom = () => { dh.classList.remove('show'); };
+        const pts = new Map(); let pinch0 = 0, z0 = 0;
+        dh.addEventListener('pointerdown', e => { if (e.target.closest('.dh-ui')) return; pts.set(e.pointerId, { x: e.clientX, y: e.clientY }); dh.classList.add('drag'); try { dh.setPointerCapture(e.pointerId); } catch (er) { } if (pts.size === 2) { const [a, b] = [...pts.values()]; pinch0 = Math.hypot(a.x - b.x, a.y - b.y); z0 = V.z; } });
+        dh.addEventListener('pointermove', e => {
+            const p = pts.get(e.pointerId); if (!p) return;
+            if (pts.size === 1) { V.y += (e.clientX - p.x) * .45; V.p += (e.clientY - p.y) * .3; }
+            p.x = e.clientX; p.y = e.clientY;
+            if (pts.size === 2) { const [a, b] = [...pts.values()], d = Math.hypot(a.x - b.x, a.y - b.y); if (pinch0) V.z = z0 + (d - pinch0) * 1.6; }
+            applyV();
+        });
+        const endPtr = e => { pts.delete(e.pointerId); if (!pts.size) dh.classList.remove('drag'); };
+        dh.addEventListener('pointerup', endPtr); dh.addEventListener('pointercancel', endPtr);
+        dh.addEventListener('wheel', e => { e.preventDefault(); V.z -= e.deltaY * .9; applyV(); }, { passive: false });
+        dh.addEventListener('click', e => { const b = e.target.closest('[data-d]'); if (!b) return; const d = b.dataset.d; if (d === 'close') closeRoom(); else if (d === 'in') V.z += 90; else if (d === 'out') V.z -= 90; else if (d === 'reset') Object.assign(V, V0); applyV(); });
+        window.addEventListener('keydown', e => {
+            if (!dh.classList.contains('show')) return;
+            if (e.key === 'Escape') { e.stopPropagation(); closeRoom(); return; }
+            const k = { ArrowLeft: () => V.y -= 8, ArrowRight: () => V.y += 8, ArrowUp: () => V.p -= 5, ArrowDown: () => V.p += 5, '+': () => V.z += 70, '=': () => V.z += 70, '-': () => V.z -= 70 }[e.key];
+            if (k) { e.preventDefault(); e.stopPropagation(); k(); applyV(); }
+        }, true);
+        window.addEventListener('resize', () => { if (dh.classList.contains('show')) applyV(); });
+        const roomBtn = $('tcRoomBtn'); roomBtn.addEventListener('click', e => { e.stopPropagation(); openRoom(); });
+
+        const shop = mk('tcModal', '<div class="tc-modal" role="dialog" aria-modal="true" aria-label="Treasure chest"><div class="tc-hdr"><span class="tc-title">🪙 TREASURE CHEST</span><button class="tc-close" data-close type="button">✕ CLOSE</button></div><div class="tc-body"><div class="tc-acct" id="tcAcct"></div><div class="tc-stats"><div class="tc-stat"><span>TOTAL WATCH TIME</span><b id="tcWatch"></b></div><div class="tc-stat"><span>COINS</span><b id="tcBal"></b></div></div><p class="tc-note">Earn 1 coin for every minute you watch. Own every skin in a row to unlock the next row. Room upgrades are open from the start.</p><div class="tc-grid" id="tcGrid"></div></div></div>');
         const auth = mk('tcAuth', '<div class="tc-modal tc-narrow" role="dialog" aria-modal="true" aria-label="Sign in"><div class="tc-hdr"><span class="tc-title" id="tcAuthTitle"></span><button class="tc-close" data-close type="button">✕ CLOSE</button></div><div class="tc-body" id="tcAuthBody"></div></div>');
         let pendingBuy = null, pendingT = 0, pendingDel = false, delT = 0;
         const closeShop = () => shop.classList.remove('show');
@@ -3416,6 +3592,7 @@
                     return '<div class="tc-card t-' + k.tier + ' k-' + k.id + (on ? ' on' : '') + (locked && !owned ? ' row-locked' : '') + '" style="--tc:' + TIERS[k.tier][1] + '"><div class="tc-prev"><i style="--pv:' + k.pv + ';--pr:' + (k.pr || 'none') + ';--pd:' + (k.pd || '#707068') + '"></i>' + (k.id === 'mint' ? '<svg class="tc-stk s1"><use href="#stk-bolt"/></svg><svg class="tc-stk s2"><use href="#stk-star"/></svg>' : '') + '</div><div class="tc-name">' + k.name + '</div><div class="tc-desc">' + k.desc + '</div>' + btn + '</div>';
                 }).join('');
             });
+            html += roomShopHtml();
             $('tcGrid').innerHTML = html;
         }
         const openShop = () => { if (!st) return; renderShop(); shop.classList.add('show'); body.classList.remove('tv-spot'); loadJingle(); };
@@ -3427,6 +3604,13 @@
                 if (t.dataset.act === 'delete') {
                     if (!pendingDel) { pendingDel = true; clearTimeout(delT); delT = setTimeout(() => { pendingDel = false; if (shop.classList.contains('show')) renderShop(); }, 5000); renderShop(); return; }
                     pendingDel = false; await call('delete_my_account'); await signOut(true); toast('Your account and data were deleted'); return;
+                }
+                if (t.dataset.act === 'room') { openRoom(); return; }
+                if (t.dataset.buyi) {
+                    const k = ITEM_BY[t.dataset.buyi]; if (!k || coins() < k.price || ownedItems().includes(k.id)) return;
+                    if (k.price >= 200 && pendingBuy !== k.id) { pendingBuy = k.id; clearTimeout(pendingT); pendingT = setTimeout(() => { pendingBuy = null; if (shop.classList.contains('show')) renderShop(); }, 4000); renderShop(); return; }
+                    pendingBuy = null; clearTimeout(pendingT); await flush();
+                    adopt(await call('buy_item', { p_item: k.id })); render(); renderShop(); jingleSound(); toast('Added to your room: ' + k.name + '!'); return;
                 }
                 if (t.dataset.eq) { await flush(); adopt(await call('equip_skin', { p_skin: t.dataset.eq })); applySkin(); renderShop(); click(); return; }
                 if (t.dataset.buy) {
