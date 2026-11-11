@@ -2985,7 +2985,7 @@
         // Any movement brings the room lights back. The pull-cord / "LIGHTS UP" pill / Esc are the separate, manual curtains mode.
         let idleT, quietUntil = 0, dimAt = 0; const vid = document.getElementById('vid');
         const setRoom = on => {
-            if (on) { document.documentElement.style.setProperty('--glow', (typeof liveMode !== 'undefined' && liveMode) ? 'rgba(57,255,20,.30)' : 'rgba(245,166,35,.40)'); dimAt = Date.now(); }
+            if (on) { document.documentElement.style.setProperty('--glow', 'rgba(255,140,40,.42)'); dimAt = Date.now(); }
             body.classList.toggle('room-dim', on);
         };
         window.toggleCinema = function (on) {
