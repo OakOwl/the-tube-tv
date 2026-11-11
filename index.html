@@ -1155,6 +1155,27 @@
         body.lights-down .topbar, body.lights-down .ep-sidebar, body.lights-down .guide-col { opacity: 0; filter: blur(3px); }
         .curtain { filter: brightness(.78) saturate(1.1); background: #6a0b12; }
         .cfold { background-color: #7a0b12; }
+
+        /* v41: tablet + phone - a compact pull-cord that stays in the header strip, nothing else visible over the curtains */
+        @media (max-width: 860px) {
+            #pullCord { top: 0; right: 0; width: 36px; --cl: 34px; }
+            #pullCord .pc-inner { width: 22px; height: calc(var(--cl) + 60px); margin: 0 auto; transform: none; }
+            #pullCord .pc-rosette { top: -6px; width: 16px; height: 16px; margin-left: -8px; }
+            #pullCord .pc-rope { top: 6px; width: 4px; margin-left: -2px; }
+            #pullCord .pc-knob { top: calc(var(--cl) - 4px); width: 14px; height: 14px; margin-left: -7px; }
+            #pullCord .pc-fringe { top: calc(var(--cl) + 10px); width: 20px; height: 44px; margin-left: -10px; }
+            .topbar { padding-right: 40px; }
+            .strip-close { right: 34px; }
+            body.lights-down .side-tabs, body.lights-down .schedule-widget-wrapper, body.lights-down .src-note { opacity: 0; pointer-events: none; transition: opacity .5s ease; }
+            .side-tabs, .schedule-widget-wrapper, .src-note { transition: opacity .6s ease .3s; }
+        }
+        @media (max-width: 639px) { .tassel { display: none; } #btnLightsUp { white-space: nowrap; } }
+
+        /* v43: room dim (auto, after 6s rest) - the room goes darker around the glowing TV, no curtains */
+        body.room-dim::before { opacity: .86; }
+        body.room-dim .topbar, body.room-dim .ep-sidebar, body.room-dim .guide-col { opacity: .14; }
+        body.room-dim:not(.tv-spot) .topbar, body.room-dim:not(.tv-spot) .ep-sidebar, body.room-dim:not(.tv-spot) .guide-col { filter: blur(2px); }
+        body.room-dim .tv-shell { box-shadow: 4px 4px 0 #707068, 8px 8px 0 #606058, 0 0 120px 20px var(--glow), 0 30px 80px rgba(0,0,0,.9), inset 0 1px 0 rgba(255,255,255,.5), inset -2px -2px 0 rgba(0,0,0,.2); }
 </style>
 </head>
 <body>
@@ -2670,12 +2691,32 @@
         shell.addEventListener('mouseenter', () => { if (!canHover.matches) return; clearTimeout(spotT); spotT = setTimeout(() => body.classList.add('tv-spot'), 180); });
         shell.addEventListener('mouseleave', () => { clearTimeout(spotT); body.classList.remove('tv-spot'); });
         // Cinema mode: the curtains + lights-down scene is now a button (CURTAINS in the header, "LIGHTS UP" pill, or Esc)
+        // Room dim: while a show plays and the mouse rests for 6s, the room fades much darker around the glowing TV (no curtains).
+        // Any movement brings the room lights back. The pull-cord / "LIGHTS UP" pill / Esc are the separate, manual curtains mode.
+        let idleT, quietUntil = 0, dimAt = 0; const vid = document.getElementById('vid');
+        const setRoom = on => {
+            if (on) { document.documentElement.style.setProperty('--glow', (typeof liveMode !== 'undefined' && liveMode) ? 'rgba(57,255,20,.30)' : 'rgba(245,166,35,.40)'); dimAt = Date.now(); }
+            body.classList.toggle('room-dim', on);
+        };
         window.toggleCinema = function (on) {
             const next = on === undefined ? !body.classList.contains('lights-down') : !!on;
-            if (next) { document.documentElement.style.setProperty('--glow', 'rgba(255,140,40,.42)'); body.classList.remove('tv-spot'); }
+            if (next) { document.documentElement.style.setProperty('--glow', 'rgba(255,140,40,.42)'); body.classList.remove('tv-spot', 'room-dim'); clearTimeout(idleT); }
+            else quietUntil = Date.now() + 12000;
             body.classList.toggle('lights-down', next);
             const pill = document.getElementById('btnLightsUp'); if (pill) pill.setAttribute('aria-hidden', next ? 'false' : 'true');
+            if (!next) arm();
         };
+        const arm = () => { clearTimeout(idleT); idleT = setTimeout(() => {
+            if (body.classList.contains('lights-down') || body.classList.contains('room-dim')) return;
+            if (Date.now() < quietUntil) { arm(); return; }
+            if (tvOn && vid && !vid.paused && !vid.ended && vid.getAttribute('src') && !document.querySelector('.modal-bg.show')) setRoom(true); else arm();
+        }, 6000); };
+        ['mousemove', 'mousedown', 'keydown', 'touchstart', 'wheel'].forEach(ev => window.addEventListener(ev, () => {
+            if (body.classList.contains('lights-down')) return;
+            if (body.classList.contains('room-dim')) { if (Date.now() - dimAt > 800) { setRoom(false); arm(); } }
+            else arm();
+        }, { passive: true }));
+        arm();
         const bc = document.getElementById('btnCurtains'); if (bc) bc.addEventListener('click', () => { try { sndClick(); } catch (e) { } toggleCinema(); });
         const pc = document.getElementById('pullCord'); if (pc) pc.addEventListener('click', () => { try { makeTone(260, 150, 0.14, 'triangle', 0.14); makeNoise(0.05, 2200, null, 0.6, 0.05); } catch (e) { } pc.classList.remove('pulled'); void pc.offsetWidth; pc.classList.add('pulled'); setTimeout(() => toggleCinema(), 280); setTimeout(() => pc.classList.remove('pulled'), 700); });
         const lu = document.getElementById('btnLightsUp'); if (lu) lu.addEventListener('click', () => { try { sndClick(); } catch (e) { } toggleCinema(false); });
@@ -2683,7 +2724,7 @@
         // wrap power on/off for flicker + standby light
         const _on = window.powerOn, _off = window.powerOff;
         window.powerOn = function () { const r = _on.apply(this, arguments); syncOff(); shell.classList.remove('crt-flicker'); void shell.offsetWidth; shell.classList.add('crt-flicker'); setTimeout(() => shell.classList.remove('crt-flicker'), 1000); return r; };
-        window.powerOff = function () { const r = _off.apply(this, arguments); syncOff(); body.classList.remove('lights-down'); return r; };
+        window.powerOff = function () { const r = _off.apply(this, arguments); syncOff(); body.classList.remove('lights-down', 'room-dim'); return r; };
         setInterval(syncOff, 1500);
     })();
     </script>
@@ -2691,7 +2732,7 @@
     <script>
     // Curtains (v33): velvet panels with tassels, a sway while closing, a fabric swish and a short "NOW SHOWING" card
     (function () {
-        ['l', 'r'].forEach(side => { const d = document.createElement('div'); d.className = 'curtain ' + side; d.setAttribute('aria-hidden', 'true'); d.innerHTML = '<div class="cfold"><i class="tassel"></i></div>'; document.body.appendChild(d); });
+        ['l', 'r'].forEach(side => { const d = document.createElement('div'); d.className = 'curtain ' + side; d.setAttribute('aria-hidden', 'true'); d.innerHTML = '<div class="cfold"></div>'; document.body.appendChild(d); });
         const pm = document.createElement('div'); pm.className = 'pelmet'; pm.setAttribute('aria-hidden', 'true'); document.body.appendChild(pm);
         let was = false;
         new MutationObserver(() => {
