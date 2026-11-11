@@ -1683,9 +1683,10 @@
         @media (hover: none) and (pointer: coarse) { #dh .tvb { animation: none !important; } #dh .mt { animation: none !important; opacity: .5; } }
         #dh .tvr-b { display: none; } #dh.drawn.lamp-off .tvr-b { display: block; }
 
-        #dh .mts { position: absolute; width: 4px; height: 4px; margin: -2px 0 0 -2px; border-radius: 50%; background: rgba(255,255,255,.7); box-shadow: 0 0 6px 2px rgba(var(--bm),.55); filter: blur(.4px); opacity: 0; animation: moteF 3.6s ease-in-out infinite; }
-        @keyframes moteF { 0%,100% { opacity: 0; transform: translate(0,0) } 30% { opacity: .75 } 60% { opacity: .35; transform: translate(4px,5px) } }
+        #dh .mts { position: absolute; width: 4px; height: 4px; margin: -2px 0 0 -2px; border-radius: 50%; background: rgba(255,255,255,.7); box-shadow: 0 0 6px 2px rgba(var(--bm),.55); filter: blur(.4px); opacity: .3; animation: moteF 5s ease-in-out infinite; }
+        @keyframes moteF { 0%,100% { opacity: .3; transform: translate(0,0) } 35% { opacity: .75 } 65% { opacity: .45; transform: translate(4px,5px) } }
         @media (hover: none) and (pointer: coarse) { #dh .mts { animation: none !important; opacity: .4; } }
+        #dh.tvoff .tvr, #dh.tvoff .tvb { opacity: 0 !important; transition: opacity .6s; }
 </style>
 </head>
 <body>
@@ -3850,11 +3851,12 @@
         };
         const tvSet = (el, g) => { if (el) el.style.background = g; };
         const tvTick = () => {
-            if (!dh.classList.contains('show') || !dh.classList.contains('drawn') || !dh.classList.contains('lamp-off')) return;
+            if (!dh.classList.contains('show') || !dh.classList.contains('drawn') || !dh.classList.contains('lamp-off')) { dh.classList.remove('tvoff'); return; }
             const f = roomEl.querySelector('.tvr-f'); if (!f) return;
             let q = null;
             const v = [...document.querySelectorAll('#screenWrap video')].find(x => x.videoWidth && !x.paused && x.readyState >= 2 && x.style.display !== 'none');
             if (v) { try { tvCx.drawImage(v, 0, 0, 16, 12); const d = tvCx.getImageData(0, 0, 16, 12).data; q = tvRegions.map((r, k) => tvCol(tvAvg(d, r), k)); } catch (e) { q = null; } }
+            dh.classList.toggle('tvoff', !v);
             const ws = roomEl.querySelectorAll('.tvr-w');
             if (!q) { if (tvLiveOn) { tvLiveOn = false; const bm0 = roomEl.querySelector('.tvr-b'); if (bm0) { bm0.classList.remove('live'); bm0.style.removeProperty('--bm'); bm0.style.removeProperty('--bi'); } f.classList.remove('live'); f.style.background = ''; f.querySelectorAll('.rb').forEach(b => b.style.background = ''); ws.forEach(w => { w.classList.remove('live'); w.style.background = ''; }); } return; }
             tvLiveOn = true; f.classList.add('live'); ws.forEach(w => w.classList.add('live'));
