@@ -1527,7 +1527,7 @@
         #dh .pl.hid { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
         #dh .pl svg { display: block; width: 100%; height: 100%; overflow: visible; }
         #dh .w-floor { background: repeating-linear-gradient(90deg, rgba(0,0,0,.28) 0 2px, transparent 2px 46px), repeating-linear-gradient(0deg, rgba(0,0,0,.12) 0 1px, transparent 1px 130px), linear-gradient(180deg, #7a5028, #5e3a1a); box-shadow: inset 0 0 60px rgba(0,0,0,.5); }
-        #dh .w-wall { background: repeating-linear-gradient(90deg, #4a3560 0 26px, #43305a 26px 52px); box-shadow: inset 0 -30px 40px rgba(0,0,0,.35), inset 0 0 40px rgba(0,0,0,.4); }
+        #dh .w-wall { background: repeating-linear-gradient(90deg, #5e0e17 0 26px, #560c14 26px 52px); box-shadow: inset 0 -30px 40px rgba(0,0,0,.35), inset 0 0 40px rgba(0,0,0,.4); }
         #dh .w-wall.back::after, #dh .w-wall::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 16px; background: linear-gradient(#e8dcc0, #b8a880); box-shadow: 0 -2px 0 rgba(0,0,0,.35); }
         #dh .tvf { box-sizing: border-box; border: 2px solid rgba(0,0,0,.55); }
         #dh .tv-scr { position: absolute; left: 22px; top: 22px; width: 270px; height: 202px; border-radius: 16px / 14px; background: #000; overflow: hidden; box-shadow: 0 0 0 5px rgba(0,0,0,.55), 0 0 34px rgba(255,170,70,.28); }
@@ -1559,6 +1559,25 @@
         #dh .chest { transition: opacity .3s ease; } #dh.near .chest { opacity: 0; pointer-events: none; }
         #dh .pcb3 { pointer-events: none; } #dh .pcb3 svg { display: block; width: 100%; height: 100%; overflow: visible; transform-origin: 50% 100%; animation: pcBob 4.2s ease-in-out infinite; }
         #dh .pcb3 .pc-k1 { animation: pcHop 3.6s ease-out .4s infinite; } #dh .pcb3 .pc-k2 { animation: pcHop 4.4s ease-out 1.6s infinite; } #dh .pcb3 .pc-k3 { animation: pcHop 5.2s ease-out 2.8s infinite; }
+        #dh .dwin { background: linear-gradient(#fff,#f3f6fa 60%,#e4edf6); border: 8px solid #f4efe3; box-sizing: border-box; box-shadow: 0 0 30px rgba(255,250,225,.55), inset 0 0 18px rgba(255,255,255,.9); }
+        #dh .dw-p { position: absolute; background: linear-gradient(160deg,#ffffff,#eaf2fa 70%); box-shadow: inset 0 0 8px rgba(160,190,220,.5); }
+        #dh .cpan { transform-style: flat; } #dh .cf { position: absolute; inset: 0; transition: transform 1.7s cubic-bezier(.45,.05,.25,1); }
+        #dh .cf.cl { transform-origin: 0 50%; transform: scaleX(.16); } #dh .cf.cr { transform-origin: 100% 50%; transform: scaleX(.16); }
+        #dh.drawn .cf { transform: scaleX(1); }
+        #dh .cs { position: absolute; inset: 0; animation: cIdle 7s ease-in-out infinite; transform-origin: 50% 0;
+            background: linear-gradient(180deg,rgba(0,0,0,.55) 0,rgba(0,0,0,.1) 12%,transparent 28%,transparent 80%,rgba(0,0,0,.4)),
+                repeating-linear-gradient(90deg,rgba(0,0,0,.5) 0,rgba(0,0,0,0) 14px,rgba(255,140,120,.22) 27px,rgba(0,0,0,0) 38px,rgba(0,0,0,.45) 58px),
+                linear-gradient(90deg,#8a0f18,#b01a22 45%,#7a0c14); box-shadow: inset 0 -10px 0 #c9a24a, 0 0 18px rgba(0,0,0,.6); }
+        #dh .cpel { background: linear-gradient(#a1161c,#5a0a10); box-shadow: 0 3px 6px rgba(0,0,0,.5); }
+        #dh .dh-cord { cursor: pointer; pointer-events: auto; } #dh .dc-in { display: block; position: relative; width: 100%; height: 100%; filter: drop-shadow(2px 4px 3px rgba(0,0,0,.55)); transform-origin: 50% 0; animation: cordSwing 5.2s ease-in-out infinite; }
+        #dh .dc-in i { position: absolute; left: 50%; display: block; } #dh .dc-in.tug { animation: cordTug .6s cubic-bezier(.3,.1,.3,1) 1, cordSwing 5.2s ease-in-out .6s infinite; }
+        #dh .dh-cord:hover .dc-in { filter: drop-shadow(2px 4px 3px rgba(0,0,0,.55)) drop-shadow(0 0 10px rgba(255,170,60,.8)); }
+        #dh .dc-ros { top: -6px; width: 18px; height: 18px; margin-left: -9px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #ffe9a8, #c89a34 55%, #5a3e0e); }
+        #dh .dc-rope { top: 6px; width: 5px; margin-left: -2.5px; height: 84px; background: repeating-linear-gradient(160deg, #f4d57c 0 3px, #8a6418 3px 6px); border-radius: 3px; }
+        #dh .dc-knob { top: 86px; width: 17px; height: 17px; margin-left: -8.5px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #fff0b8, #d3a23c 50%, #6a4a12); }
+        #dh .dc-fr { top: 100px; width: 26px; height: 48px; margin-left: -13px; background: repeating-linear-gradient(90deg, #ecc45a 0 2px, #7c5a1c 2px 4px); clip-path: polygon(30% 0, 70% 0, 100% 78%, 94% 100%, 6% 100%, 0 78%); }
+        #dh .dc-fr::before { content: ''; position: absolute; left: 0; right: 0; top: 0; height: 14px; background: linear-gradient(90deg, #8a6418, #f0cd6a 50%, #8a6418); }
+        @media (prefers-reduced-motion: reduce) { #dh .cf { transition: none; } #dh .cs, #dh .dc-in { animation: none; } }
         #dh .stand { background: repeating-linear-gradient(92deg, rgba(0,0,0,.16) 0 2px, transparent 2px 9px), linear-gradient(#9a6630, #6e4620); }
         #dh .sp { position: absolute; left: 0; top: 0; filter: drop-shadow(0 8px 8px rgba(0,0,0,.45)); }
         #dh .sp svg { display: block; width: 100%; height: 100%; overflow: visible; }
@@ -3564,7 +3583,8 @@
         };
         let tw = 0;
         const tweenTo = T => { cancelAnimationFrame(tw); const from = { ...V }, t0 = performance.now(), D = 650; const step = now => { const u = Math.min(1, (now - t0) / D), e = u < .5 ? 2 * u * u : 1 - Math.pow(-2 * u + 2, 2) / 2; ['y', 'p', 'z', 'ty'].forEach(k => { V[k] = from[k] + (T[k] - from[k]) * e; }); applyV(); if (u < 1) tw = requestAnimationFrame(step); }; tw = requestAnimationFrame(step); };
-        const SCR = { w: 270, h: 202, cy: -109, cz: -130 };         // the TV screen in room coordinates
+        const TVS = .85;
+        const SCR = { w: 270 * TVS, h: 202 * TVS, cy: 100 + (-209) * TVS, cz: -210 + 80 * TVS };         // the TV screen in room coordinates
         const closeUp = () => {                                       // camera preset that fills the view with the screen (zoom is a real scale, so it stays sharp)
             const vw = window.innerWidth, vh = window.innerHeight, target = Math.min(vw * (vw < 640 ? .96 : .8), vh * (vw < 640 ? .6 : .68) * 4 / 3), f = 1500 / (1500 - SCR.cz), sct = target / (SCR.w * f);
             return { y: 0, p: -2, z: 500 * Math.log(sct / baseSc()), ty: -SCR.cy * sct * f - 26 };
@@ -3582,7 +3602,7 @@
             const r = wrap.getBoundingClientRect(), w = Math.round(r.width) || 568, h = Math.round(r.height) || 426;
             const ph = document.createElement('div'); ph.style.cssText = 'width:' + w + 'px;height:' + h + 'px;'; wrap.parentNode.insertBefore(ph, wrap);
             moved = { wrap, ph, style: wrap.getAttribute('style') };
-            wrap.style.cssText = (moved.style || '') + ';position:absolute;left:0;top:0;width:' + w + 'px;height:' + h + 'px;max-width:none;transform-origin:0 0;transform:scale(' + (SCR.w / w).toFixed(4) + ');border-radius:0;';
+            wrap.style.cssText = (moved.style || '') + ';position:absolute;left:0;top:0;width:' + w + 'px;height:' + h + 'px;max-width:none;transform-origin:0 0;transform:scale(' + (270 / w).toFixed(4) + ');border-radius:0;';
             host.appendChild(wrap);
             const was = !vid.paused; if (was && vid.paused) vid.play().catch(() => { });
         };
@@ -3630,7 +3650,7 @@
             h += box(SW, 36, 112, 0, FY - 10 - 18, sz, 'cb', '', f());
             h += box(SW, 14, 98, 0, seatTop - 7, sz - 6, 'cb', '', cush, cush);
             h += box(SW, k.backH, 28, 0, seatTop - 14 - k.backH / 2, sz + 42, 'cb', '', fb, f());
-            return h;
+            return '<div class="bx" style="transform:scale3d(1.2,1.2,1.2);transform-origin:0 ' + FY + 'px ' + sz + 'px">' + h + '</div>';
         };
         // the 3D treasure chest: same look and the same coin-drop sequence as the one in the corner of the page
         const CHX = -335, CHZ = 150;
@@ -3667,6 +3687,34 @@
             h += '<div class="sp pcb3" style="width:' + w + 'px;height:' + hh + 'px;margin:' + (-hh / 2) + 'px 0 0 ' + (-w / 2) + 'px;transform:translate3d(0,' + (FY - TH - 6 - hh / 2 + 4) + 'px,0) rotateY(calc(var(--y) * -1));filter:none">' + sv + '</div>';
             return '<div class="bx" style="transform:translate3d(' + TBX + 'px,0,' + TBZ + 'px)">' + h + '</div>';
         };
+        // red walls, a white window and velvet curtains behind the TV, with the same pull-tassel as the 2D page
+        let drawn = false;
+        const curtainsHtml = () => {
+            const RY = FY - 322, CH = 316, Z = -304, rod = 'background:linear-gradient(#f0d070,#a8791c);';
+            const panel = side => { const L = side < 0; return '<div class="bx" style="transform:translate3d(' + (L ? -450 : 450) + 'px,' + (RY + 8 + CH / 2) + 'px,' + Z + 'px)">' + '<div class="pl cpan" style="width:456px;height:' + CH + 'px;margin:' + (-CH / 2) + 'px 0 0 ' + (L ? 0 : -456) + 'px;"><div class="cf ' + (L ? 'cl' : 'cr') + '"><div class="cs"></div></div></div></div>'; };
+            let h = '';
+            h += plane(900, 6, 0, RY, -300, 0, 0, '', '', rod) + box(900, 6, 10, 0, RY, -304, 'cb', '', rod, rod);
+            h += [-450, 450].map(x => box(16, 16, 16, x, RY, -304, 'cb', '', 'background:radial-gradient(circle at 35% 30%,#ffe9a8,#c89a34 55%,#6a4a12);')).join('');
+            h += panel(-1) + panel(1);
+            return h;
+        };
+        const windowHtml = () => {
+            const W = 140, H = 150, X = 285, Y = FY - 215, Z = -309.4;
+            const panes = '<i class="dw-p" style="left:8px;top:8px;width:' + (W / 2 - 11) + 'px;height:' + (H / 2 - 11) + 'px"></i><i class="dw-p" style="left:' + (W / 2 + 3) + 'px;top:8px;width:' + (W / 2 - 11) + 'px;height:' + (H / 2 - 11) + 'px"></i><i class="dw-p" style="left:8px;top:' + (H / 2 + 3) + 'px;width:' + (W / 2 - 11) + 'px;height:' + (H / 2 - 11) + 'px"></i><i class="dw-p" style="left:' + (W / 2 + 3) + 'px;top:' + (H / 2 + 3) + 'px;width:' + (W / 2 - 11) + 'px;height:' + (H / 2 - 11) + 'px"></i>';
+            return plane(W + 70, H + 70, X, Y, Z + .3, 0, 0, '', '', 'pointer-events:none;background:radial-gradient(closest-side,rgba(255,250,225,.45),transparent);')
+                + plane(W, H, X, Y, Z, 0, 0, 'dwin', panes, '') + plane(W + 16, 8, X, Y + H / 2 + 4, Z + 3, 0, 0, '', '', 'background:linear-gradient(#fff,#cfc6b0);box-shadow:0 2px 4px rgba(0,0,0,.4);')
+                + plane(W * 1.35, 150, X + 6, FY - 1, -230, 90, 0, 'dlight', '', 'pointer-events:none;background:linear-gradient(105deg,rgba(255,250,225,.30),rgba(255,250,225,.06) 70%,transparent);clip-path:polygon(18% 0,82% 0,100% 100%,0 100%);');
+        };
+        const cordHtml = () => {
+            const w = 36, hh = 150, X = -200, Y0 = FY - 322 + 4;
+            return '<div class="sp dh-cord" data-act="cord" title="Pull for curtains" style="width:' + w + 'px;height:' + hh + 'px;margin:0 0 0 ' + (-w / 2) + 'px;transform:translate3d(' + X + 'px,' + Y0 + 'px,-298px) rotateY(calc(var(--y) * -1));transform-origin:50% 0;filter:none"><span class="dc-in"><i class="dc-ros"></i><i class="dc-rope"></i><i class="dc-knob"></i><i class="dc-fr"></i></span></div>';
+        };
+        const toggleCurtains = on => {
+            drawn = on == null ? !drawn : on; dh.classList.toggle('drawn', drawn);
+            const c = roomEl.querySelector('.dh-cord .dc-in'); if (c) { c.classList.remove('tug'); void c.offsetWidth; c.classList.add('tug'); }
+            try { makeTone(260, 150, .14, 'triangle', .14); makeNoise(.05, 2200, null, .6, .05); } catch (e) { }
+            try { if (drawn) makeNoise(2.1, 350, 1700, .7, .07); else makeNoise(1.4, 1500, 450, .7, .055); } catch (e) { }
+        };
         const chestPlate = () => { const e = roomEl.querySelector('.cpn'); if (e) e.textContent = '● ' + coins(); };
         const chestPlay = () => {
             const c = roomEl.querySelector('.chest'); if (!c || !dh.classList.contains('show')) return;
@@ -3682,23 +3730,24 @@
             const scr = (lk.fx && srcFx ? srcFx.outerHTML : '') + (lk.ring && srcRing ? srcRing.outerHTML : '') + '<div class="tv-scr" style="' + (lk.trim ? 'box-shadow:' + lk.trim + ',0 0 34px rgba(255,170,70,.28);' : '') + '"></div><span class="tv-knob" style="left:316px;top:40px"></span><span class="tv-knob" style="left:316px;top:84px"></span><span class="tv-grille"></span><span class="tv-led"></span><span class="tv-brand" style="' + (lk.brand ? 'color:' + lk.brand + ';' : '') + '">NOSTALGIVISION</span>' + stk + riv;
             const front = 'background:' + sk.pv + ';' + (sk.pr ? 'box-shadow:' + sk.pr.split(/,(?![^(]*\))/)[0] + ';' : ''), side = 'background:linear-gradient(160deg,rgba(255,255,255,.12),rgba(0,0,0,.18)),' + (sk.pd || '#707068') + ';';
             let h = plane(900, 620, 0, FY, 0, 90, 0, 'w-floor') + plane(900, 340, 0, FY - 170, -310, 0, 0, 'w-wall back hid') + plane(620, 340, -450, FY - 170, 0, 0, 90, 'w-wall hid') + plane(620, 340, 450, FY - 170, 0, 0, -90, 'w-wall hid');
-            h += box(400, 62, 180, 0, FY - 31, -210, 'stand', '');
-            h += box(360, 270, 170, 0, FY - 62 - 135, -215, 'tvbody', scr, front, side);
+            h += windowHtml() + curtainsHtml() + cordHtml();
+            h += '<div class="bx tvg" style="transform:scale3d(' + TVS + ',' + TVS + ',' + TVS + ');transform-origin:0 ' + FY + 'px -210px">' + box(400, 62, 180, 0, FY - 31, -210, 'stand', '') + box(360, 270, 170, 0, FY - 62 - 135, -215, 'tvbody', scr, front, side);
             if (lk.halo) h += plane(620, 480, 0, FY - 62 - 135, -132, 0, 0, '', '', 'pointer-events:none;background:radial-gradient(closest-side,rgba(' + lk.halo + ',.42),rgba(' + lk.halo + ',.14) 55%,transparent);');
+            h += '</div>';
             if (have.includes('rug')) h += plane(560, 220, 0, FY - 1, -30, 90, 0, '', itemSvg(ITEM_BY.rug, true));
             if (have.includes('poster')) h += plane(104, 143, -449, -62, -120, 0, 90, 'hid', itemSvg(ITEM_BY.poster));
             if (have.includes('neon')) h += plane(140, 100, 449, -98, -60, 0, -90, 'hid neon-s', itemSvg(ITEM_BY.neon));
-            if (have.includes('shelf')) h += plane(150, 112, 330, -195, -309, 0, 0, 'hid', itemSvg(ITEM_BY.shelf));
+            if (have.includes('shelf')) h += plane(150, 112, -300, -195, -309, 0, 0, 'hid', itemSvg(ITEM_BY.shelf));
             Object.keys(SP).forEach(id => { if (!have.includes(id)) return; const s = SP[id]; h += '<div class="sp" style="width:' + s[0] + 'px;height:' + s[1] + 'px;margin:' + (-s[1] / 2) + 'px 0 0 ' + (-s[0] / 2) + 'px;transform:translate3d(' + s[2] + 'px,' + (FY - s[1] / 2) + 'px,' + s[3] + 'px) rotateY(calc(var(--y) * -1))">' + itemSvg(ITEM_BY[id]) + '</div>'; });
             h += chestHtml() + tableHtml() + couchHtml(sofaPick()) + (have.includes('skate') ? plane(150, 62, 290, FY - 1, 60, 90, 0, '', itemSvg(ITEM_BY.skate, true)) : '');
-            roomEl.innerHTML = h; chestPlate();
+            roomEl.innerHTML = h; chestPlate(); dh.classList.toggle('drawn', drawn);
             dh.querySelector('.dh-empty').textContent = have.length ? '' : 'Your room is empty. Buy room upgrades in the treasure chest to fill it.';
         };
         const toggleGuide = on => { dh.classList.toggle('guide', on == null ? !dh.classList.contains('guide') : on); if (dh.classList.contains('guide')) buildGuide(); };
         const openRoom = () => { if (!st) return; closeShop(); returnScreen(); buildRoom(); takeScreen(); toggleGuide(false); Object.assign(V, V0); applyV(); dh.classList.add('show'); body.classList.remove('tv-spot'); const b = dh.querySelector('[data-d=close]'); try { b.focus({ preventScroll: true }); } catch (e) { } };
         const closeRoom = () => { cancelAnimationFrame(tw); dh.classList.remove('show'); dh.classList.remove('guide'); returnScreen(); };
         const pts = new Map(); let pinch0 = 0, z0 = 0;
-        const noDrag = t => t.closest('.dh-ui, .dh-remote, .dh-drawer, .tv-scr');
+        const noDrag = t => t.closest('.dh-ui, .dh-remote, .dh-drawer, .tv-scr, .dh-cord');
         dh.addEventListener('pointerdown', e => { if (noDrag(e.target)) return; cancelAnimationFrame(tw); pts.set(e.pointerId, { x: e.clientX, y: e.clientY }); dh.classList.add('drag'); try { dh.setPointerCapture(e.pointerId); } catch (er) { } if (pts.size === 2) { const [a, b] = [...pts.values()]; pinch0 = Math.hypot(a.x - b.x, a.y - b.y); z0 = V.z; } });
         dh.addEventListener('pointermove', e => {
             const p = pts.get(e.pointerId); if (!p) return;
@@ -3712,6 +3761,7 @@
         dh.addEventListener('wheel', e => { if (e.target.closest('.dh-drawer')) return; e.preventDefault(); cancelAnimationFrame(tw); V.z -= e.deltaY * .9; applyV(); }, { passive: false });
         dh.addEventListener('click', e => {
             const li = e.target.closest('.dh-li'); if (li) { const c = document.querySelectorAll('#showList .show-card')[+li.dataset.i]; if (c) { c.click(); toggleGuide(false); } return; }
+            if (e.target.closest('[data-act=cord]')) { toggleCurtains(); return; }
             const r = e.target.closest('[data-r]'); if (r) { const t = $(r.dataset.r); if (t) t.click(); return; }
             const b = e.target.closest('[data-d]'); if (!b) return; const d = b.dataset.d;
             if (d === 'close') closeRoom(); else if (d === 'guide') toggleGuide();
@@ -3722,6 +3772,7 @@
             if (!dh.classList.contains('show')) return;
             if (e.key === 'Escape') { e.stopPropagation(); if (dh.classList.contains('guide')) toggleGuide(false); else closeRoom(); return; }
             if (e.target && /INPUT|TEXTAREA/.test(e.target.tagName)) return;
+            if (e.key === 'c' || e.key === 'C') { toggleCurtains(); return; }
             const k = { ArrowLeft: () => V.y -= 8, ArrowRight: () => V.y += 8, ArrowUp: () => V.p -= 5, ArrowDown: () => V.p += 5, '+': () => V.z += 90, '=': () => V.z += 90, '-': () => V.z -= 90 }[e.key];
             if (k) { e.preventDefault(); e.stopPropagation(); cancelAnimationFrame(tw); k(); applyV(); }
         }, true);
