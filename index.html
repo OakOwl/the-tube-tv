@@ -1535,6 +1535,10 @@
         #dh .tv-led { position: absolute; width: 11px; height: 11px; border-radius: 50%; background: #ff3a2a; box-shadow: 0 0 8px #ff3a2a; left: 322px; top: 134px; }
         #dh .tv-grille { position: absolute; left: 306px; top: 160px; width: 42px; height: 54px; background: repeating-linear-gradient(0deg, rgba(0,0,0,.55) 0 2px, transparent 2px 6px); }
         #dh .tv-brand { position: absolute; left: 24px; bottom: 12px; font: 400 13px/1 'VT323', monospace; letter-spacing: .3em; color: rgba(0,0,0,.55); }
+        #dh .skin-fx { z-index: 0; border-radius: 0; } #dh .skin-ring { z-index: 0; }
+        #dh .dh-stk { position: absolute; z-index: 3; overflow: visible; filter: drop-shadow(0 1.5px 1.5px rgba(0,0,0,.38)); }
+        #dh .dh-riv { position: absolute; z-index: 3; width: 12px; height: 12px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #f6dc98, #9a6a2a 70%); box-shadow: 0 1px 2px rgba(0,0,0,.6); }
+        #dh .tv-scr, #dh .tv-knob, #dh .tv-grille, #dh .tv-led, #dh .tv-brand { z-index: 2; }
         #dh .stand { background: repeating-linear-gradient(92deg, rgba(0,0,0,.16) 0 2px, transparent 2px 9px), linear-gradient(#9a6630, #6e4620); }
         #dh .sp { position: absolute; left: 0; top: 0; filter: drop-shadow(0 8px 8px rgba(0,0,0,.45)); }
         #dh .sp svg { display: block; width: 100%; height: 100%; overflow: visible; }
@@ -3536,10 +3540,10 @@
         };
         const FY = 100;                                       // floor height in the room's coordinates
         const plane = (w, h, x, y, z, rx, ry, cls, inner, extra) => '<div class="pl ' + (cls || '') + '" style="width:' + w + 'px;height:' + h + 'px;margin:' + (-h / 2) + 'px 0 0 ' + (-w / 2) + 'px;transform:translate3d(' + x + 'px,' + y + 'px,' + z + 'px) rotateX(' + (rx || 0) + 'deg) rotateY(' + (ry || 0) + 'deg);' + (extra || '') + '">' + (inner || '') + '</div>';
-        const box = (w, h, d, cx, cy, cz, cls, face, extra) => '<div class="bx" style="transform:translate3d(' + cx + 'px,' + cy + 'px,' + cz + 'px)">'
-            + plane(w, h, 0, 0, d / 2, 0, 0, cls + ' tvf', face, extra) + plane(w, h, 0, 0, -d / 2, 0, 180, cls + ' tvf', '', extra)
-            + plane(d, h, -w / 2, 0, 0, 0, -90, cls + ' tvf', '', extra) + plane(d, h, w / 2, 0, 0, 0, 90, cls + ' tvf', '', extra)
-            + plane(w, d, 0, -h / 2, 0, 90, 0, cls + ' tvf', '', extra) + plane(w, d, 0, h / 2, 0, -90, 0, cls + ' tvf', '', extra) + '</div>';
+        const box = (w, h, d, cx, cy, cz, cls, face, extra, side) => { side = side == null ? extra : side; return '<div class="bx" style="transform:translate3d(' + cx + 'px,' + cy + 'px,' + cz + 'px)">'
+            + plane(w, h, 0, 0, d / 2, 0, 0, cls + ' tvf', face, extra) + plane(w, h, 0, 0, -d / 2, 0, 180, cls + ' tvf', '', side)
+            + plane(d, h, -w / 2, 0, 0, 0, -90, cls + ' tvf', '', side) + plane(d, h, w / 2, 0, 0, 0, 90, cls + ' tvf', '', side)
+            + plane(w, d, 0, -h / 2, 0, 90, 0, cls + ' tvf', '', side) + plane(w, d, 0, h / 2, 0, -90, 0, cls + ' tvf', '', side) + '</div>'; };
         const SP = { plant: [78, 143, -305, -20], lamp: [73, 195, -295, -170], arcade: [105, 225, 300, -165], beanbag: [170, 105, 235, 105], lava: [70, 140, 215, -35] };
         let moved = null;
         const takeScreen = () => {
@@ -3560,12 +3564,29 @@
             const cards = Array.from(document.querySelectorAll('#showList .show-card'));
             listEl.innerHTML = cards.map((c, i) => { const t = (c.querySelector('.s-time') || {}).textContent || '', e = (c.querySelector('.s-emoji') || {}).textContent || '', n = (c.querySelector('.s-name') || {}).textContent || ''; return '<button type="button" class="dh-li" data-i="' + i + '"><span>' + esc(t.trim()) + '</span><span>' + esc(e.trim()) + '</span><b>' + esc(n.trim()) + '</b></button>'; }).join('') || '<p class="dh-none">No shows in the guide right now.</p>';
         };
+        // how each skin looks on the 3D set: screen trim, label colour, and which of the page's own animated effect layers to reuse
+        const LOOK = {
+            wood: { trim: '0 0 0 2px #f0d078,0 0 0 3px #7a5a1c,0 0 0 5px #c9a24a,0 0 0 6px #5a3e10', brand: '#f3dca8' },
+            red: { trim: '0 0 0 2px #fff0d0,0 0 0 4px #8d141b', brand: '#fff0d0' },
+            neon: { halo: '255,43,214', trim: '0 0 0 2px #00e5ff,0 0 0 3px #08323b', brand: '#ff7fe8', glow: true },
+            mint: { trim: '0 0 0 2px #fff,0 0 0 3px #7a8a88,0 0 0 5px #e8f4f2,0 0 0 6px #5a6a68', brand: '#0f3f3a', stickers: true },
+            synth: { halo: '255,61,166', trim: '0 0 0 2px #ffb347,0 0 0 3px #3a0c40', brand: '#ffd0f0', fx: true },
+            steam: { trim: '0 0 0 2px #f0c878,0 0 0 3px #5a3a12,0 0 0 6px #b0703a,0 0 0 7px #3a2208,0 0 0 9px #7aa890', brand: '#fbe6b8', rivets: true },
+            gold: { halo: '255,200,60', trim: '0 0 0 2px #fff6c8,0 0 0 3px #8a6a10,0 0 0 5px #f2c340,0 0 0 6px #6a4c08', brand: '#4a3004', fx: true },
+            cosmic: { halo: '122,100,255', trim: '0 0 0 2px #7aa8ff,0 0 0 3px #0a0626', brand: '#d8e0ff', fx: true },
+            holo: { halo: '190,150,255', trim: '0 0 0 2px #fff,0 0 0 3px #8a82b0,0 0 0 5px #fbeeff,0 0 0 6px #6a6290', brand: '#3a2a5a', fx: true, ring: true }
+        };
         const buildRoom = () => {
             const have = ownedItems().filter(id => ITEM_BY[id]), sk = SKINS.find(k => st && k.id === st.skin) || SKINS[0];
-            const scr = '<div class="tv-scr"></div><span class="tv-knob" style="left:316px;top:40px"></span><span class="tv-knob" style="left:316px;top:84px"></span><span class="tv-grille"></span><span class="tv-led"></span><span class="tv-brand">NOSTALGIVISION</span>';
+            const lk = LOOK[sk.id] || {}, srcFx = document.querySelector('.tv-shell .skin-fx'), srcRing = document.querySelector('.tv-shell .skin-ring');
+            const stk = lk.stickers ? '<svg class="dh-stk" style="left:206px;bottom:6px;width:38px;height:38px;transform:rotate(-10deg)"><use href="#stk-bolt"/></svg><svg class="dh-stk" style="left:246px;bottom:8px;width:34px;height:34px;transform:rotate(8deg)"><use href="#stk-star"/></svg><svg class="dh-stk" style="left:288px;bottom:5px;width:38px;height:38px;transform:rotate(-6deg)"><use href="#stk-gem"/></svg>' : '';
+            const riv = lk.rivets ? [[8, 8], [342, 8], [8, 252], [342, 252]].map(p => '<i class="dh-riv" style="left:' + p[0] + 'px;top:' + p[1] + 'px"></i>').join('') : '';
+            const scr = (lk.fx && srcFx ? srcFx.outerHTML : '') + (lk.ring && srcRing ? srcRing.outerHTML : '') + '<div class="tv-scr" style="' + (lk.trim ? 'box-shadow:' + lk.trim + ',0 0 34px rgba(255,170,70,.28);' : '') + '"></div><span class="tv-knob" style="left:316px;top:40px"></span><span class="tv-knob" style="left:316px;top:84px"></span><span class="tv-grille"></span><span class="tv-led"></span><span class="tv-brand" style="' + (lk.brand ? 'color:' + lk.brand + ';' : '') + '">NOSTALGIVISION</span>' + stk + riv;
+            const front = 'background:' + sk.pv + ';' + (sk.pr ? 'box-shadow:' + sk.pr.split(/,(?![^(]*\))/)[0] + ';' : ''), side = 'background:linear-gradient(160deg,rgba(255,255,255,.12),rgba(0,0,0,.18)),' + (sk.pd || '#707068') + ';';
             let h = plane(700, 440, 0, FY, 0, 90, 0, 'w-floor') + plane(700, 340, 0, FY - 170, -220, 0, 0, 'w-wall back hid') + plane(440, 340, -350, FY - 170, 0, 0, 90, 'w-wall hid') + plane(440, 340, 350, FY - 170, 0, 0, -90, 'w-wall hid');
             h += box(400, 62, 180, 0, FY - 31, -120, 'stand', '');
-            h += box(360, 270, 170, 0, FY - 62 - 135, -125, 'tvbody', scr, 'background:' + sk.pv + ';');
+            h += box(360, 270, 170, 0, FY - 62 - 135, -125, 'tvbody', scr, front, side);
+            if (lk.halo) h += plane(620, 480, 0, FY - 62 - 135, -42, 0, 0, '', '', 'pointer-events:none;background:radial-gradient(closest-side,rgba(' + lk.halo + ',.42),rgba(' + lk.halo + ',.14) 55%,transparent);');
             if (have.includes('rug')) h += plane(440, 160, 0, FY - 1, 30, 90, 0, '', itemSvg(ITEM_BY.rug, true));
             if (have.includes('poster')) h += plane(104, 143, -349, -62, -60, 0, 90, 'hid', itemSvg(ITEM_BY.poster));
             if (have.includes('neon')) h += plane(140, 100, 349, -98, -10, 0, -90, 'hid neon-s', itemSvg(ITEM_BY.neon));
