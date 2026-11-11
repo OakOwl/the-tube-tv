@@ -3722,7 +3722,7 @@
                 + '<i class="tvk-l" style="left:18px;top:88px;width:56px;height:30px;background:#1b1b1e"></i><i class="tvk-l" style="left:24px;top:124px;width:40px;height:16px;background:#e0826c"></i><i class="tvk-w" style="left:18px;top:144px;width:58px;height:28px"></i>'
                 + '<i class="tvk-c" style="left:128px;top:96px;width:84px;height:46px"><b></b><b></b><b></b><b></b><b></b><b></b></i><i class="tvk-n" style="left:172px;top:76px"></i>', blk);
             const rod = a => '<div class="bx" style="transform:translate3d(0,0,0) rotateX(-9deg) rotateZ(' + a + 'deg)">' + box(4, 150, 4, 0, -75, 0, 'ant', '', 'background:linear-gradient(90deg,#8d9199,#f4f6fa 45%,#a4a8b0);') + box(9, 9, 9, 0, -152, 0, 'ant', '', 'background:radial-gradient(circle at 35% 30%,#fff,#b8bcc4 60%,#767a82);') + '</div>';
-            s += '<div class="bx" style="transform:translate3d(0,' + (cy - 135) + 'px,-250px)">' + box(46, 10, 34, 0, -4, 0, 'ant', '', 'background:linear-gradient(#5a5d64,#2a2b2f);') + box(16, 7, 16, 0, -12, 0, 'ant', '', 'background:linear-gradient(90deg,#8d9199,#f4f6fa 45%,#a4a8b0);') + '<div class="bx" style="transform:translate3d(0,-14px,0)">' + rod(-30) + rod(30) + '</div></div>';
+            s += '<div class="bx" style="transform:translate3d(0,' + (cy - 135) + 'px,-250px) scale3d(.68,.68,.68)">' + box(46, 10, 34, 0, -4, 0, 'ant', '', 'background:linear-gradient(#5a5d64,#2a2b2f);') + box(16, 7, 16, 0, -12, 0, 'ant', '', 'background:linear-gradient(90deg,#8d9199,#f4f6fa 45%,#a4a8b0);') + '<div class="bx" style="transform:translate3d(0,-14px,0)">' + rod(-30) + rod(30) + '</div></div>';
             return s;
         };
         const SP = { plant: [78, 143, -400, -80], lamp: [73, 195, -385, -240], arcade: [105, 225, 395, -235], beanbag: [170, 105, 350, 150], lava: [70, 140, 290, -130], dolls: [110, 98, -230, 90], boombox: [96, 58, -320, -60] };
@@ -3866,7 +3866,7 @@
             const kern = [[0, 0, 22], [-16, 8, 17], [14, 10, 16], [-6, -14, 18], [10, -12, 15], [-22, -6, 12], [22, -4, 12], [0, 16, 14], [-12, 20, 9], [12, 21, 9], [-4, 4, 30], [8, 0, 27], [-12, -4, 26], [4, -8, 24]];
             kern.forEach((p, i) => { const s = 15 + (i % 3) * 2; bk += '<div class="sp pk" style="width:' + s + 'px;height:' + s + 'px;margin:' + (-s / 2) + 'px 0 0 ' + (-s / 2) + 'px;transform:translate3d(' + p[0] + 'px,' + (BY - BH - p[2] + 2) + 'px,' + p[1] + 'px) rotateY(calc(var(--y) * -1));filter:none"></div>'; });
             [[24, 'pk1'], [-6, 'pk2'], [-26, 'pk3']].forEach(p => { bk += '<div class="sp pk ' + p[1] + '" style="width:13px;height:13px;margin:-6px 0 0 -6px;transform:translate3d(' + p[0] + 'px,' + (BY - BH - 22) + 'px,6px) rotateY(calc(var(--y) * -1));filter:none"></div>'; });
-            h += bk;
+            h += '<div class="bx" style="transform:translate3d(0,' + BY + 'px,0) scale3d(.7,.7,.7) translate3d(0,' + (-BY) + 'px,0)">' + bk + '</div>';
             return '<div class="bx" style="transform:translate3d(' + TBX + 'px,0,' + TBZ + 'px)">' + h + '</div>';
         };
         // red walls, a white window and velvet curtains behind the TV, with the same pull-tassel as the 2D page
