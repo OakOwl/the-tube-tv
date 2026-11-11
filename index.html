@@ -1592,6 +1592,9 @@
         #dh .dp-v input { width: 100%; margin: 0 0 8px; accent-color: #f5a623; } #dh .dp-row { display: flex; gap: 6px; align-items: center; margin-bottom: 8px; }
         #dh .dp-sw { width: 26px; height: 26px; border-radius: 3px; border: 1px solid #7a5a1c; flex: none; } #dh .dp-hex { flex: 1; min-width: 0; font: 400 18px/1 'VT323', monospace; letter-spacing: .08em; color: #ffe2a8; background: #0c0803; border: 1px solid #7a5a1c; border-radius: 3px; padding: 4px 6px; }
         #dh .dp-pre { display: grid; grid-template-columns: repeat(6, 1fr); gap: 5px; } #dh .dp-pre button { height: 22px; border: 1px solid rgba(255,255,255,.25); border-radius: 3px; cursor: pointer; padding: 0; } #dh .dp-pre button:hover { outline: 2px solid #f5a623; }
+        #dh .ledl { box-shadow: 0 0 8px 1px rgba(90,255,210,.9); } #dh .ledw { opacity: .8; animation: ledBreathe 6s ease-in-out infinite; } #dh .ledf { animation: ledBreathe 6s ease-in-out infinite; }
+        @keyframes ledBreathe { 0%,100% { opacity: .72 } 50% { opacity: .95 } }
+        @media (prefers-reduced-motion: reduce) { #dh .ledw, #dh .ledf { animation: none; } }
         #dh .stand { background: repeating-linear-gradient(92deg, rgba(0,0,0,.16) 0 2px, transparent 2px 9px), linear-gradient(#9a6630, #6e4620); }
         #dh .sp { position: absolute; left: 0; top: 0; filter: drop-shadow(0 8px 8px rgba(0,0,0,.45)); }
         #dh .sp svg { display: block; width: 100%; height: 100%; overflow: visible; }
@@ -3729,6 +3732,18 @@
             try { makeTone(260, 150, .14, 'triangle', .14); makeNoise(.05, 2200, null, .6, .05); } catch (e) { }
             try { if (drawn) makeNoise(2.1, 350, 1700, .7, .07); else makeNoise(1.4, 1500, 450, .7, .055); } catch (e) { }
         };
+        // RGB corner floor lamp (always in the room): a slim black L-pole with a cyan-to-green LED strip washing the walls
+        const ledLampHtml = () => {
+            const X = -396, Z = -292, PH = 290, LED = 'linear-gradient(180deg,#8ff6ff,#38f0c8 45%,#22e07a)', WASH = 'linear-gradient(180deg,#7ff0ff,#3af0c0 50%,#22e07a)';
+            const mask = 'mask-image:linear-gradient(90deg,#000 20%,#000 30%,transparent);-webkit-mask-image:linear-gradient(90deg,#000 20%,#000 30%,transparent);';
+            let h = plane(160, PH + 20, -370, FY - (PH + 20) / 2 - 4, -302.6, 0, 0, 'ledw', '', 'pointer-events:none;background:' + WASH + ';' + mask)
+                + plane(210, PH + 20, -449.2, FY - (PH + 20) / 2 - 4, Z - 8, 0, 90, 'ledw hid', '', 'pointer-events:none;background:' + WASH + ';' + mask)
+                + plane(200, 200, X + 40, FY - 1, Z + 40, 90, 0, 'ledf', '', 'pointer-events:none;background:radial-gradient(closest-side,rgba(60,240,170,.55),rgba(60,220,200,.18) 60%,transparent);');
+            h += '<div class="bx" style="transform:translate3d(' + X + 'px,0,' + Z + 'px)">' + box(5, PH, 5, 0, FY - PH / 2, 0, 'cb', '', 'background:#0c0c0e;')
+                + plane(3, PH - 6, 0, FY - PH / 2, 2.7, 0, 0, 'ledl', '', 'background:' + LED + ';') + plane(3, PH - 6, 2.7, FY - PH / 2, 0, 0, 90, 'ledl', '', 'background:' + LED + ';')
+                + box(40, 3, 5, 20, FY - 1.5, 0, 'cb', '', 'background:#0c0c0e;') + box(5, 3, 40, 0, FY - 1.5, 20, 'cb', '', 'background:#0c0c0e;') + '</div>';
+            return h;
+        };
         const chestPlate = () => { const e = roomEl.querySelector('.cpn'); if (e) e.textContent = '● ' + coins(); };
         const chestPlay = () => {
             const c = roomEl.querySelector('.chest'); if (!c || !dh.classList.contains('show')) return;
@@ -3744,7 +3759,7 @@
             const scr = (lk.fx && srcFx ? srcFx.outerHTML : '') + (lk.ring && srcRing ? srcRing.outerHTML : '') + '<div class="tv-scr" style="' + (lk.trim ? 'box-shadow:' + lk.trim + ',0 0 34px rgba(255,170,70,.28);' : '') + '"></div><span class="tv-knob" style="left:316px;top:40px"></span><span class="tv-knob" style="left:316px;top:84px"></span><span class="tv-grille"></span><span class="tv-led"></span><span class="tv-brand" style="' + (lk.brand ? 'color:' + lk.brand + ';' : '') + '">NOSTALGIVISION</span>' + stk + riv;
             const front = 'background:' + sk.pv + ';' + (sk.pr ? 'box-shadow:' + sk.pr.split(/,(?![^(]*\))/)[0] + ';' : ''), side = 'background:linear-gradient(160deg,rgba(255,255,255,.12),rgba(0,0,0,.18)),' + (sk.pd || '#707068') + ';';
             let h = plane(900, 620, 0, FY, 0, 90, 0, 'w-floor') + plane(900, 340, 0, FY - 170, -310, 0, 0, 'w-wall back hid') + plane(620, 340, -450, FY - 170, 0, 0, 90, 'w-wall hid') + plane(620, 340, 450, FY - 170, 0, 0, -90, 'w-wall hid');
-            h += windowHtml() + curtainsHtml() + cordHtml();
+            h += windowHtml() + curtainsHtml() + ledLampHtml() + cordHtml();
             h += '<div class="bx tvg" style="transform:scale3d(' + TVS + ',' + TVS + ',' + TVS + ');transform-origin:0 ' + FY + 'px -210px">' + box(400, 62, 180, 0, FY - 31, -210, 'stand', '') + box(360, 270, 170, 0, FY - 62 - 135, -215, 'tvbody', scr, front, side);
             if (lk.halo) h += plane(620, 480, 0, FY - 62 - 135, -132, 0, 0, '', '', 'pointer-events:none;background:radial-gradient(closest-side,rgba(' + lk.halo + ',.42),rgba(' + lk.halo + ',.14) 55%,transparent);');
             h += '</div>';
