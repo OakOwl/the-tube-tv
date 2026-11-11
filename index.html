@@ -921,7 +921,7 @@
         #btnCatalogue:hover { background: #ffb938; border-color: #ffb938; color: #120c00; }
 
         /* ================= LIVING ROOM THEME (v29) ================= */
-        :root { --glow: rgba(245,166,35,.40); }
+        :root { --glow: rgba(255,140,40,.42); }
         body {
             background:
                 radial-gradient(ellipse 55% 45% at 10% -5%, rgba(255,175,70,.20), transparent 70%),
@@ -1044,6 +1044,117 @@
         .cat-card { align-self: stretch; display: flex; flex-direction: column; }
         .cat-card:hover::after { transform: translateY(7px); }
         .cat-card:active::after { transform: translateY(3px) scale(1.02); }
+
+        /* ================= CURTAINS (v32) — close behind the TV when the lights go down ================= */
+        .curtain { position: fixed; top: 0; bottom: 30px; width: 0; z-index: -1; pointer-events: none; overflow: hidden; transition: width 2s cubic-bezier(.45,.05,.25,1); filter: brightness(.62) saturate(1.05);
+            background:
+                linear-gradient(180deg, rgba(0,0,0,.55) 0, transparent 14%, transparent 80%, rgba(0,0,0,.5) 100%),
+                repeating-linear-gradient(90deg, #3a0606 0, #6e0f0f 12px, #9a1a18 22px, #6a0e0e 32px, #2c0404 44px); }
+        .curtain.l { left: 0; box-shadow: 10px 0 40px rgba(0,0,0,.7); border-right: 2px solid rgba(255,200,120,.15); }
+        .curtain.r { right: 0; box-shadow: -10px 0 40px rgba(0,0,0,.7); border-left: 2px solid rgba(255,200,120,.15); }
+        .curtain::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 12px; background: repeating-linear-gradient(90deg, #c9a24a 0 3px, #7a5a1e 3px 6px); opacity: .8; }
+        .pelmet { position: fixed; top: 0; left: 0; right: 0; height: 40px; z-index: -1; pointer-events: none; transform: translateY(-105%); transition: transform 1.6s cubic-bezier(.45,.05,.25,1); filter: brightness(.7);
+            background: radial-gradient(circle at 50% 0, transparent 0 18px, #5a0a0a 19px) 0 0 / 54px 40px repeat-x, linear-gradient(#7a1010, #4a0808);
+            border-bottom: 3px solid #c9a24a; box-shadow: 0 8px 22px rgba(0,0,0,.7); }
+        body.lights-down .curtain { width: 52vw; }
+        body.lights-down .pelmet { transform: translateY(0); }
+        @media (prefers-reduced-motion: reduce) { .curtain, .pelmet { transition: none; } }
+
+        /* ================= CURTAINS v33: thicker velvet, sway, tassels ================= */
+        .curtain { background: #5c0a10; filter: brightness(.7) saturate(1.1); transition: width 2.2s cubic-bezier(.45,.05,.25,1); }
+        .curtain.l { box-shadow: 18px 0 50px rgba(0,0,0,.8), 4px 0 0 rgba(0,0,0,.5); border-right: 0; }
+        .curtain.r { box-shadow: -18px 0 50px rgba(0,0,0,.8), -4px 0 0 rgba(0,0,0,.5); border-left: 0; }
+        .cfold { position: absolute; top: 0; bottom: 0; left: -30px; right: -30px; transform-origin: 50% 0;
+            background:
+                url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='w'><feTurbulence type='fractalNoise' baseFrequency='1.1 .03' numOctaves='2' seed='7'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1.1 -.35'/></filter><rect width='160' height='160' filter='url(%23w)' opacity='.55'/></svg>"),
+                url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' seed='3'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 .55  0 0 0 0 .5  0 0 0 .55 -.15'/></filter><rect width='120' height='120' filter='url(%23g)' opacity='.22'/></svg>"),
+                linear-gradient(180deg, rgba(0,0,0,.7) 0, rgba(0,0,0,.2) 10%, transparent 24%, transparent 78%, rgba(0,0,0,.45) 100%),
+                repeating-linear-gradient(90deg, rgba(0,0,0,.50) 0, rgba(0,0,0,0) 20px, rgba(255,140,120,.20) 38px, rgba(0,0,0,0) 54px, rgba(0,0,0,.45) 82px),
+                repeating-linear-gradient(90deg, rgba(0,0,0,.30) 0, rgba(0,0,0,0) 34px, rgba(255,120,100,.10) 70px, rgba(0,0,0,.28) 113px),
+                linear-gradient(90deg, #7a0b12, #a1161c 45%, #6c0a10); }
+        .curtain.l .cfold { background-position: 0 0, 0 0, 0 0, 0 0, 0 0, 0 0; }
+        /* light from the TV warms the leading edge */
+        .curtain.l .cfold::after { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 70% 60% at calc(100% - 30px) 52%, rgba(255,165,90,.26), transparent 70%); }
+        .curtain.r .cfold::after { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 70% 60% at 30px 52%, rgba(255,165,90,.26), transparent 70%); }
+        /* rolled, lined leading edge for a thick look */
+        .cfold::before { content: ''; position: absolute; top: 0; bottom: 0; width: 22px; z-index: 2;
+            background: linear-gradient(90deg, rgba(0,0,0,.55), rgba(255,170,150,.28) 35%, rgba(60,0,4,.7) 70%, rgba(0,0,0,.65)); box-shadow: 0 0 14px rgba(0,0,0,.6); }
+        .curtain.l .cfold::before { right: 30px; border-right: 3px solid #d8c9a0; }
+        .curtain.r .cfold::before { left: 30px; border-left: 3px solid #d8c9a0; transform: scaleX(-1); }
+        /* tassels hanging at the leading edge */
+        .tassel { position: absolute; top: 34%; width: 16px; height: 96px; z-index: 3;
+            background:
+                radial-gradient(circle at 50% 50%, #ffe39a 0 2px, #b8892c 3px 5px, transparent 6px) center 0 / 14px 14px no-repeat,
+                linear-gradient(90deg, #8a6418, #f0cd6a 50%, #8a6418) center 8px / 3px 42px no-repeat,
+                radial-gradient(circle at 36% 32%, #ffe9a8, #c89a34 55%, #6a4a12) center 46px / 14px 14px no-repeat,
+                repeating-linear-gradient(90deg, #e2b852 0 1.5px, #7c5a1c 1.5px 3px) center 58px / 14px 34px no-repeat;
+            clip-path: polygon(0 0, 100% 0, 100% 62%, 92% 100%, 8% 100%, 0 62%); filter: drop-shadow(2px 3px 3px rgba(0,0,0,.7)); transform-origin: 50% 0; animation: tasselSwing 4.5s ease-in-out infinite; }
+        .curtain.l .tassel { left: calc(max(14px, 50vw - 405px) + 30px); } .curtain.r .tassel { right: calc(max(14px, 50vw - 405px) + 30px); }
+        @keyframes tasselSwing { 0%,100% { transform: rotate(-4deg) } 50% { transform: rotate(4deg) } }
+        /* sway while closing, then a very gentle breathing */
+        body.lights-down .curtain.l .cfold { animation: cSwayL 2.8s cubic-bezier(.3,.1,.3,1) 1 both, cIdle 7s ease-in-out 2.8s infinite; }
+        body.lights-down .curtain.r .cfold { animation: cSwayR 2.8s cubic-bezier(.3,.1,.3,1) 1 both, cIdle 7s ease-in-out 2.8s infinite; }
+        @keyframes cSwayL { 0% { transform: translateX(-30px) skewX(-4deg) } 35% { transform: translateX(9px) skewX(2deg) } 65% { transform: translateX(-4px) skewX(-.8deg) } 100% { transform: translateX(0) skewX(0) } }
+        @keyframes cSwayR { 0% { transform: translateX(30px) skewX(4deg) } 35% { transform: translateX(-9px) skewX(-2deg) } 65% { transform: translateX(4px) skewX(.8deg) } 100% { transform: translateX(0) skewX(0) } }
+        @keyframes cIdle { 0%,100% { transform: skewX(0) } 50% { transform: skewX(.45deg) } }
+        body.lights-down .curtain { width: 53vw; }
+        @media (prefers-reduced-motion: reduce) { .cfold, .tassel { animation: none !important; } .curtain, .pelmet { transition: none; } }
+
+        /* ================= CURTAIN EXIT POLISH (v35) ================= */
+        /* curtains draw back first, the page text only returns once they have cleared the screen */
+        .curtain { transition: width 1.7s cubic-bezier(.55,0,.3,1), opacity .5s ease 1.2s; opacity: 0; }
+        body.lights-down .curtain { transition: width 2.2s cubic-bezier(.45,.05,.25,1), opacity .4s ease; opacity: 1; }
+        .pelmet { transition: transform 1.5s cubic-bezier(.55,0,.3,1); }
+        body.curtain-out .topbar, body.curtain-out .ep-sidebar, body.curtain-out .guide-col { transition: filter 1s ease 1.25s, opacity 1s ease 1.25s; }
+        body.curtain-out::before { transition: opacity 1.6s ease .5s; }
+        body.curtain-out .tv-shell { transition: transform .35s cubic-bezier(.2,.8,.2,1), box-shadow 1.4s ease .4s; }
+        @media (prefers-reduced-motion: reduce) { body.curtain-out .topbar, body.curtain-out .ep-sidebar, body.curtain-out .guide-col { transition-delay: 0s; } }
+
+        /* ================= FASTER EXIT (v36) ================= */
+        .curtain { transition: width 1.2s cubic-bezier(.2,.7,.3,1), opacity .35s ease .75s; }
+        .pelmet { transition: transform 1.1s cubic-bezier(.2,.7,.3,1); }
+        body.curtain-out .topbar, body.curtain-out .ep-sidebar, body.curtain-out .guide-col { transition: filter .7s ease .5s, opacity .7s ease .5s; }
+        body.curtain-out::before { transition: opacity 1.1s ease .2s; }
+        body.curtain-out .tv-shell { transition: transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .9s ease .2s; }
+
+        /* ================= CURTAINS AS A BUTTON (v37) ================= */
+        #btnLightsUp { position: fixed; left: 50%; bottom: 44px; transform: translate(-50%, 12px); z-index: 60; opacity: 0; pointer-events: none;
+            font-family: 'VT323', monospace; font-size: 1.15rem; letter-spacing: .16em; color: #f5a623; background: rgba(12,8,2,.82); border: 1px solid #c47d0e; border-radius: 3px; padding: 5px 16px;
+            box-shadow: 0 0 18px rgba(255,140,40,.35); cursor: pointer; transition: opacity .6s ease, transform .6s ease; }
+        #btnLightsUp:hover { background: #f5a623; color: #120c00; }
+        body.lights-down #btnLightsUp { opacity: 1; pointer-events: auto; transform: translate(-50%, 0); transition-delay: 1.4s; }
+        /* while the curtains are closed, the dimmed page can't be clicked by accident */
+        body.lights-down .topbar, body.lights-down .ep-sidebar, body.lights-down .guide-col { pointer-events: none; }
+        body.lights-down #btnCurtains { pointer-events: none; }
+        #btnCurtains { white-space: nowrap; }
+
+        /* ================= PULL-CORD TASSEL (v38) ================= */
+        #pullCord { position: fixed; top: 0; right: 16px; z-index: 55; width: 44px; border: 0; padding: 0; background: none; cursor: pointer; transform-origin: 50% 0; animation: cordSwing 5.2s ease-in-out infinite; -webkit-tap-highlight-color: transparent; --cl: clamp(150px, 34vh, 340px); }
+        #pullCord .pc-inner { display: block; position: relative; width: 44px; height: calc(var(--cl) + 150px); filter: drop-shadow(3px 5px 5px rgba(0,0,0,.65)); transition: filter .25s; }
+        #pullCord .pc-inner i { position: absolute; left: 50%; display: block; }
+        #pullCord .pc-rosette { top: -8px; width: 26px; height: 26px; margin-left: -13px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #ffe9a8, #c89a34 55%, #5a3e0e); box-shadow: 0 2px 4px rgba(0,0,0,.6); }
+        #pullCord .pc-rope { top: 8px; width: 7px; margin-left: -3.5px; height: var(--cl); background: repeating-linear-gradient(160deg, #f4d57c 0 3px, #8a6418 3px 6px); border-radius: 3px; box-shadow: inset 1px 0 0 rgba(255,255,255,.3); }
+        #pullCord .pc-knob { top: calc(var(--cl) - 4px); width: 24px; height: 24px; margin-left: -12px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #fff0b8, #d3a23c 50%, #6a4a12); }
+        #pullCord .pc-fringe { top: calc(var(--cl) + 18px); width: 38px; height: 120px; margin-left: -19px;
+            background: repeating-linear-gradient(90deg, #ecc45a 0 2px, #7c5a1c 2px 4px), linear-gradient(#000, #000);
+            background-blend-mode: normal; clip-path: polygon(30% 0, 70% 0, 100% 78%, 94% 100%, 6% 100%, 0 78%); }
+        #pullCord .pc-fringe::before { content: ''; position: absolute; left: 0; right: 0; top: 0; height: 22px; background: linear-gradient(90deg, #8a6418, #f0cd6a 50%, #8a6418); }
+        #pullCord:hover .pc-inner, #pullCord:focus-visible .pc-inner { filter: drop-shadow(3px 5px 5px rgba(0,0,0,.65)) drop-shadow(0 0 12px rgba(255,170,60,.7)); }
+        #pullCord:focus-visible { outline: none; }
+        #pullCord.pulled .pc-inner { animation: cordTug .6s cubic-bezier(.3,.1,.3,1) 1; }
+        @keyframes cordSwing { 0%,100% { transform: rotate(-2.6deg) } 50% { transform: rotate(2.6deg) } }
+        @keyframes cordTug { 0% { transform: translateY(0) } 35% { transform: translateY(46px) } 60% { transform: translateY(-8px) } 80% { transform: translateY(4px) } 100% { transform: translateY(0) } }
+        @media (max-width: 860px) { #pullCord { right: 6px; width: 34px; --cl: clamp(90px, 20vh, 200px); } #pullCord .pc-inner { width: 34px; transform: scale(.8); transform-origin: 50% 0; } }
+        @media (prefers-reduced-motion: reduce) { #pullCord, #pullCord.pulled .pc-inner { animation: none; } }
+
+        /* v38 position tweak: hang from the header bar, hug the right edge, stay off page content */
+        @media (min-width: 861px) { #pullCord { top: 46px; right: 3px; width: 36px; } #pullCord .pc-inner { width: 36px; }
+            #pullCord .pc-fringe { width: 30px; margin-left: -15px; } #pullCord .pc-knob { width: 22px; height: 22px; margin-left: -11px; } #pullCord .pc-rope { width: 6px; margin-left: -3px; } }
+
+        /* v39: solid velvet - the page content fades fully out behind/over the curtains instead of ghosting through */
+        body.lights-down .topbar, body.lights-down .ep-sidebar, body.lights-down .guide-col { opacity: 0; filter: blur(3px); }
+        .curtain { filter: brightness(.78) saturate(1.1); background: #6a0b12; }
+        .cfold { background-color: #7a0b12; }
 </style>
 </head>
 <body>
@@ -1072,6 +1183,8 @@
             <button class="hbtn help-btn" id="helpBtn" type="button" title="How to use The Tube" aria-label="Help"><span class="help-q">?</span><span class="help-word">HELP</span></button>
         </div>
     </header>
+    <button id="btnLightsUp" type="button" aria-hidden="true">☀ LIGHTS UP · ESC</button>
+    <button id="pullCord" type="button" title="Pull for curtains" aria-label="Pull the cord to close or open the curtains"><span class="pc-inner"><i class="pc-rosette"></i><i class="pc-rope"></i><i class="pc-knob"></i><i class="pc-fringe"></i></span></button>
     <div class="layout" data-tab="guide">
         <div class="ep-sidebar" id="panelEpisodes"><div class="ep-sidebar-hdr">EPISODES</div><div class="ep-show-name" id="epShowName">— SELECT A SHOW —</div><div class="ep-list" id="epList"><div class="ep-empty">Power on &amp; select<br>a show to see<br>episodes here</div></div></div>
         <div class="tv-col"><div class="tv-shell"><div class="tv-top-strip"><div class="tv-brand-block"><span class="tv-brand-90s">NOSTALGIVISION™</span><div class="live-widget-inline" id="liveModeIndicator"><span class="live-indicator">🔴 LIVE</span></div></div><div class="ch-display" id="chDisp">— —</div></div><div class="screen-housing"><div class="screen-bezel-90s"><div class="screen-wrap" id="screenWrap"><div class="l-idle" id="lIdle"><div class="idle-icon">📺</div><div class="idle-title">THE TUBE</div><div class="idle-sub">◈ SELECT A PROGRAMME ◈</div><div class="idle-welcome">Turn on the TV, then choose a programme<br>— or start Live Mode.</div><div class="test-bars"><div class="test-bar" style="background:#fff"></div><div class="test-bar" style="background:#ff0"></div><div class="test-bar" style="background:#0ff"></div><div class="test-bar" style="background:#0f0"></div><div class="test-bar" style="background:#f0f"></div><div class="test-bar" style="background:#f00"></div><div class="test-bar" style="background:#00f"></div><div class="test-bar" style="background:#000"></div></div></div><div class="l-video" id="lVideo"><video id="vid" playsinline preload="auto"></video><div id="resumeBadge" class="resume-badge"></div><div id="bufOverlay"><div class="buf-txt" id="bufTxt">BUFFERING</div><div class="buf-bar"><i></i></div></div></div><div class="l-vhsfx" id="lVhs"><canvas class="noisecanvas" id="vhsCanvas"></canvas><div class="vhs-stripe"></div><div class="vhs-band"></div><div class="vhs-lbl" id="vhsLbl">⏩ FF</div></div><div class="l-static" id="lStatic"><canvas class="noisecanvas" id="noiseCanvas"></canvas><div class="static-lbl" id="staticLbl">TUNING...</div></div><div class="l-off" id="lOff"></div><div class="l-splash" id="lSplash"><div class="sp-emoji" id="spEmoji"></div><div class="sp-title" id="spTitle"></div><div class="sp-year" id="spYear"></div><div class="sp-ep" id="spEp"></div><div class="sp-btn"></div><div class="sp-hint">▶ CLICK TO WATCH</div><div class="sp-loading" id="spLoading" style="display:none">LOADING EPISODES...</div></div><div class="l-scan" id="lScan"></div><div class="l-vig"></div><div class="l-phos" id="lPhos"></div><div class="l-ticker" id="lTicker"><span class="ticker-inner" id="tickerTxt"></span></div><div class="fs-btn" id="fsBtn" title="Fullscreen">⛶</div><div id="lPowerOn"><div class="poweron-flash"></div><div class="poweron-line"></div><div class="poweron-bloom"></div></div><div id="chOverlay"><div class="ch-overlay-num" id="chOverlayNum">CH —</div><div class="ch-overlay-name" id="chOverlayName"></div></div><div class="vol-overlay" id="volOverlay"><div class="vol-overlay-label">VOLUME</div><div class="vol-overlay-bars" id="volOverlayBars"></div></div></div></div></div><div class="vhs-deck"><div class="vhs-cassette-housing"><div class="vhs-label-strip"><span class="vhs-show-name" id="vhsShowName">◈ NO TAPE LOADED ◈</span><span class="vhs-ep-name" id="vhsEpName"></span></div><div class="vhs-window"><div class="vhs-reel" id="reelL"></div><div class="vhs-tape-stretch"></div><div class="vhs-reel" id="reelR"></div><div class="vhs-time" id="vhsTime">--:--</div></div></div><div class="transport"><div class="tbtn" id="tRew" title="Rewind 15s"><span class="tbtn-icon">⏪</span><span class="tbtn-lbl">-15s</span></div><div class="tbtn" id="tPlay" title="Play / Pause"><span class="tbtn-icon" id="tPlayIcon">▶</span></div><div class="tbtn" id="tFF" title="Fast forward 15s"><span class="tbtn-icon">⏩</span><span class="tbtn-lbl">+15s</span></div></div></div><div class="controls-panel"><div class="knob-group"><div class="knob-unit"><div class="knob90 k-vol" id="kVol"></div><span class="kl90">VOL</span><div class="vol-ring"><div class="vol-ring-fill" id="volFill"></div></div></div><div class="knob-unit"><div class="knob90 k-static" id="kStatic"></div><span class="kl90">STATIC</span><div class="sbar"><div class="sbar-fill" id="sbarFill"></div></div></div><div class="knob-unit"><div class="knob90 k-bright" id="kBright"></div><span class="kl90">BRIGHT</span></div></div><div class="controls-right"><div class="spkr90"><div class="spkr-slot"></div><div class="spkr-slot"></div><div class="spkr-slot"></div><div class="spkr-slot"></div><div class="spkr-slot"></div><div class="spkr-slot"></div><div class="spkr-slot"></div><div class="spkr-slot"></div></div><div class="pwr-area"><div class="pwr90" id="pwrBtn"></div><span class="pwr-lbl">POWER</span></div></div></div></div><div class="tv-base"></div><div class="src-note">◈ STREAMING VIA INTERNET ARCHIVE ◈</div>
@@ -2556,21 +2669,38 @@
         const canHover = window.matchMedia('(hover:hover) and (min-width:861px)'); let spotT;
         shell.addEventListener('mouseenter', () => { if (!canHover.matches) return; clearTimeout(spotT); spotT = setTimeout(() => body.classList.add('tv-spot'), 180); });
         shell.addEventListener('mouseleave', () => { clearTimeout(spotT); body.classList.remove('tv-spot'); });
-        // lights down: while a show plays and the mouse rests, the room dims and the TV glows (green = live, amber = playlist)
-        let idleT; const vid = document.getElementById('vid');
-        const wake = () => { clearTimeout(idleT); body.classList.remove('lights-down'); arm(); };
-        const arm = () => { clearTimeout(idleT); idleT = setTimeout(() => {
-            if (tvOn && vid && !vid.paused && !vid.ended && vid.getAttribute('src') && !document.querySelector('.modal-bg.show')) {
-                document.documentElement.style.setProperty('--glow', (typeof liveMode !== 'undefined' && liveMode) ? 'rgba(57,255,20,.30)' : 'rgba(245,166,35,.40)');
-                body.classList.add('lights-down');
-            } else arm(); }, 6000); };
-        ['mousemove', 'mousedown', 'keydown', 'touchstart', 'wheel'].forEach(ev => window.addEventListener(ev, () => { if (body.classList.contains('lights-down') || true) wake(); }, { passive: true }));
-        arm();
+        // Cinema mode: the curtains + lights-down scene is now a button (CURTAINS in the header, "LIGHTS UP" pill, or Esc)
+        window.toggleCinema = function (on) {
+            const next = on === undefined ? !body.classList.contains('lights-down') : !!on;
+            if (next) { document.documentElement.style.setProperty('--glow', 'rgba(255,140,40,.42)'); body.classList.remove('tv-spot'); }
+            body.classList.toggle('lights-down', next);
+            const pill = document.getElementById('btnLightsUp'); if (pill) pill.setAttribute('aria-hidden', next ? 'false' : 'true');
+        };
+        const bc = document.getElementById('btnCurtains'); if (bc) bc.addEventListener('click', () => { try { sndClick(); } catch (e) { } toggleCinema(); });
+        const pc = document.getElementById('pullCord'); if (pc) pc.addEventListener('click', () => { try { makeTone(260, 150, 0.14, 'triangle', 0.14); makeNoise(0.05, 2200, null, 0.6, 0.05); } catch (e) { } pc.classList.remove('pulled'); void pc.offsetWidth; pc.classList.add('pulled'); setTimeout(() => toggleCinema(), 280); setTimeout(() => pc.classList.remove('pulled'), 700); });
+        const lu = document.getElementById('btnLightsUp'); if (lu) lu.addEventListener('click', () => { try { sndClick(); } catch (e) { } toggleCinema(false); });
+        window.addEventListener('keydown', e => { if (e.key === 'Escape' && body.classList.contains('lights-down')) toggleCinema(false); });
         // wrap power on/off for flicker + standby light
         const _on = window.powerOn, _off = window.powerOff;
         window.powerOn = function () { const r = _on.apply(this, arguments); syncOff(); shell.classList.remove('crt-flicker'); void shell.offsetWidth; shell.classList.add('crt-flicker'); setTimeout(() => shell.classList.remove('crt-flicker'), 1000); return r; };
         window.powerOff = function () { const r = _off.apply(this, arguments); syncOff(); body.classList.remove('lights-down'); return r; };
         setInterval(syncOff, 1500);
+    })();
+    </script>
+
+    <script>
+    // Curtains (v33): velvet panels with tassels, a sway while closing, a fabric swish and a short "NOW SHOWING" card
+    (function () {
+        ['l', 'r'].forEach(side => { const d = document.createElement('div'); d.className = 'curtain ' + side; d.setAttribute('aria-hidden', 'true'); d.innerHTML = '<div class="cfold"><i class="tassel"></i></div>'; document.body.appendChild(d); });
+        const pm = document.createElement('div'); pm.className = 'pelmet'; pm.setAttribute('aria-hidden', 'true'); document.body.appendChild(pm);
+        let was = false;
+        new MutationObserver(() => {
+            const now = document.body.classList.contains('lights-down');
+            if (now === was) return; was = now;
+            document.body.classList.toggle('curtain-out', !now && true);
+            if (!now) { clearTimeout(window._coT); window._coT = setTimeout(() => document.body.classList.remove('curtain-out'), 2000); }
+            try { if (now) makeNoise(2.1, 350, 1700, 0.7, 0.07); else makeNoise(1.4, 1500, 450, 0.7, 0.055); } catch (e) { }
+        }).observe(document.body, { attributes: true, attributeFilter: ['class'] });
     })();
     </script>
 </body>
