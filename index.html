@@ -1651,6 +1651,16 @@
         @media (max-width: 639px) { #dh .dh-ui { gap: 5px; padding: 10px 8px; } #dh .dh-b { padding: 8px 7px; font-size: 16px; } #dh .dh-hint { display: none; } #dh .dh-remote { bottom: 16px; } #dh .dh-title { display: none; } #dh .dh-ui { justify-content: flex-end; flex-wrap: wrap; } #dh .dh-b { white-space: nowrap; } #dh .dh-stage { top: 47%; } #dh .dh-b { min-width: 0; } #dh .dh-b { padding: 8px 10px; font-size: 18px; } }
         @media (prefers-reduced-motion: reduce) { .room-items .ri, #dh .lv, #dh .tv-scr .b, #dh .tv-scr .c { animation: none !important; } }
 
+
+        /* daylight: the sun lights the room, so lamps are not needed */
+        #dh .dh-sun { position: absolute; inset: 0; z-index: 1; pointer-events: none; opacity: 0; mix-blend-mode: screen; transition: opacity 1.6s ease; background: radial-gradient(ellipse 75% 70% at 72% 30%, rgba(255,244,205,.34), rgba(255,236,190,.16) 45%, rgba(255,230,180,.07) 75%, transparent); }
+        #dh:not(.night) .dh-sun { opacity: 1; } #dh:not(.night).drawn .dh-sun { opacity: .45; }
+        #dh:not(.night) .lhalo, #dh:not(.night) .lpool { opacity: 0; }
+        #dh:not(.night) .lshade { background: linear-gradient(180deg,#f3ecd6,#d9cfae); box-shadow: none; } #dh:not(.night) .lbulbp { opacity: 0; }
+        #dh:not(.night) .dglow { background: radial-gradient(closest-side,rgba(255,250,225,.7),transparent) !important; }
+        #dh:not(.night) .dlight { background: linear-gradient(105deg,rgba(255,250,225,.5),rgba(255,250,225,.14) 70%,transparent) !important; }
+        #dh:not(.night).lamp-off .dh-dim { opacity: .3; } #dh:not(.night) .dh-dim::after { opacity: 0 !important; }
+        #dh:not(.night).drawn.lamp-off .dh-dim { opacity: .55; } #dh:not(.night).drawn.lamp-off .dh-dim::after { opacity: 1 !important; }
         /* moonlight (evenings) */
         #dh .dmoon, #dh .dmoonw { opacity: 0; transition: opacity .8s; }
         #dh .mn-grid { position: absolute; inset: 0; transform: skewX(-32deg); transform-origin: 0 0; } #dh .mn-grid i { position: absolute; width: 40%; height: 42%; background: linear-gradient(180deg,rgba(170,205,255,.9),rgba(130,170,250,.5) 70%,rgba(110,150,230,.2)); }
@@ -3672,7 +3682,7 @@
             let layer = host.querySelector('.room-items');
             if (!layer) { layer = document.createElement('div'); layer.className = 'room-items'; layer.setAttribute('aria-hidden', 'true'); host.appendChild(layer); }
             const sh = host.querySelector('.tv-shell'); if (sh) layer.style.setProperty('--fy', (sh.offsetTop + sh.offsetHeight + 62) + 'px');
-            const have = ownedItems().filter(id => ITEM_BY[id] && !ITEM_BY[id].d3 && !isOff(id));
+            const have = [];
             const cur = Array.from(layer.children).map(e => e.dataset.id).join(',');
             if (cur === have.join(',')) return;
             const old = new Set(Array.from(layer.children).map(e => e.dataset.id));
@@ -3683,14 +3693,14 @@
         const roomShopHtml = () => {
             const have = ownedItems();
             return '<h3 class="tc-tier" style="--tc:#7fd4a0">ROOM UPGRADES <span class="tc-tcount">' + have.filter(id => ITEM_BY[id]).length + '/' + ITEMS.length + '</span></h3>'
-                + '<p class="tc-room-note">Spend spare coins on your room. Items show up around the TV and in the 3D room. Anything you own can be removed or put back with one tap, so you can mix your room however you like. You can own several sofas and choose which one sits in the room.</p><button class="tc-btn tc-viewroom" data-act="room" type="button">🏠 VIEW MY ROOM IN 3D</button>'
+                + '<p class="tc-room-note">Spend spare coins on your room. Items live in the 3D room only. Anything you own can be removed or put back with one tap, so you can mix your room however you like. You can own several sofas and choose which one sits in the room.</p><button class="tc-btn tc-viewroom" data-act="room" type="button">🏠 VIEW MY ROOM IN 3D</button>'
                 + ITEMS.map(k => {
                     const owned = have.includes(k.id), need = k.price - coins();
                     const tog = key => isOff(key) ? '<button class="tc-btn" data-tog="' + key + '" data-to="on">PLACE IN ROOM</button>' : '<button class="tc-btn" data-tog="' + key + '" data-to="off">✓ IN ROOM · TAP TO REMOVE</button>';
                     const btn = owned ? (COUCH[k.id] ? (sofaPick() === k.id ? tog('sofa') : '<button class="tc-btn" data-sofa="' + k.id + '">PLACE IN ROOM</button>') : tog(k.id))
                         : need <= 0 ? '<button class="tc-btn' + (pendingBuy === k.id ? ' confirm' : '') + '" data-buyi="' + k.id + '">' + (pendingBuy === k.id ? 'TAP AGAIN TO BUY' : 'BUY · ' + k.price + ' ●') + '</button>'
                             : '<button class="tc-btn" disabled>🔒 ' + k.price + ' ● · ' + need + ' MORE</button><div class="tc-prog"><i style="width:' + Math.max(2, Math.min(100, coins() / k.price * 100)).toFixed(1) + '%"></i></div>';
-                    return '<div class="tc-card t-room k-' + k.id + (owned ? ' on' : '') + '" style="--tc:#7fd4a0"><div class="tc-prev">' + itemSvg(k) + '</div><div class="tc-name">' + k.name + '</div><div class="tc-desc">' + k.desc + (k.d3 ? ' <em class="tc-pill">3D ROOM</em>' : '') + '</div>' + btn + '</div>';
+                    return '<div class="tc-card t-room k-' + k.id + (owned ? ' on' : '') + '" style="--tc:#7fd4a0"><div class="tc-prev">' + itemSvg(k) + '</div><div class="tc-name">' + k.name + '</div><div class="tc-desc">' + k.desc + ' <em class="tc-pill">3D ROOM</em>' + '</div>' + btn + '</div>';
                 }).join('');
         };
 
@@ -3701,7 +3711,7 @@
             + '<div class="dh-ui"><span class="dh-title">🏠 ROOM</span><button class="dh-b dh-cb" data-act="cord" type="button" aria-label="Curtains"><span class="cb-c">🎭 CURTAINS</span><span class="cb-o">☀ OPEN CURTAINS</span></button><button class="dh-b dh-lb" data-act="led" type="button" aria-label="LED colour">💡 LED</button><button class="dh-b" data-d="watch" type="button">📺 WATCH</button><button class="dh-b" data-d="in" type="button" aria-label="Zoom in">＋</button><button class="dh-b" data-d="out" type="button" aria-label="Zoom out">－</button><button class="dh-b" data-d="reset" type="button">ROOM</button><button class="dh-b" data-d="close" type="button">✕ EXIT</button></div>'
             + '<div class="dh-remote"><button class="dh-b" data-r="pwrBtn" type="button" aria-label="Power">⏻</button><button class="dh-b" data-r="tRew" type="button" aria-label="Rewind 15 seconds">⏪</button><button class="dh-b" data-r="tPlay" type="button" aria-label="Play or pause">⏯</button><button class="dh-b" data-r="tFF" type="button" aria-label="Forward 15 seconds">⏩</button><button class="dh-b" data-v="-1" type="button" aria-label="Volume down">🔉</button><button class="dh-b" data-v="1" type="button" aria-label="Volume up">🔊</button><button class="dh-b" data-d="guide" type="button">📋 GUIDE</button></div>'
             + '<div class="dh-drawer" role="region" aria-label="Programme guide"><div class="dh-dh">PROGRAMME GUIDE <button class="dh-x" data-d="guide" type="button" aria-label="Close guide">✕</button></div><div class="dh-list"></div></div>'
-            + '<div class="dh-dim"></div><div class="dh-empty"></div><div class="dh-hint">DRAG TO LOOK AROUND · SCROLL OR PINCH TO ZOOM · TAP WALLS OR CURTAINS TO RECOLOUR · ESC TO EXIT</div>';
+            + '<div class="dh-sun"></div><div class="dh-dim"></div><div class="dh-empty"></div><div class="dh-hint">DRAG TO LOOK AROUND · SCROLL OR PINCH TO ZOOM · TAP WALLS OR CURTAINS TO RECOLOUR · ESC TO EXIT</div>';
         document.body.appendChild(dh);
         const cam = dh.querySelector('.dh-cam'), roomEl = dh.querySelector('.dh-room'), listEl = dh.querySelector('.dh-list');
         const V = { y: 22, p: -26, z: 0, ty: 40 }, V0 = { y: 22, p: -26, z: 0, ty: 40 };
