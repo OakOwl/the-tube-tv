@@ -1765,6 +1765,7 @@
         }
         @keyframes stk3dBob { 0%,100% { transform: rotate(-3deg) translateY(0); } 50% { transform: rotate(-1.5deg) translateY(-5px); } }
         @media (prefers-reduced-motion: reduce) { .stk3d { animation: none !important; } }
+        #dh .tvf.vg { border: 1px solid #7a5410; }
     </style>
 </head>
 <body>
@@ -3694,7 +3695,7 @@
         const sofaSvg = (c1, c2, leg, glow) => (glow ? '<ellipse cx="70" cy="76" rx="64" ry="7" fill="' + glow + '" opacity=".35"/>' : '') + '<g stroke="#2a1608" stroke-width="2.5" stroke-linejoin="round"><rect x="20" y="8" width="100" height="40" rx="12" fill="' + c2 + '"/><rect x="4" y="26" width="26" height="42" rx="10" fill="' + c1 + '"/><rect x="110" y="26" width="26" height="42" rx="10" fill="' + c1 + '"/><rect x="24" y="34" width="92" height="30" rx="7" fill="' + c1 + '"/></g><path d="M55 36 V62 M85 36 V62" stroke="#2a1608" stroke-opacity=".45" stroke-width="2"/><rect x="14" y="68" width="7" height="9" rx="2" fill="' + leg + '"/><rect x="119" y="68" width="7" height="9" rx="2" fill="' + leg + '"/>';
         ITEMS.push(
             { id: 'couch_brown', d3: 1, name: 'Worn Leather Sofa', price: 150, desc: 'A rough, well-loved leather sofa with plenty of character.', vb: '0 0 140 80', svg: sofaSvg('#a8662c', '#7a4220', '#2a1608') + '<g stroke="#47220f" stroke-width="1.4" stroke-linejoin="round"><path d="M62 12 L96 9 L104 20 L84 28 L66 22Z" fill="#e0cc9f"/><path d="M70 14 L92 12 L94 20 L78 24Z" fill="#3a1d0e"/><path d="M30 40 L58 36 L64 50 L44 58 L32 52Z" fill="#e0cc9f"/><path d="M76 44 L104 42 L108 56 L88 58Z" fill="#e0cc9f"/><path d="M10 34 L20 31 L22 42 L12 44Z" fill="#e0cc9f"/></g>' },
-            { id: 'couch_green', d3: 1, name: 'Retro Green Sofa', price: 220, desc: 'A tufted 70s sofa in avocado green.', vb: '0 0 140 80', svg: sofaSvg('#46997a', '#2f735a', '#d9b26a') },
+            { id: 'couch_green', d3: 1, name: 'Retro Green Sofa', price: 220, desc: 'A channel-tufted emerald velvet sofa on a gold frame.', vb: '0 0 140 80', svg: sofaSvg('#1b5740', '#113a2b', '#e3bd5c') },
             { id: 'couch_orange', d3: 1, name: 'Striped 70s Sofa', price: 300, desc: 'A long, low orange sofa with stripes.', vb: '0 0 140 80', svg: sofaSvg('#ec8a30', '#c06a1c', '#5a3418') },
             { id: 'couch_neon', d3: 1, name: 'Neon Pink Sofa', price: 450, desc: 'A glowing hot-pink sofa for the very rich.', vb: '0 0 140 80', svg: sofaSvg('#ff58c8', '#b02aa0', '#00e5ff', '#ff3cc8') },
             { id: 'skate', d3: 1, name: 'Skateboard', price: 60, desc: 'Left on the floor, naturally.', vb: '0 0 120 50', svg: '<g transform="rotate(-14 60 25)"><rect x="22" y="7" width="9" height="5" rx="2" fill="#222"/><rect x="22" y="38" width="9" height="5" rx="2" fill="#222"/><rect x="89" y="7" width="9" height="5" rx="2" fill="#222"/><rect x="89" y="38" width="9" height="5" rx="2" fill="#222"/><rect x="25" y="10" width="4" height="30" fill="#999"/><rect x="92" y="10" width="4" height="30" fill="#999"/><rect x="6" y="14" width="108" height="22" rx="11" fill="#e8c43a" stroke="#222" stroke-width="2.5"/><circle cx="60" cy="25" r="7" fill="#d63a3a" stroke="#222" stroke-width="2"/><path d="M30 25 H48 M72 25 H90" stroke="#222" stroke-width="2.5" stroke-linecap="round"/></g>' },
@@ -3813,7 +3814,7 @@
         // sofas: built from boxes so they look right from every side. The couch faces the TV, so from the front of the room you see its back.
         const COUCH = {
             couch_brown: { c1: '#a8662c', c2: '#7a4220', W: 270, armH: 78, backH: 66, pat: '', legs: '#2a1608', wear: 1 },
-            couch_green: { c1: '#46997a', c2: '#2f735a', W: 270, armH: 66, backH: 84, pat: 'radial-gradient(circle,rgba(0,0,0,.35) 2px,transparent 3px) 0 0/24px 24px,', legs: '#d9b26a' },
+            couch_green: { c1: '#1b5740', c2: '#113a2b', W: 290, armH: 70, backH: 100, pat: '', legs: '#e3bd5c', vel: 1 },
             couch_orange: { c1: '#ec8a30', c2: '#c06a1c', W: 330, armH: 56, backH: 56, pat: 'repeating-linear-gradient(90deg,rgba(255,236,190,.35) 0 10px,transparent 10px 20px),', legs: '#5a3418' },
             couch_neon: { c1: '#ff58c8', c2: '#b02aa0', W: 300, armH: 70, backH: 70, pat: 'linear-gradient(180deg,rgba(255,255,255,.28),transparent 30%),', legs: '#00e5ff', halo: '255,60,200' }
         };
@@ -3865,8 +3866,29 @@
             o += wisp(-2, 0, 16, 24, 9, 4.2, 0) + wisp(2.5, 1, 13, 20, -11, 3.6, 1.1) + wisp(0, -1, 19, 28, 7, 4.8, 2.0) + wisp(-3, 1, 12, 18, -8, 3.2, 2.7) + wisp(3, 0, 15, 22, 12, 4.4, .6) + wisp(-1, 0, 10, 16, -6, 3.0, 3.3) + wisp(1, 1, 18, 26, 8, 5.0, 1.6) + wisp(0, 0, 12, 18, -9, 3.8, 2.4);
             return '<div class="bx" style="transform:translate3d(' + x + 'px,0,' + z + 'px) rotateY(-40deg) scale3d(1.3,1.3,1.3)">' + o + '</div>';
         };
+        // emerald velvet sofa: channel-tufted back and arms (arms as tall as the back), two seat cushions, gold frame
+        const velvetSofaHtml = (k, coffee) => {
+            const sz = 225, W = k.W, AW = 36, SW = W - AW * 2, AD = 124, top = FY - 10 - k.armH, seatTop = FY - 10 - 38;
+            const ch = c => 'background:repeating-linear-gradient(90deg,rgba(0,0,0,.36) 0 1.5px,rgba(255,255,255,.13) 4px,rgba(255,255,255,.03) 9px,rgba(0,0,0,.2) 16.5px,rgba(0,0,0,.36) 18px),linear-gradient(180deg,rgba(255,255,255,.13),rgba(0,0,0,.24)),' + c + ';';
+            const flat = c => 'background:linear-gradient(160deg,rgba(255,255,255,.12),rgba(0,0,0,.22)),' + c + ';';
+            const gold = 'background:linear-gradient(90deg,#a87a22,#f8e08e 42%,#d6a73a 70%,#b8862a);', goldT = 'background:linear-gradient(180deg,#f8e08e,#c9982f);';
+            const cu = 'background:radial-gradient(ellipse 70% 90% at 50% 40%,rgba(255,255,255,.16),rgba(0,0,0,.14)),' + k.c1 + ';border-radius:5px;';
+            let h = '';
+            [-1, 1].forEach(sd => {
+                const x = sd * (W / 2 - AW / 2), gx = sd * (W / 2 - 3);
+                h += box(AW, k.armH, AD, x, FY - 10 - k.armH / 2, sz, 'cb', '', ch(k.c1), ch(k.c1));
+                h += box(9, 5, AD + 8, gx, FY - 2.5, sz, 'cb vg', '', goldT, goldT);
+                h += box(9, k.armH + 6, 9, gx, FY - 4 - (k.armH + 6) / 2, sz - AD / 2 - 1, 'cb vg', '', gold, gold) + box(9, k.armH + 6, 9, gx, FY - 4 - (k.armH + 6) / 2, sz + AD / 2 + 1, 'cb vg', '', gold, gold);
+            });
+            h += box(7, 10, 7, 0, FY - 5, sz - 44, 'cb vg', '', gold, gold) + box(7, 10, 7, 0, FY - 5, sz + 44, 'cb vg', '', gold, gold);
+            h += box(SW, 24, 114, 0, FY - 10 - 12, sz, 'cb', '', flat(k.c2), flat(k.c2));
+            h += box(SW / 2 - 1, 16, 96, -SW / 4, seatTop + 8 - 2, sz - 8, 'cb', '', cu, cu) + box(SW / 2 - 1, 16, 96, SW / 4, seatTop + 8 - 2, sz - 8, 'cb', '', cu, cu);
+            h += box(SW, k.backH - 14, 30, 0, FY - 10 - k.backH + (k.backH - 14) / 2, sz + AD / 2 - 15, 'cb', '', ch(k.c2), ch(k.c1));
+            if (coffee) h += coffeeCupHtml(-(W / 2 - AW / 2), top - 6, sz + 6);
+            return '<div class="bx" style="transform:scale3d(1.12,1.12,1.12);transform-origin:0 ' + FY + 'px ' + sz + 'px">' + h + '</div>';
+        };
         const couchHtml = (id, coffee) => {
-            const k = id && COUCH[id]; if (!k) return ''; const wr = k.wear ? WEAR : null;
+            const k = id && COUCH[id]; if (!k) return ''; if (k.vel) return velvetSofaHtml(k, coffee); const wr = k.wear ? WEAR : null;
             const sz = 225, SW = k.W - 60, f = (extra) => 'background:' + (extra || '') + 'linear-gradient(160deg,rgba(255,255,255,.14),rgba(0,0,0,.2)),' + k.c1 + ';', fb = 'background:' + (wr ? wr.back + ',' : '') + k.pat + 'linear-gradient(160deg,rgba(255,255,255,.1),rgba(0,0,0,.25)),' + k.c2 + ';';
             const seatTop = FY - 10 - 36, cush = 'background:' + (wr ? wr.seat + ',' : '') + 'linear-gradient(90deg,transparent calc(33.3% - 1px),rgba(0,0,0,.32) 33.3%,transparent calc(33.3% + 1px),transparent calc(66.6% - 1px),rgba(0,0,0,.32) 66.6%,transparent calc(66.6% + 1px)),linear-gradient(160deg,rgba(255,255,255,.2),rgba(0,0,0,.15)),' + k.c1 + ';';
             let h = '';
