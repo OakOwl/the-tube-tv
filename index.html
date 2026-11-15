@@ -1855,6 +1855,37 @@
         #tcHud .ch-x15 { position: absolute; right: -6px; top: -10px; z-index: 3; font-family: 'VT323', monospace; font-size: 15px; line-height: 1; padding: 2px 5px; border-radius: 4px; color: #1a1000; background: #ffc83c; box-shadow: 0 0 10px rgba(255,200,60,.6); transform: rotate(8deg); }
         body:not(.tc-bonus) #tcHud .ch-x15 { background: #8a6ad0; color: #fff; box-shadow: none; }
         #dh.visiting .dh-lb { opacity: .45; }
+        /* ===== party chat dock + floating reactions ===== */
+        .pt-chat { position: fixed; right: 16px; bottom: 16px; z-index: 100003; width: 300px; max-width: calc(100vw - 24px); font-family: 'VT323', monospace; color: #e9d9b4; background: rgba(12,8,20,.94); border: 1px solid #5a2f8a; border-radius: 6px; box-shadow: 0 10px 30px rgba(0,0,0,.6); overflow: hidden; }
+        .pt-chat[hidden] { display: none; }
+        .pc-hdr { display: flex; align-items: center; gap: 8px; width: 100%; padding: 6px 10px; font: inherit; font-size: 17px; letter-spacing: .08em; color: #d9b8ff; background: #1d1030; border: 0; cursor: pointer; text-align: left; }
+        .pc-hdr span { flex: 1; } .pc-chev { font-style: normal; transition: transform .25s; } .pt-chat.closed .pc-chev { transform: rotate(180deg); }
+        .pc-un:empty { display: none; } .pc-un { font-style: normal; font-size: 13px; min-width: 18px; text-align: center; padding: 0 5px; border-radius: 9px; background: #ff4fd8; color: #fff; }
+        .pt-chat.closed .pc-body { display: none; }
+        .pc-log { height: 170px; overflow-y: auto; padding: 6px 8px; display: flex; flex-direction: column; gap: 3px; }
+        .pc-log::-webkit-scrollbar { width: 6px } .pc-log::-webkit-scrollbar-thumb { background: #4a2a6a; border-radius: 3px }
+        .pc-m { position: relative; font-size: 16px; line-height: 1.15; padding: 1px 22px 1px 0; word-wrap: break-word; overflow-wrap: anywhere; }
+        .pc-m b { font-weight: normal; color: hsl(var(--h) 70% 70%); } .pc-m.mine b { color: #8dff6a; } .pc-m.q span { font-size: 19px; }
+        .pc-more { position: absolute; right: 0; top: 0; font: inherit; font-size: 15px; color: #7a6a90; background: none; border: 0; cursor: pointer; padding: 0 3px; opacity: 0; } .pc-m:hover .pc-more, .pc-more:focus-visible { opacity: 1; }
+        @media (hover: none) { .pc-more { opacity: .7; } }
+        .pc-menu { display: flex; gap: 4px; margin: 3px 0 2px; } .pc-menu button { font: inherit; font-size: 13px; color: #ffa090; background: #2a0a06; border: 1px solid #5a1e14; border-radius: 3px; padding: 1px 6px; cursor: pointer; } .pc-menu button[data-a=cancel] { color: #ccc; background: #222; border-color: #444; }
+        .pc-empty { font-size: 15px; color: #7a6a90; padding: 6px 0; }
+        .pc-quick { display: flex; gap: 2px; padding: 4px 6px; border-top: 1px solid #2e1a48; }
+        .pc-quick button { flex: 1; font-size: 18px; line-height: 1; padding: 4px 0; background: none; border: 0; border-radius: 4px; cursor: pointer; transition: transform .12s; } .pc-quick button:hover { background: #2a1840; transform: scale(1.18); }
+        .pc-phrases { display: flex; flex-wrap: wrap; gap: 4px; padding: 2px 8px 6px; } .pc-phrases[hidden] { display: none; }
+        .pc-phrases button { font: inherit; font-size: 14px; color: #d9b8ff; background: #1d1030; border: 1px solid #4a2a6a; border-radius: 10px; padding: 1px 8px; cursor: pointer; } .pc-phrases button:hover { background: #2e1a48; }
+        .pc-form { display: flex; gap: 5px; padding: 6px 8px; border-top: 1px solid #2e1a48; }
+        .pc-form input { flex: 1; min-width: 0; font: inherit; font-size: 16px; color: #fff; background: #000; border: 1px solid #4a2a6a; border-radius: 3px; padding: 3px 7px; outline: none; } .pc-form input:focus { border-color: #b07aff; }
+        .pc-form button { font: inherit; font-size: 15px; color: #1a0a2a; background: #b07aff; border: 0; border-radius: 3px; padding: 0 10px; cursor: pointer; }
+        .pc-note { font-size: 12px; color: #6a5a80; padding: 0 8px 6px; line-height: 1.1; }
+        .pt-float { position: fixed; right: 16px; bottom: 0; width: 320px; height: 70vh; z-index: 100002; pointer-events: none; overflow: hidden; }
+        .pf-b { position: absolute; left: var(--x); bottom: 250px; max-width: 220px; font-family: 'VT323', monospace; font-size: 17px; line-height: 1.1; color: #fff; background: rgba(20,10,35,.92); border: 1px solid hsl(var(--h) 60% 55%); border-radius: 12px 12px 12px 3px; padding: 4px 9px; animation: pfUp 4.2s ease-out forwards; }
+        .pf-b small { display: block; font-size: 13px; color: hsl(var(--h) 70% 72%); }
+        .pf-b.emo { background: none; border: 0; text-align: center; padding: 0; } .pf-b.emo .pf-e { font-size: 38px; display: block; filter: drop-shadow(0 3px 6px rgba(0,0,0,.6)); } .pf-b.emo small { text-shadow: 0 1px 3px #000; }
+        @keyframes pfUp { 0% { opacity: 0; transform: translateY(20px) scale(.6); } 12% { opacity: 1; transform: translateY(0) scale(1.1); } 20% { transform: translateY(-10px) scale(1); } 80% { opacity: 1; } 100% { opacity: 0; transform: translateY(-260px) translateX(18px); } }
+        @media (prefers-reduced-motion: reduce) { .pf-b { animation-duration: 2.5s; } }
+        .pt-chat.closed ~ .pt-float .pf-b, .pt-chat[hidden] ~ .pt-float .pf-b { bottom: 70px; }
+        @media (max-width: 700px) { .pt-chat { right: 8px; bottom: 8px; } .pc-log { height: 130px; } .pt-float { right: 8px; width: 240px; } }
     </style>
 </head>
 <body>
@@ -3627,14 +3658,18 @@
                 if (name === 'buy_item') { const k = ITEM_BY[a.p_item]; if (!k) throw new Error('unknown_item'); if (p.owned_items.includes(k.id)) throw new Error('already_owned'); if (Math.floor(p.watch_seconds / 60) - p.coins_spent < k.price) throw new Error('not_enough_coins'); p.coins_spent += k.price; p.owned_items.push(k.id); pv.put(p); return J(p); }
                 if (name === 'equip_skin') { if (!p.owned_skins.includes(a.p_skin)) throw new Error('not_owned'); p.equipped_skin = a.p_skin; pv.put(p); return J(p); }
                 if (name === 'delete_my_account') { try { localStorage.removeItem(PREV_KEY); } catch (e) { } return null; }
-                if (/^(party_|save_room|friend_room)/.test(name)) {
+                if (/^(party_|save_room|friend_room|report_message)/.test(name)) {
                     const PK = 'thetube.previewparty.v1'; let P; try { P = JSON.parse(localStorage.getItem(PK) || 'null'); } catch (e) { } P = P || { party: null, invites: [] }; const save = () => { try { localStorage.setItem(PK, JSON.stringify(P)); } catch (e) { } };
                     if (name === 'save_room') { P.myroom = a.p_room; save(); return null; }
                     if (name === 'friend_room') return { username: a.p_username, skin: 'red', items: ['rug', 'couch_green', 'lava', 'shelf', 'beanbag', 'plant'], room: { cols: { wall: '#1f3a5f', curt: '#d9a441', led: '#ff4fd8' }, sofa: 'couch_green', off: [] } };
                     if (name === 'party_invite') { P.party = P.party && P.party.me_host ? P.party : { host: p.username, me_host: true, state: null, state_age: 0, members: [] }; if (!P.party.members.find(m => m.username === a.p_username)) P.party.members.push({ username: a.p_username, status: 'invited', here: false, t: Date.now() }); save(); return 'invited'; }
                     if (name === 'party_answer') { const i = P.invites.findIndex(x => x.host === a.p_host); if (i < 0) throw new Error('invite_gone'); P.invites.splice(i, 1); if (a.p_join) P.party = { host: a.p_host, me_host: false, state: { ref: P.hostRef || '', t: 30, paused: false }, state_age: 0, members: [{ username: p.username, status: 'joined', here: true }] }; save(); return a.p_join ? 'joined' : 'declined'; }
-                    if (name === 'party_leave') { P.party = null; save(); return 'left'; }
-                    if (name === 'party_tick') { if (P.party && P.party.me_host) { P.party.state = a.p_state; P.party.members.forEach(m => { if (m.status === 'invited' && Date.now() - (m.t || 0) > 2500) { m.status = 'joined'; m.here = true; } }); } if (P.party) P.party.bonus = !!a.p_playing && P.party.members.some(m => m.here); save(); return { party: P.party, invites: P.invites }; }
+                    if (name === 'party_leave') { P.party = null; P.msgs = []; save(); return 'left'; }
+                    if (name === 'party_say') { if (!P.party) throw new Error('not_in_party'); P.msgs = P.msgs || []; const id = (P.mid = (P.mid || 0) + 1); const body = a.p_kind === 'text' ? String(a.p_body).replace(/(https?:\/\/|www\.)\S+/gi, '[link removed]').slice(0, 200) : a.p_body; P.msgs.push({ id, from: p.username, kind: a.p_kind, body, mine: true }); const other = (P.party.members.find(m => m.username !== p.username) || {}).username || P.party.host; if (other && other !== p.username) P.pendingReply = { from: other, at: Date.now() + 1500 }; save(); return id; }
+                    if (name === 'report_message') return 'reported';
+                    if (name === 'party_tick') { if (P.pendingReply && Date.now() > P.pendingReply.at && P.party) { const id = (P.mid = (P.mid || 0) + 1); P.msgs = P.msgs || []; P.msgs.push({ id, from: P.pendingReply.from, kind: 'quick', body: 'lol', mine: false }); P.msgs.push({ id: (P.mid = id + 1), from: P.pendingReply.from, kind: 'text', body: 'haha this episode is the best', mine: false }); P.pendingReply = null; }
+                        const msgsOut = (P.msgs || []).filter(m => m.id > (a.p_after || 0)).slice(a.p_after == null ? -20 : -50);
+                        if (P.party && P.party.me_host) { P.party.state = a.p_state; P.party.members.forEach(m => { if (m.status === 'invited' && Date.now() - (m.t || 0) > 2500) { m.status = 'joined'; m.here = true; } }); } if (P.party) P.party.bonus = !!a.p_playing && P.party.members.some(m => m.here); save(); return { party: P.party, invites: P.invites, messages: P.party ? msgsOut : [] }; }
                 }
                 if (/^(friend_|friends_list|set_presence|my_invite_code|reset_invite_code|accept_invite)/.test(name)) {
                     const FK = 'thetube.previewfriends.v1'; let fl; try { fl = JSON.parse(localStorage.getItem(FK) || 'null'); } catch (e) { }
@@ -4525,11 +4560,11 @@
                 if (was && !party) { toast(was.me_host ? 'Watch party ended' : 'The watch party has ended'); if (window.__room && window.__room.visiting()) window.__room.end(); }
                 window.__bonusOn = !!(party && party.bonus); if (body.classList.contains('tc-bonus') !== window.__bonusOn) body.classList.toggle('tc-bonus', window.__bonusOn); if (body.classList.contains('tc-party') !== !!party) body.classList.toggle('tc-party', !!party);
                 const tag = $('tcBonusTag'); if (tag) tag.textContent = party ? (party.bonus ? '×1.5' : 'PARTY') : '';
-                F.repaint(); follow();
+                F.repaint(); follow(); if (window.__chat) window.__chat.update(party, (j && j.messages) || []);
             };
             const tick = async () => {
                 if (ticking) return; clearTimeout(loopT); if (!st) { loopT = 0; return; }
-                if (!document.hidden) { ticking = true; try { apply(await call('party_tick', { p_state: hostState(), p_playing: playingNow() })); } catch (e) { } ticking = false; }
+                if (!document.hidden) { ticking = true; try { apply(await call('party_tick', { p_state: hostState(), p_playing: playingNow(), p_after: window.__chat ? window.__chat.after() : null })); } catch (e) { } ticking = false; }
                 loopT = setTimeout(tick, party ? 3000 : 8000);
             };
             F.partyTick = tick;
@@ -4547,6 +4582,75 @@
             new MutationObserver(() => { if (st && !loopT) tick(); if (!st && (loopT || body.classList.contains('tc-party') || body.classList.contains('tc-bonus'))) { clearTimeout(loopT); loopT = 0; party = null; invites = []; body.classList.remove('tc-bonus', 'tc-party'); window.__bonusOn = false; } }).observe(body, { attributes: true, attributeFilter: ['class'] });
             document.addEventListener('visibilitychange', () => { if (!document.hidden && st) tick(); });
             if (st) tick();
+        })();
+        // ================= PARTY CHAT (stage 3): quick reactions + typed messages, report / block =================
+        (() => {
+            const QUICK = { lol: '😂', wow: '😮', love: '❤️', clap: '👏', popcorn: '🍿', sleep: '😴', scared: '😱', fire: '🔥' };
+            const PHRASE = { great: 'Great episode!', next: 'Next one?', brb: 'Brb', snacks: 'Snacks?', again: 'Again!', classic: 'Classic!', shh: 'Shh!', hi: 'Hi! 👋', bye: 'Bye! 👋' };
+            const dock = document.createElement('div'); dock.id = 'ptChat'; dock.className = 'pt-chat'; dock.hidden = true;
+            dock.innerHTML = '<button class="pc-hdr" type="button" aria-expanded="true"><span>💬 PARTY CHAT</span><em class="pc-un"></em><i class="pc-chev">▾</i></button>'
+                + '<div class="pc-body"><div class="pc-log" aria-live="polite"></div>'
+                + '<div class="pc-quick">' + Object.keys(QUICK).map(k => '<button type="button" data-q="' + k + '" title="' + k + '">' + QUICK[k] + '</button>').join('') + '<button type="button" class="pc-ph-t" aria-expanded="false" title="Quick phrases">💬</button></div>'
+                + '<div class="pc-phrases" hidden>' + Object.keys(PHRASE).map(k => '<button type="button" data-q="' + k + '">' + esc(PHRASE[k]) + '</button>').join('') + '</div>'
+                + '<form class="pc-form" autocomplete="off"><input maxlength="200" placeholder="Say something…" aria-label="Chat message"><button type="submit">SEND</button></form>'
+                + '<div class="pc-note">Only people in this party see chat. Links are removed. Tap ⋯ on a message to report or block.</div></div>';
+            const fl = document.createElement('div'); fl.id = 'ptFloat'; fl.className = 'pt-float'; fl.setAttribute('aria-hidden', 'true');
+            document.body.appendChild(dock); document.body.appendChild(fl);
+            const log = dock.querySelector('.pc-log'), form = dock.querySelector('.pc-form'), input = form.querySelector('input'), un = dock.querySelector('.pc-un'), hdr = dock.querySelector('.pc-hdr');
+            const OPENK = 'thetube.chatopen.v1'; let openState = true; try { openState = localStorage.getItem(OPENK) !== '0'; } catch (e) { } if (matchMedia('(max-width: 700px)').matches && localStorage.getItem(OPENK) == null) openState = false;
+            let host = null, lastId = null, unread = 0, menuFor = null, msgs = [];
+            const hue = s => { let h = 0; for (const c of String(s)) h = (h * 31 + c.charCodeAt(0)) % 360; return h; };
+            const text = m => m.kind === 'quick' ? (QUICK[m.body] || PHRASE[m.body] || '') : m.body;
+            const setOpen = o => { openState = o; dock.classList.toggle('closed', !o); hdr.setAttribute('aria-expanded', o); if (o) { unread = 0; un.textContent = ''; log.scrollTop = log.scrollHeight; } try { localStorage.setItem(OPENK, o ? '1' : '0'); } catch (e) { } };
+            const floatUp = m => {
+                const q = m.kind === 'quick' && QUICK[m.body], b = document.createElement('div');
+                b.className = 'pf-b' + (q ? ' emo' : ''); b.style.setProperty('--x', (8 + Math.random() * 30) + '%'); b.style.setProperty('--h', hue(m.from.toLowerCase()));
+                b.innerHTML = q ? '<span class="pf-e">' + q + '</span><small>' + esc(m.from) + '</small>' : '<small>' + esc(m.from) + '</small>' + esc(text(m));
+                fl.appendChild(b); setTimeout(() => b.remove(), 4200); while (fl.children.length > 12) fl.firstChild.remove();
+            };
+            const paint = () => {
+                const nearBottom = log.scrollHeight - log.scrollTop - log.clientHeight < 40;
+                log.innerHTML = msgs.length ? msgs.map(m => '<div class="pc-m' + (m.mine ? ' mine' : '') + (m.kind === 'quick' ? ' q' : '') + '" data-id="' + m.id + '"><b style="--h:' + hue(m.from.toLowerCase()) + '">' + esc(m.from) + '</b> <span>' + esc(text(m)) + '</span>'
+                    + (m.mine ? '' : '<button class="pc-more" type="button" data-a="more" aria-label="Report or block ' + esc(m.from) + '">⋯</button>')
+                    + (menuFor === m.id ? '<div class="pc-menu"><button type="button" data-a="report">⚑ REPORT</button><button type="button" data-a="block">⛔ BLOCK ' + esc(m.from) + '</button><button type="button" data-a="cancel">✕</button></div>' : '') + '</div>').join('')
+                    : '<div class="pc-empty">Say hi, or tap a reaction below. Everyone in the party sees it.</div>';
+                if (nearBottom || !openState) log.scrollTop = log.scrollHeight;
+            };
+            const send = async (kind, body) => {
+                try { click(); } catch (e) { }
+                try { await call('party_say', { p_kind: kind, p_body: body }); if (kind === 'quick' && st) floatUp({ from: st.username, kind, body }); if (window.__fr && window.__fr.partyTick) window.__fr.partyTick(); }
+                catch (e) { const m = (e && e.message) || ''; toast(/slow_down/.test(m) ? 'Slow down a little 🙂' : /not_in_party/.test(m) ? 'The party has ended.' : /bad_message/.test(m) ? "That message can't be sent." : friendly(e)); }
+            };
+            form.addEventListener('submit', e => { e.preventDefault(); const t = input.value.trim(); if (!t) return; input.value = ''; send('text', t.slice(0, 200)); });
+            input.addEventListener('keydown', e => e.stopPropagation());   // typing doesn't trigger room / TV shortcuts
+            hdr.addEventListener('click', () => { try { click(); } catch (e) { } setOpen(dock.classList.contains('closed')); });
+            dock.addEventListener('click', async e => {
+                const q = e.target.closest('[data-q]'); if (q) { send('quick', q.dataset.q); return; }
+                if (e.target.closest('.pc-ph-t')) { const p = dock.querySelector('.pc-phrases'), t = e.target.closest('.pc-ph-t'); p.hidden = !p.hidden; t.setAttribute('aria-expanded', !p.hidden); return; }
+                const b = e.target.closest('[data-a]'); if (!b) return; const row = b.closest('.pc-m'), id = row && +row.dataset.id, m = msgs.find(x => x.id === id); if (!m) return;
+                const a = b.dataset.a;
+                if (a === 'more') { menuFor = menuFor === id ? null : id; paint(); return; }
+                if (a === 'cancel') { menuFor = null; paint(); return; }
+                menuFor = null;
+                if (a === 'report') { try { await call('report_message', { p_message_id: id, p_reason: 'party chat' }); toast('⚑ Thanks, that message has been reported. You can also block ' + m.from + '.'); } catch (e2) { toast(/message_gone/.test(e2.message || '') ? 'That message has already gone.' : friendly(e2)); } paint(); }
+                if (a === 'block') { try { await call('friend_block', { p_username: m.from }); msgs = msgs.filter(x => x.from !== m.from); toast('⛔ Blocked ' + m.from + '. You won\'t see their messages.'); if (window.__fr) window.__fr.repaint(); } catch (e2) { toast(friendly(e2)); } paint(); }
+            });
+            window.__chat = {
+                after: () => lastId,
+                update: (party, incoming) => {
+                    const h = party ? party.host : null;
+                    if (h !== host) { host = h; lastId = null; msgs = []; unread = 0; un.textContent = ''; menuFor = null; }
+                    dock.hidden = !party; if (!party) return;
+                    const first = lastId === null; let added = 0;
+                    (incoming || []).forEach(m => { if (lastId !== null && m.id <= lastId) return; msgs.push(m); added++; if (!first && !m.mine) { if (m.kind === 'quick' || !openState) floatUp(m); } lastId = Math.max(lastId || 0, m.id); });
+                    if (first && lastId === null) lastId = 0;
+                    if (msgs.length > 60) msgs = msgs.slice(-60);
+                    if (added) { if (!openState && !first) { unread += (incoming || []).filter(m => !m.mine).length; un.textContent = unread || ''; } paint(); }
+                    else if (!log.children.length) paint();
+                },
+                floatMine: m => floatUp(m)
+            };
+            setOpen(openState);
         })();
 
         const shop = mk('tcModal', '<div class="tc-modal" role="dialog" aria-modal="true" aria-label="Treasure chest"><div class="tc-hdr"><span class="tc-title">🪙 TREASURE CHEST</span><button class="tc-close" data-close type="button">✕ CLOSE</button></div><div class="tc-body"><div class="tc-acct" id="tcAcct"></div><div class="tc-stats"><div class="tc-stat"><span>TOTAL WATCH TIME</span><b id="tcWatch"></b></div><div class="tc-stat"><span>COINS</span><b id="tcBal"></b></div></div><p class="tc-note">Earn 1 coin for every minute you watch. Own every skin in a row to unlock the next row. Room upgrades are open from the start.</p><div class="tc-grid" id="tcGrid"></div></div></div>');
