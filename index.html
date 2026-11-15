@@ -3658,7 +3658,7 @@
         setInterval(() => {
             if (!st) return;
             let playing = false;
-            try { playing = tvOn && vid && !vid.paused && !vid.ended && vid.readyState >= 3 && vid.getAttribute('src') && !document.hidden; } catch (e) { }
+            try { const cv = isPlayingCommercials && activeCommercialVideo; playing = tvOn && !document.hidden && ((vid && !vid.paused && !vid.ended && vid.readyState >= 3 && vid.getAttribute('src')) || (cv && !cv.paused && !cv.ended && cv.readyState >= 3)); } catch (e) { }
             if (!playing) return;
             st.secs++; pending++;
             if (st.secs % COIN_EVERY === 0) earnCoin();
