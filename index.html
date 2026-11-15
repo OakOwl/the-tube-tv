@@ -2283,6 +2283,8 @@
         const fileCache = {};
         const $ = id => document.getElementById(id);
         const vid = $('vid');
+        // safety net: a file whose picture the browser can't decode plays sound only. Say so instead of leaving a black screen.
+        vid.addEventListener('loadeddata', () => { setTimeout(() => { try { if (!isPlayingCommercials && vid.getAttribute('src') && vid.readyState >= 2 && vid.videoWidth === 0 && (vid.duration || 0) > 60) showToast('⚠️ This episode is in an old video format your browser can only play the sound of. Try the next episode.'); } catch (e) { } }, 1500); });
 
         // Play token to guard against stale oncanplay calls
         let playToken = 0;
@@ -2429,13 +2431,23 @@
             });
         }
 
-        async function fetchFiles(archiveId) {
+        async function fetchFiles(archiveId, retried) {
             if (fileCache[archiveId]) return fileCache[archiveId];
             try {
                 const r = await fetch(`https://archive.org/metadata/${archiveId}/files`);
+                if (!r.ok) throw new Error('archive_http_' + r.status);
+                window.__archiveDown = false;
                 const j = await r.json();
                 const raw = (j.result || []).map(f => ({ ...f, _archiveId: archiveId }));
                 let videos = filterFiles(raw);
+                if (archiveId === 'monkey-dust-s-01e-06-div-x-640x-352') {
+                    const key = n => { const m = /s0?(\d{1,2})\s*e0?(\d{1,2})/i.exec(n); return m ? +m[1] * 100 + +m[2] : null; };
+                    const seen = new Set();
+                    videos = filterFiles(raw.filter(f => /\.ia\.mp4$/i.test(f.name || '')))
+                        .filter(v => { const k = key(v.name); if (k == null || seen.has(k)) return false; seen.add(k); return true; })
+                        .map(v => { const k = key(v.name); return { ...v, name: 'Series ' + Math.floor(k / 100) + ' Episode ' + (k % 100), _k: k }; })
+                        .sort((a, b) => a._k - b._k);
+                }
                 if(archiveId === 'living-single-1993'){
                     const artistIndex = videos.findIndex(f => /artist/i.test(f.name));
                     if(artistIndex !== -1) videos.splice(artistIndex, 1);
@@ -2460,6 +2472,8 @@
                 return videos;
             } catch (e) {
                 console.warn('Archive fetch failed', archiveId, e);
+                if (!retried) { await new Promise(r => setTimeout(r, 1500)); return fetchFiles(archiveId, true); }   // one quick retry for a network blip
+                window.__archiveDown = true;
                 return [];
             }
         }
@@ -2480,19 +2494,19 @@
                 const score = nl.endsWith('.ia.mp4') ? 3 : (nl.endsWith('.mp4') ? 2 : 1);
                 const size = parseFloat(f.size) || 0, len = parseLen(f.length), h = parseInt(f.height) || 0;
                 const kbps = size && len ? Math.round(size * 8 / len / 1000) : 0;
-                const c = { name: f.name, score, kbps, h, url: `https://archive.org/download/${f._archiveId}/${encodeURIComponent(f.name)}` };
+                const c = { name: f.name, score, kbps, h, h264: /h\.?264/i.test(f.format || '') || nl.endsWith('.ia.mp4'), url: `https://archive.org/download/${f._archiveId}/${encodeURIComponent(f.name)}` };
                 (groups.get(base) || groups.set(base, []).get(base)).push(c);
             });
             const okQuality = c => c.h ? c.h >= 400 : (c.kbps ? c.kbps >= 350 : true);
             const result = [...groups.values()].map(list => {
-                const mp4 = list.filter(c => c.score >= 2); const pool = mp4.length ? mp4 : list;   // .ogv only as a last resort
+                const safe = list.filter(c => c.h264), mp4 = list.filter(c => c.score >= 2); const pool = safe.length ? safe : mp4.length ? mp4 : list;   // H.264 copies first (older MPEG-4/DivX originals play sound only), .ogv as a last resort
                 const known = pool.filter(c => c.kbps);
                 let best;
                 if (known.length) {
                     const good = known.filter(okQuality);
                     best = (good.length ? good : known).sort((a, b) => a.kbps - b.kbps || b.score - a.score)[0];
                 } else best = pool.sort((a, b) => b.score - a.score)[0];
-                const alts = known.filter(c => c.kbps >= 150).sort((a, b) => b.kbps - a.kbps).map(c => ({ url: c.url, kbps: c.kbps }));
+                const alts = known.filter(c => c.kbps >= 150 && (!safe.length || c.h264)).sort((a, b) => b.kbps - a.kbps).map(c => ({ url: c.url, kbps: c.kbps }));
                 return { name: best.name.replace(/\.ia\.mp4$|\.mp4$|\.ogv$/i, '').replace(/[._-]?\d{2,4}kb$/i, '').replace(/[_\-]+/g, ' ').trim(), url: best.url, kbps: best.kbps, alts };
             });
             result.sort((a, b) => a.name.localeCompare(b.name));
@@ -2790,7 +2804,7 @@
             const show = allShows.find(s => s.id === showId);
             if (!show) return;
             const files = await fetchFiles(show.archiveId);
-            if (!files || files.length === 0) { showToast(`❌ No episodes found for ${show.name}`); return; }
+            if (!files || files.length === 0) { showToast((window.__archiveDown ? `📡 Can't reach the Internet Archive right now (where all the shows are stored). Check your connection or try again in a few minutes.` : `❌ No episodes found for ${show.name}`)); return; }
             const resumeData = getResumePosition(showId);
             let episodeIndex = 0, resumeTimestamp = 0;
             if (Number.isInteger(forceEp) && forceEp >= 0 && forceEp < files.length) {
@@ -3023,7 +3037,7 @@
         async function autoLiveNow(showId, autoPlay = true, randomEpisode = false) {
             if (!tvOn) return;
             if (liveMode) currentLiveShowId = showId;
-            const s = allShows.find(x => x.id === showId); if (!s) return; const files = await fetchFiles(s.archiveId); if (!files || files.length === 0) { showToast(`❌ No episodes found for ${s.name}`); return; }
+            const s = allShows.find(x => x.id === showId); if (!s) return; const files = await fetchFiles(s.archiveId); if (!files || files.length === 0) { showToast((window.__archiveDown ? `📡 Can't reach the Internet Archive right now (where all the shows are stored). Check your connection or try again in a few minutes.` : `❌ No episodes found for ${s.name}`)); return; }
             let episodeIndex = 0, resumeTimestamp = 0, liveSeekTime = null;
             let isLateJoin = false;
             let remainingSlotSeconds = 0;
