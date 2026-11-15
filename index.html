@@ -1929,7 +1929,7 @@
 <g clip-path="url(#chLidClip)"><rect x="24" y="10" width="10" height="40" fill="#d9a53a" stroke="#7a5410" stroke-width="1.2"/><rect x="86" y="10" width="10" height="40" fill="#d9a53a" stroke="#7a5410" stroke-width="1.2"/></g>
 <path d="M18 40 Q18 22 60 20" stroke="#c98a4a" stroke-width="3" fill="none" opacity=".5" stroke-linecap="round"/><rect x="8" y="43" width="104" height="5" rx="2" fill="#d9a53a" stroke="#7a5410" stroke-width="1.2"/></g>
 </svg></span><span class="ch-plus" aria-hidden="true">+1</span><span class="ch-x15" id="tcBonusTag" aria-hidden="true"></span><span class="ch-plate"><b id="tcCoins">0</b><span class="ch-sub" id="tcTime">WATCHED 0S</span></span></button>
-    <button id="tcMute" type="button" aria-pressed="false" aria-label="Mute coin and shop sounds" title="Coin and shop sounds: on">
+    <button id="tcMute" type="button" aria-pressed="false" aria-label="Mute coin, shop and invite sounds" title="Coin, shop and invite sounds: on">
         <svg class="mu-on" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5h3.6L12 5.8v12.4l-4.4-3.7H4z" fill="currentColor"/><path d="M15.2 9.2a4 4 0 0 1 0 5.6M17.6 6.9a7.3 7.3 0 0 1 0 10.2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
         <svg class="mu-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5h3.6L12 5.8v12.4l-4.4-3.7H4z" fill="currentColor"/><path d="M15.5 9.5l5 5M20.5 9.5l-5 5" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>
     </button>
@@ -3771,7 +3771,7 @@
             muteBtn.style.left = (cx - 19) + 'px'; muteBtn.style.top = Math.max(4, top - muteBtn.offsetHeight - 6) + 'px';
             const rb = $('tcRoomBtn'); if (rb) { rb.style.left = (cx + 19) + 'px'; rb.style.top = muteBtn.style.top; }
         };
-        const paintMute = () => { muteBtn.setAttribute('aria-pressed', coinMuted ? 'true' : 'false'); muteBtn.title = coinMuted ? 'Coin and shop sounds: off (click to turn on)' : 'Coin and shop sounds: on (click to mute)'; muteBtn.setAttribute('aria-label', coinMuted ? 'Unmute coin and shop sounds' : 'Mute coin and shop sounds'); };
+        const paintMute = () => { muteBtn.setAttribute('aria-pressed', coinMuted ? 'true' : 'false'); muteBtn.title = coinMuted ? 'Coin, shop and invite sounds: off (click to turn on)' : 'Coin, shop and invite sounds: on (click to mute)'; muteBtn.setAttribute('aria-label', coinMuted ? 'Unmute coin, shop and invite sounds' : 'Mute coin, shop and invite sounds'); };
         muteBtn.addEventListener('click', e => {
             e.stopPropagation(); coinMuted = !coinMuted; paintMute();
             try { localStorage.setItem('thetube.coinmute.v1', coinMuted ? '1' : '0'); } catch (er) { }
@@ -4426,7 +4426,22 @@
             const bodyEl = $('frBody'), addBox = $('frAdd'), form = $('frForm'), nameIn = $('frName'), onEl = $('frOn'), tabBadge = document.querySelector('.side-tab[data-tab="friends"] .fr-badge');
             const SHAREK = 'thetube.sharewatch.v1'; let share = true; try { share = localStorage.getItem(SHAREK) !== '0'; } catch (e) { }
             $('frShare').checked = share;
-            const F = window.__fr = { repaint: () => paint(), partyHtml: () => '', partyAction: null, partyTick: null };
+            const F = window.__fr = { repaint: () => paint(), partyHtml: () => '', partyAction: null, partyTick: null, counts: { req: 0, inv: 0 } };
+            // soft two-note chime for invites and friend requests (follows the coin-sound mute button)
+            let lastChime = 0;
+            F.chime = () => {
+                try { if (coinMuted || Date.now() - lastChime < 1500) return; lastChime = Date.now(); const ac = getAC(); if (ac.state === 'suspended') ac.resume().catch(() => { });
+                    const t0 = ac.currentTime + .02, out = ac.createGain(); out.gain.value = .5; out.connect(ac.destination);
+                    [[880, 0], [1318.5, .16]].forEach(([f, d]) => { const o = ac.createOscillator(), o2 = ac.createOscillator(), g = ac.createGain(); o.type = 'sine'; o2.type = 'sine'; o.frequency.value = f; o2.frequency.value = f * 2.01;
+                        const g2 = ac.createGain(); g2.gain.value = .18; o2.connect(g2); g2.connect(g); o.connect(g); g.connect(out);
+                        g.gain.setValueAtTime(0, t0 + d); g.gain.linearRampToValueAtTime(.16, t0 + d + .012); g.gain.exponentialRampToValueAtTime(.0008, t0 + d + .9);
+                        o.start(t0 + d); o2.start(t0 + d); o.stop(t0 + d + 1); o2.stop(t0 + d + 1); });
+                } catch (e) { }
+            };
+            // "(2) The Tube" in the browser tab while invites or friend requests are waiting
+            const baseTitle = document.title.replace(/^\(\d+\)\s*/, '');
+            F.updateTitle = () => { const n = st ? F.counts.req + F.counts.inv : 0; const t = (n ? '(' + n + ') ' : '') + baseTitle; if (document.title !== t) document.title = t; };
+            let seenReq = null;
             let list = [], open = null, confirmFor = null, busy = false, pollT = 0, presT = 0, lastRef = null, lastPres = 0, showBlocked = false, loaded = false;
             const hue = s => { let h = 0; for (const c of String(s)) h = (h * 31 + c.charCodeAt(0)) % 360; return h; };
             const ago = t => { if (!t) return 'Offline'; const m = Math.round((Date.now() - new Date(t).getTime()) / 60000); return m < 60 ? 'Seen ' + Math.max(1, m) + 'm ago' : m < 1440 ? 'Seen ' + Math.round(m / 60) + 'h ago' : 'Seen ' + Math.round(m / 1440) + 'd ago'; };
@@ -4457,6 +4472,8 @@
                 const g = k => list.filter(f => f.kind === k), fr = g('friend').sort((a, b) => (b.online - a.online) || (!!b.watching - !!a.watching) || a.username.localeCompare(b.username)), inc = g('incoming'), out = g('outgoing'), bl = g('blocked');
                 const nOn = fr.filter(f => f.online).length; onEl.textContent = fr.length ? '● ' + nOn + '/' + fr.length : ''; onEl.title = nOn + ' of ' + fr.length + ' friends online';
                 if (tabBadge) tabBadge.textContent = inc.length ? inc.length : '';
+                const incNames = inc.map(f => f.username); if (seenReq && incNames.some(n => !seenReq.has(n))) { F.chime(); const nn = incNames.filter(n => !seenReq.has(n)); toast('👋 ' + nn.join(', ') + (nn.length > 1 ? ' want' : ' wants') + ' to be friends'); } seenReq = new Set(incNames);
+                F.counts.req = inc.length; F.updateTitle();
                 let h = F.partyHtml();
                 if (inc.length) h += '<div class="fr-sec">REQUESTS <em>' + inc.length + '</em></div>' + inc.map(row).join('');
                 h += fr.length ? '<div class="fr-sec">FRIENDS</div>' + fr.map(row).join('') : (inc.length || out.length ? '' : '<div class="fr-empty">No friends yet. Tap <b>+ ADD</b> to add someone by username, or send them your invite link.</div>');
@@ -4506,13 +4523,13 @@
             let inv = null; try { const q = new URLSearchParams(location.search); inv = q.get('invite'); if (inv) { localStorage.setItem('thetube.invite', JSON.stringify({ c: inv, t: Date.now() })); q.delete('invite'); history.replaceState(null, '', location.pathname + (q.toString() ? '?' + q : '') + location.hash); } else { const o = JSON.parse(localStorage.getItem('thetube.invite') || 'null'); inv = o && Date.now() - o.t < 3 * 864e5 ? o.c : null; } } catch (e) { }
             const useInvite = async () => { if (!inv || !st) return; const c = inv; inv = null; try { localStorage.removeItem('thetube.invite'); } catch (e) { } try { const r = await call('accept_invite', { p_code: c }); toast(r && r.status === 'already_friends' ? 'You and ' + r.username + ' are already friends' : '🤝 You and ' + (r && r.username) + ' are now friends!'); } catch (e) { toast(ferr(e)); } refresh(); };
             // start / stop with sign-in, pause while the tab is hidden
-            const tick = () => { if (!st || document.hidden) return; refresh(); ping(); };
+            const tick = () => { if (!st) return; refresh(); if (!document.hidden) ping(); };
             let saveT = 0; const roomNow = () => { let c = {}, off = [], sofa = null; try { c = JSON.parse(localStorage.getItem('thetube.roomcolors.v1') || '{}'); } catch (e) { } try { off = JSON.parse(localStorage.getItem('thetube.itemsoff.v1') || '[]'); } catch (e) { } try { sofa = localStorage.getItem('thetube.sofa.v1'); } catch (e) { } return { cols: { wall: c.wall, curt: c.curt, led: c.led, ledoff: !!c.ledoff }, off: Array.isArray(off) ? off.slice(0, 40) : [], sofa }; };
             window.__saveRoom = () => { clearTimeout(saveT); saveT = setTimeout(() => { if (st) call('save_room', { p_room: roomNow() }).catch(() => { }); }, 1500); };
             const sync = () => {
                 const on = !!st; clearInterval(pollT); clearInterval(presT);
                 if (on) { loaded = loaded && panel.classList.contains('in'); paint(); refresh(); ping(true); useInvite(); window.__saveRoom(); pollT = setInterval(tick, 30000); presT = setInterval(() => ping(), 5000); }
-                else { list = []; loaded = false; open = null; addBox.hidden = true; paint(); }
+                else { list = []; loaded = false; open = null; addBox.hidden = true; seenReq = null; F.counts.req = F.counts.inv = 0; F.updateTitle(); paint(); }
             };
             new MutationObserver(() => { if (panel.classList.contains('in') !== !!st) sync(); }).observe(body, { attributes: true, attributeFilter: ['class'] });
             document.addEventListener('visibilitychange', () => { if (!document.hidden) tick(); });
@@ -4555,8 +4572,9 @@
             const visitHost = async u => { try { const d = await call('friend_room', { p_username: u }); if (window.__room) window.__room.visit(d); } catch (e) { toast(friendly(e)); } };
             const apply = j => {
                 const was = party; party = j && j.party || null; invites = (j && j.invites) || [];
-                invites.forEach(i => { if (!seenInv.has(i.host)) { seenInv.add(i.host); toast('🏠 ' + i.host + ' invited you to watch together. Open Friends to join.'); try { sndClick(); } catch (e) { } } });
-                if (party && party.me_host) { const now = new Set((party.members || []).filter(m => m.here).map(m => m.username)); if (hereSet) now.forEach(u => { if (!hereSet.has(u)) toast('🎉 ' + u + ' joined your watch party · ×1.5 coins while you watch together'); }); hereSet = now; } else hereSet = null;
+                invites.forEach(i => { if (!seenInv.has(i.host)) { seenInv.add(i.host); toast('🏠 ' + i.host + ' invited you to watch together. Open Friends to join.'); F.chime(); } });
+                F.counts.inv = invites.length; F.updateTitle();
+                if (party && party.me_host) { const now = new Set((party.members || []).filter(m => m.here).map(m => m.username)); if (hereSet) now.forEach(u => { if (!hereSet.has(u)) { toast('🎉 ' + u + ' joined your watch party · ×1.5 coins while you watch together'); F.chime(); } }); hereSet = now; } else hereSet = null;
                 if (was && !party) { toast(was.me_host ? 'Watch party ended' : 'The watch party has ended'); if (window.__room && window.__room.visiting()) window.__room.end(); }
                 window.__bonusOn = !!(party && party.bonus); if (body.classList.contains('tc-bonus') !== window.__bonusOn) body.classList.toggle('tc-bonus', window.__bonusOn); if (body.classList.contains('tc-party') !== !!party) body.classList.toggle('tc-party', !!party);
                 const tag = $('tcBonusTag'); if (tag) tag.textContent = party ? (party.bonus ? '×1.5' : 'PARTY') : '';
@@ -4564,8 +4582,8 @@
             };
             const tick = async () => {
                 if (ticking) return; clearTimeout(loopT); if (!st) { loopT = 0; return; }
-                if (!document.hidden) { ticking = true; try { apply(await call('party_tick', { p_state: hostState(), p_playing: playingNow(), p_after: window.__chat ? window.__chat.after() : null })); } catch (e) { } ticking = false; }
-                loopT = setTimeout(tick, party ? 3000 : 8000);
+                { ticking = true; try { apply(await call('party_tick', { p_state: hostState(), p_playing: playingNow(), p_after: window.__chat ? window.__chat.after() : null })); } catch (e) { } ticking = false; }
+                loopT = setTimeout(tick, document.hidden ? (party ? 6000 : 12000) : party ? 3000 : 8000);
             };
             F.partyTick = tick;
             F.partyAction = async (a, u) => {
@@ -4579,7 +4597,7 @@
                 } catch (e) { const m = (e && e.message) || ''; toast(/invite_gone/.test(m) ? 'That invite has expired.' : /party_full/.test(m) ? 'Your party is full (6 friends).' : friendly(e)); }
                 tick();
             };
-            new MutationObserver(() => { if (st && !loopT) tick(); if (!st && (loopT || body.classList.contains('tc-party') || body.classList.contains('tc-bonus'))) { clearTimeout(loopT); loopT = 0; party = null; invites = []; body.classList.remove('tc-bonus', 'tc-party'); window.__bonusOn = false; } }).observe(body, { attributes: true, attributeFilter: ['class'] });
+            new MutationObserver(() => { if (st && !loopT) tick(); if (!st && (loopT || body.classList.contains('tc-party') || body.classList.contains('tc-bonus'))) { clearTimeout(loopT); loopT = 0; party = null; invites = []; seenInv.clear(); F.counts.inv = 0; F.updateTitle(); body.classList.remove('tc-bonus', 'tc-party'); window.__bonusOn = false; } }).observe(body, { attributes: true, attributeFilter: ['class'] });
             document.addEventListener('visibilitychange', () => { if (!document.hidden && st) tick(); });
             if (st) tick();
         })();
