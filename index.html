@@ -1901,7 +1901,9 @@
         .dm-m .pc-more { right: -18px; } .dm-m .pc-menu { flex-wrap: wrap; }
         .dm-chat .pc-form input:focus { border-color: #6aa8ff; } .dm-chat .pc-form button { background: #6aa8ff; color: #06152a; }
         body.tc-party .dm-chat { right: 328px; }
-        @media (max-width: 700px) { .dm-chat, body.tc-party .dm-chat { right: 8px; left: 8px; width: auto; bottom: 8px; } body.dm-open .pt-chat { display: none; } }
+        @media (max-width: 700px) { .dm-chat, body.tc-party .dm-chat { right: 8px; left: 8px; width: auto; bottom: 8px; } body.dm-open .pt-chat:not(.dm-chat) { display: none; }
+            .fr-msg { width: 44px; height: 38px; min-height: 38px; font-size: 19px; opacity: 1; } .fr-msg em { font-size: 14px; line-height: 18px; min-width: 18px; right: -5px; top: -8px; }
+            .dm-chat .pc-log { height: 38vh; } .dm-chat .pc-form input { font-size: 16px; padding: 8px; } .dm-chat .pc-form button { padding: 0 14px; font-size: 17px; } .dm-x { width: 44px; font-size: 20px; } }
     </style>
 </head>
 <body>
