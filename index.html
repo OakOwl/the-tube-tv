@@ -1888,6 +1888,20 @@
         @media (max-width: 700px) { .pt-chat { right: 8px; bottom: 8px; } .pc-log { height: 130px; } .pt-float { right: 8px; width: 240px; } }
         /* skateboard */
         #dh .tvf.sk, #dh .sk { border: 0; }
+        /* ===== direct messages ===== */
+        .fr-msg { position: relative; flex: none; width: 28px; height: 24px; font-size: 14px; line-height: 1; color: #d9b8ff; background: #160c22; border: 1px solid #3e2560; border-radius: 3px; cursor: pointer; opacity: .75; } .fr-msg:hover, .fr-msg.has { opacity: 1; background: #24123a; }
+        .fr-msg em { position: absolute; right: -6px; top: -7px; font-style: normal; font-size: 12px; line-height: 15px; min-width: 15px; padding: 0 3px; border-radius: 8px; background: #ff4fd8; color: #fff; }
+        .dm-chat { border-color: #2f5a8a; background: rgba(8,14,26,.98); } .dm-chat .pc-hdr { background: #10203a; color: #b8d8ff; }
+        .dm-top { display: flex; } .dm-top .dm-hdr { flex: 1; min-width: 0; } .dm-name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .dm-x { flex: none; width: 34px; font: inherit; font-size: 16px; color: #8aa8cc; background: #10203a; border: 0; border-left: 1px solid #1e3658; cursor: pointer; } .dm-x:hover { color: #fff; background: #1a3050; }
+        .dm-dot { flex: none; width: 8px; height: 8px; border-radius: 50%; background: #3a3a34; } .dm-chat.on .dm-dot { background: #39ff14; box-shadow: 0 0 6px #39ff14; }
+        .dm-m { display: flex; flex-direction: column; align-items: flex-start; max-width: 84%; padding: 4px 8px !important; margin: 1px 0; border-radius: 10px 10px 10px 3px; background: #172a44; }
+        .dm-m.mine { align-self: flex-end; align-items: flex-end; border-radius: 10px 10px 3px 10px; background: #2b1d48; }
+        .dm-m small { font-size: 11px; color: #6f86a6; } .dm-m.mine small { color: #8a76b0; }
+        .dm-m .pc-more { right: -18px; } .dm-m .pc-menu { flex-wrap: wrap; }
+        .dm-chat .pc-form input:focus { border-color: #6aa8ff; } .dm-chat .pc-form button { background: #6aa8ff; color: #06152a; }
+        body.tc-party .dm-chat { right: 328px; }
+        @media (max-width: 700px) { .dm-chat, body.tc-party .dm-chat { right: 8px; left: 8px; width: auto; bottom: 8px; } body.dm-open .pt-chat { display: none; } }
     </style>
 </head>
 <body>
@@ -3660,6 +3674,16 @@
                 if (name === 'buy_item') { const k = ITEM_BY[a.p_item]; if (!k) throw new Error('unknown_item'); if (p.owned_items.includes(k.id)) throw new Error('already_owned'); if (Math.floor(p.watch_seconds / 60) - p.coins_spent < k.price) throw new Error('not_enough_coins'); p.coins_spent += k.price; p.owned_items.push(k.id); pv.put(p); return J(p); }
                 if (name === 'equip_skin') { if (!p.owned_skins.includes(a.p_skin)) throw new Error('not_owned'); p.equipped_skin = a.p_skin; pv.put(p); return J(p); }
                 if (name === 'delete_my_account') { try { localStorage.removeItem(PREV_KEY); } catch (e) { } return null; }
+                if (/^(dm_|report_dm)/.test(name)) {
+                    const DK = 'thetube.previewdm.v1'; let D; try { D = JSON.parse(localStorage.getItem(DK) || 'null'); } catch (e) { } D = D || { mid: 0, msgs: [] }; const save = () => { try { localStorage.setItem(DK, JSON.stringify(D)); } catch (e) { } };
+                    const now = new Date().toISOString();
+                    if (D.pending && Date.now() > D.pending.at) { D.msgs.push({ id: ++D.mid, with: D.pending.with, mine: false, body: 'haha yes! watching anything good tonight?', at: now }); D.pending = null; save(); }
+                    if (name === 'dm_send') { if (/^no/i.test(a.p_username)) throw new Error('not_friends'); D.msgs.push({ id: ++D.mid, with: a.p_username, mine: true, body: String(a.p_body).replace(/(https?:\/\/|www\.)\S+/gi, '[link removed]').slice(0, 200), at: now }); D.pending = { with: a.p_username, at: Date.now() + 2000 }; save(); return D.mid; }
+                    if (name === 'dm_poll') { const un = {}; D.msgs.forEach(m => { if (!m.mine && !m.read) un[m.with] = (un[m.with] || 0) + 1; }); return { messages: a.p_after == null ? [] : D.msgs.filter(m => m.id > a.p_after), unread: un, last_id: D.mid }; }
+                    if (name === 'dm_history') return D.msgs.filter(m => m.with.toLowerCase() === String(a.p_username).toLowerCase()).slice(-40);
+                    if (name === 'dm_read') { D.msgs.forEach(m => { if (m.with.toLowerCase() === String(a.p_username).toLowerCase()) m.read = true; }); save(); return null; }
+                    if (name === 'report_dm') return 'reported';
+                }
                 if (/^(party_|save_room|friend_room|report_message)/.test(name)) {
                     const PK = 'thetube.previewparty.v1'; let P; try { P = JSON.parse(localStorage.getItem(PK) || 'null'); } catch (e) { } P = P || { party: null, invites: [] }; const save = () => { try { localStorage.setItem(PK, JSON.stringify(P)); } catch (e) { } };
                     if (name === 'save_room') { P.myroom = a.p_room; save(); return null; }
@@ -4462,7 +4486,7 @@
             const bodyEl = $('frBody'), addBox = $('frAdd'), form = $('frForm'), nameIn = $('frName'), onEl = $('frOn'), tabBadge = document.querySelector('.side-tab[data-tab="friends"] .fr-badge');
             const SHAREK = 'thetube.sharewatch.v1'; let share = true; try { share = localStorage.getItem(SHAREK) !== '0'; } catch (e) { }
             $('frShare').checked = share;
-            const F = window.__fr = { repaint: () => paint(), partyHtml: () => '', partyAction: null, partyTick: null, counts: { req: 0, inv: 0 } };
+            const F = window.__fr = { repaint: () => paint(), partyHtml: () => '', partyAction: null, partyTick: null, counts: { req: 0, inv: 0, dm: 0 }, dmUnread: {}, list: () => list, refresh: () => refresh() };
             // soft two-note chime for invites and friend requests (follows the coin-sound mute button)
             let lastChime = 0;
             F.chime = () => {
@@ -4476,7 +4500,7 @@
             };
             // "(2) The Tube" in the browser tab while invites or friend requests are waiting
             const baseTitle = document.title.replace(/^\(\d+\)\s*/, '');
-            F.updateTitle = () => { const n = st ? F.counts.req + F.counts.inv : 0; const t = (n ? '(' + n + ') ' : '') + baseTitle; if (document.title !== t) document.title = t; };
+            F.updateTitle = () => { const n = st ? F.counts.req + F.counts.inv + (F.counts.dm || 0) : 0; const t = (n ? '(' + n + ') ' : '') + baseTitle; if (document.title !== t) document.title = t; };
             let seenReq = null;
             let list = [], open = null, confirmFor = null, busy = false, pollT = 0, presT = 0, lastRef = null, lastPres = 0, showBlocked = false, loaded = false;
             const hue = s => { let h = 0; for (const c of String(s)) h = (h * 31 + c.charCodeAt(0)) % 360; return h; };
@@ -4499,7 +4523,8 @@
                 let acts = '';
                 if (isOpen) acts = confirmFor ? '<div class="fr-acts fr-conf" data-u="' + u + '"><span>' + (confirmFor === 'block' ? 'Block ' : 'Remove ') + u + '?</span><button class="fr-sm fr-dang" data-a="' + confirmFor + '!">YES</button><button class="fr-sm" data-a="nevermind">NO</button></div>'
                     : '<div class="fr-acts" data-u="' + u + '">' + (f.online && f.watching_ref ? '<button class="fr-sm fr-go" data-a="join">▶ JOIN</button>' : '') + (f.online ? '<button class="fr-sm fr-go" data-a="pinvite" title="Invite them to watch with you in your room (×1.5 coins)">🏠 INVITE</button>' : '') + '<button class="fr-sm" data-a="remove">REMOVE</button><button class="fr-sm fr-dang" data-a="block">BLOCK</button></div>';
-                return '<div class="fr-row fr-fr' + (f.online ? ' on' : '') + (isOpen ? ' open' : '') + '" data-u="' + u + '" tabindex="0" role="button" aria-expanded="' + isOpen + '">' + av.replace('</i>', '<i class="fr-dot"></i></i>') + '<div class="fr-meta"><b>' + u + '</b>' + st2 + '</div>' + (f.online && f.watching_ref && !isOpen ? '<button class="fr-sm fr-go" data-a="join">JOIN</button>' : '') + '</div>' + acts;
+                const nUn = (F.dmUnread && F.dmUnread[f.username]) || 0;
+                return '<div class="fr-row fr-fr' + (f.online ? ' on' : '') + (isOpen ? ' open' : '') + '" data-u="' + u + '" tabindex="0" role="button" aria-expanded="' + isOpen + '">' + av.replace('</i>', '<i class="fr-dot"></i></i>') + '<div class="fr-meta"><b>' + u + '</b>' + st2 + '</div>' + (f.online && f.watching_ref && !isOpen ? '<button class="fr-sm fr-go" data-a="join">JOIN</button>' : '') + '<button class="fr-ic fr-msg' + (nUn ? ' has' : '') + '" data-a="dm" title="Message ' + u + '" aria-label="Message ' + u + (nUn ? ' (' + nUn + ' unread)' : '') + '">💬' + (nUn ? '<em>' + nUn + '</em>' : '') + '</button></div>' + acts;
             };
             const paint = () => {
                 panel.classList.toggle('in', !!st);
@@ -4535,6 +4560,7 @@
                 if (a === 'signin') { click(); openAuth(session && !st ? 'username' : 'signin'); return; }
                 if (a === 'showblocked') { showBlocked = !showBlocked; paint(); return; }
                 if (/^p(invite|join|no|leave|room)$/.test(a)) { if (F.partyAction) F.partyAction(a, u); open = null; return; }
+                if (a === 'dm' && u) { if (window.__dm) window.__dm.open(u); return; }
                 if (!u) return;
                 if (a === 'accept') act('friend_respond', { p_username: u, p_accept: true }, '🤝 You and ' + u + ' are now friends');
                 else if (a === 'decline') act('friend_respond', { p_username: u, p_accept: false });
@@ -4705,6 +4731,79 @@
                 floatMine: m => floatUp(m)
             };
             setOpen(openState);
+        })();
+        // ================= DIRECT MESSAGES between friends (no party needed) =================
+        (() => {
+            const F = window.__fr; if (!F) return;
+            const dock = document.createElement('div'); dock.id = 'dmChat'; dock.className = 'pt-chat dm-chat'; dock.hidden = true;
+            dock.innerHTML = '<div class="dm-top"><button class="pc-hdr dm-hdr" type="button" aria-expanded="true"><i class="dm-dot"></i><span class="dm-name"></span><em class="pc-un"></em><i class="pc-chev">▾</i></button><button class="dm-x" type="button" aria-label="Close messages">✕</button></div>'
+                + '<div class="pc-body"><div class="pc-log" aria-live="polite"></div>'
+                + '<form class="pc-form" autocomplete="off"><input maxlength="200" placeholder="Message…" aria-label="Message"><button type="submit">SEND</button></form>'
+                + '<div class="pc-note dm-note"></div></div>';
+            document.body.appendChild(dock);
+            const log = dock.querySelector('.pc-log'), form = dock.querySelector('.pc-form'), input = form.querySelector('input'), nameEl = dock.querySelector('.dm-name'), un = dock.querySelector('.pc-un'), hdr = dock.querySelector('.dm-hdr');
+            let withU = null, conv = [], lastId = null, unread = {}, menuFor = null, loopT = 0, busy = false;
+            const same = (a, b) => String(a || '').toLowerCase() === String(b || '').toLowerCase();
+            const totalUnread = () => Object.values(unread).reduce((a, b) => a + (+b || 0), 0);
+            const publish = () => { F.dmUnread = unread; F.counts.dm = totalUnread(); F.updateTitle(); F.repaint(); };
+            const isOpen = () => !dock.hidden && !dock.classList.contains('closed');
+            const fmt = t => { try { const d = new Date(t); return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); } catch (e) { return ''; } };
+            const paint = () => {
+                const nearBottom = log.scrollHeight - log.scrollTop - log.clientHeight < 40;
+                log.innerHTML = conv.length ? conv.map(m => '<div class="pc-m dm-m' + (m.mine ? ' mine' : '') + '" data-id="' + m.id + '"><span>' + esc(m.body) + '</span><small>' + fmt(m.at) + '</small>'
+                    + (m.mine ? '' : '<button class="pc-more" type="button" data-a="more" aria-label="Report or block">⋯</button>')
+                    + (menuFor === m.id ? '<div class="pc-menu"><button type="button" data-a="report">⚑ REPORT</button><button type="button" data-a="block">⛔ BLOCK ' + esc(withU) + '</button><button type="button" data-a="cancel">✕</button></div>' : '') + '</div>').join('')
+                    : '<div class="pc-empty">No messages yet. Say hi to ' + esc(withU || '') + '!</div>';
+                if (nearBottom) log.scrollTop = log.scrollHeight;
+            };
+            const markRead = () => { if (withU && unread[withU]) { const u = withU; delete unread[u]; publish(); call('dm_read', { p_username: u }).catch(() => { }); } };
+            const poll = async () => {
+                clearTimeout(loopT); if (!st) { loopT = 0; return; }
+                if (!busy) { busy = true; try {
+                    const j = await call('dm_poll', { p_after: lastId });
+                    if (lastId === null) lastId = +j.last_id || 0;
+                    else {
+                        const fresh = (j.messages || []).filter(m => m.id > lastId); let fromOthers = [];
+                        fresh.forEach(m => { lastId = Math.max(lastId, m.id); if (withU && same(m.with, withU)) { if (!conv.some(x => x.id === m.id)) conv.push(m); } if (!m.mine && !(isOpen() && same(m.with, withU))) fromOthers.push(m); });
+                        if (fresh.some(m => withU && same(m.with, withU))) { if (conv.length > 120) conv = conv.slice(-120); paint(); }
+                        if (fromOthers.length) { F.chime(); if (!isOpen() || !fromOthers.every(m => same(m.with, withU))) { const m = fromOthers[fromOthers.length - 1]; toast('💬 ' + m.with + ': ' + (m.body.length > 60 ? m.body.slice(0, 60) + '…' : m.body)); } }
+                    }
+                    unread = j.unread || {}; if (isOpen() && withU) { const k = Object.keys(unread).find(u => same(u, withU)); if (k) { delete unread[k]; call('dm_read', { p_username: withU }).catch(() => { }); } }
+                    publish();
+                } catch (e) { } busy = false; }
+                loopT = setTimeout(poll, document.hidden ? 15000 : withU ? 3000 : 7000);
+            };
+            const open = async u => {
+                try { click(); } catch (e) { }
+                withU = u; conv = []; menuFor = null; dock.hidden = false; dock.classList.remove('closed'); hdr.setAttribute('aria-expanded', 'true'); body.classList.add('dm-open');
+                nameEl.textContent = u; dock.querySelector('.dm-note').textContent = 'Only you and ' + u + ' can see this. Links are removed; kept for 30 days.';
+                const f = (F.list ? F.list() : []).find(x => same(x.username, u)); dock.classList.toggle('on', !!(f && f.online));
+                log.innerHTML = '<div class="pc-empty">Loading…</div>';
+                try { conv = await call('dm_history', { p_username: u, p_before: null }) || []; } catch (e) { conv = []; toast(/not_friends/.test(e.message || '') ? 'You can only message friends.' : friendly(e)); }
+                paint(); log.scrollTop = log.scrollHeight; markRead(); input.focus({ preventScroll: true }); poll();
+            };
+            const close = () => { dock.hidden = true; withU = null; conv = []; body.classList.remove('dm-open'); poll(); };
+            form.addEventListener('submit', async e => {
+                e.preventDefault(); const t = input.value.trim(); if (!t || !withU) return; input.value = '';
+                try { await call('dm_send', { p_username: withU, p_body: t.slice(0, 200) }); poll(); }
+                catch (e2) { const m = (e2 && e2.message) || ''; input.value = t; toast(/slow_down/.test(m) ? 'Slow down a little 🙂' : /not_friends/.test(m) ? 'You can only message friends.' : /bad_message/.test(m) ? "That message can't be sent." : friendly(e2)); }
+            });
+            input.addEventListener('keydown', e => e.stopPropagation());
+            hdr.addEventListener('click', () => { try { click(); } catch (e) { } const c = !dock.classList.contains('closed'); dock.classList.toggle('closed', c); hdr.setAttribute('aria-expanded', !c); if (!c) { markRead(); log.scrollTop = log.scrollHeight; } });
+            dock.querySelector('.dm-x').addEventListener('click', () => { try { click(); } catch (e) { } close(); });
+            dock.addEventListener('click', async e => {
+                const b = e.target.closest('[data-a]'); if (!b) return; const row = b.closest('.pc-m'), id = row && +row.dataset.id, m = conv.find(x => x.id === id); if (!m) return;
+                const a = b.dataset.a;
+                if (a === 'more') { menuFor = menuFor === id ? null : id; paint(); return; }
+                menuFor = null;
+                if (a === 'report') { try { await call('report_dm', { p_message_id: id, p_reason: 'reported from DMs' }); toast('⚑ Thanks, that message has been reported. You can also block ' + withU + '.'); } catch (e2) { toast(friendly(e2)); } }
+                if (a === 'block') { const u = withU; try { await call('friend_block', { p_username: u }); toast('⛔ Blocked ' + u + '.'); close(); if (F.refresh) F.refresh(); } catch (e2) { toast(friendly(e2)); } return; }
+                paint();
+            });
+            window.__dm = { open };
+            new MutationObserver(() => { if (st && !loopT) poll(); if (!st && (loopT || !dock.hidden)) { clearTimeout(loopT); loopT = 0; lastId = null; unread = {}; dock.hidden = true; withU = null; if (body.classList.contains('dm-open')) body.classList.remove('dm-open'); F.counts.dm = 0; F.updateTitle(); } }).observe(body, { attributes: true, attributeFilter: ['class'] });
+            document.addEventListener('visibilitychange', () => { if (!document.hidden && st) poll(); });
+            if (st) poll();
         })();
 
         const shop = mk('tcModal', '<div class="tc-modal" role="dialog" aria-modal="true" aria-label="Treasure chest"><div class="tc-hdr"><span class="tc-title">🪙 TREASURE CHEST</span><button class="tc-close" data-close type="button">✕ CLOSE</button></div><div class="tc-body"><div class="tc-acct" id="tcAcct"></div><div class="tc-stats"><div class="tc-stat"><span>TOTAL WATCH TIME</span><b id="tcWatch"></b></div><div class="tc-stat"><span>COINS</span><b id="tcBal"></b></div></div><p class="tc-note">Earn 1 coin for every minute you watch. Own every skin in a row to unlock the next row. Room upgrades are open from the start.</p><div class="tc-grid" id="tcGrid"></div></div></div>');
