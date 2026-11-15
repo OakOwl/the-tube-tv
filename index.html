@@ -1523,7 +1523,7 @@
         #dh .dh-stage { position: absolute; left: 50%; top: 52%; width: 0; height: 0; perspective: 1500px; }
         #dh .dh-cam { position: absolute; left: 0; top: 0; width: 0; height: 0; transform-style: preserve-3d; transform: translateY(var(--ty, 0px)) scale(var(--sc, 1)) rotateX(var(--p, -24deg)) rotateY(var(--y, 0deg)); }
         #dh .dh-room, #dh .bx { position: absolute; left: 0; top: 0; width: 0; height: 0; transform-style: preserve-3d; }
-        #dh .pl { position: absolute; left: 0; top: 0; transform-style: preserve-3d; }
+        #dh .pl { position: absolute; left: 0; top: 0; transform-style: flat; } #dh .pl:has(.pl, .bx) { transform-style: preserve-3d; }
         #dh .pl.hid { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
         #dh .pl svg { display: block; width: 100%; height: 100%; overflow: visible; }
         #dh .w-floor { background: repeating-linear-gradient(90deg, rgba(0,0,0,.28) 0 2px, transparent 2px 46px), repeating-linear-gradient(0deg, rgba(0,0,0,.12) 0 1px, transparent 1px 130px), linear-gradient(180deg, #7a5028, #5e3a1a); box-shadow: inset 0 0 60px rgba(0,0,0,.5); }
@@ -1664,7 +1664,7 @@
 
         /* sunbeam dust motes */
         #dh .sunr > .sunb { opacity: 0; transition: opacity 1.4s ease; } #dh:not(.night):not(.drawn) .sunr > .sunb { opacity: 1; }
-        #dh .sps { position: absolute; width: 4px; height: 4px; margin: -2px 0 0 -2px; border-radius: 50%; background: rgba(255,252,232,.95); box-shadow: 0 0 8px 3px rgba(255,236,170,.75); filter: blur(.4px); opacity: 0; animation: spF 6s ease-in-out infinite; }
+        #dh .sps { position: absolute; width: 10px; height: 10px; margin: -5px 0 0 -5px; border-radius: 50%; background: radial-gradient(circle,rgba(255,252,232,.98) 0 22%,rgba(255,236,170,.55) 40%,rgba(255,236,170,0) 70%); opacity: 0; animation: spF 6s ease-in-out infinite; } #dh.night .sps, #dh.drawn .sps { animation-play-state: paused; }
         @keyframes spF { 0% { opacity: 0; transform: translate(0,0) scale(.7); } 25% { opacity: .95; } 55% { opacity: .55; transform: translate(-7px,12px) scale(1.1); } 80% { opacity: .9; } 100% { opacity: 0; transform: translate(5px,24px) scale(.8); } }
         @media (hover: none) and (pointer: coarse) { #dh .sps { animation: none !important; opacity: .5; } }
         @media (prefers-reduced-motion: reduce) { #dh .sps { animation: none !important; opacity: .5; } }
@@ -1732,7 +1732,7 @@
         @media (hover: none) and (pointer: coarse) { #dh .tvb { animation: none !important; } #dh .mt { animation: none !important; opacity: .5; } }
         #dh .tvr-b { display: none; } #dh.drawn.lamp-off .tvr-b { display: block; }
 
-        #dh .mts { position: absolute; width: 4px; height: 4px; margin: -2px 0 0 -2px; border-radius: 50%; background: rgba(255,255,255,.88); box-shadow: 0 0 7px 2px rgba(var(--bm),.8); filter: blur(.4px); opacity: .5; animation: moteF 5s ease-in-out infinite; }
+        #dh .mts { position: absolute; width: 10px; height: 10px; margin: -5px 0 0 -5px; border-radius: 50%; background: radial-gradient(circle,rgba(255,255,255,.95) 0 20%,rgba(var(--bm),.6) 40%,rgba(var(--bm),0) 70%); opacity: .5; animation: moteF 5s ease-in-out infinite; }
         @keyframes moteF { 0%,100% { opacity: .5; transform: translate(0,0) } 35% { opacity: .95 } 65% { opacity: .68; transform: translate(4px,5px) } }
         @media (hover: none) and (pointer: coarse) { #dh .mts { animation: none !important; opacity: .4; } }
         #dh.tvoff .tvr, #dh.tvoff .tvb { opacity: 0 !important; transition: opacity .6s; }
@@ -1778,6 +1778,9 @@
         #dh .drk { position: absolute; width: 5px; height: 5px; margin: -2.5px 0 0 -2.5px; border-radius: 50%; background: radial-gradient(circle at 35% 30%,#8a7452,#2b2117 70%); box-shadow: 0 1px 1px rgba(0,0,0,.5); }
         #dh .drh { position: absolute; width: 2px; height: 7px; background: #3a2c1c; border-radius: 1px; }
         #dh .tvf.bbp, #dh .bbp { border: 0; backface-visibility: visible; }
+        /* performance: page behind the 3D room isn't painted while the room is open */
+        body.in-room > .layout, body.in-room > .topbar, body.in-room > #signupStrip, body.in-room > .curtain, body.in-room > .pelmet { visibility: hidden; }
+        #dh { contain: layout paint style; }
     </style>
 </head>
 <body>
@@ -3867,7 +3870,7 @@
         };
         // a proper 3D coffee cup: lathe-style ceramic cup and saucer built from tapered segments, a crema surface, a curved handle and soft rising steam
         const coffeeCupHtml = (x, ybase, z, sc = 1.3) => {
-            const ytop = 0, N = 16, DEG = 180 / Math.PI, L0 = -50;
+            const ytop = 0, N = 12, DEG = 180 / Math.PI, L0 = -50;
             const frust = (rb, rt, hh, yb, shade, cls) => { const tilt = Math.atan((rt - rb) / hh) * DEG, slant = Math.sqrt(hh * hh + (rt - rb) * (rt - rb)), rm = (rt + rb) / 2, w = (2 * rt * Math.tan(Math.PI / N) * 1.07).toFixed(2); let o = ''; for (let k = 0; k < N; k++) { const th = k * 360 / N, l = Math.round(shade * (.8 + .2 * Math.cos((th + L0) / DEG))); o += '<div class="bx" style="transform:rotateY(' + th + 'deg)">' + plane(w, slant.toFixed(2), 0, yb - hh / 2, rm.toFixed(2), -tilt.toFixed(2), 0, cls || 'cup', '', 'background:linear-gradient(rgba(255,255,255,.4),rgba(0,0,0,.1)),rgb(' + l + ',' + l + ',' + (l + 2) + ');') + '</div>'; } return o; };
             const H = 12, RB = 5.2, RT = 9.4;
             let o = frust(4.2, 5.4, 3, ytop, 226) + frust(5.4, 12.6, 2.4, ytop - 3, 240) + frust(0.8, 5.4, 0.8, ytop - 3, 222);
@@ -3921,15 +3924,15 @@
         };
         // corduroy bean bag chair: a lathed dome whose back rises into a rest and whose front dips into a seat, with vertical corduroy ribs
         const beanBagHtml = (x, z, ry) => {
-            const N = 30, DEG = 180 / Math.PI, L0 = -50 - ry, base = [172, 126, 86];
-            const P = [[47, 0, .55], [57, 6, .66], [64, 18, .8], [67, 34, .92], [65, 50, 1], [60, 63, 1.05], [52, 73, 1.08], [42, 80, 1.1], [27, 75, .82], [12, 69, .7], [0, 67, .66]];
-            const lift = (th, i) => { const b = Math.pow((1 + Math.cos((th - 180) / DEG)) / 2, 1.6), L = 34 * b - 7; const [r, y] = P[i]; return i <= 7 ? y + L * Math.max(0, Math.min(1, (y - 26) / 54)) : y + L * r / 42 * .85; };
+            const N = 24, DEG = 180 / Math.PI, L0 = -50 - ry, base = [172, 126, 86];
+            const P = [[47, 0, .55], [60, 9, .7], [67, 30, .9], [65, 50, 1], [58, 65, 1.05], [42, 80, 1.1], [22, 74, .8], [0, 67, .66]];
+            const lift = (th, i) => { const b = Math.pow((1 + Math.cos((th - 180) / DEG)) / 2, 1.6), L = 34 * b - 7; const [r, y] = P[i]; return i <= 5 ? y + L * Math.max(0, Math.min(1, (y - 26) / 54)) : y + L * r / 42 * .85; };
             const rib = 'repeating-linear-gradient(90deg,rgba(50,28,10,.2) 0 1.2px,rgba(255,236,206,.07) 3px,rgba(255,236,206,.13) 4.3px,rgba(255,236,206,.03) 5.8px,rgba(50,28,10,.2) 7px)';
             let o = plane(200, 200, 0, FY - .5, 0, 90, 0, '', '', 'pointer-events:none;background:radial-gradient(closest-side,rgba(0,0,0,.55),rgba(0,0,0,.22) 68%,transparent);');
             for (let k = 0; k < N; k++) {
                 const th = k * 360 / N, c = Math.cos((th + L0) / DEG); let seg = '';
                 for (let i = 0; i < P.length - 1; i++) {
-                    const ra = P[i][0], rb = P[i + 1][0], ya = lift(th, i), yb = lift(th, i + 1), dr = rb - ra, dy = yb - ya, sl = Math.max(1, Math.hypot(dr, dy)), w = Math.max(2, 2 * Math.max(ra, rb) * Math.tan(Math.PI / N) * 1.1), dish = i >= 7;
+                    const ra = P[i][0], rb = P[i + 1][0], ya = lift(th, i), yb = lift(th, i + 1), dr = rb - ra, dy = yb - ya, sl = Math.max(1, Math.hypot(dr, dy)), w = Math.max(2, 2 * Math.max(ra, rb) * Math.tan(Math.PI / N) * 1.1), dish = i >= 5;
                     const v = (P[i][2] + P[i + 1][2]) / 2, cc = dish ? -c * .5 : c, l = (.56 + .4 * Math.max(0, cc) + .08 * cc) * v;
                     const rgb = 'rgb(' + base.map(q => Math.min(255, Math.round(q * l))).join(',') + ')';
                     seg += plane(w.toFixed(2), (sl + .8).toFixed(2), 0, (FY - (ya + yb) / 2).toFixed(2), ((ra + rb) / 2).toFixed(2), (-Math.atan2(dr, dy) * DEG).toFixed(2), 0, 'bbp', '', 'background:linear-gradient(180deg,rgba(255,240,222,' + (dish ? .03 : .05 + .07 * Math.max(0, c)).toFixed(2) + '),rgba(20,10,0,.1)),' + rib + ',' + rgb + ';');
@@ -4016,7 +4019,7 @@
                 + plane(W * 1.9, 330, X - 40, FY - 10, -150, 90, 0, 'dmoon', '<div class="mn-grid"><i style="left:6%;top:4%"></i><i style="left:52%;top:4%"></i><i style="left:6%;top:50%"></i><i style="left:52%;top:50%"></i></div>', 'pointer-events:none;')
                 + plane(900, 440, 0, FY - WH / 2, -307.5, 0, 0, 'dmoonw', '', 'pointer-events:none;')
                 + plane(W * 1.35, 150, X + 6, FY - 4, -230, 90, 0, 'dlight', '', 'pointer-events:none;background:linear-gradient(105deg,rgba(255,250,225,.30),rgba(255,250,225,.06) 70%,transparent);clip-path:polygon(18% 0,82% 0,100% 100%,0 100%);');
-            { let sr = '<div class="bx sunr">'; const N = 10; for (let i = 0; i < N; i++) { const t = i / (N - 1), x = X - t * 85, y = Y + 10 + t * (FY - 8 - Y - 10), z = -296 + t * 130, w = W * (.95 + t * .5), hh = 70 + t * 70, A = (.2 * (1 - .35 * t)).toFixed(3); let m = ''; for (let k = 0; k < 8; k++) m += '<i class="sps" style="left:' + (12 + Math.random() * 76).toFixed(0) + '%;top:' + (12 + Math.random() * 76).toFixed(0) + '%;animation-delay:' + (-(i * .45 + k * 1.3)).toFixed(2) + 's;animation-duration:' + (5 + Math.random() * 4).toFixed(1) + 's"></i>'; sr += plane(w, hh, x, y, z, 0, 0, 'sunb', m, 'pointer-events:none;background:radial-gradient(closest-side,rgba(255,244,205,' + A + '),rgba(255,236,180,' + (A * .5).toFixed(3) + ') 55%,rgba(255,230,170,0));'); } h += sr + '</div>'; }
+            { let sr = '<div class="bx sunr">'; const N = 10; for (let i = 0; i < N; i++) { const t = i / (N - 1), x = X - t * 85, y = Y + 10 + t * (FY - 8 - Y - 10), z = -296 + t * 130, w = W * (.95 + t * .5), hh = 70 + t * 70, A = (.2 * (1 - .35 * t)).toFixed(3); let m = ''; for (let k = 0; k < 5; k++) m += '<i class="sps" style="left:' + (12 + Math.random() * 76).toFixed(0) + '%;top:' + (12 + Math.random() * 76).toFixed(0) + '%;animation-delay:' + (-(i * .45 + k * 1.3)).toFixed(2) + 's;animation-duration:' + (5 + Math.random() * 4).toFixed(1) + 's"></i>'; sr += plane(w, hh, x, y, z, 0, 0, 'sunb', m, 'pointer-events:none;background:radial-gradient(closest-side,rgba(255,244,205,' + A + '),rgba(255,236,180,' + (A * .5).toFixed(3) + ') 55%,rgba(255,230,170,0));'); } h += sr + '</div>'; }
             if (plantOn && ITEM_BY.plant) h += '<div class="sp" style="width:58px;height:98px;margin:-98px 0 0 -29px;transform:translate3d(' + (X + 30) + 'px,' + (Y + H / 2 - 1) + 'px,-298px) rotateY(calc(var(--y) * -1))">' + itemSvg(ITEM_BY.plant) + '</div>';
             return h;
         };
@@ -4068,9 +4071,12 @@
             const p = tvPrev[k] || cur; const o = cur.map((x, i) => p[i] + (x - p[i]) * (i === 3 ? .65 : .4)); tvPrev[k] = o; return o;
         };
         const tvSet = (el, g) => { if (el) el.style.background = g; };
+        let tvN = 0;
         const tvTick = () => {
+            if (document.hidden) return;
+            tvN++;
             if (!dh.classList.contains('show') || !dh.classList.contains('drawn') || !dh.classList.contains('lamp-off')) { dh.classList.remove('tvoff'); return; }
-            try { const sc = roomEl.querySelector('.tv-scr'); if (sc) { const r = sc.getBoundingClientRect(), d = dh.getBoundingClientRect(); if (r.width) { dh.style.setProperty('--vx', ((r.left + r.width / 2 - d.left) / d.width * 100).toFixed(1) + '%'); dh.style.setProperty('--vy', ((r.top + r.height / 2 - d.top) / d.height * 100).toFixed(1) + '%'); } } } catch (e) { }
+            try { const sc = tvN % 4 === 1 && roomEl.querySelector('.tv-scr'); if (sc) { const r = sc.getBoundingClientRect(), d = dh.getBoundingClientRect(); if (r.width) { dh.style.setProperty('--vx', ((r.left + r.width / 2 - d.left) / d.width * 100).toFixed(1) + '%'); dh.style.setProperty('--vy', ((r.top + r.height / 2 - d.top) / d.height * 100).toFixed(1) + '%'); } } } catch (e) { }
             const f = roomEl.querySelector('.tvr-f'); if (!f) return;
             let q = null;
             const v = [...document.querySelectorAll('#screenWrap video')].find(x => x.videoWidth && !x.paused && x.readyState >= 2 && x.style.display !== 'none');
@@ -4118,7 +4124,7 @@
         // two wall shelves on the right-hand wall: books, a little plant and some trinkets
         // a proper 3D lava lamp: copper hourglass base and cap, tapered tinted glass, bright purple wax pool, and wax blobs that slowly rise and fall
         const lavaLampHtml = (x, y, z) => {
-            const N = 24, DEG = 180 / Math.PI, L0 = -50;
+            const N = 18, DEG = 180 / Math.PI, L0 = -50;
             const lathe = (rb, rt, hh, yb, bgf) => { const tilt = Math.atan((rt - rb) / hh) * DEG, slant = Math.sqrt(hh * hh + (rt - rb) * (rt - rb)), rm = (rt + rb) / 2, w = (2 * Math.max(rb, rt) * Math.tan(Math.PI / N) * 1.03).toFixed(2); let o = ''; for (let k = 0; k < N; k++) { const th = k * 360 / N, c = Math.cos((th + L0) / DEG); o += '<div class="bx" style="transform:rotateY(' + th + 'deg)">' + plane(w, slant.toFixed(2), 0, yb - hh / 2, rm.toFixed(2), -tilt.toFixed(2), 0, 'lvp', '', bgf(c, th)) + '</div>'; } return o; };
             const cu = c => { const l = .66 + .6 * Math.max(0, c) + .12 * c * c; const R = Math.min(255, Math.round(222 * l)), G = Math.min(255, Math.round(138 * l)), B = Math.min(255, Math.round(80 * l)); return 'background:linear-gradient(rgba(255,240,215,' + (.2 + .3 * Math.max(0, c)).toFixed(2) + '),rgba(0,0,0,.18)),rgb(' + R + ',' + G + ',' + B + ');'; };
             const gl = (c, th) => 'background:' + (c > .8 ? 'linear-gradient(90deg,transparent 30%,rgba(255,255,255,.55) 42%,transparent 56%),' : '') + 'linear-gradient(90deg,rgba(255,255,255,.22),rgba(255,255,255,0) 40%,rgba(60,0,130,.25)),rgba(172,62,255,' + (.46 + .1 * (1 - c)).toFixed(2) + ');';
@@ -4237,8 +4243,8 @@
             closePick();
         };
         const toggleGuide = on => { dh.classList.toggle('guide', on == null ? !dh.classList.contains('guide') : on); if (dh.classList.contains('guide')) buildGuide(); };
-        const openRoom = () => { if (!st) return; closeShop(); returnScreen(); buildRoom(); takeScreen(); toggleGuide(false); Object.assign(V, V0); applyV(); dh.classList.add('show'); body.classList.remove('tv-spot'); try { localStorage.setItem('thetube.roomtip.v1', '1'); } catch (e) { } const rb0 = $('tcRoomBtn'); if (rb0) rb0.classList.add('seen'); const b = dh.querySelector('[data-d=close]'); try { b.focus({ preventScroll: true }); } catch (e) { } };
-        const closeRoom = () => { dh.cu = false; closePick(); cancelAnimationFrame(tw); dh.classList.remove('show'); dh.classList.remove('guide'); returnScreen(); };
+        const openRoom = () => { if (!st) return; closeShop(); returnScreen(); buildRoom(); takeScreen(); toggleGuide(false); Object.assign(V, V0); applyV(); dh.classList.add('show'); body.classList.add('in-room'); body.classList.remove('tv-spot'); try { localStorage.setItem('thetube.roomtip.v1', '1'); } catch (e) { } const rb0 = $('tcRoomBtn'); if (rb0) rb0.classList.add('seen'); const b = dh.querySelector('[data-d=close]'); try { b.focus({ preventScroll: true }); } catch (e) { } };
+        const closeRoom = () => { dh.cu = false; closePick(); cancelAnimationFrame(tw); dh.classList.remove('show'); dh.classList.remove('guide'); body.classList.remove('in-room'); returnScreen(); clearTimeout(closeRoom.t); closeRoom.t = setTimeout(() => { if (!dh.classList.contains('show') && !moved) roomEl.innerHTML = ''; }, 600); };
         const pts = new Map(); let pinch0 = 0, z0 = 0;
         // volume buttons: the same steps, click sound, TV volume overlay, toast and saved setting as the knob in 2D mode (one click up or down, 0 to 100%)
         const syncPwr = () => dh.classList.toggle('tvon', $('pwrBtn').classList.contains('on')); syncPwr(); try { new MutationObserver(syncPwr).observe($('pwrBtn'), { attributes: true, attributeFilter: ['class'] }); } catch (e) { }
