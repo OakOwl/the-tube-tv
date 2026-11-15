@@ -921,7 +921,7 @@
         #btnCatalogue:hover { background: #ffb938; border-color: #ffb938; color: #120c00; }
 
         /* ================= LIVING ROOM THEME (v29) ================= */
-        :root { --glow: rgba(255,140,40,.42); }
+        :root { --glow: rgba(0,0,0,.62); }
         body {
             background:
                 radial-gradient(ellipse 55% 45% at 10% -5%, rgba(255,175,70,.20), transparent 70%),
@@ -988,7 +988,7 @@
         /* hover spotlight: the TV lifts, the rest of the room blurs */
         @media (hover: hover) and (min-width: 861px) {
             body.tv-spot .tv-shell { transform: translateY(-8px) scale(1.035); box-shadow: var(--skinring, 0 0 0 0 transparent), 4px 4px 0 var(--skin-d1, #707068), 8px 8px 0 var(--skin-d2, #606058), 0 0 90px 10px var(--glow), 0 40px 90px rgba(0,0,0,.92), inset 0 1px 0 rgba(255,255,255,.5), inset -2px -2px 0 rgba(0,0,0,.2); }
-            body.tv-spot .topbar, body.tv-spot .ep-sidebar, body.tv-spot .guide-col { filter: blur(4px) brightness(.5); }
+            body.tv-spot .topbar, body.tv-spot .ep-sidebar, body.tv-spot .guide-col { filter: blur(4px) brightness(.4); }
         }
         @media (max-width: 860px) { .tv-shell::after { display: none; } .tv-plate { display: none; } .guide-hdr { transform: none; } }
         @media (prefers-reduced-motion: reduce) { .tv-shell, .tv-shell.crt-flicker { transition: none; animation: none; } }
@@ -1761,7 +1761,7 @@
             .stk3d:hover, .stk3d:focus-visible { animation: none; transform: rotate(3deg) scale(1.09); filter: drop-shadow(0 12px 10px rgba(0,0,0,.6)) drop-shadow(0 0 16px rgba(63,240,208,.45)); }
             .stk3d:active { transform: rotate(1deg) scale(.96); }
             .stk3d:focus-visible { outline: 2px solid var(--amber); outline-offset: 2px; border-radius: 12px; }
-            body.lights-down .stk3d { opacity: 0; pointer-events: none; } body.room-dim .stk3d { opacity: .22; } body.room-dim .stk3d:hover { opacity: 1; }
+            body.lights-down .stk3d { opacity: 0; pointer-events: none; } body.tv-spot .stk3d { animation: none; filter: blur(4px) brightness(.4); } body.room-dim .stk3d { opacity: .22; } body.room-dim .stk3d:hover { opacity: 1; }
         }
         @keyframes stk3dBob { 0%,100% { transform: rotate(-3deg) translateY(0); } 50% { transform: rotate(-1.5deg) translateY(-5px); } }
         @media (prefers-reduced-motion: reduce) { .stk3d { animation: none !important; } }
@@ -3339,12 +3339,12 @@
         // Any movement brings the room lights back. The pull-cord / "LIGHTS UP" pill / Esc are the separate, manual curtains mode.
         let idleT, quietUntil = 0, dimAt = 0; const vid = document.getElementById('vid');
         const setRoom = on => {
-            if (on) { document.documentElement.style.setProperty('--glow', 'rgba(255,140,40,.42)'); dimAt = Date.now(); }
+            if (on) { document.documentElement.style.setProperty('--glow', 'rgba(0,0,0,.62)'); dimAt = Date.now(); }
             body.classList.toggle('room-dim', on);
         };
         window.toggleCinema = function (on) {
             const next = on === undefined ? !body.classList.contains('lights-down') : !!on;
-            if (next) { document.documentElement.style.setProperty('--glow', 'rgba(255,140,40,.42)'); body.classList.remove('tv-spot', 'room-dim'); clearTimeout(idleT); }
+            if (next) { document.documentElement.style.setProperty('--glow', 'rgba(0,0,0,.62)'); body.classList.remove('tv-spot', 'room-dim'); clearTimeout(idleT); }
             else quietUntil = Date.now() + 12000;
             body.classList.toggle('lights-down', next);
             const pill = document.getElementById('btnLightsUp'); if (pill) pill.setAttribute('aria-hidden', next ? 'false' : 'true');
