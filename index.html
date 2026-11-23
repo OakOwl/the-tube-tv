@@ -3013,6 +3013,10 @@
 
         function playFile(show, files, idx, resumeTimestamp, autoPlay, liveSeekTime, isBonusEp) {
             const f = files[idx]; if (!f) return;
+            const airing = liveSeekTime !== null && liveSeekTime !== undefined;
+            const trackProgress = () => !liveMode && !airing && active && active.id === show.id;
+            if (trackProgress()) { const prev = getResumePosition(show.id); if (!prev || prev.episode !== idx || !(resumeTimestamp > 0) || prev.timestamp < resumeTimestamp) saveResumePosition(show.id, idx, resumeTimestamp || (prev && prev.episode === idx ? prev.timestamp : 0)); }
+            window._saveNow = () => { if (trackProgress() && vid.currentTime > 5 && vid.duration && vid.currentTime < vid.duration - 5) saveResumePosition(show.id, idx, vid.currentTime); };
             // Increment token to cancel any stale oncanplay from previous plays
             const token = ++playToken;
             window._activeFiles = files;
@@ -3040,9 +3044,7 @@
             vid.load();
             // Setup resume saving
             window._saveInterval = setInterval(() => {
-                if (vid.currentTime && vid.duration && !vid.paused && vid.currentTime < vid.duration - 5) {
-                    localStorage.setItem(`thetube_resume_${show.id}`, JSON.stringify({ episode: idx, timestamp: Math.floor(vid.currentTime) }));
-                }
+                if (!vid.paused) window._saveNow();
                 // Preload what comes next once the episode is nearly over (~2.5 min out)
                 const rem = vid.duration - vid.currentTime;
                 if (isFinite(rem) && rem > 0 && rem < 150 && !vid.paused) {
@@ -3052,11 +3054,7 @@
                 }
             }, 10000);
             // Create a named listener so we can remove it later
-            const onPause = () => {
-                if (vid.currentTime && vid.duration && vid.currentTime < vid.duration - 5) {
-                    localStorage.setItem(`thetube_resume_${show.id}`, JSON.stringify({ episode: idx, timestamp: Math.floor(vid.currentTime) }));
-                }
-            };
+            const onPause = () => window._saveNow();
             vid.addEventListener('pause', onPause);
             window._onPauseListener = onPause;
 
@@ -3127,7 +3125,7 @@
                     vid.removeEventListener('pause', window._onPauseListener);
                     window._onPauseListener = null;
                 }
-                if (!liveMode) clearResumePosition(show.id);
+                if (trackProgress()) { if (idx + 1 < files.length) saveResumePosition(show.id, idx + 1, 0); else clearResumePosition(show.id); }
                 if (liveMode) {
                     const scheduleTimes = getCurrentScheduleTimes();
                     if (scheduleTimes && scheduleTimes.showId === show.id) {
@@ -3190,6 +3188,8 @@
             };
         }
 
+        // personal progress: only for shows you pick yourself, never for the live/airing schedule
+        function saveResumePosition(showId, ep, t) { try { localStorage.setItem(`thetube_resume_${showId}`, JSON.stringify({ episode: ep, timestamp: Math.max(0, Math.floor(t || 0)), at: Date.now() })); } catch (e) { } }
         function clearResumePosition(showId) { localStorage.removeItem(`thetube_resume_${showId}`); }
         function getResumePosition(showId) { const saved = localStorage.getItem(`thetube_resume_${showId}`); if (saved) try { return JSON.parse(saved); } catch (e) { return null; } return null; }
         function getScheduleEntryForShow(showId) { const cur = getCurrentShow(); return cur.id === showId ? cur : null; }
@@ -3206,6 +3206,8 @@
             return { seekTime: Math.max(0, secsAired), tooLate: false };
         }
 
+        addEventListener('pagehide', () => { try { window._saveNow && window._saveNow(); } catch (e) { } });
+        document.addEventListener('visibilitychange', () => { if (document.hidden) try { window._saveNow && window._saveNow(); } catch (e) { } });
         async function autoLiveNow(showId, autoPlay = true, randomEpisode = false) {
             if (!tvOn) return;
             if (liveMode) currentLiveShowId = showId;
@@ -3230,10 +3232,12 @@
                         showToast(`📺 DAILY EPISODE ${episodeIndex + 1}/${files.length}`);
                     }
                 } else {
-                    const stored = localStorage.getItem(`thetube_episode_${showId}`);
-                    if (stored !== null) episodeIndex = parseInt(stored) || 0;
                     const resumeData = getResumePosition(showId);
-                    if (resumeData && resumeData.episode === episodeIndex && resumeData.timestamp > 30) resumeTimestamp = resumeData.timestamp;
+                    if (resumeData && Number.isInteger(resumeData.episode) && resumeData.episode >= 0 && resumeData.episode < files.length) {
+                        episodeIndex = resumeData.episode;
+                        resumeTimestamp = resumeData.timestamp > 15 ? resumeData.timestamp : 0;
+                        showToast(`📺 RESUMING ${s.name} — Episode ${episodeIndex + 1}`);
+                    }
                 }
             }
             if (window._saveInterval) clearInterval(window._saveInterval);
