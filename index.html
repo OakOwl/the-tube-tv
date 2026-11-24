@@ -2234,7 +2234,8 @@
             { name: "90's Commercials Vol. 570 (1991 Fox)", archiveId: "90s-commercials-vol.-570" },
             { name: "Fox Sports — Weekend Promo (1999)", archiveId: "1999-promo-for-weekend-programming-on-fox-sports" },
             { name: "Sizzler Restaurant (1988)", archiveId: "1988-commercial-for-sizzler" },
-            { name: "M&M's Chocolate (1988)", archiveId: "1988-commercial-for-m-ms" }
+            { name: "M&M's Chocolate (1988)", archiveId: "1988-commercial-for-m-ms" },
+            { name: "90s Commercials", archiveId: "Collectionof90sCommercials", all: true }   // ~120 single ads, each one its own playlist entry
         ];
 
         let commercialPlaylist = [];
@@ -2247,6 +2248,12 @@
         let wasPlayingBeforeCommercial = false;
         let commercialsLoaded = false;
 
+        // random order every time round: shuffle, play through, then reshuffle (never the same ad twice in a row)
+        function shuffleAds() {
+            const last = commercialPlaylist[commercialPlaylist.length - 1];
+            for (let i = commercialPlaylist.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [commercialPlaylist[i], commercialPlaylist[j]] = [commercialPlaylist[j], commercialPlaylist[i]]; }
+            if (commercialPlaylist.length > 1 && commercialPlaylist[0] === last) [commercialPlaylist[0], commercialPlaylist[1]] = [commercialPlaylist[1], commercialPlaylist[0]];
+        }
         async function fetchCommercials() {
             if (commercialsLoaded) return;
             for (const source of commercialSources) {
@@ -2260,7 +2267,10 @@
                             return (name.endsWith('.mp4') || name.endsWith('.ia.mp4')) && !name.includes('thumb');
                         })
                         .sort((a, b) => parseInt(a.size || 0) - parseInt(b.size || 0));
-                    if (videoFiles.length > 0) {
+                    if (source.all && videoFiles.length) {
+                        videoFiles.forEach(vf => commercialPlaylist.push({ name: source.name, url: `https://archive.org/download/${source.archiveId}/${encodeURIComponent(vf.name)}` }));
+                        console.log(`✅ Loaded ${videoFiles.length} commercials from ${source.name}`);
+                    } else if (videoFiles.length > 0) {
                         const videoFile = videoFiles[0];
                         const videoUrl = `https://archive.org/download/${source.archiveId}/${encodeURIComponent(videoFile.name)}`;
                         commercialPlaylist.push({ name: source.name, url: videoUrl });
@@ -2275,11 +2285,12 @@
             if (commercialPlaylist.length === 0) {
                 commercialPlaylist.push({ name: "Fallback Commercial", url: "https://archive.org/download/SilentFilmFrenzy/silent_film_frenzy_512kb.mp4" });
             }
-            for (let i = commercialPlaylist.length - 1; i > 0; i--) {
+            shuffleAds();
+            if (false) for (let i = commercialPlaylist.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
                 [commercialPlaylist[i], commercialPlaylist[j]] = [commercialPlaylist[j], commercialPlaylist[i]];
             }
-            currentCommercialIndex = Math.floor(Math.random() * commercialPlaylist.length);
+            currentCommercialIndex = 0;
             commercialsLoaded = true;
             console.log(`📺 Loaded ${commercialPlaylist.length} commercials`);
         }
@@ -2714,7 +2725,7 @@
         }
         function releasePre() { if (_preVid) { try { _preVid.pause(); _preVid.removeAttribute('src'); _preVid.load(); } catch (e) { } } _preUrl = ''; }
         function consumePre(url) { if (_preUrl && url === _preUrl) setTimeout(() => { if (_preUrl === url) releasePre(); }, 15000); }
-        function peekPreloadAd() { if (typeof commercialPlaylist !== 'undefined' && commercialPlaylist.length) { const ad = commercialPlaylist[currentCommercialIndex % commercialPlaylist.length]; if (ad) preloadMedia(ad.url); } }
+        function peekPreloadAd() { if (typeof commercialPlaylist !== 'undefined' && commercialPlaylist.length) { const ad = commercialPlaylist[currentCommercialIndex]; if (ad) preloadMedia(ad.url); } }
         function releaseMedia(v) { try { v.pause(); v.removeAttribute('src'); v.load(); } catch (e) { } }
         function stopCommercial() {
             if (commercialTimeout) { clearTimeout(commercialTimeout); commercialTimeout = null; }
@@ -2751,7 +2762,8 @@
             if (commercialPlaylist.length === 0) {
                 return { name: "Fallback Commercial", url: "https://archive.org/download/SilentFilmFrenzy/silent_film_frenzy_512kb.mp4" };
             }
-            const ad = commercialPlaylist[currentCommercialIndex % commercialPlaylist.length];
+            if (currentCommercialIndex >= commercialPlaylist.length) { shuffleAds(); currentCommercialIndex = 0; }
+            const ad = commercialPlaylist[currentCommercialIndex];
             currentCommercialIndex++;
             return ad;
         }
