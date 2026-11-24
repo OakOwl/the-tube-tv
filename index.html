@@ -1797,6 +1797,46 @@
         #dh .lpool { background: radial-gradient(closest-side,rgba(255,226,150,.42),rgba(255,210,120,.16) 55%,transparent); transition: opacity .9s ease; } #dh.lamp-off .lpool { opacity: 0; }
         #dh .dh-dim { position: absolute; inset: 0; z-index: 2; pointer-events: none; opacity: 0; transition: opacity 1.4s cubic-bezier(.4,0,.2,1); background: radial-gradient(ellipse 60% 55% at 50% 46%, rgba(4,6,22,.18), rgba(3,4,16,.62)); } #dh.lamp-off .dh-dim { opacity: 1; }
         #dh .dh-dim::after { content: ''; position: absolute; inset: 0; opacity: 0; transition: opacity 1.8s cubic-bezier(.4,0,.2,1); background: radial-gradient(ellipse 46% 42% at var(--vx,48%) var(--vy,46%), rgba(0,0,0,0) 0, rgba(1,2,8,.3) 42%, rgba(1,2,8,.74) 74%, rgba(0,1,5,.93) 100%); } #dh.drawn.lamp-off .dh-dim::after { opacity: 1; }
+
+        /* ===== avatars ===== */
+        #dh .avc { pointer-events: none; }
+        #dh .av-t svg, #dh .av-l svg, #dh .av-s svg { position: absolute; left: 0; top: 0; width: 100%; height: 100%; overflow: visible; }
+        #dh .av .av-t svg { display: none; transform-origin: 50% 86%; animation: avBreath 4.6s ease-in-out infinite; }
+        #dh .av.v-b .av-t svg.avb { display: block; }
+        #dh .av-s, #dh .av-fr, #dh .av:not(.v-b) .av-t { display: none; }
+        #dh .av.v-f .av-fr { display: block; }
+        #dh .av-fr .avlp, #dh .av-fr .avtp { position: absolute; left: 0; right: 0; }
+        #dh .av-fr .avlp { right: auto; } #dh .av-fr .avtp { top: 0; }
+        #dh .av-fr svg { position: absolute; left: 0; top: 0; width: 100%; height: 100%; overflow: visible; }
+        #dh .av-fr .avtp svg { transform-origin: 50% 86%; animation: avBreath 4.6s ease-in-out infinite; }
+        #dh .av.v-s .av-s { display: block; }
+        #dh .av.mir { --mx: -1; }
+        #dh .av-n { display: flex; justify-content: center; align-items: flex-end; }
+        #dh .av-n span { font: 400 15px/1 'VT323', monospace; letter-spacing: .06em; color: #ffe9b0; background: rgba(18,12,4,.82); border: 1px solid rgba(196,125,14,.7); border-radius: 3px; padding: 2px 6px 1px; white-space: nowrap; }
+        #dh .av-me .av-n span { color: #1a1000; background: #ffc83c; border-color: #fff3b0; }
+        @keyframes avBreath { 0%, 100% { transform: scaleY(1); } 50% { transform: scaleY(1.014); } }
+        @media (prefers-reduced-motion: reduce) { #dh .av-t svg, #dh .av-fr .avtp svg { animation: none; } }
+        #dh .av-panel { position: absolute; z-index: 7; right: 14px; top: 62px; bottom: 74px; width: 340px; display: none; flex-direction: column; box-sizing: border-box; background: rgba(18,12,4,.95); border: 1px solid #c47d0e; border-radius: 6px; box-shadow: 0 10px 34px rgba(0,0,0,.7), 0 0 16px rgba(255,140,40,.22); font-family: 'VT323', monospace; color: #ffe2a8; overflow: hidden; }
+        #dh.avp .av-panel { display: flex; }
+        #dh.avp .dh-me { background: #ffc83c; color: #1a1000; }
+        #dh.visiting .dh-me { display: none; }
+        #dh .avp-hd { display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; font-size: 22px; letter-spacing: .08em; color: #ffd36a; border-bottom: 1px solid rgba(196,125,14,.4); }
+        #dh .avp-x { font: inherit; font-size: 20px; color: #ffd36a; background: none; border: 0; cursor: pointer; padding: 0 4px; }
+        #dh .avp-stage { flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; padding: 10px 10px 6px; background: radial-gradient(ellipse at 50% 70%, rgba(255,190,90,.18), transparent 70%), linear-gradient(#2a1a0a, #120b04); }
+        #dh .avp-fig { position: relative; width: 150px; height: 230px; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; }
+        #dh .avp-fig svg { width: 128px; height: auto; flex: 0 0 auto; overflow: visible; }
+        #dh .avp-fig svg.avs { width: 140px; }
+        #dh .avp-fig svg.avp-lap { width: 118px; margin-top: -6px; }
+        #dh .avp-vb { display: flex; flex-wrap: wrap; justify-content: center; gap: 5px; margin-top: 8px; }
+        #dh .avp-vb button, #dh .avp-ch { font: 400 16px/1 'VT323', monospace; letter-spacing: .05em; color: #ffd36a; background: linear-gradient(#2a1a0a, #160d05); border: 1px solid #7a5a1c; border-radius: 3px; padding: 5px 8px; cursor: pointer; }
+        #dh .avp-vb button.on, #dh .avp-ch.on { background: #ffc83c; color: #1a1000; border-color: #fff3b0; }
+        #dh .avp-opts { flex: 1 1 auto; overflow-y: auto; overscroll-behavior: contain; padding: 4px 12px 10px; }
+        #dh .avp-g { margin-top: 8px; } #dh .avp-gt { font-size: 15px; letter-spacing: .1em; color: #c9a86a; margin-bottom: 4px; }
+        #dh .avp-row { display: flex; flex-wrap: wrap; gap: 5px; }
+        #dh .avp-sw { width: 26px; height: 26px; border-radius: 50%; border: 2px solid rgba(0,0,0,.55); box-shadow: 0 0 0 1px #7a5a1c; cursor: pointer; padding: 0; }
+        #dh .avp-sw.on { box-shadow: 0 0 0 2px #ffc83c, 0 0 8px rgba(255,200,60,.7); }
+        #dh .avp-ft { padding: 8px 12px; font-size: 14px; color: #a88a5a; border-top: 1px solid rgba(196,125,14,.3); }
+        @media (max-width: 639px) { #dh .av-panel { left: 8px; right: 8px; width: auto; top: auto; bottom: 70px; height: 62vh; } #dh .avp-fig { height: 150px; width: 110px; } #dh .avp-fig svg { width: 84px; } #dh .avp-fig svg.avs { width: 96px; } #dh .avp-fig svg.avp-lap { width: 78px; } }
         #dh .dh-ui, #dh .dh-remote, #dh .dh-drawer, #dh .dh-hint, #dh .dh-pick { z-index: 5; }
         #dh .stand { background: repeating-linear-gradient(92deg, rgba(0,0,0,.16) 0 2px, transparent 2px 9px), linear-gradient(#9a6630, #6e4620); }
         #dh .sp { position: absolute; left: 0; top: 0; filter: drop-shadow(0 8px 8px rgba(0,0,0,.45)); }
@@ -4269,7 +4309,7 @@
         // The real TV screen (video, static, effects, on-screen text) is moved into the 3D TV while the room is open, so you watch the live picture there.
         const dh = document.createElement('div'); dh.id = 'dh'; dh.setAttribute('role', 'dialog'); dh.setAttribute('aria-modal', 'true'); dh.setAttribute('aria-label', 'Your room in 3D');
         dh.innerHTML = '<div class="dh-stage"><div class="dh-cam"><div class="dh-room"></div></div></div>'
-            + '<div class="dh-ui"><span class="dh-title">🏠 ROOM</span><button class="dh-b dh-cb" data-act="cord" type="button" aria-label="Curtains"><span class="cb-c">🎭 CURTAINS</span><span class="cb-o">☀ OPEN CURTAINS</span></button><button class="dh-b dh-lb" data-act="led" type="button" aria-label="LED colour">💡 LED</button><button class="dh-b" data-d="watch" type="button">📺 WATCH</button><button class="dh-b" data-d="in" type="button" aria-label="Zoom in">＋</button><button class="dh-b" data-d="out" type="button" aria-label="Zoom out">－</button><button class="dh-b" data-d="reset" type="button">ROOM</button><button class="dh-b" data-d="close" type="button">✕ EXIT</button></div>'
+            + '<div class="dh-ui"><span class="dh-title">🏠 ROOM</span><button class="dh-b dh-cb" data-act="cord" type="button" aria-label="Curtains"><span class="cb-c">🎭 CURTAINS</span><span class="cb-o">☀ OPEN CURTAINS</span></button><button class="dh-b dh-lb" data-act="led" type="button" aria-label="LED colour">💡 LED</button><button class="dh-b dh-me" data-act="me" type="button" aria-label="Customise your avatar">👤 ME</button><button class="dh-b" data-d="watch" type="button">📺 WATCH</button><button class="dh-b" data-d="in" type="button" aria-label="Zoom in">＋</button><button class="dh-b" data-d="out" type="button" aria-label="Zoom out">－</button><button class="dh-b" data-d="reset" type="button">ROOM</button><button class="dh-b" data-d="close" type="button">✕ EXIT</button></div>'
             + '<div class="dh-remote"><button class="dh-b" data-r="pwrBtn" type="button" aria-label="Power">⏻</button><button class="dh-b" data-r="tRew" type="button" aria-label="Rewind 15 seconds">⏪</button><button class="dh-b" data-r="tPlay" type="button" aria-label="Play or pause">⏯</button><button class="dh-b" data-r="tFF" type="button" aria-label="Forward 15 seconds">⏩</button><button class="dh-b" data-v="-1" type="button" aria-label="Volume down">🔉</button><button class="dh-b" data-v="1" type="button" aria-label="Volume up">🔊</button><button class="dh-b" data-d="guide" type="button">📋 GUIDE</button></div>'
             + '<div class="dh-drawer" role="region" aria-label="Programme guide"><div class="dh-dh">PROGRAMME GUIDE <button class="dh-x" data-d="guide" type="button" aria-label="Close guide">✕</button></div><div class="dh-list"></div></div>'
             + '<div class="dh-sun"></div><div class="dh-dim"></div><div class="dh-empty"></div><div class="dh-hint">DRAG TO LOOK AROUND · SCROLL OR PINCH TO ZOOM · TAP WALLS OR CURTAINS TO RECOLOUR · ESC TO EXIT</div>';
@@ -4280,7 +4320,7 @@
         const baseSc = () => Math.max(.5, Math.min(1.35, Math.min(window.innerWidth, window.innerHeight * 1.5) / (window.innerWidth < 640 ? 1500 : 1470)));
         const applyV = () => {
             clampV(); cam.style.setProperty('--sc', (baseSc() * Math.exp(V.z / 500)).toFixed(4));
-            cam.style.setProperty('--y', V.y.toFixed(2) + 'deg'); cam.style.setProperty('--p', V.p.toFixed(2) + 'deg'); if (window.__impUpdate) window.__impUpdate(); cam.style.setProperty('--ty', V.ty.toFixed(0) + 'px');
+            cam.style.setProperty('--y', V.y.toFixed(2) + 'deg'); cam.style.setProperty('--p', V.p.toFixed(2) + 'deg'); if (window.__impUpdate) window.__impUpdate(); if (window.__avView) window.__avView(); cam.style.setProperty('--ty', V.ty.toFixed(0) + 'px');
             dh.classList.toggle('near', !!dh.cu && V.z > 230);
         };
         let tw = 0;
@@ -4312,6 +4352,243 @@
             s += '<div class="bx" style="transform:translate3d(0,' + (cy - 135) + 'px,-250px) scale3d(.68,.68,.68)">' + box(46, 10, 34, 0, -4, 0, 'ant', '', 'background:linear-gradient(#5a5d64,#2a2b2f);') + box(16, 7, 16, 0, -12, 0, 'ant', '', 'background:linear-gradient(90deg,#8d9199,#f4f6fa 45%,#a4a8b0);') + '<div class="bx" style="transform:translate3d(0,-14px,0)">' + rod(-30) + rod(30) + '</div></div>';
             return s;
         };
+// ===== Paper-doll avatars: layered SVG, three views (front / back / side), two poses (sofa / floor) =====
+const AV = (() => {
+    const SKIN = ['#fde3cf', '#f6caa6', '#e5ab80', '#c98a5c', '#99613f', '#65402b'];
+    const HAIRC = ['#1f1611', '#4b2e1c', '#8a5a2b', '#d4a043', '#f3d985', '#c2452a', '#e9e5dd', '#ff7cc0', '#58b8ff', '#7ad17a'];
+    const COLS = ['#e63946', '#f4a261', '#f2cc5b', '#2a9d8f', '#1d6f5a', '#3a86ff', '#264b8f', '#8338ec', '#ff5fa2', '#f4efe2', '#2b2d42', '#7a5c44'];
+    const OPT = {
+        hair: ['short', 'quiff', 'curly', 'long', 'bob', 'buns', 'bald'],
+        eyes: ['dot', 'happy', 'sparkle', 'sleepy'],
+        mouth: ['smile', 'grin', 'o', 'smirk'],
+        glasses: ['none', 'round', 'square', 'shades'],
+        beard: ['none', 'stubble', 'tache', 'beard'],
+        top: ['tee', 'hoodie', 'stripes', 'varsity', 'knit'],
+        bot: ['jeans', 'joggers', 'shorts', 'skirt'],
+        hat: ['none', 'beanie', 'cap', 'bucket', 'phones', 'party'],
+        cheeks: ['blush', 'freckles', 'none']
+    };
+    const DEF = { skin: 1, hair: 'short', hc: 1, eyes: 'dot', mouth: 'smile', glasses: 'none', beard: 'none', top: 'hoodie', tc: 0, tc2: 9, bot: 'jeans', bc: 6, sc: 9, hat: 'none', hatc: 2, cheeks: 'blush' };
+    const OL = '#2b1b12';
+    const norm = c => { const o = Object.assign({}, DEF); if (c && typeof c === 'object') Object.keys(DEF).forEach(k => { const v = c[k]; if (v === undefined) return; if (OPT[k] ? OPT[k].includes(v) : (Number.isInteger(v) && v >= 0 && v < 12)) o[k] = v; }); return o; };
+    const shade = (hex, f) => { const n = parseInt(hex.slice(1), 16); let r = n >> 16, g = (n >> 8) & 255, b = n & 255; const m = f < 0 ? 0 : 255, t = Math.abs(f); r = Math.round(r + (m - r) * t); g = Math.round(g + (m - g) * t); b = Math.round(b + (m - b) * t); return '#' + ((1 << 24) | (r << 16) | (g << 8) | b).toString(16).slice(1); };
+    let uidN = 0;
+    const P = (d, fill, x) => '<path d="' + d + '" fill="' + fill + '"' + (x || '') + '/>';
+    const C = (cx, cy, r, fill, x) => '<circle cx="' + cx + '" cy="' + cy + '" r="' + r + '" fill="' + fill + '"' + (x || '') + '/>';
+    const E = (cx, cy, rx, ry, fill, x) => '<ellipse cx="' + cx + '" cy="' + cy + '" rx="' + rx + '" ry="' + ry + '" fill="' + fill + '"' + (x || '') + '/>';
+    const NS = ' stroke="none"';
+    const L = (d, w, col) => '<path d="' + d + '" fill="none" stroke="' + (col || OL) + '" stroke-width="' + (w || 1.3) + '" stroke-linecap="round" stroke-linejoin="round"/>';
+
+    // ---------- head parts (head centre hx,hy, radius 20) ----------
+    function hairBack(c, hx, hy, view) {
+        const h = HAIRC[c.hc], d = shade(h, -.25);
+        switch (c.hair) {
+            case 'long': return view === 'side' ? P(`M${hx - 2} ${hy - 18} Q${hx + 26} ${hy - 14} ${hx + 24} ${hy + 22} Q${hx + 22} ${hy + 46} ${hx + 12} ${hy + 50} L${hx - 2} ${hy + 46} Q${hx + 6} ${hy + 20} ${hx - 2} ${hy - 18}Z`, h)
+                : P(`M${hx - 21} ${hy - 4} Q${hx - 25} ${hy + 40} ${hx - 16} ${hy + 50} L${hx + 16} ${hy + 50} Q${hx + 25} ${hy + 40} ${hx + 21} ${hy - 4} Q${hx} ${hy - 24} ${hx - 21} ${hy - 4}Z`, h) + L(`M${hx - 12} ${hy + 30} Q${hx - 14} ${hy + 42} ${hx - 10} ${hy + 48} M${hx + 10} ${hy + 30} Q${hx + 13} ${hy + 42} ${hx + 9} ${hy + 48}`, .8, d);
+            case 'bob': return view === 'side' ? P(`M${hx - 4} ${hy - 19} Q${hx + 24} ${hy - 16} ${hx + 23} ${hy + 6} L${hx + 22} ${hy + 22} L${hx + 4} ${hy + 22} Q${hx + 6} ${hy} ${hx - 4} ${hy - 19}Z`, h)
+                : P(`M${hx - 23} ${hy + 20} L${hx - 22} ${hy - 2} Q${hx} ${hy - 26} ${hx + 22} ${hy - 2} L${hx + 23} ${hy + 20} Q${hx} ${hy + 24} ${hx - 23} ${hy + 20}Z`, h);
+            case 'curly': { let s = ''; const n = view === 'side' ? 7 : 11; for (let i = 0; i < n; i++) { const a = Math.PI * (view === 'side' ? (-.7 + i * .25) : (.9 + i * .135)) , r = 21; const x = hx + Math.cos(a) * r * (view === 'side' ? -1 : 1), y = hy - 2 + Math.sin(a) * -r * .95; s += C(x.toFixed(1), y.toFixed(1), 8.5, h); } return s + (view === 'side' ? C(hx + 10, hy - 6, 16, h) : C(hx, hy - 4, 19, h)); }
+            case 'buns': return view === 'side' ? C(hx + 6, hy - 22, 8.5, h) + L(`M${hx + 1} ${hy - 25} q4 4 10 2`, .8, d) : C(hx - 15, hy - 18, 8.5, h) + C(hx + 15, hy - 18, 8.5, h) + L(`M${hx - 20} ${hy - 20} q4 5 10 3 M${hx + 10} ${hy - 20} q4 5 10 3`, .8, d);
+            default: return '';
+        }
+    }
+    function hairFront(c, hx, hy, view) {
+        const h = HAIRC[c.hc], hl = shade(h, .25), d = shade(h, -.25), cap = view === 'side'
+            ? `M${hx - 15} ${hy - 6} Q${hx - 16} ${hy - 22} ${hx + 2} ${hy - 21} Q${hx + 20} ${hy - 20} ${hx + 21} ${hy + 2} L${hx + 14} ${hy + 6} Q${hx + 8} ${hy - 6} ${hx + 2} ${hy - 6} Q${hx - 6} ${hy - 12} ${hx - 15} ${hy - 6}Z`
+            : `M${hx - 20} ${hy + 2} Q${hx - 21} ${hy - 21} ${hx} ${hy - 21} Q${hx + 21} ${hy - 21} ${hx + 20} ${hy + 2} Q${hx + 16} ${hy - 9} ${hx + 6} ${hy - 9} Q${hx - 4} ${hy - 5} ${hx - 13} ${hy - 9} Q${hx - 18} ${hy - 6} ${hx - 20} ${hy + 2}Z`;
+        const back = view === 'back';
+        const capB = `M${hx - 20.5} ${hy + 6} Q${hx - 22} ${hy - 21} ${hx} ${hy - 21} Q${hx + 22} ${hy - 21} ${hx + 20.5} ${hy + 6} Q${hx + 12} ${hy + 15} ${hx} ${hy + 15} Q${hx - 12} ${hy + 15} ${hx - 20.5} ${hy + 6}Z`;
+        switch (c.hair) {
+            case 'bald': return back ? '' : P(`M${hx - 8} ${hy - 15} q5 -3 10 -2`, 'none', ' stroke="#fff" stroke-opacity=".45" stroke-width="2" stroke-linecap="round"');
+            case 'short': return back ? P(capB, h) + L(`M${hx - 8} ${hy - 12} q2 10 0 20 M${hx + 6} ${hy - 14} q3 10 0 22`, .8, d)
+                : P(cap, h) + L(view === 'side' ? `M${hx - 4} ${hy - 16} q8 -2 14 4` : `M${hx - 10} ${hy - 15} q8 -4 18 0`, 1.4, hl);
+            case 'quiff': return back ? P(capB, h) + P(`M${hx - 12} ${hy - 18} Q${hx} ${hy - 30} ${hx + 12} ${hy - 18}Z`, h)
+                : view === 'side' ? P(cap, h) + P(`M${hx - 17} ${hy - 12} Q${hx - 22} ${hy - 30} ${hx - 2} ${hy - 30} Q${hx + 12} ${hy - 29} ${hx + 10} ${hy - 18} Q${hx - 2} ${hy - 22} ${hx - 17} ${hy - 12}Z`, h) + L(`M${hx - 14} ${hy - 18} q6 -9 18 -8`, 1.3, hl)
+                    : P(cap, h) + P(`M${hx - 14} ${hy - 12} Q${hx - 16} ${hy - 31} ${hx + 4} ${hy - 31} Q${hx + 18} ${hy - 30} ${hx + 16} ${hy - 18} Q${hx + 6} ${hy - 24} ${hx - 2} ${hy - 16} Q${hx - 8} ${hy - 12} ${hx - 14} ${hy - 12}Z`, h) + L(`M${hx - 8} ${hy - 20} q6 -8 16 -6`, 1.3, hl);
+            case 'curly': { if (back) { let b = C(hx, hy - 2, 21.5, h); for (let i = 0; i < 9; i++) { const a = Math.PI * (1.05 + i * .11); b += C((hx + Math.cos(a) * 20).toFixed(1), (hy - 2 + Math.sin(a) * 20).toFixed(1), 7, h); } return b + L(`M${hx - 10} ${hy - 6} a4 4 0 0 1 6 0 M${hx + 2} ${hy + 4} a4 4 0 0 1 6 0 M${hx - 6} ${hy + 10} a4 4 0 0 1 6 0`, .9, d); } let s = ''; const xs = view === 'side' ? [-14, -7] : [-15, -8, 0, 8, 15]; xs.forEach((x, i) => { s += C(hx + x, hy - 13 - (i % 2 ? 3 : 0), 6.2, h); }); return s + (view === 'side' ? '' : L(`M${hx - 9} ${hy - 19} a4 4 0 0 1 6 0 M${hx + 5} ${hy - 19} a4 4 0 0 1 6 0`, .9, hl)); }
+            case 'long': return back ? P(capB, h) + L(`M${hx - 6} ${hy - 10} q-3 20 -2 54 M${hx + 6} ${hy - 10} q3 20 2 54 M${hx} ${hy - 12} v58`, .8, d)
+                : view === 'side' ? P(cap, h) + L(`M${hx - 4} ${hy - 16} q8 -2 14 4`, 1.4, hl)
+                    : P(`M${hx - 21} ${hy + 12} Q${hx - 23} ${hy - 22} ${hx + 2} ${hy - 21} Q${hx + 23} ${hy - 21} ${hx + 21} ${hy + 12} L${hx + 18} ${hy + 12} Q${hx + 17} ${hy - 6} ${hx + 6} ${hy - 9} Q${hx - 6} ${hy - 4} ${hx - 16} ${hy - 6} Q${hx - 18} ${hy} ${hx - 18} ${hy + 12}Z`, h) + L(`M${hx - 8} ${hy - 16} q10 -4 18 2`, 1.4, hl);
+            case 'bob': return back ? P(`M${hx - 23} ${hy + 20} L${hx - 22} ${hy - 2} Q${hx} ${hy - 26} ${hx + 22} ${hy - 2} L${hx + 23} ${hy + 20} Q${hx} ${hy + 24} ${hx - 23} ${hy + 20}Z`, h) + L(`M${hx - 8} ${hy - 12} v30 M${hx + 8} ${hy - 12} v30`, .8, d)
+                : view === 'side' ? P(cap, h) + P(`M${hx - 16} ${hy - 6} Q${hx - 18} ${hy - 4} ${hx - 17} ${hy + 2} L${hx - 12} ${hy - 4}Z`, h)
+                    : P(`M${hx - 20} ${hy + 4} Q${hx - 21} ${hy - 21} ${hx} ${hy - 21} Q${hx + 21} ${hy - 21} ${hx + 20} ${hy + 4} L${hx + 17} ${hy - 7} L${hx - 17} ${hy - 7}Z`, h) + L(`M${hx - 10} ${hy - 15} q8 -4 18 0`, 1.4, hl);
+            case 'buns': return back ? P(capB, h) : P(cap, h) + L(`M${hx - 10} ${hy - 15} q8 -4 18 0`, 1.4, hl);
+        }
+        return '';
+    }
+    function face(c, hx, hy, side) {
+        const sk = SKIN[c.skin], ex = side ? [hx - 9] : [hx - 8, hx + 8], ey = hy + 1;
+        let s = '';
+        if (c.cheeks === 'blush') ex.forEach(x => { s += E(x + (side ? -2 : (x < hx ? -3 : 3)), ey + 8, 4, 2.4, '#ff7a8a', ' opacity=".42"' + NS); });
+        if (c.cheeks === 'freckles') ex.forEach(x => { const o = side ? -1 : (x < hx ? -3 : 3); s += C(x + o - 2, ey + 7, .8, '#9a5a3a', NS) + C(x + o + 1, ey + 8.5, .8, '#9a5a3a', NS) + C(x + o + 2.5, ey + 6.5, .8, '#9a5a3a', NS); });
+        ex.forEach(x => {
+            if (c.eyes === 'happy') s += L(`M${x - 3} ${ey + 1} q3 -4 6 0`, 1.6);
+            else if (c.eyes === 'sleepy') s += L(`M${x - 3} ${ey} q3 3 6 0`, 1.6) + L(`M${x - 3.5} ${ey - 1} h7`, .8);
+            else if (c.eyes === 'sparkle') s += E(x, ey, 3.3, 4, OL, NS) + C(x + 1, ey - 1.5, 1.4, '#fff', NS) + C(x - 1.2, ey + 1.6, .7, '#fff', NS);
+            else s += E(x, ey, 2.4, 3, OL, NS) + C(x + .8, ey - 1, .9, '#fff', NS);
+            s += L(side ? `M${x - 3} ${ey - 6} q3 -2 6 -.5` : `M${x - 3.5} ${ey - 6.5} q3.5 ${x < hx ? -1.5 : -1.5} 7 0`, 1.2, shade(HAIRC[c.hc], -.2));
+        });
+        // nose
+        s += side ? '' : L(`M${hx - 1} ${ey + 5} q1.5 1.2 3 0`, 1.1, shade(sk, -.35));
+        // mouth
+        const mx = side ? hx - 10 : hx, my = ey + 10;
+        if (c.mouth === 'grin') s += P(`M${mx - 5} ${my - 1} Q${mx} ${my - 1.5} ${mx + 5} ${my - 1} Q${mx + 4} ${my + 5} ${mx} ${my + 5} Q${mx - 4} ${my + 5} ${mx - 5} ${my - 1}Z`, '#7a1f22', ' stroke="' + OL + '" stroke-width="1"') + P(`M${mx - 4} ${my - .6} L${mx + 4} ${my - .6} L${mx + 3.5} ${my + 1.2} L${mx - 3.5} ${my + 1.2}Z`, '#fff', NS);
+        else if (c.mouth === 'o') s += E(mx, my + 1, 2.2, 2.8, '#7a1f22', ' stroke="' + OL + '" stroke-width="1"');
+        else if (c.mouth === 'smirk') s += L(`M${mx - 4} ${my + 1} q4 2.5 7 -1.5`, 1.4);
+        else s += L(`M${mx - 4} ${my} q4 4 8 0`, 1.4);
+        // facial hair
+        const hcol = HAIRC[c.hc];
+        if (c.beard === 'stubble') s += P(side ? `M${hx - 19} ${hy + 4} Q${hx - 18} ${hy + 18} ${hx - 6} ${hy + 19} Q${hx + 4} ${hy + 18} ${hx + 8} ${hy + 10} Q${hx - 4} ${hy + 14} ${hx - 19} ${hy + 4}Z` : `M${hx - 16} ${hy + 6} Q${hx - 14} ${hy + 20} ${hx} ${hy + 20} Q${hx + 14} ${hy + 20} ${hx + 16} ${hy + 6} Q${hx + 8} ${hy + 15} ${hx} ${hy + 15} Q${hx - 8} ${hy + 15} ${hx - 16} ${hy + 6}Z`, hcol, ' opacity=".28"' + NS);
+        if (c.beard === 'beard') s += P(side ? `M${hx - 4} ${hy + 6} Q${hx + 2} ${hy + 14} ${hx - 4} ${hy + 20} Q${hx - 14} ${hy + 25} ${hx - 19} ${hy + 14} L${hx - 18} ${hy + 8} Q${hx - 12} ${hy + 14} ${hx - 4} ${hy + 6}Z` : `M${hx - 17} ${hy + 4} Q${hx - 17} ${hy + 25} ${hx} ${hy + 25} Q${hx + 17} ${hy + 25} ${hx + 17} ${hy + 4} Q${hx + 12} ${hy + 14} ${hx + 6} ${my - 1.5} Q${hx} ${my - 3} ${hx - 6} ${my - 1.5} Q${hx - 12} ${hy + 14} ${hx - 17} ${hy + 4}Z`, hcol);
+        if (c.beard === 'tache' || c.beard === 'beard') s += P(side ? `M${mx - 1} ${my - 3} q4 -2 6 1 q-3 2 -6 1Z` : `M${mx - 7} ${my - 1} Q${mx - 4} ${my - 5} ${mx} ${my - 3} Q${mx + 4} ${my - 5} ${mx + 7} ${my - 1} Q${mx + 3} ${my - 2} ${mx} ${my - 1.2} Q${mx - 3} ${my - 2} ${mx - 7} ${my - 1}Z`, hcol);
+        // glasses
+        if (c.glasses !== 'none') {
+            const dark = c.glasses === 'shades', fr = dark ? '#111' : (c.glasses === 'round' ? '#7a4a20' : '#222');
+            ex.forEach(x => { s += c.glasses === 'round' ? C(x, ey, 5.2, 'rgba(200,230,255,.25)', ' stroke="' + fr + '" stroke-width="1.5"') : '<rect x="' + (x - 5.5) + '" y="' + (ey - 4) + '" width="11" height="8" rx="' + (dark ? 3.5 : 1.5) + '" fill="' + (dark ? '#141418' : 'rgba(200,230,255,.25)') + '" stroke="' + fr + '" stroke-width="1.5"/>' + (dark ? L(`M${x - 3} ${ey - 2} l2 -1`, 1, 'rgba(255,255,255,.6)') : ''); });
+            s += side ? L(`M${hx - 4} ${ey - 1} L${hx + 12} ${ey - 2}`, 1.3, fr) : L(`M${hx - 3} ${ey - 1} q3 -1.5 6 0`, 1.3, fr) + L(`M${hx - 13.5} ${ey - 1} L${hx - 20} ${ey - 2} M${hx + 13.5} ${ey - 1} L${hx + 20} ${ey - 2}`, 1.3, fr);
+        }
+        return s;
+    }
+    function hat(c, hx, hy, view) {
+        const k = COLS[c.hatc], kd = shade(k, -.3), kl = shade(k, .3);
+        const side = view === 'side';
+        switch (c.hat) {
+            case 'beanie': return P(side ? `M${hx - 17} ${hy - 6} Q${hx - 18} ${hy - 30} ${hx + 3} ${hy - 30} Q${hx + 22} ${hy - 29} ${hx + 22} ${hy - 4}Z` : `M${hx - 21} ${hy - 6} Q${hx - 21} ${hy - 31} ${hx} ${hy - 31} Q${hx + 21} ${hy - 31} ${hx + 21} ${hy - 6}Z`, k)
+                + '<rect x="' + (side ? hx - 18 : hx - 22.5) + '" y="' + (hy - 11) + '" width="' + (side ? 41 : 45) + '" height="8" rx="3" fill="' + kd + '"/>' + L(side ? `M${hx - 8} ${hy - 26} v14 M${hx + 2} ${hy - 28} v16 M${hx + 12} ${hy - 26} v14` : `M${hx - 12} ${hy - 26} v14 M${hx - 4} ${hy - 29} v17 M${hx + 4} ${hy - 29} v17 M${hx + 12} ${hy - 26} v14`, .7, kd) + C(side ? hx + 4 : hx, hy - 33, 5, kl);
+            case 'cap': return side ? P(`M${hx - 15} ${hy - 9} Q${hx - 14} ${hy - 28} ${hx + 4} ${hy - 27} Q${hx + 21} ${hy - 25} ${hx + 21} ${hy - 7}Z`, k) + P(`M${hx - 15} ${hy - 9} L${hx - 30} ${hy - 6} Q${hx - 31} ${hy - 9} ${hx - 26} ${hy - 11} L${hx - 14} ${hy - 13}Z`, kd)
+                : view === 'back' ? P(`M${hx - 21} ${hy - 7} Q${hx - 21} ${hy - 29} ${hx} ${hy - 29} Q${hx + 21} ${hy - 29} ${hx + 21} ${hy - 7}Z`, k) + P(`M${hx - 6} ${hy - 7} Q${hx} ${hy - 14} ${hx + 6} ${hy - 7}Z`, SKIN[c.skin]) + L(`M${hx - 6} ${hy - 9} h12`, 1.6, kd)
+                    : P(`M${hx - 21} ${hy - 7} Q${hx - 21} ${hy - 29} ${hx} ${hy - 29} Q${hx + 21} ${hy - 29} ${hx + 21} ${hy - 7}Z`, k) + E(hx, hy - 7, 23, 4.5, kd) + C(hx, hy - 29, 2, kd) + P(`M${hx - 7} ${hy - 22} h14 v8 h-14Z`, '#fff', ' opacity=".85" stroke="none"') + '<text x="' + hx + '" y="' + (hy - 15.6) + '" text-anchor="middle" font-family="Arial Black,Arial" font-weight="900" font-size="7" fill="' + kd + '">T</text>';
+            case 'bucket': return P(side ? `M${hx - 15} ${hy - 8} Q${hx - 14} ${hy - 29} ${hx + 3} ${hy - 29} Q${hx + 20} ${hy - 28} ${hx + 20} ${hy - 8}Z` : `M${hx - 18} ${hy - 8} Q${hx - 18} ${hy - 30} ${hx} ${hy - 30} Q${hx + 18} ${hy - 30} ${hx + 18} ${hy - 8}Z`, k) + E(side ? hx + 3 : hx, hy - 7, side ? 25 : 27, 5, kd) + L(side ? `M${hx - 14} ${hy - 13} h33` : `M${hx - 18} ${hy - 13} h36`, 1.2, kl);
+            case 'phones': return L(side ? `M${hx - 2} ${hy - 22} Q${hx + 2} ${hy - 27} ${hx + 6} ${hy - 22}` : `M${hx - 22} ${hy} Q${hx - 24} ${hy - 30} ${hx} ${hy - 30} Q${hx + 24} ${hy - 30} ${hx + 22} ${hy}`, 3.4, '#2a2a30') + (side ? '<rect x="' + (hx + 2) + '" y="' + (hy - 6) + '" width="10" height="15" rx="4" fill="' + k + '" stroke="' + OL + '" stroke-width="1.2"/>' : '<rect x="' + (hx - 27) + '" y="' + (hy - 6) + '" width="9" height="15" rx="4" fill="' + k + '"/><rect x="' + (hx + 18) + '" y="' + (hy - 6) + '" width="9" height="15" rx="4" fill="' + k + '"/>');
+            case 'party': return P(`M${hx - 11} ${hy - 18} L${hx + (side ? -2 : 0)} ${hy - 46} L${hx + 11} ${hy - 18}Z`, k) + L(`M${hx - 8} ${hy - 25} l15 -3 M${hx - 5} ${hy - 33} l10 -2`, 2.2, '#fff') + C(hx + (side ? -2 : 0), hy - 47, 4, kl);
+        }
+        return '';
+    }
+    function headHtml(c, hx, hy, view) {
+        const sk = SKIN[c.skin], skd = shade(sk, -.18);
+        let s = hairBack(c, hx, hy, view);
+        if (view === 'side') {
+            s += P(`M${hx + 4} ${hy + 14} L${hx + 6} ${hy + 26} L${hx - 4} ${hy + 26} L${hx - 6} ${hy + 14}Z`, sk);
+            s += P(`M${hx + 20} ${hy} Q${hx + 20} ${hy - 20} ${hx} ${hy - 20} Q${hx - 18} ${hy - 20} ${hx - 19} ${hy - 2} L${hx - 23} ${hy + 3} Q${hx - 24} ${hy + 5} ${hx - 20} ${hy + 6} Q${hx - 20} ${hy + 18} ${hx - 6} ${hy + 19} Q${hx + 18} ${hy + 20} ${hx + 20} ${hy}Z`, sk);
+            s += E(hx + 7, hy + 4, 3, 4.2, sk) + L(`M${hx + 6.5} ${hy + 2} q1.8 2 0 4`, .8, skd);
+            s += hairFront(c, hx, hy, view) + face(c, hx, hy, true);
+        } else {
+            s += P(`M${hx - 3.5} ${hy + 16} L${hx - 4} ${hy + 25} L${hx + 4} ${hy + 25} L${hx + 3.5} ${hy + 16}Z`, sk);
+            s += E(hx - 20, hy + 3, 4, 5.5, sk) + E(hx + 20, hy + 3, 4, 5.5, sk);
+            s += E(hx, hy, 20, 20, sk);
+            if (view === 'front') s += P(`M${hx - 14} ${hy + 12} Q${hx} ${hy + 22} ${hx + 14} ${hy + 12} Q${hx} ${hy + 19} ${hx - 14} ${hy + 12}Z`, skd, ' opacity=".5"' + NS) + hairFront(c, hx, hy, view) + face(c, hx, hy, false);
+            else s += hairFront(c, hx, hy, 'back');
+        }
+        return s + hat(c, hx, hy, view);
+    }
+    // ---------- clothes ----------
+    function topFill(c, uid) { return c.top === 'stripes' ? 'url(#' + uid + 'st)' : COLS[c.tc]; }
+    function topDefs(c, uid) { return c.top === 'stripes' ? '<pattern id="' + uid + 'st" width="8" height="7" patternUnits="userSpaceOnUse"><rect width="8" height="7" fill="' + COLS[c.tc] + '"/><rect y="4" width="8" height="3" fill="' + COLS[c.tc2] + '"/></pattern>' : ''; }
+    function torsoFront(c, uid, back) {
+        const t = COLS[c.tc], td = shade(t, -.25), t2 = COLS[c.tc2], sk = SKIN[c.skin], f = topFill(c, uid);
+        const longSl = c.top !== 'tee', slv = c.top === 'varsity' ? t2 : f;
+        let s = '';
+        if (c.top === 'hoodie' && !back) s += P('M34 58 Q50 70 66 58 L64 52 Q50 60 36 52Z', td);
+        // arms (sleeves), hands resting forward on the lap
+        [[1, 31], [-1, 69]].forEach(([dir, x]) => {
+            const m = v => (dir === 1 ? v : 100 - v);
+            s += P(`M${m(33)} 60 Q${m(23)} 64 ${m(23)} 80 Q${m(23)} 92 ${m(28)} 95 L${m(34)} 95 Q${m(31)} 82 ${m(34)} 70Z`, longSl ? slv : sk);
+            if (!longSl) s += P(`M${m(33)} 60 Q${m(23)} 64 ${m(23.5)} 74 L${m(32)} 74 Q${m(32)} 68 ${m(34)} 64Z`, f);
+            if (c.top === 'knit' || c.top === 'hoodie' || c.top === 'varsity') s += P(`M${m(23.2)} 88 L${m(33)} 88 L${m(33.5)} 93 L${m(26)} 94Z`, c.top === 'varsity' ? t : td);
+            s += C(m(30), 96, 4.6, sk);
+        });
+        // body
+        s += P('M32 63 Q32 56 41 55 L59 55 Q68 56 68 63 L67 100 L33 100Z', f);
+        if (!back) {
+            if (c.top === 'tee') s += P('M44 55 Q50 62 56 55Z', sk, NS);
+            if (c.top === 'stripes' || c.top === 'knit') s += P('M43 55 Q50 61 57 55 L55 55 Q50 58 45 55Z', td);
+            if (c.top === 'hoodie') s += P('M40 80 L60 80 L63 94 L37 94Z', td) + L('M46 58 l-1 12 M54 58 l1 12', 1, '#fff') + C(45, 71, 1.2, '#fff', NS) + C(55, 71, 1.2, '#fff', NS);
+            if (c.top === 'varsity') s += P('M44 55 L50 64 L56 55Z', t2) + L('M50 64 V100', 1.1, td) + [70, 78, 86, 94].map(y => C(52.5, y, .9, '#f2cc5b', NS)).join('') + '<text x="40" y="78" text-anchor="middle" font-family="Arial Black,Arial" font-weight="900" font-size="10" fill="' + t2 + '" stroke="' + td + '" stroke-width=".6">T</text>';
+            if (c.top === 'knit') s += L('M42 64 l3 6 l-3 6 l3 6 l-3 6 M58 64 l-3 6 l3 6 l-3 6 l3 6 M50 62 v34', .8, td);
+        } else {
+            if (c.top === 'hoodie') s += P('M36 56 Q50 50 64 56 Q64 70 50 72 Q36 70 36 56Z', td) + P('M40 57 Q50 53 60 57 Q59 66 50 67 Q41 66 40 57Z', shade(t, -.45));
+            if (c.top === 'varsity') s += '<text x="50" y="86" text-anchor="middle" font-family="Arial Black,Arial" font-weight="900" font-size="18" fill="' + t2 + '" stroke="' + td + '" stroke-width=".8">T</text>';
+            if (c.top === 'knit') s += L('M44 62 v34 M56 62 v34', .8, td);
+        }
+        s += P('M33 95 L67 95 L67 100 L33 100Z', c.top === 'tee' ? shade(t, -.12) : td, NS);   // hem
+        s += L(back ? 'M50 58 v40' : 'M37 66 q2 10 1 26 M63 66 q-2 10 -1 26', .7, 'rgba(0,0,0,.18)');
+        return s;
+    }
+    // front lap: thighs coming toward you, knees, shins down to the shoes (sofa) -- viewBox 0 0 100 70
+    function lapFront(c) {
+        const b = COLS[c.bc], bd = shade(b, -.25), sk = SKIN[c.skin], sh = COLS[c.sc], shd = shade(sh, -.35);
+        const shorts = c.bot === 'shorts', skirt = c.bot === 'skirt';
+        let s = '';
+        [36, 64].forEach(x => {
+            s += P(`M${x - 9} 4 Q${x - 10} 14 ${x - 8} 18 L${x - 6} 60 L${x + 6} 60 L${x + 8} 18 Q${x + 10} 14 ${x + 9} 4Z`, (shorts || skirt) ? sk : b);
+            if (shorts) s += P(`M${x - 9} 4 Q${x - 10} 12 ${x - 9} 16 L${x + 9} 16 Q${x + 10} 12 ${x + 9} 4Z`, b);
+            if (c.bot === 'joggers') s += P(`M${x - 6.5} 52 L${x + 6.5} 52 L${x + 6} 60 L${x - 6} 60Z`, bd);
+            if (c.bot === 'jeans') s += L(`M${x - 8} 18 l2 6 M${x + 8} 18 l-2 6`, .8, shade(b, .25));
+            s += E(x, 10, 9, 7, (shorts || skirt) ? sk : b) + L(`M${x - 5} 9 q5 -3 10 0`, .8, 'rgba(255,255,255,.35)');
+            s += P(`M${x - 8} 58 Q${x - 10} 68 ${x} 68 Q${x + 10} 68 ${x + 8} 58Z`, sh) + P(`M${x - 8} 64 Q${x} 67 ${x + 8} 64 L${x + 8.5} 66.5 Q${x} 70 ${x - 8.5} 66.5Z`, '#f4efe2', NS) + L(`M${x - 3} 60 l6 0 M${x - 3} 62.5 l6 0`, .8, shd);
+        });
+        if (skirt) s += P('M22 0 L78 0 L82 16 Q50 22 18 16Z', b) + L('M34 2 l-3 14 M50 2 v17 M66 2 l3 14', .8, bd);
+        return s;
+    }
+    // cross-legged on the floor, front/back: drawn under the torso (y 92..122)
+    function crossLegs(c, back) {
+        const b = COLS[c.bc], bd = shade(b, -.25), sk = SKIN[c.skin], sh = COLS[c.sc], bare = c.bot === 'shorts' || c.bot === 'skirt';
+        let s = P('M18 104 Q16 96 30 94 L70 94 Q84 96 82 104 Q80 116 50 117 Q20 116 18 104Z', bare ? sk : b);
+        if (c.bot === 'shorts') s += P('M30 94 L70 94 Q74 100 66 104 L34 104 Q26 100 30 94Z', b);
+        if (c.bot === 'skirt') s += P('M28 92 L72 92 L78 106 Q50 112 22 106Z', b) + L('M38 94 l-2 12 M50 94 v14 M62 94 l2 12', .8, bd);
+        if (!back) s += L('M50 104 Q40 112 26 110 M50 104 Q60 112 74 110', 1, 'rgba(0,0,0,.25)') + E(24, 110, 7, 5, sh) + E(76, 110, 7, 5, sh) + L('M19 111 h10 M71 111 h10', 1, '#f4efe2');
+        return s;
+    }
+    // side view: one profile card (facing left) -- sofa: viewBox 0 0 120 168, hip at (72,100), floor at y=164
+    function sideCard(c, uid, pose) {
+        const t = COLS[c.tc], td = shade(t, -.25), t2 = COLS[c.tc2], sk = SKIN[c.skin], b = COLS[c.bc], bd = shade(b, -.25), sh = COLS[c.sc], f = topFill(c, uid), bare = c.bot === 'shorts' || c.bot === 'skirt';
+        let s = '';
+        const floor = pose === 'floor', hipY = floor ? 150 : 100;
+        // legs
+        if (floor) {
+            s += P(`M58 ${hipY - 10} Q40 ${hipY - 14} 30 ${hipY - 6} Q26 ${hipY + 2} 36 ${hipY + 4} L80 ${hipY + 4} Q84 ${hipY - 6} 76 ${hipY - 12}Z`, bare ? sk : b) + E(30, hipY, 7, 4.5, sh) + L(`M24 ${hipY + 1.5} h12`, 1, '#f4efe2');
+            if (c.bot === 'shorts') s += P(`M56 ${hipY - 11} Q46 ${hipY - 12} 44 ${hipY - 4} L80 ${hipY + 2} Q84 ${hipY - 6} 76 ${hipY - 12}Z`, b);
+        } else {
+            s += P(`M78 ${hipY - 8} L40 ${hipY - 9} Q30 ${hipY - 8} 30 ${hipY} Q30 ${hipY + 6} 34 ${hipY + 8} L34 156 L46 156 L46 ${hipY + 8} L78 ${hipY + 8}Z`, bare ? sk : b);
+            if (c.bot === 'shorts') s += P(`M78 ${hipY - 8} L52 ${hipY - 9} L52 ${hipY + 8} L78 ${hipY + 8}Z`, b);
+            if (c.bot === 'skirt') s += P(`M80 ${hipY - 10} L44 ${hipY - 10} L42 ${hipY + 6} L80 ${hipY + 8}Z`, b);
+            if (c.bot === 'joggers') s += P('M33.5 148 L46.5 148 L46.5 156 L33.5 156Z', bd);
+            s += P('M46 154 L46 162 Q46 166 40 166 L24 166 Q18 166 19 161 Q21 156 30 155 L34 154Z', sh) + L('M19.5 163 H46', 1.6, '#f4efe2');
+        }
+        // back arm behind
+        s += P(`M66 ${hipY - 40} Q72 ${hipY - 28} 62 ${hipY - 12} L54 ${hipY - 10} Q62 ${hipY - 26} 60 ${hipY - 38}Z`, shade(c.top === 'tee' ? sk : (c.top === 'varsity' ? t2 : t), -.15));
+        // torso
+        s += P(`M62 ${hipY - 46} Q80 ${hipY - 48} 82 ${hipY - 32} L82 ${hipY} L56 ${hipY} Q54 ${hipY - 30} 62 ${hipY - 46}Z`, f);
+        if (c.top === 'hoodie') s += P(`M70 ${hipY - 48} Q86 ${hipY - 48} 84 ${hipY - 34} Q78 ${hipY - 38} 72 ${hipY - 42}Z`, td);
+        if (c.top === 'varsity') s += L(`M58 ${hipY - 30} V${hipY}`, 1, td);
+        s += P(`M56 ${hipY - 5} L82 ${hipY - 5} L82 ${hipY} L56 ${hipY}Z`, td, NS);
+        // front arm: shoulder down to the knee
+        const sl = c.top === 'tee' ? sk : (c.top === 'varsity' ? t2 : f);
+        s += P(`M64 ${hipY - 44} Q74 ${hipY - 40} 70 ${hipY - 26} Q64 ${hipY - 14} 46 ${hipY - 12} L44 ${hipY - 20} Q58 ${hipY - 22} 60 ${hipY - 30} Q62 ${hipY - 38} 64 ${hipY - 44}Z`, sl);
+        if (c.top === 'tee') s += P(`M64 ${hipY - 44} Q74 ${hipY - 40} 71 ${hipY - 30} L61 ${hipY - 30} Q62 ${hipY - 38} 64 ${hipY - 44}Z`, f);
+        s += C(43, hipY - 16, 4.6, sk);
+        // head (profile, facing left)
+        s += headHtml(c, 66, hipY - 70, 'side');
+        return s;
+    }
+    const OUT = '<filter id="avOut" x="-10%" y="-10%" width="120%" height="120%"><feMorphology in="SourceAlpha" operator="dilate" radius="2.2" result="d"/><feFlood flood-color="#fffaf0"/><feComposite in2="d" operator="in" result="w"/><feOffset in="d" dx="1.2" dy="2" result="o"/><feFlood flood-color="#000" flood-opacity=".28"/><feComposite in2="o" operator="in" result="sh"/><feMerge><feMergeNode in="sh"/><feMergeNode in="w"/><feMergeNode in="SourceGraphic"/></feMerge></filter>';
+    const wrap = (vb, defs, body, cls) => '<svg class="' + (cls || '') + '" viewBox="' + vb + '" overflow="visible"><defs>' + OUT + defs + '</defs><g filter="url(#avOut)"><g stroke="' + OL + '" stroke-width="1.5" stroke-linejoin="round">' + body + '</g></g></svg>';
+    // view: front | back | side ; part: torso | lap ; pose: sofa | floor
+    function svg(cfg, view, pose, part) {
+        const c = norm(cfg), uid = 'av' + (++uidN), defs = topDefs(c, uid);
+        if (view === 'side') return pose === 'floor' ? wrap('0 70 120 100', defs, sideCard(c, uid, 'floor'), 'avs') : wrap('0 0 120 168', defs, sideCard(c, uid, 'sofa'), 'avs');
+        if (part === 'lap') return wrap('0 0 100 70', '', lapFront(c), 'avl');
+        const back = view === 'back';
+        const body = (pose === 'floor' ? crossLegs(c, back) : '') + torsoFront(c, uid, back) + headHtml(c, 50, 34, back ? 'back' : 'front');
+        return wrap(pose === 'floor' ? '0 -14 100 136' : '0 -14 100 118', defs, body, 'avt');
+    }
+    return { svg, norm, DEF, OPT, SKIN, HAIRC, COLS };
+})();
+
+        // ---- your avatar: saved on this device and in your room layout (so friends who visit see you) ----
+        const AVK = 'thetube.avatar.v1';
+        const myAv = () => { try { return AV.norm(JSON.parse(localStorage.getItem(AVK) || 'null')); } catch (e) { return AV.norm(null); } };
+        const AV_LABEL = { hair: 'HAIR', eyes: 'EYES', mouth: 'MOUTH', cheeks: 'CHEEKS', glasses: 'GLASSES', beard: 'FACIAL HAIR', top: 'TOP', bot: 'BOTTOMS', hat: 'HAT' };
         const SP = { plant: [78, 143, -400, -80], lamp: [73, 195, -385, -240], arcade: [105, 225, 395, -235], dolls: [110, 98, -230, 90], boombox: [96, 58, -320, -60] };
         let moved = null;
         const takeScreen = () => {
@@ -4720,6 +4997,48 @@
             fl('cdrop', 900); setTimeout(() => { c.classList.add('copen'); fl('cbump', 480); fl('ctick', 1150); chestPlate(); }, 720); setTimeout(() => c.classList.remove('copen'), 1250);
         };
         dh.playCoin = chestPlay;
+
+        // ---- avatars in the room: paper-doll cut-outs that sit on the sofa (left seat is yours) or on the rug ----
+        const avSeats = () => {
+            const id = isOff('sofa') ? null : sofaPick(), k = id && COUCH[id], out = [];
+            if (k) {
+                const vel = !!k.vel, SW = vel ? k.W - 72 : k.W - 60, top = vel ? 50 : 60, bf = vel ? 32 : 28, cf = vel ? -56 : -55, sc = 1.12, hz = 225 + (bf - 15) * sc;
+                [-1, 1].forEach(d => out.push({ x: d * SW / 4 * sc, y: FY - top * sc, z: hz, fz: 225 + cf * sc - 6 - hz, seatH: top * sc, pose: 'sofa' }));
+            }
+            [[-140, 30], [-55, 60], [55, 60], [140, 30]].forEach(p => out.push({ x: p[0], y: FY, z: p[1], pose: 'floor' }));
+            return out;
+        };
+        const avatarHtml = (cfg, seat, name, me) => {
+            const sofa = seat.pose === 'sofa', u = (sofa ? seat.seatH / 64 : .92) * 1.6, f = n => n.toFixed(1);
+            const card = (cls, w, h, ox, oy, inner, dz) => '<div class="sp nofx avc ' + cls + '" style="width:' + f(w) + 'px;height:' + f(h) + 'px;margin:' + f(-oy) + 'px 0 0 ' + f(-ox) + 'px;transform-origin:' + f(ox) + 'px ' + f(oy) + 'px;transform:translate3d(0,0,' + (dz || 0) + 'px) rotateY(calc(var(--y) * -1)) scaleX(var(--mx,1))">' + inner + '</div>';
+            const th = sofa ? 118 : 136, ty = sofa ? 114 : 136;
+            let h = '<div class="bx av' + (me ? ' av-me' : '') + '" style="transform:translate3d(' + f(seat.x) + 'px,' + f(seat.y) + 'px,' + f(seat.z) + 'px)">';
+            // back view: torso against the backrest
+            h += card('av-t', 100 * u, th * u, 50 * u, ty * u, AV.svg(cfg, 'back', seat.pose).replace('class="avt"', 'class="avt avb"'));
+            // front view: one card with the body, knees and legs together (so nothing comes apart as the camera turns), sat at the front of the seat
+            const fw = 100 * u, ft = sofa ? ty * u + seat.seatH : th * u, lapT = ty * u - 12, lw = 84 * u;
+            const fin = (sofa ? '<div class="avlp" style="left:' + f((fw - lw) / 2) + 'px;top:' + f(lapT) + 'px;width:' + f(lw) + 'px;height:' + f(ft - lapT) + 'px">' + AV.svg(cfg, 'front', 'sofa', 'lap').replace('<svg ', '<svg preserveAspectRatio="none" ') + '</div>' : '')
+                + '<div class="avtp" style="height:' + f(th * u) + 'px">' + AV.svg(cfg, 'front', seat.pose).replace('class="avt"', 'class="avt avf"') + '</div>';
+            h += card('av-fr', fw, ft, fw / 2, ty * u, fin, sofa ? Math.round(seat.fz - 3) : 0);
+            h += sofa ? card('av-s', 120 * u, 168 * u, 72 * u, 100 * u, AV.svg(cfg, 'side', 'sofa')) : card('av-s', 120 * u, 100 * u, 72 * u, 84 * u, AV.svg(cfg, 'side', 'floor'));
+            if (name) h += '<div class="sp nofx avc av-n" style="width:120px;height:22px;margin:' + f(-(ty + 10) * u - 22) + 'px 0 0 -60px;transform:rotateY(calc(var(--y) * -1))"><span>' + String(name).replace(/[<>&"]/g, '') + '</span></div>';
+            return h + '</div>';
+        };
+        const avPeople = () => {
+            const meName = st ? st.username : 'You';
+            if (VISIT) return [{ cfg: VISIT.av, name: VISIT.host }, { cfg: myAv(), name: meName, me: 1 }];
+            return [{ cfg: myAv(), name: meName, me: 1 }];
+        };
+        const avatarsHtml = () => { const seats = avSeats(); return avPeople().map((p, i) => seats[i] ? avatarHtml(p.cfg, seats[i], p.name, p.me) : '').join(''); };
+        let avLast = '';
+        const avView = () => {
+            const rel = ((-V.y - 180) % 360 + 540) % 360 - 180, a = Math.abs(rel);
+            const v = a < 55 ? 'v-f' : a > 125 ? 'v-b' : 'v-s', mir = v === 'v-s' && Math.sin(V.y * Math.PI / 180) < 0, k = v + mir;
+            if (k === avLast && roomEl.querySelector('.av.' + v)) return; avLast = k;
+            roomEl.querySelectorAll('.av').forEach(e => { e.classList.remove('v-f', 'v-b', 'v-s', 'mir'); e.classList.add(v); if (mir) e.classList.add('mir'); });
+        };
+        const renderAvatars = () => { const r = roomEl.querySelector('.avroot'); if (!r) return; r.innerHTML = avatarsHtml(); avLast = ''; avView(); };
+        window.__avRender = renderAvatars; window.__avView = avView;
         const buildRoom = () => {
             const have = ownedItems().filter(id => ITEM_BY[id] && !isOff(id)); const hasStand = have.includes('lamp') && !standOff(); dh.classList.toggle('hasstand', have.includes('lamp')); const sbtn = dh.querySelector('.dh-sb'); if (sbtn) sbtn.textContent = hasStand ? '🪑 STAND: ON' : '🪑 STAND: OFF'; const UP = hasStand ? STAND_UP : 0; curUp = UP * TVS; SCR.cy = 100 + (-209 - UP) * TVS;
             const sk = SKINS.find(k => k.id === (VISIT ? VISIT.skin : st && st.skin)) || SKINS[0];
@@ -4743,8 +5062,9 @@
             if (have.includes('neon')) h += plane(140, 100, 446, -98, -60, 0, -90, 'hid neon-s', itemSvg(ITEM_BY.neon));
             
             Object.keys(SP).forEach(id => { if (!have.includes(id) || id === 'plant' || id === 'lamp' || id === 'dolls' || id === 'boombox') return; const s = SP[id]; h += '<div class="sp" style="width:' + s[0] + 'px;height:' + s[1] + 'px;margin:' + (-s[1] / 2) + 'px 0 0 ' + (-s[0] / 2) + 'px;transform:translate3d(' + s[2] + 'px,' + (FY - s[1] / 2) + 'px,' + s[3] + 'px) rotateY(calc(var(--y) * -1))">' + itemSvg(ITEM_BY[id]) + '</div>'; });
+            h += '<div class="bx avroot">' + avatarsHtml() + '</div>';
             h += chestHtml() + tableHtml() + (isOff('sofa') ? '' : couchHtml(sofaPick(), have.includes('shelf'))) + (have.includes('skate') ? skateHtml(285, 70, 24) : '') + (have.includes('dresser') ? dresserHtml() : '') + (have.includes('beanbag') ? beanBagHtml(342, 225) : '') + (have.includes('dolls') ? dollsHtml(366, -112) : '') + (have.includes('boombox') ? boomHtml(-322, -64, 48) : '');
-            roomEl.innerHTML = h; chestPlate(); impUpdate(); dh.classList.toggle('drawn', drawn); dh.classList.toggle('lamp-off', !lampOn); applyNight();
+            roomEl.innerHTML = h; chestPlate(); impUpdate(); avLast = ''; avView(); dh.classList.toggle('drawn', drawn); dh.classList.toggle('lamp-off', !lampOn); applyNight();
             dh.querySelector('.dh-empty').textContent = have.length ? '' : 'Your room is empty. Buy room upgrades in the treasure chest to fill it.';
         };
         // colour wheel: tap a wall or a curtain to recolour it (free for everyone, remembered in this browser)
@@ -4816,7 +5136,7 @@
         const startVisit = d => {
             if (!d || !st) return; const r = d.room || {};
             if (!VISIT) colStash = { ...cols };
-            VISIT = { host: d.username, items: d.items || [], off: Array.isArray(r.off) ? r.off : [], sofa: r.sofa || null, skin: d.skin || 'default' };
+            VISIT = { host: d.username, items: d.items || [], off: Array.isArray(r.off) ? r.off : [], sofa: r.sofa || null, skin: d.skin || 'default', av: r.av && typeof r.av === 'object' ? r.av : null };
             Object.keys(cols).forEach(k => delete cols[k]); Object.assign(cols, COLDEF, r.cols && typeof r.cols === 'object' ? r.cols : {}); applyCols();
             dh.classList.add('visiting'); openRoom(); setTitle(); toast('🏠 Welcome to ' + d.username + "'s room");
         };
@@ -4835,7 +5155,39 @@
             kAngle.kVol += d * 36; $('kVol').style.transform = 'rotate(' + kAngle.kVol + 'deg)'; $('volFill').style.width = (vClicks * 10) + '%';
             showToast('◈ VOLUME: ' + (vClicks * 10) + '% ◈'); saveSettings(); showVolOverlay(vClicks); showChOverlay();
         };
-        const noDrag = t => t.closest('.dh-ui, .dh-remote, .dh-drawer, .tv-scr, .dh-pick');
+
+        // ---- the avatar wardrobe (👤 ME in the room toolbar) ----
+        let avp = null, avCfg = null, avPv = 'front', avSaveT = 0;
+        const avOptName = { short: 'SHORT', quiff: 'QUIFF', curly: 'CURLY', long: 'LONG', bob: 'BOB', buns: 'BUNS', bald: 'BALD', dot: 'BRIGHT', happy: 'HAPPY', sparkle: 'SPARKLY', sleepy: 'SLEEPY', smile: 'SMILE', grin: 'GRIN', o: 'OOH', smirk: 'SMIRK', blush: 'BLUSH', freckles: 'FRECKLES', none: 'NONE', round: 'ROUND', square: 'SQUARE', shades: 'SHADES', stubble: 'STUBBLE', tache: 'TACHE', beard: 'BEARD', tee: 'T-SHIRT', hoodie: 'HOODIE', stripes: 'STRIPES', varsity: 'VARSITY', knit: 'KNIT', jeans: 'JEANS', joggers: 'JOGGERS', shorts: 'SHORTS', skirt: 'SKIRT', beanie: 'BEANIE', cap: 'CAP', bucket: 'BUCKET', phones: 'HEADPHONES', party: 'PARTY HAT' };
+        const avGroups = [['SKIN', 'skin', 'SKIN'], ['HAIR', 'hair'], ['HAIR COLOUR', 'hc', 'HAIRC'], ['EYES', 'eyes'], ['MOUTH', 'mouth'], ['CHEEKS', 'cheeks'], ['GLASSES', 'glasses'], ['FACIAL HAIR', 'beard'], ['TOP', 'top'], ['TOP COLOUR', 'tc', 'COLS'], ['ACCENT (STRIPES / SLEEVES)', 'tc2', 'COLS'], ['BOTTOMS', 'bot'], ['BOTTOMS COLOUR', 'bc', 'COLS'], ['SHOES', 'sc', 'COLS'], ['HAT', 'hat'], ['HAT COLOUR', 'hatc', 'COLS']];
+        const avPreview = () => { if (!avp) return; const pv = avp.querySelector('.avp-fig'); pv.innerHTML = avPv === 'side' ? AV.svg(avCfg, 'side', 'sofa') : AV.svg(avCfg, avPv, 'sofa') + AV.svg(avCfg, avPv, 'sofa', 'lap').replace('<svg ', '<svg class="avp-lap" '); avp.querySelectorAll('[data-pv]').forEach(b => b.classList.toggle('on', b.dataset.pv === avPv)); };
+        const avPaint = () => {
+            const body = avp.querySelector('.avp-opts');
+            body.innerHTML = avGroups.map(([t, key, pal]) => '<div class="avp-g"><div class="avp-gt">' + t + '</div><div class="avp-row">' + (pal
+                ? AV[pal].map((c, i) => '<button type="button" class="avp-sw' + (avCfg[key] === i ? ' on' : '') + '" data-k="' + key + '" data-v="' + i + '" style="background:' + c + '" aria-label="' + t + ' ' + (i + 1) + '"></button>').join('')
+                : AV.OPT[key].map(o => '<button type="button" class="avp-ch' + (avCfg[key] === o ? ' on' : '') + '" data-k="' + key + '" data-v="' + o + '">' + (avOptName[o] || o.toUpperCase()) + '</button>').join('')) + '</div></div>').join('');
+        };
+        const avCommit = () => { try { localStorage.setItem(AVK, JSON.stringify(avCfg)); } catch (e) { } renderAvatars(); clearTimeout(avSaveT); avSaveT = setTimeout(() => { if (window.__saveRoom) window.__saveRoom(); }, 600); };
+        const avPanel = open => {
+            if (open === undefined) open = !dh.classList.contains('avp');
+            if (open && VISIT) { toast('👤 Go back to your own room to change your avatar'); return; }
+            if (!avp) {
+                avp = document.createElement('div'); avp.className = 'av-panel'; avp.setAttribute('role', 'dialog'); avp.setAttribute('aria-label', 'Your avatar');
+                avp.innerHTML = '<div class="avp-hd">👤 YOUR AVATAR<button type="button" class="avp-x" data-avx aria-label="Close">✕</button></div><div class="avp-stage"><div class="avp-fig"></div><div class="avp-vb"><button type="button" data-pv="front">FRONT</button><button type="button" data-pv="side">SIDE</button><button type="button" data-pv="back">BACK</button><button type="button" data-rand>🎲 SURPRISE ME</button></div></div><div class="avp-opts"></div><div class="avp-ft">Friends see you sitting on the sofa (or the rug) when you\'re in a room together.</div>';
+                ['pointerdown', 'touchstart'].forEach(ev => avp.addEventListener(ev, e => e.stopPropagation(), { passive: true }));
+                avp.addEventListener('click', e => {
+                    e.stopPropagation(); const t = e.target.closest('button'); if (!t) return; click();
+                    if (t.hasAttribute('data-avx')) { avPanel(false); return; }
+                    if (t.dataset.pv) { avPv = t.dataset.pv; avPreview(); return; }
+                    if (t.hasAttribute('data-rand')) { const r = a => a[Math.floor(Math.random() * a.length)], n = m => Math.floor(Math.random() * m); avCfg = AV.norm({ skin: n(6), hair: r(AV.OPT.hair), hc: n(10), eyes: r(AV.OPT.eyes), mouth: r(AV.OPT.mouth), cheeks: r(AV.OPT.cheeks), glasses: Math.random() < .3 ? r(AV.OPT.glasses) : 'none', beard: Math.random() < .25 ? r(AV.OPT.beard) : 'none', top: r(AV.OPT.top), tc: n(12), tc2: n(12), bot: r(AV.OPT.bot), bc: n(12), sc: n(12), hat: Math.random() < .45 ? r(AV.OPT.hat) : 'none', hatc: n(12) }); avPaint(); avPreview(); avCommit(); return; }
+                    if (t.dataset.k) { const k = t.dataset.k, v = /^(skin|hc|tc|tc2|bc|sc|hatc)$/.test(k) ? +t.dataset.v : t.dataset.v; avCfg = AV.norm(Object.assign({}, avCfg, { [k]: v })); t.parentNode.querySelectorAll('.on').forEach(b => b.classList.remove('on')); t.classList.add('on'); avPreview(); avCommit(); }
+                });
+                dh.appendChild(avp);
+            }
+            dh.classList.toggle('avp', open);
+            if (open) { avCfg = myAv(); avPv = 'front'; avPaint(); avPreview(); closePick(); }
+        };
+        const noDrag = t => t.closest('.dh-ui, .dh-remote, .dh-drawer, .tv-scr, .dh-pick, .av-panel');
         dh.addEventListener('pointerdown', e => { if (noDrag(e.target)) return; cancelAnimationFrame(tw); dh.cu = false; pts.set(e.pointerId, { x: e.clientX, y: e.clientY }); dh.classList.add('drag'); try { dh.setPointerCapture(e.pointerId); } catch (er) { } if (pts.size === 2) { const [a, b] = [...pts.values()]; pinch0 = Math.hypot(a.x - b.x, a.y - b.y); z0 = V.z; } });
         dh.addEventListener('pointermove', e => {
             const p = pts.get(e.pointerId); if (!p) return;
@@ -4849,11 +5201,12 @@
         dh.addEventListener('pointerdown', e => { tap0 = (!noDrag(e.target) && e.isPrimary) ? { x: e.clientX, y: e.clientY, t: performance.now() } : null; }, true);
         dh.addEventListener('pointerup', e => { const t = tap0; tap0 = null; if (!t || Math.hypot(e.clientX - t.x, e.clientY - t.y) > 6 || performance.now() - t.t > 600) return; tapAt(e.clientX, e.clientY); });
         dh.addEventListener('pointerup', endPtr); dh.addEventListener('pointercancel', endPtr);
-        dh.addEventListener('wheel', e => { if (e.target.closest('.dh-drawer')) return; e.preventDefault(); cancelAnimationFrame(tw); dh.cu = false; V.z -= e.deltaY * .9; applyV(); }, { passive: false });
+        dh.addEventListener('wheel', e => { if (e.target.closest('.dh-drawer, .av-panel')) return; e.preventDefault(); cancelAnimationFrame(tw); dh.cu = false; V.z -= e.deltaY * .9; applyV(); }, { passive: false });
         dh.addEventListener('click', e => {
             const li = e.target.closest('.dh-li'); if (li) { const c = document.querySelectorAll('#showList .show-card')[+li.dataset.i]; if (c) { c.click(); toggleGuide(false); } return; }
             if (e.target.closest('[data-act=led]')) { const bb = e.target.closest('[data-act=led]').getBoundingClientRect(); if (pick.hidden || ptarget !== 'led') openPick('led', bb.x - 120, bb.bottom); else closePick(); return; }
             if (e.target.closest('[data-act=cord]')) { toggleCurtains(); return; }
+            if (e.target.closest('[data-act=me]')) { avPanel(); return; }
             const vb = e.target.closest('[data-v]'); if (vb) { roomVol(+vb.dataset.v); return; }
             const r = e.target.closest('[data-r]'); if (r) { const t = $(r.dataset.r); if (t) t.click(); return; }
             const b = e.target.closest('[data-d]'); if (!b) return; const d = b.dataset.d;
@@ -4864,7 +5217,7 @@
         window.addEventListener('keydown', e => {
             if (!dh.classList.contains('show')) return;
             if (document.querySelector('.tc-modal-bg.show')) return;
-            if (e.key === 'Escape') { e.stopPropagation(); if (!pick.hidden) { closePick(); return; } if (dh.classList.contains('guide')) toggleGuide(false); else closeRoom(); return; }
+            if (e.key === 'Escape') { e.stopPropagation(); if (dh.classList.contains('avp')) { avPanel(false); return; } if (!pick.hidden) { closePick(); return; } if (dh.classList.contains('guide')) toggleGuide(false); else closeRoom(); return; }
             if (e.target && /INPUT|TEXTAREA/.test(e.target.tagName)) return;
             if (e.key === 'c' || e.key === 'C') { toggleCurtains(); return; }
             if (e.key === 'l' || e.key === 'L') { toggleLamp(); return; }
@@ -4983,7 +5336,7 @@
             const useInvite = async () => { if (!inv || !st) return; const c = inv; inv = null; try { localStorage.removeItem('thetube.invite'); } catch (e) { } try { const r = await call('accept_invite', { p_code: c }); toast(r && r.status === 'already_friends' ? 'You and ' + r.username + ' are already friends' : '🤝 You and ' + (r && r.username) + ' are now friends!'); } catch (e) { toast(ferr(e)); } refresh(); };
             // start / stop with sign-in, pause while the tab is hidden
             const tick = () => { if (!st) return; refresh(); if (!document.hidden) ping(); };
-            let saveT = 0; const roomNow = () => { let c = {}, off = [], sofa = null; try { c = JSON.parse(localStorage.getItem('thetube.roomcolors.v1') || '{}'); } catch (e) { } try { off = JSON.parse(localStorage.getItem('thetube.itemsoff.v1') || '[]'); } catch (e) { } try { sofa = localStorage.getItem('thetube.sofa.v1'); } catch (e) { } return { cols: { wall: c.wall, curt: c.curt, led: c.led, ledoff: !!c.ledoff }, off: Array.isArray(off) ? off.slice(0, 40) : [], sofa }; };
+            let saveT = 0; const roomNow = () => { let c = {}, off = [], sofa = null; try { c = JSON.parse(localStorage.getItem('thetube.roomcolors.v1') || '{}'); } catch (e) { } try { off = JSON.parse(localStorage.getItem('thetube.itemsoff.v1') || '[]'); } catch (e) { } try { sofa = localStorage.getItem('thetube.sofa.v1'); } catch (e) { } return { cols: { wall: c.wall, curt: c.curt, led: c.led, ledoff: !!c.ledoff }, off: Array.isArray(off) ? off.slice(0, 40) : [], sofa, av: (() => { try { return JSON.parse(localStorage.getItem('thetube.avatar.v1') || 'null'); } catch (e) { return null; } })() }; };
             window.__saveRoom = () => { clearTimeout(saveT); saveT = setTimeout(() => { if (st) call('save_room', { p_room: roomNow() }).catch(() => { }); }, 1500); };
             const sync = () => {
                 const on = !!st; clearInterval(pollT); clearInterval(presT);
