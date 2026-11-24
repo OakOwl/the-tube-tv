@@ -2725,12 +2725,14 @@
 
         function showChannelChangeEffect(onComplete) {
             stopCommercial();
+            $('staticLbl').textContent = '';
             screen('static');
-            sndTune();
-            setTimeout(() => {
+            const ms = staticMs(); sndTune(ms / 1000);
+            clearTimeout(window._chgTimer);
+            window._chgTimer = runNoise('noiseCanvas', 'lStatic', ms, .35 + staticIntensity * .65, 'snow', () => {
                 screen('video');
                 if (onComplete) onComplete();
-            }, 600);
+            });
         }
 
         function getNextCommercial() {
@@ -2941,7 +2943,9 @@
                 s.start(); s.stop(c.currentTime + 0.7);
             } catch(e) {}
         };
-        const sndTune = () => { makeNoise(0.9, 4000, 400, 1.2, 0.28 * (staticIntensity + 0.35)); };
+        const sndTune = (d) => { d = Math.max(.35, d || .7); const v = 0.28 * (staticIntensity + 0.35);
+            makeNoise(d + .15, 3000 + Math.random() * 2600, 280 + Math.random() * 500, .8 + Math.random() * .8, v);
+            const pops = 2 + (Math.random() * 4 | 0); for (let i = 0; i < pops; i++) setTimeout(() => { try { makeNoise(.012 + Math.random() * .03, 1200 + Math.random() * 4000, null, .7, v * (.35 + Math.random() * .5)); } catch (e) { } }, Math.random() * d * 1000); };
         const sndSeek = (ff) => { makeTone(ff ? 700 : 350, ff ? 180 : 90, 0.1, 'sine', 0.07); makeNoise(0.1, ff ? 2500 : 800, null, 1.5, 0.05); };
         const sndVHS = (ff) => { try { const c = getAC(), bl = Math.floor(c.sampleRate * 1.0), b = getNoiseBuf(c); const s = c.createBufferSource(); s.buffer = b; s.playbackRate.value = ff ? 2.1 : 0.45; const flt = c.createBiquadFilter(); flt.type = 'bandpass'; flt.frequency.value = ff ? 2800 : 700; flt.Q.value = 1.4; const g = c.createGain(); g.gain.setValueAtTime(0.22, c.currentTime); g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 1.0); s.connect(flt); flt.connect(g); g.connect(c.destination); s.start(); s.stop(c.currentTime + 1.0); makeTone(ff ? 140 : 50, ff ? 50 : 18, 0.9, 'sawtooth', 0.035); } catch (e) { } };
 
@@ -2962,10 +2966,76 @@
 
         function screen(state) { $('lIdle').style.display = state === 'idle' ? 'flex' : 'none'; $('lVideo').classList[state === 'video' ? 'add' : 'remove']('show'); $('lVhs').classList[state === 'vhs' ? 'add' : 'remove']('show'); $('lStatic').classList[state === 'static' ? 'add' : 'remove']('show'); $('lSplash').classList[state === 'splash' ? 'add' : 'remove']('show'); $('lOff').classList[state === 'off' ? 'add' : 'remove']('show'); $('fsBtn').classList.toggle('show', state === 'video'); }
         function showOff(cb) { $('lOff').innerHTML = '<div class="off-line"></div>'; screen('off'); setTimeout(() => { $('lOff').innerHTML = ''; screen('idle'); if (cb) cb(); }, 550); }
-        function showStaticAnim(label, cb) { $('staticLbl').textContent = label || 'TUNING...'; screen('static'); sndTune(); let f = 0, frames = 12; noiseTimer = setInterval(() => { drawNoise('noiseCanvas', 0.5); if (++f >= frames) { clearInterval(noiseTimer); if (cb) cb(); } }, 52); }
-        const _nz = {};
-        function drawNoise(cid, intensity) { const c = $(cid); if (!c) return; let st = _nz[cid]; if (!st) { c.width = 192; c.height = 144; const ctx = c.getContext('2d'); st = _nz[cid] = { ctx, img: ctx.createImageData(192, 144) }; } const d = st.img.data, iv = (intensity || 0.5) * 255; for (let i = 0; i < d.length; i += 4) { const v = Math.random() * iv; d[i] = v; d[i + 1] = v; d[i + 2] = v; d[i + 3] = 255; } st.ctx.putImageData(st.img, 0, 0); }
-        function showVHSAnim(isFF, cb) { $('vhsLbl').textContent = isFF ? '⏩ FF' : '⏮ REW'; screen('vhs'); sndVHS(isFF); let f = 0; vhsTimer = setInterval(() => { drawNoise('vhsCanvas', 0.6); if (++f >= 20) { clearInterval(vhsTimer); if (cb) cb(); } }, 52); }
+        // ===== Analog static engine =====
+        // Snow with horizontal smear, a rolling hum bar, signal strength that drifts, tearing lines,
+        // faint colour noise and a drifting blanking bar. Every burst gets its own length and character.
+        const _nz = {}, _nzRaf = {};
+        const nzRand = (a, b) => a + Math.random() * (b - a);
+        function nzState(cid) {
+            const c = $(cid); if (!c) return null; let st = _nz[cid];
+            if (!st) {
+                const W = 240, H = 180; c.width = W; c.height = H; const ctx = c.getContext('2d'); const img = ctx.createImageData(W, H);
+                st = _nz[cid] = { ctx, img, buf: new Uint32Array(img.data.buffer), W, H };
+            }
+            return st;
+        }
+        function nzSeed(st, mode) {   // a fresh "personality" for each burst
+            st.mode = mode || 'snow';
+            st.roll = Math.random() * st.H; st.rollV = nzRand(-1.5, 3.5); st.rollW = nzRand(8, 26); st.rollD = nzRand(.25, .6);
+            st.sig = Math.random(); st.sigT = Math.random(); st.hb = Math.random() * st.W; st.hbK = Math.random() < .4 ? nzRand(.62, .82) : 1; st.hbV = nzRand(-1.2, 1.2);
+            st.tint = [nzRand(.9, 1.06), nzRand(.92, 1.04), nzRand(.96, 1.14)]; st.tears = [];
+            st.smear = nzRand(.25, .6);
+        }
+        function drawNoise(cid, intensity) {
+            const st = nzState(cid); if (!st) return; if (!st.mode) nzSeed(st);
+            const { W, H, buf } = st, k = Math.max(0, Math.min(1, intensity == null ? .5 : intensity)), vhs = st.mode === 'vhs';
+            // drifting signal strength, with the odd sudden jump
+            if (Math.random() < .06) st.sigT = Math.random(); else st.sigT = Math.max(0, Math.min(1, st.sigT + (Math.random() - .5) * .18));
+            st.sig += (st.sigT - st.sig) * .25;
+            st.rollV = Math.max(-2, Math.min(5, st.rollV + (Math.random() - .5) * .5)); st.roll = (st.roll + st.rollV * 1.6 + H) % H;
+            st.hbV = Math.max(-2, Math.min(2, st.hbV + (Math.random() - .5) * .3)); st.hb = (st.hb + st.hbV + W) % W;
+            if (Math.random() < (vhs ? .35 : .12 + k * .15)) st.tears.push({ y: Math.random() * H, h: vhs ? nzRand(3, 14) : nzRand(1, 4), v: nzRand(-6, 6), life: ((Math.random() * (vhs ? 10 : 5)) | 0) + 2, sh: nzRand(-40, 40) });
+            st.tears = st.tears.filter(t => (t.y += t.v, t.life-- > 0));
+            const gain = (.55 + k * .55) * nzRand(.86, 1.12), contrast = .9 + st.sig * .9, smearBase = vhs ? .72 : st.smear;
+            const [tr, tg, tb] = st.tint, rw2 = 2 * st.rollW * st.rollW, chroma = 10 + k * 18;
+            for (let y = 0; y < H; y++) {
+                let dy = Math.abs(y - st.roll); if (dy > H / 2) dy = H - dy;
+                const band = 1 - st.rollD * Math.exp(-dy * dy / rw2);
+                let lg = gain * band * nzRand(.82, 1.14), sm = smearBase, shift = 0;
+                for (let t = 0; t < st.tears.length; t++) { const T = st.tears[t]; if (y >= T.y && y < T.y + T.h) { lg *= vhs ? .55 : 1.7; sm = .9; shift = T.sh | 0; } }
+                if (vhs && Math.random() < .04) lg *= 1.6;
+                let prev = Math.random(), row = y * W;
+                for (let x = 0; x < W; x++) {
+                    let v = prev * sm + Math.random() * (1 - sm); prev = v;
+                    v = (v - .5) * contrast + .5; if (v < 0) v = 0; else if (v > 1) v = 1;
+                    v = v * v * (3 - 2 * v);                                   // grainier: darks darker, sparkles brighter
+                    let hx = x - st.hb; if (hx < 0) hx += W;
+                    let o = v * 255 * lg * (hx < 7 ? st.hbK : 1);
+                    const cn = (Math.random() - .5) * chroma;
+                    let r = o * tr + cn, g = o * tg, b = o * tb - cn;
+                    r = r < 0 ? 0 : r > 255 ? 255 : r; g = g > 255 ? 255 : g; b = b < 0 ? 0 : b > 255 ? 255 : b;
+                    let xi = x + shift; if (xi >= W) xi -= W; else if (xi < 0) xi += W;
+                    buf[row + xi] = 0xff000000 | (b << 16) | (g << 8) | r;
+                }
+            }
+            st.ctx.putImageData(st.img, 0, 0);
+        }
+        // run the animation while its layer is showing; finish (cb) after ms, using a timer so it still completes in a background tab
+        function runNoise(cid, layerId, ms, intensity, mode, cb) {
+            const st = nzState(cid); if (st) nzSeed(st, mode);
+            if (_nzRaf[cid]) cancelAnimationFrame(_nzRaf[cid]);
+            let last = 0; const end = performance.now() + ms + 400;
+            const tick = (now) => {
+                if (now - last >= 30) { drawNoise(cid, intensity); last = now; }
+                const lay = $(layerId);
+                if (now < end && lay && lay.classList.contains('show')) _nzRaf[cid] = requestAnimationFrame(tick); else _nzRaf[cid] = 0;
+            };
+            drawNoise(cid, intensity); _nzRaf[cid] = requestAnimationFrame(tick);
+            return setTimeout(() => { if (cb) cb(); }, ms);
+        }
+        const staticMs = () => Math.round(nzRand(380, 820) + staticIntensity * nzRand(80, 320));
+        function showStaticAnim(label, cb) { $('staticLbl').textContent = label || 'TUNING...'; screen('static'); const ms = staticMs(); sndTune(ms / 1000); clearTimeout(noiseTimer); noiseTimer = runNoise('noiseCanvas', 'lStatic', ms, .35 + staticIntensity * .65, 'snow', cb); }
+        function showVHSAnim(isFF, cb) { $('vhsLbl').textContent = isFF ? '⏩ FF' : '⏮ REW'; screen('vhs'); sndVHS(isFF); clearTimeout(vhsTimer); vhsTimer = runNoise('vhsCanvas', 'lVhs', Math.round(nzRand(850, 1250)), .55, 'vhs', cb); }
         function startReels() { $('reelL').classList.add('spinning'); $('reelR').classList.add('spinning'); clearInterval(timeTimer); timeTimer = setInterval(() => { if (vid.duration && isFinite(vid.duration)) { const t = vid.currentTime; $('vhsTime').textContent = `${String(Math.floor(t / 60)).padStart(2, '0')}:${String(Math.floor(t % 60)).padStart(2, '0')}`; } }, 1000); }
         function stopReels() { $('reelL').classList.remove('spinning'); $('reelR').classList.remove('spinning'); clearInterval(timeTimer); }
         function markEpActive(idx) { document.querySelectorAll('.ep-item').forEach(el => { const epIndex = parseInt(el.getAttribute('data-index')); if (epIndex === idx) el.classList.add('ep-active'); else el.classList.remove('ep-active'); }); }
