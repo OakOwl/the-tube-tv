@@ -1800,10 +1800,17 @@
 
 
 
+        /* the camera angle is set only on the pieces that face the camera, and doesn't flow down into their drawings */
+        @property --y { syntax: '*'; inherits: false; }
+        @property --p { syntax: '*'; inherits: false; }
         /* ===== phones/tablets: lighter 3D room (less GPU memory, no constant re-sorting) ===== */
         #dh.lite .tvr, #dh.lite .lpool, #dh.lite .dmoonw, #dh.lite .sunr, #dh.lite .dglow, #dh.lite .cglow, #dh.lite .dh-sun { display: none !important; }
         #dh.lite .av-t svg, #dh.lite .avtp svg, #dh.lite .stm, #dh.lite .stm i, #dh.lite .rb, #dh.lite .sunb { animation: none !important; }
         #dh.lite .sp { filter: none; }
+        /* while the camera turns, Chrome on Android re-draws every surface at its new on-screen size, and on busy rooms the
+           tiles can't keep up, so pieces blink out and back in. Fixing each surface's drawing size stops that redraw. */
+        #dh.lite .pl, #dh.lite .sp, #dh.lite .imp { will-change: transform; }
+        #dh.lite .dh-cam { will-change: transform; transform-style: preserve-3d; }
         /* ===== knock knock: friends at your door (shows over the 2D page and the 3D room) ===== */
         #knock { position: fixed; right: 16px; top: 96px; z-index: 100001; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
         #knock .kn-card { pointer-events: auto; width: 300px; display: grid; grid-template-columns: 44px 1fr; gap: 6px 10px; align-items: center; padding: 12px 12px 12px 10px; box-sizing: border-box;
@@ -4350,9 +4357,19 @@
         const V = { y: 22, p: -26, z: 0, ty: 40 }, V0 = { y: 22, p: -26, z: 0, ty: 40 };
         const clampV = () => { V.p = Math.max(-82, Math.min(-2, V.p)); V.z = Math.max(-420, Math.min(900, V.z)); };
         const baseSc = () => Math.max(.5, Math.min(1.35, Math.min(window.innerWidth, window.innerHeight * 1.5) / (window.innerWidth < 640 ? 1500 : 1470)));
+        let yEls = null;
+        const ySet = () => {
+            if (!yEls) yEls = typeof roomEl !== 'undefined' && roomEl ? [...roomEl.querySelectorAll('[style*="var(--y"],[style*="var(--p"]')] : [];
+            const ys = V.y.toFixed(2) + 'deg', ps = V.p.toFixed(2) + 'deg';
+            for (const e of yEls) { e.style.setProperty('--y', ys); e.style.setProperty('--p', ps); }
+        };
+        window.__yRefresh = () => { yEls = null; ySet(); };
         const applyV = () => {
-            clampV(); cam.style.setProperty('--sc', (baseSc() * Math.exp(V.z / 500)).toFixed(4));
-            cam.style.setProperty('--y', V.y.toFixed(2) + 'deg'); cam.style.setProperty('--p', V.p.toFixed(2) + 'deg'); if (window.__impUpdate) window.__impUpdate(); if (window.__avView) window.__avView(); cam.style.setProperty('--ty', V.ty.toFixed(0) + 'px');
+            clampV();
+            // the camera gets its transform directly, and only the camera-facing pieces get the angle (instead of every
+            // piece in the room inheriting it and being restyled + redrawn on every frame of a drag)
+            cam.style.transform = 'translateY(' + V.ty.toFixed(0) + 'px) scale(' + (baseSc() * Math.exp(V.z / 500)).toFixed(4) + ') rotateX(' + V.p.toFixed(2) + 'deg) rotateY(' + V.y.toFixed(2) + 'deg)';
+            ySet(); if (window.__impUpdate) window.__impUpdate(); if (window.__avView) window.__avView();
             dh.classList.toggle('near', !!dh.cu && V.z > 230);
         };
         let tw = 0;
@@ -5084,7 +5101,7 @@ const AV = (() => {
             if (k === avLast && roomEl.querySelector('.av.' + v)) return; avLast = k;
             roomEl.querySelectorAll('.av').forEach(e => { e.classList.remove('v-f', 'v-b', 'v-s', 'mir'); e.classList.add(v); if (mir) e.classList.add('mir'); });
         };
-        const renderAvatars = () => { const r = roomEl.querySelector('.avroot'); if (!r) return; r.innerHTML = avatarsHtml(); avLast = ''; avView(); };
+        const renderAvatars = () => { const r = roomEl.querySelector('.avroot'); if (!r) return; r.innerHTML = avatarsHtml(); window.__yRefresh(); avLast = ''; avView(); };
         window.__avRender = renderAvatars; window.__avView = avView;
 
         // ---- anti-flicker: find surfaces that sit in exactly the same plane (things flush against walls, stacked boxes,
@@ -5152,7 +5169,7 @@ const AV = (() => {
             Object.keys(SP).forEach(id => { if (!have.includes(id) || id === 'plant' || id === 'lamp' || id === 'dolls' || id === 'boombox') return; const s = SP[id]; h += '<div class="sp" style="width:' + s[0] + 'px;height:' + s[1] + 'px;margin:' + (-s[1] / 2) + 'px 0 0 ' + (-s[0] / 2) + 'px;transform:translate3d(' + s[2] + 'px,' + (FY - s[1] / 2) + 'px,' + s[3] + 'px) rotateY(calc(var(--y) * -1))">' + itemSvg(ITEM_BY[id]) + '</div>'; });
             h += '<div class="bx avroot">' + avatarsHtml() + '</div>';
             h += chestHtml() + tableHtml() + (isOff('sofa') ? '' : couchHtml(sofaPick(), have.includes('shelf'))) + (have.includes('skate') ? skateHtml(285, 70, 24) : '') + (have.includes('dresser') ? dresserHtml() : '') + (have.includes('beanbag') ? beanBagHtml(342, 225) : '') + (have.includes('dolls') ? dollsHtml(366, -112) : '') + (have.includes('boombox') ? boomHtml(-322, -64, 48) : '');
-            roomEl.innerHTML = h; chestPlate(); impUpdate(); avLast = ''; avView(); dh.classList.toggle('lite', LITE); setTimeout(() => { try { fixCoplanar(); fixCoplanar(); } catch (e) { } }, 0); dh.classList.toggle('drawn', drawn); dh.classList.toggle('lamp-off', !lampOn); applyNight();
+            roomEl.innerHTML = h; window.__yRefresh(); chestPlate(); impUpdate(); avLast = ''; avView(); dh.classList.toggle('lite', LITE); setTimeout(() => { try { fixCoplanar(); fixCoplanar(); } catch (e) { } }, 0); dh.classList.toggle('drawn', drawn); dh.classList.toggle('lamp-off', !lampOn); applyNight();
             dh.querySelector('.dh-empty').textContent = have.length ? '' : 'Your room is empty. Buy room upgrades in the treasure chest to fill it.';
         };
         // colour wheel: tap a wall or a curtain to recolour it (free for everyone, remembered in this browser)
@@ -5296,8 +5313,9 @@ const AV = (() => {
             if (pts.size === 1) { V.y += (e.clientX - p.x) * .45; V.p += (e.clientY - p.y) * .3; }
             p.x = e.clientX; p.y = e.clientY;
             if (pts.size === 2) { const [a, b] = [...pts.values()], d = Math.hypot(a.x - b.x, a.y - b.y); if (pinch0) V.z = z0 + (d - pinch0) * 1.6; }
-            applyV();
+            if (!mvRaf) mvRaf = requestAnimationFrame(() => { mvRaf = 0; applyV(); });   // at most one camera update per screen refresh
         });
+        let mvRaf = 0;
         const endPtr = e => { pts.delete(e.pointerId); if (!pts.size) dh.classList.remove('drag'); };
         let tap0 = null;
         dh.addEventListener('pointerdown', e => { tap0 = (!noDrag(e.target) && e.isPrimary) ? { x: e.clientX, y: e.clientY, t: performance.now() } : null; }, true);
