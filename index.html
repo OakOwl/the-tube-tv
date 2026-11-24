@@ -5255,14 +5255,14 @@ const AV = (() => {
             if (VISIT) return;
             Object.keys(cols).forEach(k => delete cols[k]); Object.assign(cols, COLDEF); try { Object.assign(cols, JSON.parse(localStorage.getItem(COLKEY) || '{}')); } catch (e) { }
             dh.classList.toggle('ledoff', !!cols.ledoff); dh.style.setProperty('--wall', cols.wall); dh.style.setProperty('--curt', cols.curt); dh.style.setProperty('--led', cols.led || COLDEF.led);
-            if (dh.classList.contains('show')) buildRoom();
+            if (dh.classList.contains('show')) { returnScreen(); buildRoom(); takeScreen(); }   // the TV screen (and the playing video) lives inside the room: hand it back before rebuilding
         };
         const updateVisit = d => {
             if (!VISIT || !d || d.username !== VISIT.host) return; const r = d.room || {};
             const nv = { host: d.username, items: d.items || [], off: Array.isArray(r.off) ? r.off : [], sofa: r.sofa || null, skin: d.skin || 'default', av: r.av && typeof r.av === 'object' ? r.av : null };
             const key = JSON.stringify([nv, r.cols || {}]); if (key === VISIT.key) return;
             Object.assign(VISIT, nv, { key }); Object.keys(cols).forEach(k => delete cols[k]); Object.assign(cols, COLDEF, r.cols && typeof r.cols === 'object' ? r.cols : {}); applyCols();
-            if (dh.classList.contains('show')) buildRoom();
+            if (dh.classList.contains('show')) { returnScreen(); buildRoom(); takeScreen(); }   // the TV screen (and the playing video) lives inside the room: hand it back before rebuilding
         };
         window.__room = { visit: startVisit, end: () => endVisit(false), visiting: () => !!VISIT, host: () => VISIT && VISIT.host, update: updateVisit };
         const pts = new Map(); let pinch0 = 0, z0 = 0;
