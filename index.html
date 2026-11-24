@@ -4093,12 +4093,13 @@
                     if (name === 'dm_read') { D.msgs.forEach(m => { if (m.with.toLowerCase() === String(a.p_username).toLowerCase()) m.read = true; }); save(); return null; }
                     if (name === 'report_dm') return 'reported';
                 }
-                if (/^(party_|save_room|friend_room|report_message)/.test(name)) {
+                if (/^(party_|save_room|my_room|friend_room|report_message)/.test(name)) {
                     const PK = 'thetube.previewparty.v1'; let P; try { P = JSON.parse(localStorage.getItem(PK) || 'null'); } catch (e) { } P = P || { party: null, invites: [] }; const save = () => { try { localStorage.setItem(PK, JSON.stringify(P)); } catch (e) { } };
                     if (name === 'party_request') { P.knock = { host: a.p_username, status: 'pending', at: Date.now() }; save(); return a.p_username; }
                     if (name === 'party_request_answer') { P.requests = (P.requests || []).filter(r => r.username !== a.p_username); if (a.p_accept) { P.party = P.party && P.party.me_host ? P.party : { host: p.username, me_host: true, state: null, state_age: 0, members: [] }; P.party.members.push({ username: a.p_username, status: 'joined', here: true }); } save(); return a.p_accept ? 'accepted' : 'declined'; }
                     if (name === 'party_join') { P.party = { host: a.p_username, me_host: false, state: null, state_age: 0, members: [{ username: p.username, status: 'joined', here: true }] }; save(); return a.p_username; }
                     if (name === 'save_room') { P.myroom = a.p_room; save(); return null; }
+                    if (name === 'my_room') return P.myroom || {};
                     if (name === 'friend_room') return { username: a.p_username, skin: 'red', items: ['rug', 'couch_green', 'lava', 'shelf', 'beanbag', 'plant'], room: { cols: { wall: '#1f3a5f', curt: '#d9a441', led: '#ff4fd8' }, sofa: 'couch_green', off: [] } };
                     if (name === 'party_invite') { P.party = P.party && P.party.me_host ? P.party : { host: p.username, me_host: true, state: null, state_age: 0, members: [] }; if (!P.party.members.find(m => m.username === a.p_username)) P.party.members.push({ username: a.p_username, status: 'invited', here: false, t: Date.now() }); save(); return 'invited'; }
                     if (name === 'party_answer') { const i = P.invites.findIndex(x => x.host === a.p_host); if (i < 0) throw new Error('invite_gone'); P.invites.splice(i, 1); if (a.p_join) P.party = { host: a.p_host, me_host: false, state: { ref: P.hostRef || '', t: 30, paused: false }, state_age: 0, members: [{ username: p.username, status: 'joined', here: true }] }; save(); return a.p_join ? 'joined' : 'declined'; }
@@ -5111,7 +5112,7 @@ const AV = (() => {
         // colour wheel: tap a wall or a curtain to recolour it (free for everyone, remembered in this browser)
         const COLKEY = 'thetube.roomcolors.v1', COLDEF = { wall: '#5e0e17', curt: '#b01a22', led: '#22e07a' };
         let cols = { ...COLDEF }; try { Object.assign(cols, JSON.parse(localStorage.getItem(COLKEY) || '{}')); } catch (e) { }
-        const applyCols = () => { dh.classList.toggle('ledoff', !!cols.ledoff); const pw = dh.querySelector('.dp-pw'); if (pw) pw.textContent = cols.ledoff ? '⏻ LED OFF' : '⏻ LED ON'; dh.style.setProperty('--wall', cols.wall); dh.style.setProperty('--curt', cols.curt); const lc = cols.led || COLDEF.led; dh.style.setProperty('--led', lc); try { const q = hex2hsv(lc); dh.style.setProperty('--ledg', hsv2hex(q.h, Math.min(q.s, .72), 1)); } catch (e) { } if (!VISIT) { try { localStorage.setItem(COLKEY, JSON.stringify(cols)); } catch (e) { } if (window.__saveRoom) window.__saveRoom(); } };
+        const applyCols = chg => { dh.classList.toggle('ledoff', !!cols.ledoff); const pw = dh.querySelector('.dp-pw'); if (pw) pw.textContent = cols.ledoff ? '⏻ LED OFF' : '⏻ LED ON'; dh.style.setProperty('--wall', cols.wall); dh.style.setProperty('--curt', cols.curt); const lc = cols.led || COLDEF.led; dh.style.setProperty('--led', lc); try { const q = hex2hsv(lc); dh.style.setProperty('--ledg', hsv2hex(q.h, Math.min(q.s, .72), 1)); } catch (e) { } if (!VISIT && chg) { try { localStorage.setItem(COLKEY, JSON.stringify(cols)); } catch (e) { } if (window.__saveRoom) window.__saveRoom(); } };
         const hex2hsv = h => { const n = parseInt(h.slice(1), 16), r = (n >> 16 & 255) / 255, g = (n >> 8 & 255) / 255, b = (n & 255) / 255, mx = Math.max(r, g, b), mn = Math.min(r, g, b), d = mx - mn; let hh = 0; if (d) { hh = mx === r ? ((g - b) / d) % 6 : mx === g ? (b - r) / d + 2 : (r - g) / d + 4; hh *= 60; if (hh < 0) hh += 360; } return { h: hh, s: mx ? d / mx : 0, v: mx }; };
         const hsv2hex = (h, s, v) => { const f = n => { const k = (n + h / 60) % 6, x = v - v * s * Math.max(0, Math.min(k, 4 - k, 1)); return Math.round(x * 255).toString(16).padStart(2, '0'); }; return '#' + f(5) + f(3) + f(1); };
         applyCols();
@@ -5124,7 +5125,7 @@ const AV = (() => {
         const pkw = pick.querySelector('.dp-wheel'), pkdot = pick.querySelector('.dp-dot'), pkv = pick.querySelector('input[type=range]'), pkhex = pick.querySelector('.dp-hex'), pksw = pick.querySelector('.dp-sw');
         let ptarget = 'wall', hsv = { h: 0, s: 1, v: 1 };
         const paintPick = (fromHex) => {
-            if (ptarget === 'led' && hsv.v < .6) hsv.v = .6; const hx = hsv2hex(hsv.h, hsv.s, hsv.v); cols[ptarget] = hx; if (ptarget === 'led') cols.ledoff = false; applyCols();
+            if (ptarget === 'led' && hsv.v < .6) hsv.v = .6; const hx = hsv2hex(hsv.h, hsv.s, hsv.v); cols[ptarget] = hx; if (ptarget === 'led') cols.ledoff = false; applyCols(true);
             const r = pkw.clientWidth / 2, a = hsv.h * Math.PI / 180; pkdot.style.left = (r + Math.cos(a) * hsv.s * r) + 'px'; pkdot.style.top = (r + Math.sin(a) * hsv.s * r) + 'px';
             pkw.style.setProperty('--dv', (1 - hsv.v).toFixed(3)); pkv.value = Math.round(hsv.v * 100); pksw.style.background = hx; if (!fromHex) pkhex.value = hx;
         };
@@ -5136,7 +5137,7 @@ const AV = (() => {
         pkhex.addEventListener('input', () => { const v = pkhex.value.trim(); if (/^#?[0-9a-fA-F]{6}$/.test(v)) { hsv = hex2hsv(v[0] === '#' ? v : '#' + v); paintPick(true); } });
         pick.querySelector('.dp-rs').addEventListener('click', () => setFromHex(COLDEF[ptarget]));
         pick.querySelector('.dp-x').addEventListener('click', () => closePick());
-        pick.querySelector('.dp-pw').addEventListener('click', () => { cols.ledoff = !cols.ledoff; applyCols(); });
+        pick.querySelector('.dp-pw').addEventListener('click', () => { cols.ledoff = !cols.ledoff; applyCols(true); });
         pick.querySelector('.dp-pre').addEventListener('click', e => { const b = e.target.closest('[data-c]'); if (b) setFromHex(b.dataset.c); });
         const closePick = () => { pick.hidden = true; };
         const openPick = (which, x, y) => {
@@ -5169,7 +5170,7 @@ const AV = (() => {
             closePick();
         };
         const toggleGuide = on => { dh.classList.toggle('guide', on == null ? !dh.classList.contains('guide') : on); if (dh.classList.contains('guide')) buildGuide(); };
-        const openRoom = () => { if (!st) return; closeShop(); returnScreen(); buildRoom(); takeScreen(); toggleGuide(false); Object.assign(V, V0); applyV(); dh.classList.add('show'); body.classList.add('in-room'); body.classList.remove('tv-spot'); try { localStorage.setItem('thetube.roomtip.v1', '1'); } catch (e) { } const rb0 = $('tcRoomBtn'); if (rb0) rb0.classList.add('seen'); const b = dh.querySelector('[data-d=close]'); try { b.focus({ preventScroll: true }); } catch (e) { } };
+        const openRoom = () => { if (!st) return; if (!VISIT && window.__pullRoom) window.__pullRoom(); closeShop(); returnScreen(); buildRoom(); takeScreen(); toggleGuide(false); Object.assign(V, V0); applyV(); dh.classList.add('show'); body.classList.add('in-room'); body.classList.remove('tv-spot'); try { localStorage.setItem('thetube.roomtip.v1', '1'); } catch (e) { } const rb0 = $('tcRoomBtn'); if (rb0) rb0.classList.add('seen'); const b = dh.querySelector('[data-d=close]'); try { b.focus({ preventScroll: true }); } catch (e) { } };
         const closeRoom = () => { if (VISIT) endVisit(true); dh.cu = false; closePick(); cancelAnimationFrame(tw); dh.classList.remove('show'); dh.classList.remove('guide'); body.classList.remove('in-room'); returnScreen(); clearTimeout(closeRoom.t); closeRoom.t = setTimeout(() => { if (!dh.classList.contains('show') && !moved) roomEl.innerHTML = ''; }, 600); };
         // visiting a friend's room: show their furniture, colours and TV skin; nothing is saved to yours
         let colStash = null;
@@ -5178,6 +5179,7 @@ const AV = (() => {
             if (!d || !st) return; const r = d.room || {};
             if (!VISIT) colStash = { ...cols };
             VISIT = { host: d.username, items: d.items || [], off: Array.isArray(r.off) ? r.off : [], sofa: r.sofa || null, skin: d.skin || 'default', av: r.av && typeof r.av === 'object' ? r.av : null };
+            VISIT.key = JSON.stringify([{ host: VISIT.host, items: VISIT.items, off: VISIT.off, sofa: VISIT.sofa, skin: VISIT.skin, av: VISIT.av }, r.cols || {}]);
             Object.keys(cols).forEach(k => delete cols[k]); Object.assign(cols, COLDEF, r.cols && typeof r.cols === 'object' ? r.cols : {}); applyCols();
             dh.classList.add('visiting'); openRoom(); setTitle(); toast('🏠 Welcome to ' + d.username + "'s room"); if (window.__doorbell) window.__doorbell();
         };
@@ -5186,7 +5188,20 @@ const AV = (() => {
             if (colStash) { Object.keys(cols).forEach(k => delete cols[k]); Object.assign(cols, colStash); colStash = null; } applyCols(); setTitle();
             if (!quiet && dh.classList.contains('show')) openRoom();
         };
-        window.__room = { visit: startVisit, end: () => endVisit(false), visiting: () => !!VISIT };
+        window.__roomReload = () => {
+            if (VISIT) return;
+            Object.keys(cols).forEach(k => delete cols[k]); Object.assign(cols, COLDEF); try { Object.assign(cols, JSON.parse(localStorage.getItem(COLKEY) || '{}')); } catch (e) { }
+            dh.classList.toggle('ledoff', !!cols.ledoff); dh.style.setProperty('--wall', cols.wall); dh.style.setProperty('--curt', cols.curt); dh.style.setProperty('--led', cols.led || COLDEF.led);
+            if (dh.classList.contains('show')) buildRoom();
+        };
+        const updateVisit = d => {
+            if (!VISIT || !d || d.username !== VISIT.host) return; const r = d.room || {};
+            const nv = { host: d.username, items: d.items || [], off: Array.isArray(r.off) ? r.off : [], sofa: r.sofa || null, skin: d.skin || 'default', av: r.av && typeof r.av === 'object' ? r.av : null };
+            const key = JSON.stringify([nv, r.cols || {}]); if (key === VISIT.key) return;
+            Object.assign(VISIT, nv, { key }); Object.keys(cols).forEach(k => delete cols[k]); Object.assign(cols, COLDEF, r.cols && typeof r.cols === 'object' ? r.cols : {}); applyCols();
+            if (dh.classList.contains('show')) buildRoom();
+        };
+        window.__room = { visit: startVisit, end: () => endVisit(false), visiting: () => !!VISIT, host: () => VISIT && VISIT.host, update: updateVisit };
         const pts = new Map(); let pinch0 = 0, z0 = 0;
         // volume buttons: the same steps, click sound, TV volume overlay, toast and saved setting as the knob in 2D mode (one click up or down, 0 to 100%)
         const syncPwr = () => dh.classList.toggle('tvon', $('pwrBtn').classList.contains('on')); syncPwr(); try { new MutationObserver(syncPwr).observe($('pwrBtn'), { attributes: true, attributeFilter: ['class'] }); } catch (e) { }
@@ -5380,11 +5395,35 @@ const AV = (() => {
             const useInvite = async () => { if (!inv || !st) return; const c = inv; inv = null; try { localStorage.removeItem('thetube.invite'); } catch (e) { } try { const r = await call('accept_invite', { p_code: c }); toast(r && r.status === 'already_friends' ? 'You and ' + r.username + ' are already friends' : '🤝 You and ' + (r && r.username) + ' are now friends!'); } catch (e) { toast(ferr(e)); } refresh(); };
             // start / stop with sign-in, pause while the tab is hidden
             const tick = () => { if (!st) return; refresh(); if (!document.hidden) ping(); };
-            let saveT = 0; const roomNow = () => { let c = {}, off = [], sofa = null; try { c = JSON.parse(localStorage.getItem('thetube.roomcolors.v1') || '{}'); } catch (e) { } try { off = JSON.parse(localStorage.getItem('thetube.itemsoff.v1') || '[]'); } catch (e) { } try { sofa = localStorage.getItem('thetube.sofa.v1'); } catch (e) { } return { cols: { wall: c.wall, curt: c.curt, led: c.led, ledoff: !!c.ledoff }, off: Array.isArray(off) ? off.slice(0, 40) : [], sofa, av: (() => { try { return JSON.parse(localStorage.getItem('thetube.avatar.v1') || 'null'); } catch (e) { return null; } })() }; };
-            window.__saveRoom = () => { clearTimeout(saveT); saveT = setTimeout(() => { if (st) call('save_room', { p_room: roomNow() }).catch(() => { }); }, 1500); };
+            let saveT = 0; const roomNow = () => { let c = {}, off = [], sofa = null; try { c = JSON.parse(localStorage.getItem('thetube.roomcolors.v1') || '{}'); } catch (e) { } try { off = JSON.parse(localStorage.getItem('thetube.itemsoff.v1') || '[]'); } catch (e) { } try { sofa = localStorage.getItem('thetube.sofa.v1'); } catch (e) { } return { cols: { wall: c.wall, curt: c.curt, led: c.led, ledoff: !!c.ledoff }, off: Array.isArray(off) ? off.slice(0, 40) : [], sofa, at: +(localStorage.getItem('thetube.room.at') || 0) || Date.now(), av: (() => { try { return JSON.parse(localStorage.getItem('thetube.avatar.v1') || 'null'); } catch (e) { return null; } })() }; };
+            // a change on this device: stamp it, then save to your profile
+            window.__saveRoom = () => { try { localStorage.setItem('thetube.room.at', String(Date.now())); } catch (e) { } clearTimeout(saveT); saveT = setTimeout(() => { if (st) call('save_room', { p_room: roomNow() }).catch(() => { }); }, 1500); };
+            // on sign-in / opening the room: take whichever is newer, this device or your saved profile
+            let pulling = false;
+            window.__pullRoom = async () => {
+                if (!st || pulling) return; pulling = true;
+                try {
+                    const r = await call('my_room'), la = +(localStorage.getItem('thetube.room.at') || 0), ra = r && +r.at || 0;
+                    const has = r && typeof r === 'object' && (r.cols || r.av || r.sofa || (r.off && r.off.length));
+                    // rooms saved by older versions have no time stamp: if this device has its own avatar or colours, keep them and save them up
+                    const localHas = !!(localStorage.getItem('thetube.avatar.v1') || localStorage.getItem('thetube.roomcolors.v1'));
+                    if (!ra && localHas) { localStorage.setItem('thetube.room.at', String(Date.now())); call('save_room', { p_room: roomNow() }).catch(() => { }); }
+                    else if (has && (!la || ra >= la)) {
+                        try {
+                            if (r.cols && typeof r.cols === 'object') localStorage.setItem('thetube.roomcolors.v1', JSON.stringify(r.cols));
+                            localStorage.setItem('thetube.itemsoff.v1', JSON.stringify(Array.isArray(r.off) ? r.off : []));
+                            if (r.sofa) localStorage.setItem('thetube.sofa.v1', r.sofa); else localStorage.removeItem('thetube.sofa.v1');
+                            if (r.av && typeof r.av === 'object') localStorage.setItem('thetube.avatar.v1', JSON.stringify(r.av));
+                            localStorage.setItem('thetube.room.at', String(ra || Date.now()));
+                        } catch (e) { }
+                        if (window.__roomReload) window.__roomReload();
+                    } else if (la > ra) call('save_room', { p_room: roomNow() }).catch(() => { });
+                } catch (e) { }   // (before thetube-my-room.sql is run this just does nothing, and never overwrites your saved room)
+                pulling = false;
+            };
             const sync = () => {
                 const on = !!st; clearInterval(pollT); clearInterval(presT);
-                if (on) { loaded = loaded && panel.classList.contains('in'); paint(); refresh(); ping(true); useInvite(); window.__saveRoom(); pollT = setInterval(tick, 30000); presT = setInterval(() => ping(), 5000); }
+                if (on) { loaded = loaded && panel.classList.contains('in'); paint(); refresh(); ping(true); useInvite(); window.__pullRoom(); pollT = setInterval(tick, 30000); presT = setInterval(() => ping(), 5000); }
                 else { list = []; loaded = false; open = null; addBox.hidden = true; seenReq = null; F.counts.req = F.counts.inv = 0; F.updateTitle(); paint(); }
             };
             new MutationObserver(() => { if (panel.classList.contains('in') !== !!st) sync(); }).observe(body, { attributes: true, attributeFilter: ['class'] });
@@ -5467,6 +5506,7 @@ const AV = (() => {
                 return h;
             };
             F.partyHtml = html;
+            setInterval(async () => { try { if (!st || document.hidden || !window.__room || !window.__room.visiting()) return; const d = await call('friend_room', { p_username: window.__room.host() }); window.__room.update(d); } catch (e) { } }, 15000);
             const visitHost = async u => { try { const d = await call('friend_room', { p_username: u }); if (window.__room) window.__room.visit(d); } catch (e) { toast(friendly(e)); } };
             const apply = j => {
                 const was = party; party = j && j.party || null; invites = (j && j.invites) || [];
