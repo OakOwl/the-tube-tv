@@ -2370,7 +2370,12 @@
             { id: 78, ch: '78', time: '23:30', name: 'Bam\'s Unholy Union', emoji: '💒', cat: 'mtv', year: '2007', badges: ['PLAYLIST', 'MTV'], desc: 'Bam Margera plans his wedding to Missy.', tickers: ['Bam', 'Missy'], archiveId: 'bamsunholyunion_202507', playlist: true },
             { id: 79, ch: '79', time: '3:30 AM', name: 'Hey Arnold Marathon', emoji: '🏈', cat: 'animation', year: '1996', badges: ['MARATHON', 'NICK'], desc: 'Classic Hey Arnold! episodes back to back.', tickers: ['Arnold', 'Football Head'], archiveId: 'hey-arnold-marathon-jan-29-2000', playlist: true },
             // NEW: Bill Nye for Schedule A
-            { id: 80, ch: '80', time: '5:30 PM', name: 'Bill Nye, The Science Guy', emoji: '🔬', cat: 'classic', year: '1993', badges: ['PLAYLIST', 'PBS'], desc: 'Bill Nye makes science fun.', tickers: ['Science rules!'], archiveId: 'billnyethescienceguythecompleteseries-07-28-2021', playlist: true }
+            { id: 80, ch: '80', time: '5:30 PM', name: 'Bill Nye, The Science Guy', emoji: '🔬', cat: 'classic', year: '1993', badges: ['PLAYLIST', 'PBS'], desc: 'Bill Nye makes science fun.', tickers: ['Science rules!'], archiveId: 'billnyethescienceguythecompleteseries-07-28-2021', playlist: true },
+            { id: 109, ch: '109', time: '8:00 PM', name: 'UFO', emoji: '🛸', cat: 'scifi', year: '1970', badges: ['PLAYLIST', 'ITC', 'GERRY ANDERSON'], desc: 'SHADO defends Earth from a secret alien invasion.', tickers: ['SHADO is on red alert'], archiveId: 'UFO.complete', playlist: true, natSort: true },
+            { id: 110, ch: '110', time: '9:00 PM', name: 'Banacek', emoji: '🕵️', cat: 'drama', year: '1972', badges: ['PLAYLIST', 'NBC', 'MYSTERY'], desc: 'George Peppard as a Boston insurance investigator who cracks impossible thefts.', tickers: ['Ten percent of the recovery'], archiveId: 'banacek-complete-series-1972', playlist: true, natSort: true },
+            { id: 111, ch: '111', time: '7:00 PM', name: 'Planet of the Apes', emoji: '🦍', cat: 'scifi', year: '1974', badges: ['PLAYLIST', 'CBS', 'CULT'], desc: 'Two astronauts on the run in a world ruled by apes.', tickers: ['Escape from tomorrow'], archiveId: 'planet-of-the-apes-complete-series-1974', playlist: true, natSort: true },
+            { id: 112, ch: '112', time: '6:00 PM', name: 'Arthur of the Britons', emoji: '⚔️', cat: 'british', year: '1972', badges: ['PLAYLIST', 'HTV', 'ADVENTURE'], desc: 'A gritty, swords-and-mud take on the young Arthur, warlord of the Celts.', tickers: ['Arthur rides again'], archiveId: 'arthur-of-the-britons-complete-series-1972', playlist: true, natSort: true },
+            { id: 113, ch: '113', time: '10:00 PM', name: 'Thriller', emoji: '🔪', cat: 'horror', year: '1973', badges: ['PLAYLIST', 'ATV', 'SUSPENSE'], desc: 'Brian Clemens\' twisty British suspense anthology: a new nightmare every week.', tickers: ['Who is at the top of the stairs?'], archiveId: 'thriller-s-01-e-010-spell-of-evil', playlist: true, natSort: true }
             // SCHEDULE C EXPANDED CATALOGUE
             ,{ id:81,ch:'81',time:'6:00 AM',name:'The Borrowers',emoji:'🏠',cat:'classic',year:'1992',badges:['PLAYLIST','BBC','FAMILY'],desc:'Tiny people living beneath the floorboards make a big adventure.',tickers:['Something small is stirring beneath the floorboards.','Borrowers beware!'],archiveId:'the-borrowers-1992-93',playlist:true }
             ,{ id:82,ch:'82',time:'6:30 AM',name:'Classic British TV Pack',emoji:'🇬🇧',cat:'british',year:'Classic',badges:['PLAYLIST','BRITISH','ARCHIVE'],desc:'A varied collection of classic British television.',tickers:['From the classic British television vaults.','Proper telly, preserved.'],archiveId:'classic-british-tv-pack',playlist:true }
@@ -2658,6 +2663,7 @@
         // on a ~600px TV screen (>=~400p, or >=350kbps when the height is unknown). Heavier/lighter versions are
         // kept as alternatives so playback can step down if the connection stalls.
         function parseLen(v) { if (v == null) return 0; if (typeof v === 'number') return v; v = String(v); if (v.includes(':')) return v.split(':').reduce((t, x) => t * 60 + parseFloat(x || 0), 0); return parseFloat(v) || 0; }
+        const NAT_SORT = new Set(['UFO.complete', 'banacek-complete-series-1972', 'planet-of-the-apes-complete-series-1974', 'arthur-of-the-britons-complete-series-1972', 'thriller-s-01-e-010-spell-of-evil']);
         function filterFiles(rawFiles) {
             const groups = new Map();
             rawFiles.forEach(f => {
@@ -2685,7 +2691,9 @@
                 const alts = known.filter(c => c.kbps >= 150 && (!safe.length || c.h264)).sort((a, b) => b.kbps - a.kbps).map(c => ({ url: c.url, kbps: c.kbps }));
                 return { name: best.name.replace(/\.ia\.mp4$|\.mp4$|\.ogv$/i, '').replace(/[._-]?\d{2,4}kb$/i, '').replace(/[_\-]+/g, ' ').trim(), url: best.url, kbps: best.kbps, alts };
             });
-            result.sort((a, b) => a.name.localeCompare(b.name));
+            const nat = rawFiles.length && NAT_SORT.has(rawFiles[0]._archiveId);
+            result.sort((a, b) => nat ? a.name.localeCompare(b.name, undefined, { numeric: true }) : a.name.localeCompare(b.name));
+            if (nat) result.forEach(r => { r.name = r.name.replace(/\.(?=\S)/g, ' ').replace(/\s+/g, ' ').trim(); });
             return result;
         }
 
