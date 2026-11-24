@@ -4358,6 +4358,7 @@
         };
 // ===== Paper-doll avatars: layered SVG, three views (front / back / side), two poses (sofa / floor) =====
 const AV = (() => {
+    
     const SKIN = ['#fde3cf', '#f6caa6', '#e5ab80', '#c98a5c', '#99613f', '#65402b'];
     const HAIRC = ['#1f1611', '#4b2e1c', '#8a5a2b', '#d4a043', '#f3d985', '#c2452a', '#e9e5dd', '#ff7cc0', '#58b8ff', '#7ad17a'];
     const COLS = ['#e63946', '#f4a261', '#f2cc5b', '#2a9d8f', '#1d6f5a', '#3a86ff', '#264b8f', '#8338ec', '#ff5fa2', '#f4efe2', '#2b2d42', '#7a5c44'];
@@ -4404,8 +4405,8 @@ const AV = (() => {
         const capB = `M${hx - 20.5} ${hy + 6} Q${hx - 22} ${hy - 21} ${hx} ${hy - 21} Q${hx + 22} ${hy - 21} ${hx + 20.5} ${hy + 6} Q${hx + 12} ${hy + 15} ${hx} ${hy + 15} Q${hx - 12} ${hy + 15} ${hx - 20.5} ${hy + 6}Z`;
         switch (c.hair) {
             case 'bald': return back ? '' : P(`M${hx - 8} ${hy - 15} q5 -3 10 -2`, 'none', ' stroke="#fff" stroke-opacity=".45" stroke-width="2" stroke-linecap="round"');
-            case 'short': return back ? P(capB, h) + L(`M${hx - 8} ${hy - 12} q2 10 0 20 M${hx + 6} ${hy - 14} q3 10 0 22`, .8, d)
-                : P(cap, h) + L(view === 'side' ? `M${hx - 4} ${hy - 16} q8 -2 14 4` : `M${hx - 10} ${hy - 15} q8 -4 18 0`, 1.4, hl);
+            case 'short': return back ? P(capB, h) + L(`M${hx - 8} ${hy - 12} q2 10 0 20 M${hx + 6} ${hy - 14} q3 10 0 22 M${hx - 15} ${hy - 4} q1 6 3 10 M${hx + 14} ${hy - 4} q-1 6 -3 10 M${hx - 1} ${hy - 18} q1 12 -1 26`, .8, d)
+                : P(cap, h) + L(view === 'side' ? `M${hx - 4} ${hy - 16} q8 -2 14 4` : `M${hx - 10} ${hy - 15} q8 -4 18 0`, 1.4, hl) + L(view === 'side' ? `M${hx + 4} ${hy - 12} q6 2 10 10 M${hx - 8} ${hy - 9} q4 -3 9 -2` : `M${hx - 15} ${hy - 6} q3 -6 9 -8 M${hx + 15} ${hy - 6} q-3 -6 -9 -8 M${hx - 2} ${hy - 11} q3 -5 8 -6`, .7, d);
             case 'quiff': return back ? P(capB, h) + P(`M${hx - 12} ${hy - 18} Q${hx} ${hy - 30} ${hx + 12} ${hy - 18}Z`, h)
                 : view === 'side' ? P(cap, h) + P(`M${hx - 17} ${hy - 12} Q${hx - 22} ${hy - 30} ${hx - 2} ${hy - 30} Q${hx + 12} ${hy - 29} ${hx + 10} ${hy - 18} Q${hx - 2} ${hy - 22} ${hx - 17} ${hy - 12}Z`, h) + L(`M${hx - 14} ${hy - 18} q6 -9 18 -8`, 1.3, hl)
                     : P(cap, h) + P(`M${hx - 14} ${hy - 12} Q${hx - 16} ${hy - 31} ${hx + 4} ${hy - 31} Q${hx + 18} ${hy - 30} ${hx + 16} ${hy - 18} Q${hx + 6} ${hy - 24} ${hx - 2} ${hy - 16} Q${hx - 8} ${hy - 12} ${hx - 14} ${hy - 12}Z`, h) + L(`M${hx - 8} ${hy - 20} q6 -8 16 -6`, 1.3, hl);
@@ -4429,11 +4430,12 @@ const AV = (() => {
             if (c.eyes === 'happy') s += L(`M${x - 3} ${ey + 1} q3 -4 6 0`, 1.6);
             else if (c.eyes === 'sleepy') s += L(`M${x - 3} ${ey} q3 3 6 0`, 1.6) + L(`M${x - 3.5} ${ey - 1} h7`, .8);
             else if (c.eyes === 'sparkle') s += E(x, ey, 3.3, 4, OL, NS) + C(x + 1, ey - 1.5, 1.4, '#fff', NS) + C(x - 1.2, ey + 1.6, .7, '#fff', NS);
-            else s += E(x, ey, 2.4, 3, OL, NS) + C(x + .8, ey - 1, .9, '#fff', NS);
+            else s += E(x, ey, 2.4, 3, OL, NS) + C(x + .8, ey - 1, .9, '#fff', NS) + C(x - .7, ey + 1.2, .4, '#fff', NS);
+            if (c.eyes === 'sparkle') s += L(side ? `M${x - 3} ${ey - 3.4} l-1.4 -1` : (x < hx ? `M${x - 2.6} ${ey - 2.6} l-1.6 -1` : `M${x + 2.6} ${ey - 2.6} l1.6 -1`), .8);
             s += L(side ? `M${x - 3} ${ey - 6} q3 -2 6 -.5` : `M${x - 3.5} ${ey - 6.5} q3.5 ${x < hx ? -1.5 : -1.5} 7 0`, 1.2, shade(HAIRC[c.hc], -.2));
         });
         // nose
-        s += side ? '' : L(`M${hx - 1} ${ey + 5} q1.5 1.2 3 0`, 1.1, shade(sk, -.35));
+        s += side ? '' : L(`M${hx - 1} ${ey + 5} q1.5 1.2 3 0`, 1.1, shade(sk, -.35)) + E(hx + .5, ey + 3.6, 1.2, .8, 'rgba(255,255,255,.45)', NS);
         // mouth
         const mx = side ? hx - 10 : hx, my = ey + 10;
         if (c.mouth === 'grin') s += P(`M${mx - 5} ${my - 1} Q${mx} ${my - 1.5} ${mx + 5} ${my - 1} Q${mx + 4} ${my + 5} ${mx} ${my + 5} Q${mx - 4} ${my + 5} ${mx - 5} ${my - 1}Z`, '#7a1f22', ' stroke="' + OL + '" stroke-width="1"') + P(`M${mx - 4} ${my - .6} L${mx + 4} ${my - .6} L${mx + 3.5} ${my + 1.2} L${mx - 3.5} ${my + 1.2}Z`, '#fff', NS);
@@ -4478,7 +4480,7 @@ const AV = (() => {
             s += hairFront(c, hx, hy, view) + face(c, hx, hy, true);
         } else {
             s += P(`M${hx - 3.5} ${hy + 16} L${hx - 4} ${hy + 25} L${hx + 4} ${hy + 25} L${hx + 3.5} ${hy + 16}Z`, sk);
-            s += E(hx - 20, hy + 3, 4, 5.5, sk) + E(hx + 20, hy + 3, 4, 5.5, sk);
+            s += E(hx - 20, hy + 3, 4, 5.5, sk) + E(hx + 20, hy + 3, 4, 5.5, sk) + L(`M${hx - 20.5} ${hy + 1} q-1.6 2 0 4.5 M${hx + 20.5} ${hy + 1} q1.6 2 0 4.5`, .7, skd);
             s += E(hx, hy, 20, 20, sk);
             if (view === 'front') s += P(`M${hx - 14} ${hy + 12} Q${hx} ${hy + 22} ${hx + 14} ${hy + 12} Q${hx} ${hy + 19} ${hx - 14} ${hy + 12}Z`, skd, ' opacity=".5"' + NS) + hairFront(c, hx, hy, view) + face(c, hx, hy, false);
             else s += hairFront(c, hx, hy, 'back');
@@ -4499,22 +4501,33 @@ const AV = (() => {
             s += P(`M${m(33)} 60 Q${m(23)} 64 ${m(23)} 80 Q${m(23)} 92 ${m(28)} 95 L${m(34)} 95 Q${m(31)} 82 ${m(34)} 70Z`, longSl ? slv : sk);
             if (!longSl) s += P(`M${m(33)} 60 Q${m(23)} 64 ${m(23.5)} 74 L${m(32)} 74 Q${m(32)} 68 ${m(34)} 64Z`, f);
             if (c.top === 'knit' || c.top === 'hoodie' || c.top === 'varsity') s += P(`M${m(23.2)} 88 L${m(33)} 88 L${m(33.5)} 93 L${m(26)} 94Z`, c.top === 'varsity' ? t : td);
-            s += C(m(30), 96, 4.6, sk);
+            s += L(`M${m(24.5)} 78 q${2.5 * dir} 1.5 ${5 * dir} .5`, .7, 'rgba(0,0,0,.25)') + P(`M${m(31)} 64 Q${m(33)} 76 ${m(33)} 92 L${m(30.5)} 92 Q${m(31)} 76 ${m(29.5)} 66Z`, 'rgba(0,0,0,.12)', NS);
+            if (c.top === 'varsity') s += L(`M${m(23.4)} 89.6 H${m(33.1)} M${m(23.7)} 91.6 H${m(33.3)}`, .8, t2);
+            if (c.top === 'knit') s += L(`M${m(25)} 89 v4.5 M${m(27.5)} 89 v4.8 M${m(30)} 89 v4.8`, .6, 'rgba(0,0,0,.3)');
+            s += C(m(30), 96, 4.6, sk) + L(`M${m(28)} 99.4 v-2.2 M${m(30.2)} 99.9 v-2.4 M${m(32.3)} 99.4 v-2.2`, .6, shade(sk, -.35)) + E(m(34), 94.6, 1.8, 2.4, sk, ' stroke-width="1"');
         });
         // body
         s += P('M32 63 Q32 56 41 55 L59 55 Q68 56 68 63 L67 100 L33 100Z', f);
+        s += P(back ? 'M32 63 Q32 56 41 55 L42 55 Q36 62 37 100 L33 100Z' : 'M68 63 Q68 56 59 55 L58 55 Q64 62 63 100 L67 100Z', 'rgba(40,20,10,.16)', NS) + P(back ? 'M66 64 Q66 60 62 58 Q65 70 64 92 L66.6 92Z' : 'M34 64 Q34 60 38 58 Q35 70 36 92 L33.4 92Z', 'rgba(255,255,255,.16)', NS);
+        s += L('M33.5 62 q4 -4 8 -5 M66.5 62 q-4 -4 -8 -5', .6, 'rgba(0,0,0,.2)');
         if (!back) {
+            if (c.top === 'tee') s += P('M46.5 68 l1.2 2.6 2.8 .3 -2.1 1.9 .6 2.8 -2.5 -1.4 -2.5 1.4 .6 -2.8 -2.1 -1.9 2.8 -.3Z', shade(t, .45), ' transform="translate(9 0)" stroke-width=".6"') + L('M33 72 H38 M67 72 H62', .6, 'rgba(0,0,0,.18)');
+            if (c.top === 'stripes') s += P('M44 55 Q50 60 56 55', 'none', ' stroke-width="1.6"');
             if (c.top === 'tee') s += P('M44 55 Q50 62 56 55Z', sk, NS);
             if (c.top === 'stripes' || c.top === 'knit') s += P('M43 55 Q50 61 57 55 L55 55 Q50 58 45 55Z', td);
-            if (c.top === 'hoodie') s += P('M40 80 L60 80 L63 94 L37 94Z', td) + L('M46 58 l-1 12 M54 58 l1 12', 1, '#fff') + C(45, 71, 1.2, '#fff', NS) + C(55, 71, 1.2, '#fff', NS);
+            if (c.top === 'hoodie') s += P('M40 80 L60 80 L63 94 L37 94Z', td) + L('M41.5 82 L58.5 82 L61 92.5 L39 92.5Z', .6, 'rgba(255,255,255,.35)') + L('M47 82 Q50 86 53 82', .7, shade(t, -.45)) + L('M46 58 l-1 12 M54 58 l1 12', 1, '#fff') + '<rect x="43.6" y="69.5" width="2.6" height="3.4" rx=".8" fill="#d9d9d9" stroke-width=".6"/><rect x="53.8" y="69.5" width="2.6" height="3.4" rx=".8" fill="#d9d9d9" stroke-width=".6"/>';
             if (c.top === 'varsity') s += P('M44 55 L50 64 L56 55Z', t2) + L('M50 64 V100', 1.1, td) + [70, 78, 86, 94].map(y => C(52.5, y, .9, '#f2cc5b', NS)).join('') + '<text x="40" y="78" text-anchor="middle" font-family="Arial Black,Arial" font-weight="900" font-size="10" fill="' + t2 + '" stroke="' + td + '" stroke-width=".6">T</text>';
-            if (c.top === 'knit') s += L('M42 64 l3 6 l-3 6 l3 6 l-3 6 M58 64 l-3 6 l3 6 l-3 6 l3 6 M50 62 v34', .8, td);
+            if (c.top === 'knit') s += L('M42 64 l3 6 l-3 6 l3 6 l-3 6 M58 64 l-3 6 l3 6 l-3 6 l3 6 M50 62 v34', .8, td) + L('M46 66 h8 M46 72 h8 M46 78 h8 M46 84 h8 M46 90 h8', .5, 'rgba(255,255,255,.25)');
+            if (c.top === 'varsity') s += L('M44 55 L50 64 L56 55', .8, t) + L('M45.5 55.4 L50 62.2 L54.5 55.4', .7, t2);
         } else {
             if (c.top === 'hoodie') s += P('M36 56 Q50 50 64 56 Q64 70 50 72 Q36 70 36 56Z', td) + P('M40 57 Q50 53 60 57 Q59 66 50 67 Q41 66 40 57Z', shade(t, -.45));
             if (c.top === 'varsity') s += '<text x="50" y="86" text-anchor="middle" font-family="Arial Black,Arial" font-weight="900" font-size="18" fill="' + t2 + '" stroke="' + td + '" stroke-width=".8">T</text>';
             if (c.top === 'knit') s += L('M44 62 v34 M56 62 v34', .8, td);
+            s += P('M47.5 56.5 h5 v3.2 h-5Z', '#f4efe2', ' stroke-width=".6"') + L('M50 60 v38', .6, 'rgba(0,0,0,.18)');
         }
         s += P('M33 95 L67 95 L67 100 L33 100Z', c.top === 'tee' ? shade(t, -.12) : td, NS);   // hem
+        if (c.top === 'knit' || c.top === 'varsity' || c.top === 'hoodie') s += L('M36 95.5 v4 M39 95.5 v4 M42 95.5 v4 M45 95.5 v4 M48 95.5 v4 M51 95.5 v4 M54 95.5 v4 M57 95.5 v4 M60 95.5 v4 M63 95.5 v4', .5, 'rgba(0,0,0,.28)');
+        if (!back && (c.bot === 'jeans' || c.bot === 'shorts')) s += P('M34 97 H66 V100 H34Z', '#3a2414', ' stroke-width=".6"') + '<rect x="47.5" y="96.4" width="5" height="4" rx=".6" fill="#e8c050" stroke-width=".6"/>';
         s += L(back ? 'M50 58 v40' : 'M37 66 q2 10 1 26 M63 66 q-2 10 -1 26', .7, 'rgba(0,0,0,.18)');
         return s;
     }
@@ -4527,9 +4540,11 @@ const AV = (() => {
             s += P(`M${x - 9} 4 Q${x - 10} 14 ${x - 8} 18 L${x - 6} 60 L${x + 6} 60 L${x + 8} 18 Q${x + 10} 14 ${x + 9} 4Z`, (shorts || skirt) ? sk : b);
             if (shorts) s += P(`M${x - 9} 4 Q${x - 10} 12 ${x - 9} 16 L${x + 9} 16 Q${x + 10} 12 ${x + 9} 4Z`, b);
             if (c.bot === 'joggers') s += P(`M${x - 6.5} 52 L${x + 6.5} 52 L${x + 6} 60 L${x - 6} 60Z`, bd);
-            if (c.bot === 'jeans') s += L(`M${x - 8} 18 l2 6 M${x + 8} 18 l-2 6`, .8, shade(b, .25));
-            s += E(x, 10, 9, 7, (shorts || skirt) ? sk : b) + L(`M${x - 5} 9 q5 -3 10 0`, .8, 'rgba(255,255,255,.35)');
-            s += P(`M${x - 8} 58 Q${x - 10} 68 ${x} 68 Q${x + 10} 68 ${x + 8} 58Z`, sh) + P(`M${x - 8} 64 Q${x} 67 ${x + 8} 64 L${x + 8.5} 66.5 Q${x} 70 ${x - 8.5} 66.5Z`, '#f4efe2', NS) + L(`M${x - 3} 60 l6 0 M${x - 3} 62.5 l6 0`, .8, shd);
+            if (c.bot === 'jeans') s += L(`M${x - 8} 18 l2 6 M${x + 8} 18 l-2 6`, .8, shade(b, .25)) + L(`M${x - 5} 22 v32 M${x + 5} 22 v32`, .5, 'rgba(255,220,120,.45)');
+            if (!(shorts || skirt)) s += P(`M${x + 3} 20 L${x + 6} 20 L${x + 5} 58 L${x + 2.5} 58Z`, 'rgba(40,20,10,.16)', NS);
+            if (shorts || skirt) s += P(`M${x - 6.6} 48 L${x + 6.6} 48 L${x + 6.2} 58 L${x - 6.2} 58Z`, '#f4efe2', ' stroke-width=".8"') + L(`M${x - 6.4} 51 H${x + 6.4} M${x - 6.3} 53.6 H${x + 6.3}`, .9, COLS[c.tc]);
+            s += E(x, 10, 9, 7, (shorts || skirt) ? sk : b) + L(`M${x - 5} 9 q5 -3 10 0`, .8, 'rgba(255,255,255,.35)') + E(x - 2.5, 8, 2.5, 1.4, 'rgba(255,255,255,.25)', NS) + (c.bot === 'jeans' ? L(`M${x - 6} 14 q6 3 12 0`, .5, 'rgba(255,220,120,.5)') : '');
+            s += P(`M${x - 8} 58 Q${x - 10} 68 ${x} 68 Q${x + 10} 68 ${x + 8} 58Z`, sh) + P(`M${x - 8} 64 Q${x} 67 ${x + 8} 64 L${x + 8.5} 66.5 Q${x} 70 ${x - 8.5} 66.5Z`, '#f4efe2', NS) + L(`M${x - 3.5} 59.6 l7 1.6 M${x + 3.5} 59.6 l-7 1.6 M${x - 3.5} 62.2 l7 1.4 M${x + 3.5} 62.2 l-7 1.4`, .8, '#f4efe2') + P(`M${x - 5} 65 Q${x} 68.2 ${x + 5} 65 Q${x} 66.5 ${x - 5} 65Z`, shade(sh, .3), NS) + E(x - 3, 61, 1.6, 1, 'rgba(255,255,255,.35)', NS);
         });
         if (skirt) s += P('M22 0 L78 0 L82 16 Q50 22 18 16Z', b) + L('M34 2 l-3 14 M50 2 v17 M66 2 l3 14', .8, bd);
         return s;
@@ -4572,7 +4587,7 @@ const AV = (() => {
         if (c.top === 'tee') s += P(`M64 ${hipY - 44} Q74 ${hipY - 40} 71 ${hipY - 30} L61 ${hipY - 30} Q62 ${hipY - 38} 64 ${hipY - 44}Z`, f);
         s += C(43, hipY - 16, 4.6, sk);
         // head (profile, facing left)
-        s += headHtml(c, 66, hipY - 70, 'side');
+        s += '<g transform="translate(66 ' + (hipY - 46) + ') scale(.88) translate(-66 ' + (46 - hipY) + ')">' + headHtml(c, 66, hipY - 70, 'side') + '</g>';
         return s;
     }
     const OUT = '<filter id="avOut" x="-10%" y="-10%" width="120%" height="120%"><feMorphology in="SourceAlpha" operator="dilate" radius="2.2" result="d"/><feFlood flood-color="#fffaf0"/><feComposite in2="d" operator="in" result="w"/><feOffset in="d" dx="1.2" dy="2" result="o"/><feFlood flood-color="#000" flood-opacity=".28"/><feComposite in2="o" operator="in" result="sh"/><feMerge><feMergeNode in="sh"/><feMergeNode in="w"/><feMergeNode in="SourceGraphic"/></feMerge></filter>';
@@ -4583,7 +4598,7 @@ const AV = (() => {
         if (view === 'side') return pose === 'floor' ? wrap('0 70 120 100', defs, sideCard(c, uid, 'floor'), 'avs') : wrap('0 0 120 168', defs, sideCard(c, uid, 'sofa'), 'avs');
         if (part === 'lap') return wrap('0 0 100 70', '', lapFront(c), 'avl');
         const back = view === 'back';
-        const body = (pose === 'floor' ? crossLegs(c, back) : '') + torsoFront(c, uid, back) + headHtml(c, 50, 34, back ? 'back' : 'front');
+        const body = (pose === 'floor' ? crossLegs(c, back) : '') + torsoFront(c, uid, back) + '<g transform="translate(50 57) scale(.88) translate(-50 -57)">' + headHtml(c, 50, 34, back ? 'back' : 'front') + '</g>';
         return wrap(pose === 'floor' ? '0 -14 100 136' : '0 -14 100 118', defs, body, 'avt');
     }
     return { svg, norm, DEF, OPT, SKIN, HAIRC, COLS };
@@ -5025,7 +5040,7 @@ const AV = (() => {
                 + '<div class="avtp" style="height:' + f(th * u) + 'px">' + AV.svg(cfg, 'front', seat.pose).replace('class="avt"', 'class="avt avf"') + '</div>';
             h += card('av-fr', fw, ft, fw / 2, ty * u, fin, sofa ? Math.round(seat.fz - 3) : 0);
             h += sofa ? card('av-s', 120 * u, 168 * u, 72 * u, 100 * u, AV.svg(cfg, 'side', 'sofa')) : card('av-s', 120 * u, 100 * u, 72 * u, 84 * u, AV.svg(cfg, 'side', 'floor'));
-            if (name) h += '<div class="sp nofx avc av-n" style="width:120px;height:22px;margin:' + f(-(ty + 10) * u - 22) + 'px 0 0 -60px;transform:rotateY(calc(var(--y) * -1))"><span>' + String(name).replace(/[<>&"]/g, '') + '</span></div>';
+            if (name) h += '<div class="sp nofx avc av-n" style="width:120px;height:22px;margin:' + f(-(ty + 2) * u - 22) + 'px 0 0 -60px;transform:rotateY(calc(var(--y) * -1))"><span>' + String(name).replace(/[<>&"]/g, '') + '</span></div>';
             return h + '</div>';
         };
         const avPeople = () => {
