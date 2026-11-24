@@ -1737,7 +1737,7 @@
         #dh .chplus b { display: block; text-align: center; font: 400 26px/1 'VT323', monospace; color: #fff3b0; text-shadow: 0 0 8px #f5a623, 0 2px 0 #000; opacity: 0; }
         #dh .chest.ctick .chplus b { animation: chPlus 1.1s ease-out 1; }
         #dh .chplate { text-align: center; pointer-events: none; background: linear-gradient(#2a1a0a,#160d05); border: 1px solid #7a5a1c; border-radius: 4px; padding: 3px 4px; box-sizing: border-box; }
-        #dh .chplate b { display: block; font: 400 24px/1 'VT323', monospace; color: #ffd36a; text-shadow: 0 0 8px rgba(255,190,60,.55); } #dh .chplate small { font: 400 13px/1 'VT323', monospace; color: #c9a86a; letter-spacing: .1em; }
+        #dh .chplate b { display: block; white-space: nowrap; font: 400 24px/1 'VT323', monospace; color: #ffd36a; text-shadow: 0 0 8px rgba(255,190,60,.55); } #dh .chplate small { font: 400 13px/1 'VT323', monospace; color: #c9a86a; letter-spacing: .1em; }
         #dh .chest.ctick .chplate b { animation: chTick .5s ease-out 1; }
         #dh .chest { transition: opacity .3s ease; } #dh.near .chest { opacity: 0; pointer-events: none; }
         #dh .pcb3 { pointer-events: none; } #dh .pcb3 svg { display: block; width: 100%; height: 100%; overflow: visible; transform-origin: 50% 100%; animation: pcBob 4.2s ease-in-out infinite; }
@@ -1799,6 +1799,11 @@
         #dh .dh-dim::after { content: ''; position: absolute; inset: 0; opacity: 0; transition: opacity 1.8s cubic-bezier(.4,0,.2,1); background: radial-gradient(ellipse 46% 42% at var(--vx,48%) var(--vy,46%), rgba(0,0,0,0) 0, rgba(1,2,8,.3) 42%, rgba(1,2,8,.74) 74%, rgba(0,1,5,.93) 100%); } #dh.drawn.lamp-off .dh-dim::after { opacity: 1; }
 
 
+
+        /* ===== phones/tablets: lighter 3D room (less GPU memory, no constant re-sorting) ===== */
+        #dh.lite .tvr, #dh.lite .lpool, #dh.lite .dmoonw, #dh.lite .sunr, #dh.lite .dglow, #dh.lite .cglow, #dh.lite .dh-sun { display: none !important; }
+        #dh.lite .av-t svg, #dh.lite .avtp svg, #dh.lite .stm, #dh.lite .stm i, #dh.lite .rb, #dh.lite .sunb { animation: none !important; }
+        #dh.lite .sp { filter: none; }
         /* ===== knock knock: friends at your door (shows over the 2D page and the 3D room) ===== */
         #knock { position: fixed; right: 16px; top: 96px; z-index: 100001; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
         #knock .kn-card { pointer-events: auto; width: 300px; display: grid; grid-template-columns: 44px 1fr; gap: 6px 10px; align-items: center; padding: 12px 12px 12px 10px; box-sizing: border-box;
@@ -5081,6 +5086,47 @@ const AV = (() => {
         };
         const renderAvatars = () => { const r = roomEl.querySelector('.avroot'); if (!r) return; r.innerHTML = avatarsHtml(); avLast = ''; avView(); };
         window.__avRender = renderAvatars; window.__avView = avView;
+
+        // ---- anti-flicker: find surfaces that sit in exactly the same plane (things flush against walls, stacked boxes,
+        // details laid on a surface). Phone GPUs can't decide which is in front and keep swapping them, which flickers.
+        // Facing each other: the smaller one is a hidden contact face, so it's switched off. Facing the same way: the
+        // smaller one (the detail) is lifted 0.75px toward its visible side.
+        // phones and tablets: a lighter 3D room (no purely decorative light layers, fewer constant animations)
+        const LITE = (() => { try { return matchMedia('(pointer: coarse)').matches || /Android|iPhone|iPad|Mobile/i.test(navigator.userAgent); } catch (e) { return false; } })();
+        const fixCoplanar = () => {
+            const t0 = performance.now(), P = [];
+            const walk = (el, M) => {
+                if (el.classList.contains('sp') || el.classList.contains('imp') || el.classList.contains('avroot')) return;   // camera-facing sprites move with the camera
+                const cs = getComputedStyle(el); if (cs.display === 'none') return; let m = M;
+                if (cs.transform && cs.transform !== 'none') { const o = cs.transformOrigin.split(' ').map(parseFloat); m = M.multiply(new DOMMatrix().translate(el.offsetLeft, el.offsetTop).translate(o[0], o[1], o[2] || 0).multiply(new DOMMatrix(cs.transform)).translate(-o[0], -o[1], -(o[2] || 0))); }
+                else m = M.multiply(new DOMMatrix().translate(el.offsetLeft, el.offsetTop));
+                if (el.classList.contains('pl') && el.offsetWidth > 1 && el.offsetHeight > 1 && el.style.visibility !== 'hidden') {
+                    const w = el.offsetWidth, h = el.offsetHeight, p0 = m.transformPoint(new DOMPoint(0, 0)), p1 = m.transformPoint(new DOMPoint(w, 0)), p2 = m.transformPoint(new DOMPoint(0, h)), p3 = m.transformPoint(new DOMPoint(w, h));
+                    const ux = [p1.x - p0.x, p1.y - p0.y, p1.z - p0.z], uy = [p2.x - p0.x, p2.y - p0.y, p2.z - p0.z];
+                    let n = [ux[1] * uy[2] - ux[2] * uy[1], ux[2] * uy[0] - ux[0] * uy[2], ux[0] * uy[1] - ux[1] * uy[0]]; const L = Math.hypot(n[0], n[1], n[2]) || 1; n = [n[0] / L, n[1] / L, n[2] / L];
+                    let c = n; if (c[0] < -1e-4 || (Math.abs(c[0]) < 1e-4 && (c[1] < -1e-4 || (Math.abs(c[1]) < 1e-4 && c[2] < 0)))) c = [-c[0], -c[1], -c[2]];
+                    const xs = [p0.x, p1.x, p2.x, p3.x], ys = [p0.y, p1.y, p2.y, p3.y], zs = [p0.z, p1.z, p2.z, p3.z];
+                    const q0 = m.transformPoint(new DOMPoint(0, 0, 0)), q1 = m.transformPoint(new DOMPoint(0, 0, 1)), k = Math.hypot(q1.x - q0.x, q1.y - q0.y, q1.z - q0.z) || 1;
+                    P.push({ el, n, c, k, d: c[0] * p0.x + c[1] * p0.y + c[2] * p0.z, a: w * h, b: [Math.min(...xs), Math.max(...xs), Math.min(...ys), Math.max(...ys), Math.min(...zs), Math.max(...zs)] });
+                }
+                for (const ch of el.children) if (!(ch instanceof SVGElement)) walk(ch, m);
+            };
+            for (const ch of roomEl.children) walk(ch, new DOMMatrix());
+            P.sort((a, b) => a.d - b.d);
+            let hid = 0, lift = 0;
+            for (let i = 0; i < P.length; i++) {
+                const A = P[i]; if (A.gone) continue;
+                for (let j = i + 1; j < P.length && P[j].d - A.d < .9; j++) {
+                    const B = P[j]; if (B.gone || Math.abs(A.c[0] - B.c[0]) + Math.abs(A.c[1] - B.c[1]) + Math.abs(A.c[2] - B.c[2]) > .02) continue;
+                    let ok = 0; for (let k = 0; k < 3; k++) if (Math.min(A.b[k * 2 + 1], B.b[k * 2 + 1]) - Math.max(A.b[k * 2], B.b[k * 2]) > .5) ok++;
+                    if (ok < 2) continue;
+                    const small = A.a <= B.a ? A : B, same = A.n[0] * B.n[0] + A.n[1] * B.n[1] + A.n[2] * B.n[2] > 0;
+                    if (!same) { small.el.style.visibility = 'hidden'; small.gone = true; hid++; if (small === A) break; }
+                    else if (!small.lifted && !small.el.dataset.lift) { small.el.style.transform += ' translateZ(' + (1.6 / small.k).toFixed(2) + 'px)'; small.lifted = true; small.el.dataset.lift = 1; lift++; }
+                }
+            }
+            window.__coplanar = { planes: P.length, hid, lift, ms: Math.round(performance.now() - t0) };
+        };
         const buildRoom = () => {
             const have = ownedItems().filter(id => ITEM_BY[id] && !isOff(id)); const hasStand = have.includes('lamp') && !standOff(); dh.classList.toggle('hasstand', have.includes('lamp')); const sbtn = dh.querySelector('.dh-sb'); if (sbtn) sbtn.textContent = hasStand ? '🪑 STAND: ON' : '🪑 STAND: OFF'; const UP = hasStand ? STAND_UP : 0; curUp = UP * TVS; SCR.cy = 100 + (-209 - UP) * TVS;
             const sk = SKINS.find(k => k.id === (VISIT ? VISIT.skin : st && st.skin)) || SKINS[0];
@@ -5106,7 +5152,7 @@ const AV = (() => {
             Object.keys(SP).forEach(id => { if (!have.includes(id) || id === 'plant' || id === 'lamp' || id === 'dolls' || id === 'boombox') return; const s = SP[id]; h += '<div class="sp" style="width:' + s[0] + 'px;height:' + s[1] + 'px;margin:' + (-s[1] / 2) + 'px 0 0 ' + (-s[0] / 2) + 'px;transform:translate3d(' + s[2] + 'px,' + (FY - s[1] / 2) + 'px,' + s[3] + 'px) rotateY(calc(var(--y) * -1))">' + itemSvg(ITEM_BY[id]) + '</div>'; });
             h += '<div class="bx avroot">' + avatarsHtml() + '</div>';
             h += chestHtml() + tableHtml() + (isOff('sofa') ? '' : couchHtml(sofaPick(), have.includes('shelf'))) + (have.includes('skate') ? skateHtml(285, 70, 24) : '') + (have.includes('dresser') ? dresserHtml() : '') + (have.includes('beanbag') ? beanBagHtml(342, 225) : '') + (have.includes('dolls') ? dollsHtml(366, -112) : '') + (have.includes('boombox') ? boomHtml(-322, -64, 48) : '');
-            roomEl.innerHTML = h; chestPlate(); impUpdate(); avLast = ''; avView(); dh.classList.toggle('drawn', drawn); dh.classList.toggle('lamp-off', !lampOn); applyNight();
+            roomEl.innerHTML = h; chestPlate(); impUpdate(); avLast = ''; avView(); dh.classList.toggle('lite', LITE); setTimeout(() => { try { fixCoplanar(); fixCoplanar(); } catch (e) { } }, 0); dh.classList.toggle('drawn', drawn); dh.classList.toggle('lamp-off', !lampOn); applyNight();
             dh.querySelector('.dh-empty').textContent = have.length ? '' : 'Your room is empty. Buy room upgrades in the treasure chest to fill it.';
         };
         // colour wheel: tap a wall or a curtain to recolour it (free for everyone, remembered in this browser)
