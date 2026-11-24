@@ -1811,7 +1811,6 @@
         #dh .av-fr .avtp svg { transform-origin: 50% 86%; animation: avBreath 4.6s ease-in-out infinite; }
         #dh .av.v-s .av-s { display: block; }
         #dh .av.mir { --mx: -1; }
-        #dh .av.v-s { --sd: var(--sdA, 0px); --ss: var(--ssA, 1); } #dh .av.v-s.mir { --sd: var(--sdB, 0px); --ss: var(--ssB, 1); }
         #dh .av-n { display: flex; justify-content: center; align-items: flex-end; }
         #dh .av-n span { font: 400 15px/1 'VT323', monospace; letter-spacing: .06em; color: #ffe9b0; background: rgba(18,12,4,.82); border: 1px solid rgba(196,125,14,.7); border-radius: 3px; padding: 2px 6px 1px; white-space: nowrap; }
         #dh .av-me .av-n span { color: #1a1000; background: #ffc83c; border-color: #fff3b0; }
@@ -5008,14 +5007,14 @@ const AV = (() => {
             const id = isOff('sofa') ? null : sofaPick(), k = id && COUCH[id], out = [];
             if (k) {
                 const vel = !!k.vel, SW = vel ? k.W - 72 : k.W - 60, top = vel ? 50 : 60, bf = vel ? 32 : 28, cf = vel ? -56 : -55, sc = 1.12, hz = 225 + (bf - 15) * sc;
-                [-1, 1].forEach(d => out.push({ x: d * SW / 4 * sc, y: FY - top * sc, z: hz, fz: 225 + cf * sc - 6 - hz, seatH: top * sc, half: k.W / 2 * sc, pose: 'sofa' }));
+                [-1, 1].forEach(d => out.push({ x: d * SW / 4 * sc, y: FY - top * sc, z: hz, fz: 225 + cf * sc - 6 - hz, seatH: top * sc, pose: 'sofa' }));
             }
             [[-140, 30], [-55, 60], [55, 60], [140, 30]].forEach(p => out.push({ x: p[0], y: FY, z: p[1], pose: 'floor' }));
             return out;
         };
         const avatarHtml = (cfg, seat, name, me) => {
             const sofa = seat.pose === 'sofa', u = (sofa ? seat.seatH / 64 : .92) * 1.6, f = n => n.toFixed(1);
-            const card = (cls, w, h, ox, oy, inner, dz, xtra) => '<div class="sp nofx avc ' + cls + '" style="width:' + f(w) + 'px;height:' + f(h) + 'px;margin:' + f(-oy) + 'px 0 0 ' + f(-ox) + 'px;transform-origin:' + f(ox) + 'px ' + f(oy) + 'px;transform:translate3d(0,0,' + (dz || 0) + 'px) rotateY(calc(var(--y) * -1))' + (xtra || '') + ' scaleX(var(--mx,1))">' + inner + '</div>';
+            const card = (cls, w, h, ox, oy, inner, dz) => '<div class="sp nofx avc ' + cls + '" style="width:' + f(w) + 'px;height:' + f(h) + 'px;margin:' + f(-oy) + 'px 0 0 ' + f(-ox) + 'px;transform-origin:' + f(ox) + 'px ' + f(oy) + 'px;transform:translate3d(0,0,' + (dz || 0) + 'px) rotateY(calc(var(--y) * -1)) scaleX(var(--mx,1))">' + inner + '</div>';
             const th = sofa ? 118 : 136, ty = sofa ? 114 : 136;
             let h = '<div class="bx av' + (me ? ' av-me' : '') + '" style="transform:translate3d(' + f(seat.x) + 'px,' + f(seat.y) + 'px,' + f(seat.z) + 'px)">';
             // back view: torso against the backrest
@@ -5025,14 +5024,7 @@ const AV = (() => {
             const fin = (sofa ? '<div class="avlp" style="left:' + f((fw - lw) / 2) + 'px;top:' + f(lapT) + 'px;width:' + f(lw) + 'px;height:' + f(ft - lapT) + 'px">' + AV.svg(cfg, 'front', 'sofa', 'lap').replace('<svg ', '<svg preserveAspectRatio="none" ') + '</div>' : '')
                 + '<div class="avtp" style="height:' + f(th * u) + 'px">' + AV.svg(cfg, 'front', seat.pose).replace('class="avt"', 'class="avt avf"') + '</div>';
             h += card('av-fr', fw, ft, fw / 2, ty * u, fin, sofa ? Math.round(seat.fz - 3) : 0);
-            // side view on the sofa: the cut-out is slid toward the camera (along the line of sight, so it stays in the same spot on screen)
-            // until it clears the sofa arm, so the legs aren't hidden inside the sofa; shrunk a touch to make up for being closer
-            if (sofa) {
-                const half = (seat.half || 165) + 14, dA = half + seat.x, dB = half - seat.x, sc = d => (1 - d / 1500).toFixed(3);
-                const pull = ' rotateX(calc(var(--p) * -1)) translateZ(var(--sd,0px)) scale(var(--ss,1)) rotateX(var(--p))';
-                h = h.replace('style="transform:translate3d(', 'style="--sdA:' + f(dA) + 'px;--sdB:' + f(dB) + 'px;--ssA:' + sc(dA) + ';--ssB:' + sc(dB) + ';transform:translate3d(');
-                h += card('av-s', 120 * u, 168 * u, 72 * u, 100 * u, AV.svg(cfg, 'side', 'sofa'), 0, pull);
-            } else h += card('av-s', 120 * u, 100 * u, 72 * u, 84 * u, AV.svg(cfg, 'side', 'floor'));
+            h += sofa ? card('av-s', 120 * u, 168 * u, 72 * u, 100 * u, AV.svg(cfg, 'side', 'sofa')) : card('av-s', 120 * u, 100 * u, 72 * u, 84 * u, AV.svg(cfg, 'side', 'floor'));
             if (name) h += '<div class="sp nofx avc av-n" style="width:120px;height:22px;margin:' + f(-(ty + 10) * u - 22) + 'px 0 0 -60px;transform:rotateY(calc(var(--y) * -1))"><span>' + String(name).replace(/[<>&"]/g, '') + '</span></div>';
             return h + '</div>';
         };
