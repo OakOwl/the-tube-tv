@@ -2029,6 +2029,15 @@
         #tcHud .ch-x15:empty { display: none; }
         #tcHud .ch-x15 { position: absolute; right: -6px; top: -10px; z-index: 3; font-family: 'VT323', monospace; font-size: 15px; line-height: 1; padding: 2px 5px; border-radius: 4px; color: #1a1000; background: #ffc83c; box-shadow: 0 0 10px rgba(255,200,60,.6); transform: rotate(8deg); }
         body:not(.tc-bonus) #tcHud .ch-x15 { background: #8a6ad0; color: #fff; box-shadow: none; }
+        body.tc-bonus #tcHud .ch-x15 { right: auto; left: 50%; top: -30px; white-space: nowrap; font-size: 19px; padding: 3px 9px 2px; letter-spacing: .06em; border: 1px solid #fff3b0;
+            background: linear-gradient(#ffe27a, #f5a623); color: #3a1e00; text-shadow: 0 1px 0 rgba(255,255,255,.5); animation: x2Pulse 1.6s ease-in-out infinite; }
+        body.tc-bonus #tcHud .ch-plate { border-color: #ffc83c; box-shadow: 0 0 14px rgba(255,200,60,.55), 0 2px 6px rgba(0,0,0,.6); }
+        @keyframes x2Pulse { 0%,100% { transform: translateX(-50%) rotate(-4deg) scale(1); box-shadow: 0 0 10px rgba(255,200,60,.6); } 50% { transform: translateX(-50%) rotate(3deg) scale(1.1); box-shadow: 0 0 22px rgba(255,200,60,.95); } }
+        #dh .chx2 { display: none; pointer-events: none; align-items: center; justify-content: center; border-radius: 5px; border: 1px solid #fff3b0; background: linear-gradient(#ffe27a, #f5a623); box-shadow: 0 0 18px rgba(255,200,60,.85); }
+        #dh .chx2 b { white-space: nowrap; font: 400 23px/1 'VT323', monospace; letter-spacing: .06em; color: #3a1e00; }
+        body.tc-bonus #dh .chx2 { display: flex; animation: x2Glow 1.6s ease-in-out infinite; }
+        @keyframes x2Glow { 0%,100% { box-shadow: 0 0 10px rgba(255,200,60,.6); } 50% { box-shadow: 0 0 26px rgba(255,200,60,1); } }
+        @media (prefers-reduced-motion: reduce) { body.tc-bonus #tcHud .ch-x15, body.tc-bonus #dh .chx2 { animation: none; } }
         #dh.visiting .dh-lb { opacity: .45; }
         /* ===== party chat dock + floating reactions ===== */
         .pt-chat { position: fixed; right: 16px; bottom: 16px; z-index: 100003; width: 300px; max-width: calc(100vw - 24px); font-family: 'VT323', monospace; color: #e9d9b4; background: rgba(12,8,20,.94); border: 1px solid #5a2f8a; border-radius: 6px; box-shadow: 0 10px 30px rgba(0,0,0,.6); overflow: hidden; }
@@ -4011,7 +4020,7 @@
                 if (name === 'get_profile') return p ? J(p) : null;
                 if (name === 'create_profile') { const n = { username: a.p_username, watch_seconds: 0, coins_spent: 0, owned_skins: ['default'], owned_items: [], equipped_skin: 'default' }; pv.put(n); return J(n); }
                 if (!p) throw new Error('no_profile'); p.owned_items = p.owned_items || [];
-                if (name === 'sync_watch') { const n = Math.max(0, a.p_seconds | 0); p.watch_seconds += n; if (window.__bonusOn) p.bonus_seconds = (p.bonus_seconds || 0) + Math.floor(n / 2); pv.put(p); return J(p); }
+                if (name === 'sync_watch') { const n = Math.max(0, a.p_seconds | 0); p.watch_seconds += n; if (window.__bonusOn) p.bonus_seconds = (p.bonus_seconds || 0) + n; pv.put(p); return J(p); }
                 if (name === 'buy_skin') { const k = SKINS.find(z => z.id === a.p_skin); if (!k) throw new Error('unknown_skin'); if (p.owned_skins.includes(k.id)) throw new Error('already_owned'); if (rowLocked(p.owned_skins, k.tier)) throw new Error('tier_locked'); if (Math.floor(p.watch_seconds / 60) - p.coins_spent < k.price) throw new Error('not_enough_coins'); p.coins_spent += k.price; p.owned_skins.push(k.id); p.equipped_skin = k.id; pv.put(p); return J(p); }
                 if (name === 'buy_item') { const k = ITEM_BY[a.p_item]; if (!k) throw new Error('unknown_item'); if (p.owned_items.includes(k.id)) throw new Error('already_owned'); if (Math.floor(p.watch_seconds / 60) - p.coins_spent < k.price) throw new Error('not_enough_coins'); p.coins_spent += k.price; p.owned_items.push(k.id); pv.put(p); return J(p); }
                 if (name === 'equip_skin') { if (!p.owned_skins.includes(a.p_skin)) throw new Error('not_owned'); p.equipped_skin = a.p_skin; pv.put(p); return J(p); }
@@ -4028,6 +4037,7 @@
                 }
                 if (/^(party_|save_room|friend_room|report_message)/.test(name)) {
                     const PK = 'thetube.previewparty.v1'; let P; try { P = JSON.parse(localStorage.getItem(PK) || 'null'); } catch (e) { } P = P || { party: null, invites: [] }; const save = () => { try { localStorage.setItem(PK, JSON.stringify(P)); } catch (e) { } };
+                    if (name === 'party_join') { P.party = { host: a.p_username, me_host: false, state: null, state_age: 0, members: [{ username: p.username, status: 'joined', here: true }] }; save(); return a.p_username; }
                     if (name === 'save_room') { P.myroom = a.p_room; save(); return null; }
                     if (name === 'friend_room') return { username: a.p_username, skin: 'red', items: ['rug', 'couch_green', 'lava', 'shelf', 'beanbag', 'plant'], room: { cols: { wall: '#1f3a5f', curt: '#d9a441', led: '#ff4fd8' }, sofa: 'couch_green', off: [] } };
                     if (name === 'party_invite') { P.party = P.party && P.party.me_host ? P.party : { host: p.username, me_host: true, state: null, state_age: 0, members: [] }; if (!P.party.members.find(m => m.username === a.p_username)) P.party.members.push({ username: a.p_username, status: 'invited', here: false, t: Date.now() }); save(); return 'invited'; }
@@ -4079,7 +4089,7 @@
         const applySkin = () => { SKINS.forEach(k => body.classList.remove('skin-' + k.id)); if (st && st.skin !== 'default') body.classList.add('skin-' + st.skin); };
         const setMode = () => { body.classList.toggle('tc-in', !!st); body.classList.toggle('tc-out', !st); applySkin(); render(); };
         const render = () => {
-            if (st) { $('tcCoins').textContent = coins(); $('tcTime').textContent = 'WATCHED ' + fmt(st.secs); hud.title = st.username + ' · ' + coins() + ' coins · 1 coin per minute watched' + (window.__bonusOn ? ' · ×1.5 watch-party bonus on' : ''); }
+            if (st) { $('tcCoins').textContent = coins(); $('tcTime').textContent = 'WATCHED ' + fmt(st.secs); hud.title = st.username + ' · ' + coins() + ' coins · 1 coin per minute watched' + (window.__bonusOn ? ' · ×2 watch-party bonus on' : ''); }
             if (shop.classList.contains('show')) renderShop();
             try { paintRoom(); } catch (e) { }
         };
@@ -4153,7 +4163,7 @@
         const earnCoin = () => { try { const d3 = document.getElementById('dh'); if (d3 && d3.playCoin) d3.playCoin(); } catch (e3) { } flash('drop', 900); setTimeout(coinSound, 660); setTimeout(() => { hud.classList.add('open'); flash('bump', 480); flash('tick', 1150); render(); }, 720); setTimeout(() => hud.classList.remove('open'), 1250); };
         async function flush(ka) {
             if (!st || flushing || pending <= 0) return; flushing = true; const n = pending; pending = 0;
-            try { const j = await call('sync_watch', { p_seconds: n }, ka); const b0 = (st.bonus || 0) + (st.bx || 0); st.secs = Number(j.watch_seconds) + pending; st.spent = Number(j.coins_spent); st.bonus = Number(j.bonus_seconds || 0); st.bx = window.__bonusOn ? pending / 2 : 0; if (st.bonus > b0 + 1 && !ka) render(); }
+            try { const j = await call('sync_watch', { p_seconds: n }, ka); const b0 = (st.bonus || 0) + (st.bx || 0); st.secs = Number(j.watch_seconds) + pending; st.spent = Number(j.coins_spent); st.bonus = Number(j.bonus_seconds || 0); st.bx = window.__bonusOn ? pending : 0; if (st.bonus > b0 + 1 && !ka) render(); }
             catch (e) { pending += n; } finally { flushing = false; }
         }
         setInterval(() => {
@@ -4161,7 +4171,7 @@
             let playing = false;
             try { const cv = isPlayingCommercials && activeCommercialVideo; playing = tvOn && !document.hidden && ((vid && !vid.paused && !vid.ended && vid.readyState >= 3 && vid.getAttribute('src')) || (cv && !cv.paused && !cv.ended && cv.readyState >= 3)); } catch (e) { }
             if (!playing) return;
-            const c0 = coins(); st.secs++; pending++; if (window.__bonusOn) st.bx = (st.bx || 0) + .5;
+            const c0 = coins(); st.secs++; pending++; if (window.__bonusOn) st.bx = (st.bx || 0) + 1;
             if (coins() > c0) { earnCoin(); $('tcCoins').textContent = coins(); }
             $('tcTime').textContent = 'WATCHED ' + fmt(st.secs);
             if (shop.classList.contains('show')) $('tcWatch').textContent = fmtLong(st.secs);
@@ -4538,7 +4548,7 @@
                 + plane(W + 90, D + 90, 0, FY - H - 2, 0, 90, 0, 'cglow', '', 'background:radial-gradient(closest-side,rgba(255,225,120,.75),rgba(242,168,35,.25) 55%,transparent);');
             const bb = (cls, w, h, y, z, inner) => '<div class="sp ' + cls + '" style="width:' + w + 'px;height:' + h + 'px;margin:' + (-h / 2) + 'px 0 0 ' + (-w / 2) + 'px;transform:translate3d(0,' + y + 'px,' + z + 'px) rotateY(calc(var(--y) * -1));filter:none">' + inner + '</div>';
             return '<div class="bx chest" style="transform:translate3d(' + CHX + 'px,0,' + CHZ + 'px)"><div class="bx cgrp" style="transform-origin:0 ' + FY + 'px 0">' + body + lid + pile + '</div>'
-                + bb('chcoin', 30, 30, FY - H - 4, 0, '<i class="cc">T</i>') + bb('chplus', 40, 24, FY - H - 58, 0, '<b>+1</b>') + bb('chplate', 96, 40, FY - H - 84, 0, '<b class="cpn">● 0</b><small>COINS</small>') + '</div>';
+                + bb('chcoin', 30, 30, FY - H - 4, 0, '<i class="cc">T</i>') + bb('chplus', 40, 24, FY - H - 58, 0, '<b>+1</b>') + bb('chplate', 96, 40, FY - H - 84, 0, '<b class="cpn">● 0</b><small>COINS</small>') + bb('chx2', 124, 28, FY - H - 128, 0, '<b>2× COINS</b>') + '</div>';
         };
         // side table with the same popcorn bucket as the 2D page (cloned, with its idle bob + hopping kernels)
         const TBX = 215, TBZ = -35;
@@ -4908,7 +4918,7 @@
                 const isOpen = open === f.username, st2 = f.online ? (f.watching ? '<span class="fr-st fr-w">▶ ' + esc(f.watching) + '</span>' : '<span class="fr-st fr-on1">Online</span>') : '<span class="fr-st">' + ago(f.last_seen) + '</span>';
                 let acts = '';
                 if (isOpen) acts = confirmFor ? '<div class="fr-acts fr-conf" data-u="' + u + '"><span>' + (confirmFor === 'block' ? 'Block ' : 'Remove ') + u + '?</span><button class="fr-sm fr-dang" data-a="' + confirmFor + '!">YES</button><button class="fr-sm" data-a="nevermind">NO</button></div>'
-                    : '<div class="fr-acts" data-u="' + u + '">' + (f.online && f.watching_ref ? '<button class="fr-sm fr-go" data-a="join">▶ JOIN</button>' : '') + (f.online ? '<button class="fr-sm fr-go" data-a="pinvite" title="Invite them to watch with you in your room (×1.5 coins)">🏠 INVITE</button>' : '') + '<button class="fr-sm" data-a="remove">REMOVE</button><button class="fr-sm fr-dang" data-a="block">BLOCK</button></div>';
+                    : '<div class="fr-acts" data-u="' + u + '">' + (f.online && f.watching_ref ? '<button class="fr-sm fr-go" data-a="join">▶ JOIN</button>' : '') + (f.online ? '<button class="fr-sm fr-go" data-a="pinvite" title="Invite them to watch with you in your room (×2 coins)">🏠 INVITE</button>' : '') + '<button class="fr-sm" data-a="remove">REMOVE</button><button class="fr-sm fr-dang" data-a="block">BLOCK</button></div>';
                 const nUn = (F.dmUnread && F.dmUnread[f.username]) || 0;
                 return '<div class="fr-row fr-fr' + (f.online ? ' on' : '') + (isOpen ? ' open' : '') + '" data-u="' + u + '" tabindex="0" role="button" aria-expanded="' + isOpen + '">' + av.replace('</i>', '<i class="fr-dot"></i></i>') + '<div class="fr-meta"><b>' + u + '</b>' + st2 + '</div>' + (f.online && f.watching_ref && !isOpen ? '<button class="fr-sm fr-go" data-a="join">JOIN</button>' : '') + '<button class="fr-ic fr-msg' + (nUn ? ' has' : '') + '" data-a="dm" title="Message ' + u + '" aria-label="Message ' + u + (nUn ? ' (' + nUn + ' unread)' : '') + '">💬' + (nUn ? '<em>' + nUn + '</em>' : '') + '</button></div>' + acts;
             };
@@ -4932,6 +4942,7 @@
             const act = async (fn, args, ok) => { busy = true; try { const r = await call(fn, args); if (ok) toast(typeof ok === 'function' ? ok(r) : ok); } catch (e) { toast(ferr(e)); } busy = false; await refresh(); };
             const joinFriend = async f => {
                 const ref = f.watching_ref || ''; click();
+                try { const h = await call('party_join', { p_username: f.username }); toast('🎉 In a watch party with ' + (h || f.username) + ' · 2× coins while you both watch'); if (F.partyTick) F.partyTick(); } catch (e) { }
                 if (!tvOn) { try { $('pwrBtn').click(); } catch (e) { } await new Promise(r => setTimeout(r, 1600)); }
                 if (ref === 'live') { try { if (!liveMode) startLiveMode(); toast('📺 Joined ' + f.username + ' on Live Mode'); } catch (e) { } return; }
                 const m = /^show:(.+):(\d+)$/.exec(ref); if (!m) return;
@@ -4984,7 +4995,7 @@
             sync();
             if (inv && !st) setTimeout(() => { if (!st && inv) { toast('Sign in or create an account to accept the friend invite.'); try { openAuth(session ? 'username' : 'signup'); } catch (e) { } } }, 1500);
         })();
-        // ================= WATCH PARTIES (stage 2): invite friends, visit their room, watch in sync, x1.5 coins =================
+        // ================= WATCH PARTIES (stage 2): invite friends, visit their room, watch in sync, x2 coins =================
         (() => {
             const panel = $('panelFriends'); if (!panel || !window.__fr) return;
             const F = window.__fr; let party = null, invites = [], seenInv = new Set(), hereSet = null, loopT = 0, followUntil = 0, ticking = false;
@@ -5012,7 +5023,7 @@
                 if (party) {
                     const ppl = [{ username: party.host, host: 1, here: true }].concat(party.members || []), me = st && st.username;
                     const names = ppl.filter(p => p.username !== me).map(p => '<span class="fr-pp' + (p.here ? ' on' : '') + '">' + esc(p.username) + (p.host ? ' (host)' : p.status === 'invited' ? ' (invited)' : '') + '</span>').join('');
-                    h += '<div class="fr-party' + (party.bonus ? ' bonus' : '') + '"><div class="fr-ph">🎉 WATCH PARTY <span class="fr-x15">' + (party.bonus ? '×1.5 COINS ON' : '×1.5 when you both watch') + '</span></div><div class="fr-pm">' + (names || '<span class="fr-pp">Waiting for friends…</span>') + '</div><div class="fr-acts0"><button class="fr-sm" data-a="proom">🏠 ' + (party.me_host ? 'MY ROOM' : esc(party.host).toUpperCase() + "'S ROOM") + '</button><button class="fr-sm fr-dang" data-a="pleave">' + (party.me_host ? 'END PARTY' : 'LEAVE') + '</button></div></div>';
+                    h += '<div class="fr-party' + (party.bonus ? ' bonus' : '') + '"><div class="fr-ph">🎉 WATCH PARTY <span class="fr-x15">' + (party.bonus ? '×2 COINS ON' : '×2 when you both watch') + '</span></div><div class="fr-pm">' + (names || '<span class="fr-pp">Waiting for friends…</span>') + '</div><div class="fr-acts0"><button class="fr-sm" data-a="proom">🏠 ' + (party.me_host ? 'MY ROOM' : esc(party.host).toUpperCase() + "'S ROOM") + '</button><button class="fr-sm fr-dang" data-a="pleave">' + (party.me_host ? 'END PARTY' : 'LEAVE') + '</button></div></div>';
                 }
                 return h;
             };
@@ -5022,10 +5033,10 @@
                 const was = party; party = j && j.party || null; invites = (j && j.invites) || [];
                 invites.forEach(i => { if (!seenInv.has(i.host)) { seenInv.add(i.host); toast('🏠 ' + i.host + ' invited you to watch together. Open Friends to join.'); F.chime(); } });
                 F.counts.inv = invites.length; F.updateTitle();
-                if (party && party.me_host) { const now = new Set((party.members || []).filter(m => m.here).map(m => m.username)); if (hereSet) now.forEach(u => { if (!hereSet.has(u)) { toast('🎉 ' + u + ' joined your watch party · ×1.5 coins while you watch together'); F.chime(); } }); hereSet = now; } else hereSet = null;
+                if (party && party.me_host) { const now = new Set((party.members || []).filter(m => m.here).map(m => m.username)); if (hereSet) now.forEach(u => { if (!hereSet.has(u)) { toast('🎉 ' + u + ' joined your watch party · ×2 coins while you watch together'); F.chime(); } }); hereSet = now; } else hereSet = null;
                 if (was && !party) { toast(was.me_host ? 'Watch party ended' : 'The watch party has ended'); if (window.__room && window.__room.visiting()) window.__room.end(); }
                 window.__bonusOn = !!(party && party.bonus); if (body.classList.contains('tc-bonus') !== window.__bonusOn) body.classList.toggle('tc-bonus', window.__bonusOn); if (body.classList.contains('tc-party') !== !!party) body.classList.toggle('tc-party', !!party);
-                const tag = $('tcBonusTag'); if (tag) tag.textContent = party ? (party.bonus ? '×1.5' : 'PARTY') : '';
+                const tag = $('tcBonusTag'); if (tag) tag.textContent = party ? (party.bonus ? '2× COINS' : 'PARTY') : '';
                 F.repaint(); follow(); if (window.__chat) window.__chat.update(party, (j && j.messages) || []);
             };
             const tick = async () => {
@@ -5037,7 +5048,7 @@
             F.partyAction = async (a, u) => {
                 click();
                 try {
-                    if (a === 'pinvite') { await call('party_invite', { p_username: u }); toast('🏠 Invite sent to ' + u + '. You\'ll both earn ×1.5 coins while you watch together.'); }
+                    if (a === 'pinvite') { await call('party_invite', { p_username: u }); toast('🏠 Invite sent to ' + u + '. You\'ll both earn ×2 coins while you watch together.'); }
                     else if (a === 'pjoin') { await call('party_answer', { p_host: u, p_join: true }); seenInv.delete(u); toast('🎉 Joined ' + u + '\'s watch party'); await tick(); visitHost(u); return; }
                     else if (a === 'pno') { await call('party_answer', { p_host: u, p_join: false }); }
                     else if (a === 'pleave') { await call('party_leave'); if (window.__room && window.__room.visiting()) window.__room.end(); }
