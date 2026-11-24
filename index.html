@@ -1801,8 +1801,8 @@
 
 
         /* the camera angle is set only on the pieces that face the camera, and doesn't flow down into their drawings */
-        @property --y { syntax: '*'; inherits: false; }
-        @property --p { syntax: '*'; inherits: false; }
+        @property --y { syntax: '*'; inherits: false; initial-value: 0deg; }
+        @property --p { syntax: '*'; inherits: false; initial-value: -24deg; }
         /* ===== phones/tablets: lighter 3D room (less GPU memory, no constant re-sorting) ===== */
         #dh.lite .tvr, #dh.lite .lpool, #dh.lite .dmoonw, #dh.lite .sunr, #dh.lite .dglow, #dh.lite .cglow, #dh.lite .dh-sun { display: none !important; }
         #dh.lite .av-t svg, #dh.lite .avtp svg, #dh.lite .stm, #dh.lite .stm i, #dh.lite .rb, #dh.lite .sunb { animation: none !important; }
@@ -4359,7 +4359,7 @@
         const baseSc = () => Math.max(.5, Math.min(1.35, Math.min(window.innerWidth, window.innerHeight * 1.5) / (window.innerWidth < 640 ? 1500 : 1470)));
         let yEls = null;
         const ySet = () => {
-            if (!yEls) yEls = typeof roomEl !== 'undefined' && roomEl ? [...roomEl.querySelectorAll('[style*="var(--y"],[style*="var(--p"]')] : [];
+            if (!yEls) yEls = typeof roomEl !== 'undefined' && roomEl ? [...roomEl.querySelectorAll('[style*="var(--y"],[style*="var(--p"],.imp')] : [];
             const ys = V.y.toFixed(2) + 'deg', ps = V.p.toFixed(2) + 'deg';
             for (const e of yEls) { e.style.setProperty('--y', ys); e.style.setProperty('--p', ps); }
         };
