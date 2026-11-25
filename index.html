@@ -5541,7 +5541,7 @@ window.AV3 = AV3;
             if (lk.halo) h += plane(620, 480, 0, FY - 62 - UP - 135, -132, 0, 0, '', '', 'pointer-events:none;background:radial-gradient(closest-side,rgba(' + lk.halo + ',.42),rgba(' + lk.halo + ',.14) 55%,transparent);');
             h += '</div>';
             if (have.includes('poster')) h += plane(104, 143, -446, -62, -120, 0, 90, 'hid', itemSvg(ITEM_BY.poster));
-            if (have.includes('neon')) h += plane(140, 100, 446, -98, -60, 0, -90, 'hid neon-s', itemSvg(ITEM_BY.neon));
+            if (have.includes('neon')) h += plane(140, 100, 446, -165, -60, 0, -90, 'hid neon-s', itemSvg(ITEM_BY.neon));
             
             Object.keys(SP).forEach(id => { if (!have.includes(id) || id === 'plant' || id === 'lamp' || id === 'dolls' || id === 'boombox') return; const s = SP[id]; h += '<div class="sp" style="width:' + s[0] + 'px;height:' + s[1] + 'px;margin:' + (-s[1] / 2) + 'px 0 0 ' + (-s[0] / 2) + 'px;transform:translate3d(' + s[2] + 'px,' + (FY - s[1] / 2) + 'px,' + s[3] + 'px) rotateY(calc(var(--y) * -1))">' + itemSvg(ITEM_BY[id]) + '</div>'; });
             h += '<div class="bx avroot">' + avatarsHtml() + '</div>';
