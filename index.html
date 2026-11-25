@@ -1983,6 +1983,28 @@
         #dh .av-n span { font: 400 15px/1 'VT323', monospace; letter-spacing: .06em; color: #ffe9b0; background: rgba(18,12,4,.82); border: 1px solid rgba(196,125,14,.7); border-radius: 3px; padding: 2px 6px 1px; white-space: nowrap; }
         #dh .av-me .av-n span { color: #1a1000; background: #ffc83c; border-color: #fff3b0; }
         #dh .avc img.av3 { position: absolute; left: 0; top: 0; width: 100%; height: 100%; visibility: hidden; transform-origin: 50% 80%; animation: avBreath 4.6s ease-in-out infinite; -webkit-user-drag: none; }
+        #dh .avc .avst { position: absolute; inset: 0; transform-origin: 50% 80%; animation: avBreath 4.6s ease-in-out infinite; }
+        #dh .avc .avst img.av3 { animation: none; }
+        #dh .avc img.av3h { transition: transform .7s cubic-bezier(.4,0,.3,1); }
+        #dh .av.nod img.av3h { transform: rotate(10deg) translateY(11%); transition: transform 3.4s cubic-bezier(.5,0,.8,.6); }
+        #dh .av.v-s.nod img.av3h { transform: rotate(-20deg) translateY(4%); }
+        #dh .av.v-b.nod img.av3h { transform: translateY(10%) scaleY(.94); }
+        #dh .av.jolt img.av3h { animation: avJolt .55s ease-out; }
+        #dh .av.yawn img.av3h { transform: rotate(-4deg) translateY(-3%) scale(1.02); transition-duration: 1s; }
+        #dh .av.v-s.yawn img.av3h { transform: rotate(10deg) translateY(-2%); }
+        #dh .av.lookL img.av3h { transform: rotate(-13deg) translateX(-3%); } #dh .av.lookR img.av3h { transform: rotate(13deg) translateX(3%); }
+        #dh .av.v-s.lookL img.av3h { transform: rotate(-6deg); } #dh .av.v-s.lookR img.av3h { transform: rotate(5deg) translateY(-1%); }
+        #dh .av.bob img.av3h { animation: avBob .62s ease-in-out 5; }
+        #dh .av.wiggle .avst { animation: avWiggle 1.2s ease-in-out; }
+        @keyframes avJolt { 0% { transform: rotate(4deg) translateY(4%); } 30% { transform: translateY(-6%) scale(1.04); } 55% { transform: rotate(-3deg) translateY(-1%); } 80% { transform: rotate(2deg); } 100% { transform: none; } }
+        @keyframes avBob { 0%, 100% { transform: none; } 50% { transform: rotate(3deg) translateY(3%); } }
+        @keyframes avWiggle { 0%, 100% { transform: none; } 20% { transform: rotate(-3deg); } 40% { transform: rotate(3deg) translateY(-2%); } 60% { transform: rotate(-2deg); } 80% { transform: rotate(1deg); } }
+        #dh .av-n { overflow: visible; } #dh .av-n .avz { position: absolute; left: 78%; top: 18px; display: none; pointer-events: none; }
+        #dh .av.nod .av-n .avz { display: block; }
+        #dh .av-n .avz i { position: absolute; left: 0; top: 0; font: 700 20px/1 'VT323', monospace; font-style: normal; color: #cfe6ff; text-shadow: 0 0 4px rgba(120,170,255,.9), 0 1px 0 #123; opacity: 0; animation: avZ 2.4s ease-out infinite; }
+        #dh .av-n .avz i:nth-child(2) { animation-delay: .8s; font-size: 25px; } #dh .av-n .avz i:nth-child(3) { animation-delay: 1.6s; font-size: 31px; }
+        @keyframes avZ { 0% { opacity: 0; transform: translate(0, 0) rotate(-10deg); } 20% { opacity: 1; } 100% { opacity: 0; transform: translate(22px, -34px) rotate(12deg); } }
+        #dh.lite .avc .avst { animation: none; }
         #dh .avc img.av3.on { visibility: visible; }
         #dh.lite .avc img.av3 { animation: none; }
         #dh .avp-fig img.av3 { width: 170px; height: auto; visibility: hidden; }
@@ -4808,7 +4830,7 @@ const AV = (() => {
 })();
 // ---------- 3D avatar kit: pre-rendered Blender layers, tinted + stacked on a canvas ----------
 const AV3 = (() => {
-    const BASE = 'av3/', VER = '?v=138'; // bump whenever the kit is re-rendered so browsers/CDN fetch the new images
+    const BASE = 'av3/', VER = '?v=146'; // bump whenever the kit is re-rendered so browsers/CDN fetch the new images
     let man = null, ready = false; const waiters = [];
     const imgs = new Map(), comps = new Map();
     // sRGB <-> linear tables; neutral layers were rendered so a mid-lit surface reads ~200
@@ -4824,21 +4846,30 @@ const AV3 = (() => {
         imgs.set(k, p); return p;
     };
     // which layers make up one view of one outfit, back to front
-    function recipe(c, v, pose) {
+    function recipe(c, v, pose, part, expr) {
+        part = part || 'full';
         const S = AV.SKIN[c.skin], HC = AV.HAIRC[c.hc], K = AV.COLS, L = [];
         const has = n => man[v].layers.includes(n);
         const add = (n, t) => { if (has(n)) L.push([n, t || null]); };
         const bot = c.bot === 'jeans' ? 'trousers' : c.bot;
+        const split = part !== 'full' && has('headskin');
+        if (part === 'head' && !split) return L;
+        if (part !== 'head') {
         if (bot === 'shorts' || bot === 'skirt') add('legs_' + pose, S);
         add('shoes_' + pose, K[c.sc]); add('soles_' + pose);
         add('bot_' + bot + '_' + pose, K[c.bc]);
         if (c.top === 'tee') add('arms', S);
         const t = c.top; add('top_' + t, K[c.tc]); add('top_' + t + '_2', K[c.tc2]); add('top_' + t + '_d');
-        add('skin', S);
+        add(split ? 'bodyskin' : 'skin', S);
+        }
+        if (part === 'body' && split) return L;
+        if (split) add('headskin', S);
         if (v !== 'b') {
             if (c.cheeks !== 'none') add('cheeks_' + c.cheeks);
-            add('eyes_' + (c.eyes === 'dot' ? 'default' : c.eyes));
-            add('mouth_' + ({ smile: 'open', closed: 'smile' }[c.mouth] || c.mouth));
+            const eyes = expr && has('eyes_blink') ? 'blink' : (c.eyes === 'dot' ? 'default' : c.eyes);
+            const mouth = expr === 'yawn' && has('mouth_yawn') ? 'yawn' : expr === 'sleep' ? 'smile' : ({ smile: 'open', closed: 'smile' }[c.mouth] || c.mouth);
+            add('eyes_' + eyes);
+            add('mouth_' + mouth);
             add('brows', shade(HC, -.25));
             if (c.beard !== 'none') add('beard_' + c.beard, HC);
             if (c.glasses !== 'none') add('glasses_' + c.glasses);
@@ -4848,11 +4879,11 @@ const AV3 = (() => {
         if (c.hat !== 'none') { add('hat_' + c.hat, K[c.hatc]); add('hat_' + c.hat + '_d'); }
         return L;
     }
-    async function compose(cfg, v, pose) {
-        const c = AV.norm(cfg), key = JSON.stringify(c) + '|' + v + '|' + pose;
+    async function compose(cfg, v, pose, part, expr) {
+        const c = AV.norm(cfg), key = JSON.stringify(c) + '|' + v + '|' + pose + '|' + (part || '') + '|' + (expr || '');
         if (comps.has(key)) return comps.get(key);
         const job = (async () => {
-            const L = recipe(c, v, pose), ims = await Promise.all(L.map(([n]) => load(v, n)));
+            const L = recipe(c, v, pose, part, expr), ims = await Promise.all(L.map(([n]) => load(v, n)));
             const b = man[v].box, W = b[2] - b[0], H = b[3] - b[1];
             const cv = document.createElement('canvas'); cv.width = W; cv.height = H; const g = cv.getContext('2d');
             const tmp = document.createElement('canvas'); tmp.width = W; tmp.height = H; const tg = tmp.getContext('2d', { willReadFrequently: true });
@@ -4873,13 +4904,13 @@ const AV3 = (() => {
             const sil = document.createElement('canvas'); sil.width = W; sil.height = H; const sg = sil.getContext('2d');
             sg.drawImage(cv, 0, 0); sg.globalCompositeOperation = 'source-in'; sg.fillStyle = '#fffdf6'; sg.fillRect(0, 0, W, H);
             const R = 4.5, ring = (x0, y0) => { for (let a = 0; a < 16; a++) og.drawImage(sil, x0 + Math.cos(a * Math.PI / 8) * R, y0 + Math.sin(a * Math.PI / 8) * R); og.drawImage(sil, x0, y0); };
-            try { og.save(); og.filter = 'blur(3px)'; og.globalAlpha = .35; const sh = document.createElement('canvas'); sh.width = W; sh.height = H; const hg = sh.getContext('2d'); hg.drawImage(cv, 0, 0); hg.globalCompositeOperation = 'source-in'; hg.fillStyle = '#000'; hg.fillRect(0, 0, W, H);
+            if (part !== 'head') try { og.save(); og.filter = 'blur(3px)'; og.globalAlpha = .35; const sh = document.createElement('canvas'); sh.width = W; sh.height = H; const hg = sh.getContext('2d'); hg.drawImage(cv, 0, 0); hg.globalCompositeOperation = 'source-in'; hg.fillStyle = '#000'; hg.fillRect(0, 0, W, H);
                 for (let a = 0; a < 8; a++) og.drawImage(sh, P + 1.5 + Math.cos(a * Math.PI / 4) * R, P + 3 + Math.sin(a * Math.PI / 4) * R); og.restore(); } catch (e) { og.restore(); }
             ring(P, P); og.drawImage(cv, P, P);
             const blob = await new Promise(r => out.toBlob(r, 'image/webp', .92));
             return blob ? URL.createObjectURL(blob) : out.toDataURL();
         })();
-        comps.set(key, job); if (comps.size > 60) { const k0 = comps.keys().next().value; comps.get(k0).then(u => { try { URL.revokeObjectURL(u); } catch (e) { } }); comps.delete(k0); }
+        comps.set(key, job); if (comps.size > 160) { const k0 = comps.keys().next().value; comps.get(k0).then(u => { try { URL.revokeObjectURL(u); } catch (e) { } }); comps.delete(k0); }
         return job;
     }
     // placement in room px: k = room px per world unit; returns card size + the seat pivot inside it
@@ -4892,11 +4923,27 @@ const AV3 = (() => {
         root.querySelectorAll('img[data-av3]').forEach(im => {
             if (im.dataset.done === im.dataset.av3) return; im.dataset.done = im.dataset.av3;
             let o; try { o = JSON.parse(decodeURIComponent(im.dataset.av3)); } catch (e) { return; }
-            compose(o.c, o.v, o.p).then(u => { if (im.dataset.av3 === im.dataset.done) { im.src = u; im.classList.add('on'); } });
+            compose(o.c, o.v, o.p, o.pt, o.x).then(u => { if (im.dataset.av3 === im.dataset.done) { im.src = u; im.classList.add('on'); } });
         });
     };
     const tag = (cfg, v, pose, cls) => '<img class="av3 ' + (cls || '') + '" alt="" draggable="false" data-av3="' + encodeURIComponent(JSON.stringify({ c: AV.norm(cfg), v, p: pose })) + '">';
-    return { get ready() { return ready; }, onReady: f => { if (ready) f(); else waiters.push(f); }, compose, geom, fill, tag, recipe };
+    // body + separately-posable head (for idle animations); the head pivots at the neck
+    const NECK_Z = .56;
+    const pivot = v => { const b = man[v].box, W = b[2] - b[0] + 2 * PAD, H = b[3] - b[1] + 2 * PAD; return [((FULL.cx - b[0] + PAD) / W * 100).toFixed(1), ((295 + (.85 - NECK_Z) * FULL.ppu - b[1] + PAD) / H * 100).toFixed(1)]; };
+    const stack = (cfg, v, pose) => {
+        const c = AV.norm(cfg); if (!man[v].layers.includes('headskin')) return tag(c, v, pose);
+        const d = o => encodeURIComponent(JSON.stringify(o)), pv = pivot(v);
+        return '<span class="avst"><img class="av3" alt="" draggable="false" data-av3="' + d({ c, v, p: pose, pt: 'body' }) + '"><img class="av3 av3h" alt="" draggable="false" style="transform-origin:' + pv[0] + '% ' + pv[1] + '%" data-av3="' + d({ c, v, p: pose, pt: 'head' }) + '"></span>';
+    };
+    // swap the face on a head image (blink / yawn / sleep / '' = normal); the old picture stays until the new one is ready
+    const setExpr = (im, x) => {
+        let o; try { o = JSON.parse(decodeURIComponent(im.dataset.av3)); } catch (e) { return; }
+        if ((o.x || '') === (x || '')) return; o.x = x || undefined;
+        const k = encodeURIComponent(JSON.stringify(o)); im.dataset.av3 = k; im.dataset.done = k;
+        compose(o.c, o.v, o.p, o.pt, o.x).then(u => { if (im.dataset.av3 === k) im.src = u; });
+    };
+    const warm = (cfg, v, pose) => { if (!ready || !man[v].layers.includes('headskin')) return; ['blink', 'sleep', 'yawn'].forEach(x => compose(cfg, v, pose, 'head', x)); };
+    return { get ready() { return ready; }, onReady: f => { if (ready) f(); else waiters.push(f); }, compose, geom, fill, tag, stack, setExpr, warm, recipe };
 })();
 window.AV3 = AV3;
 
@@ -5455,10 +5502,11 @@ window.AV3 = AV3;
                 // sit into the cushion: a little forward of the backrest and in from the arm
                 const SZ = sofa ? -46 : 0, SX = sofa ? -Math.sign(seat.x) * 14 : 0;
                 let q = '<div class="bx av' + (me ? ' av-me' : '') + '" style="transform:translate3d(' + f(seat.x + SX) + 'px,' + f(seat.y) + 'px,' + f(seat.z + SZ) + 'px)">';
-                q += card('av-t', gb.w, gb.h, gb.ox, gb.oy, AV3.tag(cfg, 'b', seat.pose, 'avb'));
-                q += card('av-fr', gf.w, gf.h, gf.ox, gf.oy, AV3.tag(cfg, 'f', seat.pose), sofa ? Math.round(seat.fz - 3 - SZ) : 0);
-                q += card('av-s', gs.w, gs.h, gs.ox, gs.oy, AV3.tag(cfg, 's', seat.pose));
-                if (name) q += '<div class="sp nofx avc av-n" style="width:120px;height:22px;margin:' + f(-1.32 * k - 22) + 'px 0 0 -60px;transform:rotateY(calc(var(--y) * -1)) translateZ(60px)"><span>' + String(name).replace(/[<>&"]/g, '') + '</span></div>';
+                q += card('av-t', gb.w, gb.h, gb.ox, gb.oy, AV3.stack(cfg, 'b', seat.pose));
+                q += card('av-fr', gf.w, gf.h, gf.ox, gf.oy, AV3.stack(cfg, 'f', seat.pose), sofa ? Math.round(seat.fz - 3 - SZ) : 0);
+                q += card('av-s', gs.w, gs.h, gs.ox, gs.oy, AV3.stack(cfg, 's', seat.pose));
+                if (name) q += '<div class="sp nofx avc av-n" style="width:120px;height:22px;margin:' + f(-1.32 * k - 22) + 'px 0 0 -60px;transform:rotateY(calc(var(--y) * -1)) translateZ(60px)"><span>' + String(name).replace(/[<>&"]/g, '') + '</span><b class="avz"><i>z</i><i>z</i><i>Z</i></b></div>';
+                q = q.replace('<div class="bx av', '<div data-avc="' + encodeURIComponent(JSON.stringify(AV.norm(cfg))) + '" data-pose="' + seat.pose + '" class="bx av');
                 return q + '</div>';
             }
             let h = '<div class="bx av' + (me ? ' av-me' : '') + '" style="transform:translate3d(' + f(seat.x) + 'px,' + f(seat.y) + 'px,' + f(seat.z) + 'px)">';
@@ -5487,6 +5535,38 @@ window.AV3 = AV3;
             roomEl.querySelectorAll('.av').forEach(e => { e.classList.remove('v-f', 'v-b', 'v-s', 'mir'); e.classList.add(v); if (mir) e.classList.add('mir'); });
         };
         const renderAvatars = () => { const r = roomEl.querySelector('.avroot'); if (!r) return; r.innerHTML = avatarsHtml(); window.__yRefresh(); avLast = ''; avView(); AV3.fill(r); };
+        // ---- idle life: blinks, yawns, nodding off (with a jolt awake), glancing round, bopping along ----
+        const avIdle = (() => {
+            const S = new WeakMap(), R = (a, b) => a + Math.random() * (b - a);
+            const heads = el => el.querySelectorAll('img.av3h');
+            const face = (el, x) => heads(el).forEach(im => AV3.setExpr(im, x));
+            const cls = (el, c, on) => el.classList.toggle(c, on);
+            const busy = st => st.act && performance.now() < st.until;
+            const acts = {
+                yawn(el, st) { cls(el, 'yawn', true); face(el, 'yawn'); st.t1 = setTimeout(() => { cls(el, 'yawn', false); face(el, ''); }, R(2000, 2800)); return 3200; },
+                nod(el, st) { cls(el, 'nod', true); face(el, 'sleep'); const hold = R(4200, 7500);
+                    st.t1 = setTimeout(() => { cls(el, 'nod', false); cls(el, 'jolt', true); face(el, ''); setTimeout(() => cls(el, 'jolt', false), 600); setTimeout(() => { face(el, 'blink'); setTimeout(() => face(el, ''), 120); }, 700); }, hold); return hold + 1400; },
+                look(el, st) { const d = Math.random() < .5 ? 'lookL' : 'lookR'; cls(el, d, true); st.t1 = setTimeout(() => cls(el, d, false), R(1400, 2600)); return 2900; },
+                bob(el, st) { cls(el, 'bob', true); st.t1 = setTimeout(() => cls(el, 'bob', false), 3200); return 3400; },
+                wiggle(el, st) { cls(el, 'wiggle', true); st.t1 = setTimeout(() => cls(el, 'wiggle', false), 1300); return 1500; },
+            };
+            const pick = () => { const r = Math.random(), late = new Date().getHours() >= 22 || new Date().getHours() < 6; return r < (late ? .38 : .2) ? 'nod' : r < (late ? .58 : .42) ? 'yawn' : r < .7 ? 'look' : r < .88 ? 'bob' : 'wiggle'; };
+            let timer = 0;
+            const tick = () => {
+                if (!dh.classList.contains('show') || document.hidden) return;
+                const now = performance.now();
+                roomEl.querySelectorAll('.avroot > .av').forEach(el => {
+                    let st = S.get(el);
+                    if (!st) { st = { blink: now + R(800, 3500), next: now + R(3000, 9000), act: null, until: 0 }; S.set(el, st);
+                        try { const c = JSON.parse(decodeURIComponent(el.dataset.avc || '')); ['f', 's', 'b'].forEach(v => AV3.warm(c, v, el.dataset.pose || 'sofa')); } catch (e) { } }
+                    const b = busy(st);
+                    if (!b && now >= st.blink) { face(el, 'blink'); setTimeout(() => { if (!busy(st)) face(el, ''); if (Math.random() < .22) setTimeout(() => { if (!busy(st)) { face(el, 'blink'); setTimeout(() => { if (!busy(st)) face(el, ''); }, 110); } }, 190); }, 120); st.blink = now + R(2600, 6200); }
+                    if (!b && now >= st.next) { st.act = pick(); st.until = now + acts[st.act](el, st); st.next = st.until + R(6000, 16000); }
+                });
+            };
+            return { start() { if (!timer) timer = setInterval(tick, 200); }, stop() { clearInterval(timer); timer = 0; } };
+        })();
+        avIdle.start();
         AV3.onReady(() => { try { renderAvatars(); if (avp && dh.classList.contains('avp')) avPreview(); } catch (e) { } });
         window.__avRender = renderAvatars; window.__avView = avView;
 
