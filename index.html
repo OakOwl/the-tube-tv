@@ -5485,7 +5485,7 @@ window.AV3 = AV3;
             if (ITEM_BY.plant) h += '<div class="sp" style="width:44px;height:57px;margin:-57px 0 0 -22px;transform:translate3d(' + (WX - 2) + 'px,' + (Y2 - 3) + 'px,80px) rotateY(calc(var(--y) * -1))">' + itemSvg(ITEM_BY.plant) + '</div>';
             h += box(16, 26, 38, WX - 4, Y2 - 3 - 13, 140, 'cb', '', 'background:linear-gradient(180deg,#f4efe3,#cfc6b0);') + plane(30, 20, 441.5, Y2 - 28, 140, 0, -90, 'hid', '', 'background:#274690;border:2px solid #f4efe3;box-sizing:border-box;');
             if (lava) h += lavaLampHtml(WX - 2, Y1 - 3, 126);
-            return '<div class="bx" style="transform:translate3d(0,0,45px)">' + h + '</div>';
+            return '<div class="bx" style="transform:translate3d(0,-60px,45px)">' + h + '</div>';
         };
         const chestPlate = () => { const e = roomEl.querySelector('.cpn'); if (e) e.textContent = '● ' + coins(); };
         const chestPlay = () => {
