@@ -4959,6 +4959,7 @@ window.AV3 = AV3;
             return { back, seat, arm };
         })();
         // the big black media console: the TV sits on top of it (the lower stand is replaced and the TV rises a little)
+        const SOFA_Z = 320; // sofa sits further back from the TV
         const STAND_H = 102, STAND_LEG = 70, STAND_UP = STAND_H - 62 + STAND_LEG;
         const standOff = () => isOff('lamp');
         const standHtml = () => {
@@ -4990,7 +4991,7 @@ window.AV3 = AV3;
         };
         // emerald velvet sofa: channel-tufted back and arms (arms as tall as the back), two seat cushions, gold frame
         const velvetSofaHtml = (k, coffee) => {
-            const sz = 225, W = k.W, AW = 36, SW = W - AW * 2, AD = 124, top = FY - 10 - k.armH, seatTop = FY - 10 - 38;
+            const sz = SOFA_Z, W = k.W, AW = 36, SW = W - AW * 2, AD = 124, top = FY - 10 - k.armH, seatTop = FY - 10 - 38;
             const ch = c => 'background:repeating-linear-gradient(90deg,rgba(0,0,0,.36) 0 1.5px,rgba(255,255,255,.13) 4px,rgba(255,255,255,.03) 9px,rgba(0,0,0,.2) 16.5px,rgba(0,0,0,.36) 18px),linear-gradient(180deg,rgba(255,255,255,.13),rgba(0,0,0,.24)),' + c + ';';
             const flat = c => 'background:linear-gradient(160deg,rgba(255,255,255,.12),rgba(0,0,0,.22)),' + c + ';';
             const gold = 'background:linear-gradient(90deg,#a87a22,#f8e08e 42%,#d6a73a 70%,#b8862a);', goldT = 'background:linear-gradient(180deg,#f8e08e,#c9982f);';
@@ -5128,7 +5129,7 @@ window.AV3 = AV3;
         };
         const couchHtml = (id, coffee) => {
             const k = id && COUCH[id]; if (!k) return ''; if (k.vel) return velvetSofaHtml(k, coffee); const wr = k.wear ? WEAR : null;
-            const sz = 225, SW = k.W - 60, f = (extra) => 'background:' + (extra || '') + 'linear-gradient(160deg,rgba(255,255,255,.14),rgba(0,0,0,.2)),' + k.c1 + ';', fb = 'background:' + (wr ? wr.back + ',' : '') + k.pat + 'linear-gradient(160deg,rgba(255,255,255,.1),rgba(0,0,0,.25)),' + k.c2 + ';';
+            const sz = SOFA_Z, SW = k.W - 60, f = (extra) => 'background:' + (extra || '') + 'linear-gradient(160deg,rgba(255,255,255,.14),rgba(0,0,0,.2)),' + k.c1 + ';', fb = 'background:' + (wr ? wr.back + ',' : '') + k.pat + 'linear-gradient(160deg,rgba(255,255,255,.1),rgba(0,0,0,.25)),' + k.c2 + ';';
             const seatTop = FY - 10 - 36, cush = 'background:' + (wr ? wr.seat + ',' : '') + 'linear-gradient(90deg,transparent calc(33.3% - 1px),rgba(0,0,0,.32) 33.3%,transparent calc(33.3% + 1px),transparent calc(66.6% - 1px),rgba(0,0,0,.32) 66.6%,transparent calc(66.6% + 1px)),linear-gradient(160deg,rgba(255,255,255,.2),rgba(0,0,0,.15)),' + k.c1 + ';';
             let h = '';
             if (k.halo) h += plane(k.W + 160, 300, 0, FY - 3, sz, 90, 0, '', '', 'pointer-events:none;background:radial-gradient(closest-side,rgba(' + k.halo + ',.4),rgba(' + k.halo + ',.12) 60%,transparent);');
@@ -5430,8 +5431,8 @@ window.AV3 = AV3;
         const avSeats = () => {
             const id = isOff('sofa') ? null : sofaPick(), k = id && COUCH[id], out = [];
             if (k) {
-                const vel = !!k.vel, SW = vel ? k.W - 72 : k.W - 60, top = vel ? 50 : 60, bf = vel ? 32 : 28, cf = vel ? -56 : -55, sc = 1.12, hz = 225 + (bf - 15) * sc;
-                [-1, 1].forEach(d => out.push({ x: d * SW / 4 * sc, y: FY - top * sc, z: hz, fz: 225 + cf * sc - 6 - hz, seatH: top * sc, pose: 'sofa' }));
+                const vel = !!k.vel, SW = vel ? k.W - 72 : k.W - 60, top = vel ? 50 : 60, bf = vel ? 32 : 28, cf = vel ? -56 : -55, sc = 1.12, hz = SOFA_Z + (bf - 15) * sc;
+                [-1, 1].forEach(d => out.push({ x: d * SW / 4 * sc, y: FY - top * sc, z: hz, fz: SOFA_Z + cf * sc - 6 - hz, seatH: top * sc, pose: 'sofa' }));
             }
             [[-140, 30], [-55, 60], [55, 60], [140, 30]].forEach(p => out.push({ x: p[0], y: FY, z: p[1], pose: 'floor' }));
             return out;
