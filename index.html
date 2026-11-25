@@ -4805,7 +4805,7 @@ const AV = (() => {
 })();
 // ---------- 3D avatar kit: pre-rendered Blender layers, tinted + stacked on a canvas ----------
 const AV3 = (() => {
-    const BASE = 'av3/';
+    const BASE = 'av3/', VER = '?v=136'; // bump whenever the kit is re-rendered so browsers/CDN fetch the new images
     let man = null, ready = false; const waiters = [];
     const imgs = new Map(), comps = new Map();
     // sRGB <-> linear tables; neutral layers were rendered so a mid-lit surface reads ~200
@@ -4814,10 +4814,10 @@ const AV3 = (() => {
     const LREF = S2L[200];
     const hexLin = h => { const n = parseInt(h.slice(1), 16); return [S2L[n >> 16], S2L[(n >> 8) & 255], S2L[n & 255]]; };
     const shade = (hex, f) => { const n = parseInt(hex.slice(1), 16); let r = n >> 16, g = (n >> 8) & 255, b = n & 255; const m = f < 0 ? 0 : 255, t = Math.abs(f); r = Math.round(r + (m - r) * t); g = Math.round(g + (m - g) * t); b = Math.round(b + (m - b) * t); return '#' + ((1 << 24) | (r << 16) | (g << 8) | b).toString(16).slice(1); };
-    fetch(BASE + 'manifest.json', { cache: 'force-cache' }).then(r => r.ok ? r.json() : null).then(j => { if (j && j.f) { man = j; ready = true; waiters.splice(0).forEach(f => f()); } }).catch(() => { });
+    fetch(BASE + 'manifest.json' + VER, { cache: 'no-cache' }).then(r => r.ok ? r.json() : null).then(j => { if (j && j.f) { man = j; ready = true; waiters.splice(0).forEach(f => f()); } }).catch(() => { });
     const load = (v, n) => {
         const k = v + '/' + n; if (imgs.has(k)) return imgs.get(k);
-        const p = new Promise(res => { const im = new Image(); im.decoding = 'async'; im.onload = () => res(im); im.onerror = () => res(null); im.src = BASE + k + '.webp'; });
+        const p = new Promise(res => { const im = new Image(); im.decoding = 'async'; im.onload = () => res(im); im.onerror = () => res(null); im.src = BASE + k + '.webp' + VER; });
         imgs.set(k, p); return p;
     };
     // which layers make up one view of one outfit, back to front
