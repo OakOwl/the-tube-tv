@@ -4553,11 +4553,11 @@ const AV = (() => {
     const HAIRC = ['#1f1611', '#4b2e1c', '#8a5a2b', '#d4a043', '#f3d985', '#c2452a', '#e9e5dd', '#ff7cc0', '#58b8ff', '#7ad17a'];
     const COLS = ['#e63946', '#f4a261', '#f2cc5b', '#2a9d8f', '#1d6f5a', '#3a86ff', '#264b8f', '#8338ec', '#ff5fa2', '#f4efe2', '#2b2d42', '#7a5c44'];
     const OPT = {
-        hair: ['short', 'curly', 'afro', 'bob', 'long', 'locs', 'buns', 'ponytail', 'pigtails', 'spiky', 'bald'],
+        hair: ['short', 'curly', 'afro', 'bob', 'long', 'locs', 'buns', 'ponytail', 'pigtails', 'spiky', 'quiff', 'bald'],
         eyes: ['dot', 'happy', 'sparkle', 'sleepy'],
         mouth: ['smile', 'closed', 'grin', 'o', 'smirk'],
         glasses: ['none', 'round', 'square', 'shades'],
-        beard: ['none', 'tache', 'beard'],
+        beard: ['none', 'stubble', 'tache', 'beard'],
         top: ['overshirt', 'tee', 'hoodie', 'stripes', 'varsity', 'knit'],
         bot: ['jeans', 'joggers', 'shorts', 'skirt'],
         hat: ['none', 'beanie', 'cap', 'bucket', 'phones', 'party'],
@@ -4805,7 +4805,7 @@ const AV = (() => {
 })();
 // ---------- 3D avatar kit: pre-rendered Blender layers, tinted + stacked on a canvas ----------
 const AV3 = (() => {
-    const BASE = 'av3/', VER = '?v=136'; // bump whenever the kit is re-rendered so browsers/CDN fetch the new images
+    const BASE = 'av3/', VER = '?v=138'; // bump whenever the kit is re-rendered so browsers/CDN fetch the new images
     let man = null, ready = false; const waiters = [];
     const imgs = new Map(), comps = new Map();
     // sRGB <-> linear tables; neutral layers were rendered so a mid-lit surface reads ~200
