@@ -4959,7 +4959,7 @@ window.AV3 = AV3;
             return { back, seat, arm };
         })();
         // the big black media console: the TV sits on top of it (the lower stand is replaced and the TV rises a little)
-        const STAND_H = 102, STAND_UP = STAND_H - 62;
+        const STAND_H = 102, STAND_LEG = 70, STAND_UP = STAND_H - 62 + STAND_LEG;
         const standOff = () => isOff('lamp');
         const standHtml = () => {
             const blk = 'background:repeating-linear-gradient(90deg,rgba(255,255,255,.05) 0 1px,transparent 1px 7px),linear-gradient(160deg,#2c2c31,#121215);', slat = 'background:repeating-linear-gradient(0deg,rgba(255,255,255,.08) 0 2px,rgba(0,0,0,.4) 2px 7px),#1a1a1e;', inn = 'background:linear-gradient(#0c0c0e,#1b1b1f);';
@@ -4973,7 +4973,12 @@ window.AV3 = AV3;
             s += bw(-45, FY - 50 - 2.5 - 7, 110, 14, 84, null, 'background:linear-gradient(#cfd2d8,#8f939b);') + bw(-45, FY - 50 - 2.5 - 14.5, 64, 2, 30, Z + 6, 'background:#4a4d55;');
             s += bw(45, FY - 50 - 2.5 - 5, 70, 10, 56, null, 'background:linear-gradient(90deg,#f2ecd8,#d8cfb4);') + bw(45, FY - 50 - 2.5 - 14, 64, 8, 52, null, 'background:linear-gradient(90deg,#c0392b,#8a2a20);') + bw(45, FY - 50 - 2.5 - 21, 56, 6, 46, null, 'background:linear-gradient(90deg,#2f6f4f,#1f4a36);');
             s += bw(-45, FY - 8 - 3 - 7, 100, 14, 60, null, 'background:linear-gradient(90deg,#c0392b,#e9c46a 50%,#274690);') + bw(45, FY - 8 - 3 - 10, 64, 20, 60, null, 'background:linear-gradient(#e9e3d0,#b8b09a);') + bw(-228, FY - 50 - 2.5 - 12, 40, 24, 38, null, 'background:linear-gradient(#202024,#0a0a0c);') + bw(-135, FY - 50 - 2.5 - 4, 70, 8, 56, null, 'background:linear-gradient(90deg,#2d2d33,#4a4a52);') + bw(228, FY - 50 - 2.5 - 10, 46, 20, 38, null, 'background:linear-gradient(#26262a,#0c0c0e);');
-            return s;
+            // stand it on tall tapered legs so the TV sits higher
+            const leg = 'background:linear-gradient(90deg,#1a1a1e,#3a3a40 45%,#141417);', foot = 'background:linear-gradient(#e2c06a,#9a7420);';
+            let legs = '';
+            [-262, 262].forEach(x => [Z - 78, Z + 78].forEach(z => { legs += bw(x, FY - STAND_LEG / 2, 14, STAND_LEG, 14, z, leg) + bw(x, FY - 3, 18, 6, 18, z, foot); }));
+            legs += bw(0, FY - STAND_LEG + 10, W - 40, 6, 10, Z + 78, leg);
+            return '<div class="bx" style="transform:translate3d(0,' + (-STAND_LEG) + 'px,0)">' + s + '</div>' + legs;
         };
         // a proper 3D coffee cup: lathe-style ceramic cup and saucer built from tapered segments, a crema surface, a curved handle and soft rising steam
         const CUP_SVG = '<defs><linearGradient id="cpB" x1="0" x2="1"><stop offset="0" stop-color="#c9ccd3"/><stop offset=".35" stop-color="#ffffff"/><stop offset=".7" stop-color="#eceef2"/><stop offset="1" stop-color="#b9bcc4"/></linearGradient><linearGradient id="cpS" x1="0" x2="1"><stop offset="0" stop-color="#cfd2d8"/><stop offset=".4" stop-color="#ffffff"/><stop offset="1" stop-color="#c3c6cd"/></linearGradient><radialGradient id="cpC" cx=".42" cy=".4" r=".7"><stop offset="0" stop-color="#8a5a32"/><stop offset=".55" stop-color="#5a3216"/><stop offset="1" stop-color="#2e1608"/></radialGradient></defs><ellipse cx="28" cy="40" rx="25" ry="5.6" fill="#000" opacity=".28"/><ellipse cx="28" cy="38" rx="24" ry="6" fill="url(#cpS)" stroke="#9fa3ab" stroke-width=".7"/><ellipse cx="28" cy="37" rx="15" ry="3.4" fill="#d6d9df"/><path d="M45 16 C55 15 55 29 43 29" fill="none" stroke="#b9bcc4" stroke-width="4.2" stroke-linecap="round"/><path d="M45 16 C53.5 15.5 53.5 28 43.5 28.5" fill="none" stroke="#f4f5f8" stroke-width="2" stroke-linecap="round"/><path d="M10 12 L13.5 33 C15 37.5 41 37.5 42.5 33 L46 12 Z" fill="url(#cpB)" stroke="#9fa3ab" stroke-width=".7"/><ellipse cx="28" cy="12" rx="18" ry="4.6" fill="#f2f3f6" stroke="#a6aab2" stroke-width=".7"/><ellipse cx="28" cy="12.4" rx="15.6" ry="3.5" fill="url(#cpC)"/><path d="M19 12 C23 10.6 31 10.6 36 12.2" fill="none" stroke="#c9905a" stroke-opacity=".7" stroke-width="1"/><path d="M15 16 L17 31" stroke="#fff" stroke-opacity=".8" stroke-width="2" stroke-linecap="round"/>';
