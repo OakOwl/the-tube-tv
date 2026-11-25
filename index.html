@@ -5434,7 +5434,7 @@ window.AV3 = AV3;
                 const vel = !!k.vel, SW = vel ? k.W - 72 : k.W - 60, top = vel ? 50 : 60, bf = vel ? 32 : 28, cf = vel ? -56 : -55, sc = 1.12, hz = SOFA_Z + (bf - 15) * sc;
                 [-1, 1].forEach(d => out.push({ x: d * SW / 4 * sc, y: FY - top * sc, z: hz, fz: SOFA_Z + cf * sc - 6 - hz, seatH: top * sc, pose: 'sofa' }));
             }
-            [[-140, 30], [-55, 60], [55, 60], [140, 30]].forEach(p => out.push({ x: p[0], y: FY, z: p[1], pose: 'floor' }));
+            [[-150, 160], [-55, 172], [55, 172], [150, 160]].forEach(p => out.push({ x: p[0], y: FY, z: p[1], pose: 'floor' }));
             return out;
         };
         const avatarHtml = (cfg, seat, name, me) => {
