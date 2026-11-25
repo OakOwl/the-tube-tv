@@ -2490,6 +2490,9 @@
             { name: "90s Commercials", archiveId: "Collectionof90sCommercials", all: true }   // ~120 single ads, each one its own playlist entry
         ];
 
+        // adverts were mastered much louder than the shows: play them quieter, and skip any that are still painful
+        const AD_TRIM = .6;
+        const AD_BLOCK = [];   // file names to never play, e.g. '90s Commercials - S01.E37.mp4'
         let commercialPlaylist = [];
         let currentCommercialIndex = 0;
         let isPlayingCommercials = false;
@@ -2520,7 +2523,7 @@
                         })
                         .sort((a, b) => parseInt(a.size || 0) - parseInt(b.size || 0));
                     if (source.all && videoFiles.length) {
-                        videoFiles.forEach(vf => commercialPlaylist.push({ name: source.name, url: `https://archive.org/download/${source.archiveId}/${encodeURIComponent(vf.name)}` }));
+                        videoFiles.filter(vf => !AD_BLOCK.includes(vf.name)).forEach(vf => commercialPlaylist.push({ name: source.name + ' · ' + (vf.name.match(/E\d+/) || [''])[0], url: `https://archive.org/download/${source.archiveId}/${encodeURIComponent(vf.name)}` }));
                         console.log(`✅ Loaded ${videoFiles.length} commercials from ${source.name}`);
                     } else if (videoFiles.length > 0) {
                         const videoFile = videoFiles[0];
@@ -3033,9 +3036,9 @@
                 hideBuf(); clearTimeout(_stallTimer); releaseMedia(vid); vid.style.display = 'none';
                 isPlayingCommercials = true;
                 const commVid = document.createElement('video');
-                commVid.volume = volumeVal;
+                commVid.volume = volumeVal * AD_TRIM;
                 commVid.style.cssText = 'width:100%;height:100%;object-fit:contain;background:#000;display:block;';
-                activeCommercialVideo = commVid;
+                activeCommercialVideo = commVid; window.activeCommercialVideo = commVid;
                 const wrapper = document.createElement('div');
                 wrapper.style.cssText = 'position:absolute;inset:0;z-index:15;background:#000;';
                 wrapper.appendChild(commVid);
@@ -3065,9 +3068,9 @@
             isPlayingCommercials = true;
             showToast(`📺 COMMERCIAL BREAK — ${Math.floor(remainingSeconds / 60)}m OF ADS`);
             const commVid = document.createElement('video');
-            commVid.volume = volumeVal;
+            commVid.volume = volumeVal * AD_TRIM;
             commVid.style.cssText = 'width:100%;height:100%;object-fit:contain;background:#000;display:block;';
-            activeCommercialVideo = commVid;
+            activeCommercialVideo = commVid; window.activeCommercialVideo = commVid;
             const wrapper = document.createElement('div');
             wrapper.style.cssText = 'position:absolute;inset:0;z-index:15;background:#000;';
             wrapper.appendChild(commVid);
@@ -3876,7 +3879,7 @@
             vClicks = (vClicks + 1) % 11;
             volumeVal = vClicks / 10;
             vid.volume = volumeVal;
-            if (window.activeCommercialVideo) window.activeCommercialVideo.volume = volumeVal;
+            if (window.activeCommercialVideo) window.activeCommercialVideo.volume = volumeVal * AD_TRIM;
             kAngle.kVol += 36;
             $('kVol').style.transform = `rotate(${kAngle.kVol}deg)`;
             $('volFill').style.width = `${vClicks * 10}%`;
@@ -5748,7 +5751,7 @@ window.AV3 = AV3;
         const syncPwr = () => dh.classList.toggle('tvon', $('pwrBtn').classList.contains('on')); syncPwr(); try { new MutationObserver(syncPwr).observe($('pwrBtn'), { attributes: true, attributeFilter: ['class'] }); } catch (e) { }
         const roomVol = d => {
             sndKnob(); vClicks = Math.max(0, Math.min(10, vClicks + d)); volumeVal = vClicks / 10; vid.volume = volumeVal;
-            if (window.activeCommercialVideo) window.activeCommercialVideo.volume = volumeVal;
+            if (window.activeCommercialVideo) window.activeCommercialVideo.volume = volumeVal * AD_TRIM;
             kAngle.kVol += d * 36; $('kVol').style.transform = 'rotate(' + kAngle.kVol + 'deg)'; $('volFill').style.width = (vClicks * 10) + '%';
             showToast('◈ VOLUME: ' + (vClicks * 10) + '% ◈'); saveSettings(); showVolOverlay(vClicks); showChOverlay();
         };
