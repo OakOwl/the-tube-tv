@@ -5443,7 +5443,7 @@ window.AV3 = AV3;
                 q += card('av-t', gb.w, gb.h, gb.ox, gb.oy, AV3.tag(cfg, 'b', seat.pose, 'avb'));
                 q += card('av-fr', gf.w, gf.h, gf.ox, gf.oy, AV3.tag(cfg, 'f', seat.pose), sofa ? Math.round(seat.fz - 3 - SZ) : 0);
                 q += card('av-s', gs.w, gs.h, gs.ox, gs.oy, AV3.tag(cfg, 's', seat.pose));
-                if (name) q += '<div class="sp nofx avc av-n" style="width:120px;height:22px;margin:' + f(-1.48 * k - 22) + 'px 0 0 -60px;transform:rotateY(calc(var(--y) * -1))"><span>' + String(name).replace(/[<>&"]/g, '') + '</span></div>';
+                if (name) q += '<div class="sp nofx avc av-n" style="width:120px;height:22px;margin:' + f(-1.32 * k - 22) + 'px 0 0 -60px;transform:rotateY(calc(var(--y) * -1))"><span>' + String(name).replace(/[<>&"]/g, '') + '</span></div>';
                 return q + '</div>';
             }
             let h = '<div class="bx av' + (me ? ' av-me' : '') + '" style="transform:translate3d(' + f(seat.x) + 'px,' + f(seat.y) + 'px,' + f(seat.z) + 'px)">';
